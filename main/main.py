@@ -8,23 +8,21 @@ from pathlib import Path
 from urllib.parse import quote
 
 import requests
-from .ignore_git.token import ACCESS_TOKEN
 
+from .ignore_git import token
 
-
-
-from config import (
+from .config import (
     NOTEBOOK_NAME,
     SECTION_NAME,
     DXL_DIR,
     TITLE_COLUMN,
     SLEEP_SEC,
 )
-from find_id import find_notebook_id, find_section_id
-from renderer_rich import render_incident_like_page
+from .find_id import find_notebook_id, find_section_id
+from .renderer_rich import render_incident_like_page
 
 # ★ 追加：DXL -> (OneNoteRow, parts)
-from dxl_to_payload import dxl_to_onenote_payload, BinaryPart
+from .dxl_to_payload import dxl_to_onenote_payload, BinaryPart
 
 
 # ========= OneNote POST (multipart) =========
@@ -101,6 +99,25 @@ def _make_title(note, dxl_filename: str) -> str:
     return dxl_filename
 
 
+def _resolve_dxl_dir(config_value: str) -> Path:
+    if not config_value or not str(config_value).strip():
+        raise RuntimeError("DXL_DIR is empty. Set it in config.py")
+
+    dxl_path = Path(config_value)
+    if dxl_path.is_absolute():
+        return dxl_path
+
+    base_dir = Path(__file__).resolve().parent
+    return (base_dir / dxl_path).resolve()
+
+
+def _validate_config() -> None:
+    if not NOTEBOOK_NAME or not str(NOTEBOOK_NAME).strip():
+        raise RuntimeError("NOTEBOOK_NAME is empty. Set it in config.py")
+    if not SECTION_NAME or not str(SECTION_NAME).strip():
+        raise RuntimeError("SECTION_NAME is empty. Set it in config.py")
+
+
 # ======== (delete util はそのまま残してOK) ========
 
 def _graph_get(session: requests.Session, access_token: str, url: str) -> dict:
@@ -170,12 +187,18 @@ def delete_all_pages_in_section(
 # ========= main =========
 
 def main() -> None:
+
+    ACCESS_TOKEN = token.ACCESS_TOKEN
     if not ACCESS_TOKEN or not ACCESS_TOKEN.strip():
         raise RuntimeError("ACCESS_TOKEN is empty. Set it in config.py")
 
-    dxl_dir = Path(DXL_DIR)
+    _validate_config()
+
+    dxl_dir = _resolve_dxl_dir(DXL_DIR)
     if not dxl_dir.exists():
         raise RuntimeError(f"DXL_DIR not found: {dxl_dir}")
+    if not dxl_dir.is_dir():
+        raise RuntimeError(f"DXL_DIR is not a directory: {dxl_dir}")
 
     dxl_files = sorted(dxl_dir.glob("*.dxl"))
     if not dxl_files:
