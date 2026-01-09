@@ -5,8 +5,7 @@ import base64
 import html
 import re
 import xml.etree.ElementTree as ET
-from dataclasses import replace
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Optional, List, Tuple
 
 from .models import OneNoteRow
@@ -16,12 +15,14 @@ DXL_NS = {"dxl": "http://www.lotus.com/dxl"}
 
 @dataclass
 class BinaryPart:
+    """Graphへmultipart送信する画像パートの情報。"""
     name: str
     filename: str
     content_type: str
     data: bytes
     origin_field: str
 
+# DXL内の画像タグ名 -> MIMEタイプ
 _BINARY_TAG_TO_MIME = {
     "gif": "image/gif",
     "png": "image/png",
@@ -30,9 +31,11 @@ _BINARY_TAG_TO_MIME = {
 }
 
 def _local_tag(tag: str) -> str:
+    """XMLの名前空間を剥がしてローカル名だけ返す。"""
     return tag.split("}", 1)[1] if "}" in tag else tag
 
 def _safe_px(v: Optional[str]) -> Optional[int]:
+    """px表記や数値文字列から幅/高さを安全に抽出する。"""
     if not v:
         return None
     m = re.search(r"(\d+)", v)
@@ -53,6 +56,7 @@ def _richtext_item_to_html_and_parts(item_el: ET.Element, *, field_name: str, pa
     out: List[str] = []
 
     for par in rt.findall("dxl:par", DXL_NS):
+        # 画像の有無を判定（<picture>があれば画像扱い）
         pic = par.find("dxl:picture", DXL_NS)
         if pic is not None:
             w = _safe_px(pic.get("width"))
@@ -60,6 +64,7 @@ def _richtext_item_to_html_and_parts(item_el: ET.Element, *, field_name: str, pa
 
             handled = False
             for child in list(pic):
+                # 画像タグの種類(gif/png/jpeg等)を拾う
                 tag = _local_tag(child.tag)
                 mime = _BINARY_TAG_TO_MIME.get(tag)
                 if not mime:
@@ -69,6 +74,7 @@ def _richtext_item_to_html_and_parts(item_el: ET.Element, *, field_name: str, pa
                 if not b64:
                     continue
 
+                # base64 -> raw bytes
                 data = base64.b64decode(b64)
                 part_name = f"{part_prefix}{len(parts)+1}"
                 filename = f"{part_name}.{tag}"
@@ -81,6 +87,7 @@ def _richtext_item_to_html_and_parts(item_el: ET.Element, *, field_name: str, pa
                     origin_field=field_name,
                 ))
 
+                # OneNote上で崩れないように幅・高さは最大幅100%に制限
                 style = "max-width:100%;"
                 if w:
                     style += f" width:{w}px;"
@@ -119,6 +126,7 @@ def dxl_to_onenote_payload(dxl_path: str, *, rich_fields: List[str]) -> Tuple[On
     replace_kwargs = {}
 
     for field_name in rich_fields:
+        # richtext項目を拾って画像HTMLに置き換える
         item = root.find(f".//dxl:item[@name='{field_name}']", DXL_NS)
         if item is None:
             continue
