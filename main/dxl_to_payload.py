@@ -10,7 +10,7 @@ from dataclasses import dataclass
 from typing import Optional, List, Tuple
 
 from models import OneNoteRow
-from dxl_to_model import dxl_to_onenote_row  # 既存
+from dxl_to_model import dxl_to_onenote_row, _parse_dxl_root  # 既存
 
 DXL_NS = {"dxl": "http://www.lotus.com/dxl"}
 
@@ -113,7 +113,7 @@ def dxl_to_onenote_payload(dxl_path: str, *, rich_fields: List[str]) -> Tuple[On
     - parts: rich_fields内の <picture> を抽出してmultipart用に返す
     """
     note = dxl_to_onenote_row(dxl_path)
-    root = ET.parse(dxl_path).getroot()
+    root = _parse_dxl_root(dxl_path)
 
     parts_all: List[BinaryPart] = []
     replace_kwargs = {}

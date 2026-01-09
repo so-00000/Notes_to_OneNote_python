@@ -4,11 +4,25 @@ from __future__ import annotations
 import re
 import xml.etree.ElementTree as ET
 from dataclasses import fields
+from pathlib import Path
 from typing import Dict, List, Optional
 
 from models import OneNoteRow
 
 DXL_NS = {"dxl": "http://www.lotus.com/dxl"}
+
+
+def _parse_dxl_root(dxl_path: str) -> ET.Element:
+    path = Path(dxl_path)
+    if not path.exists():
+        raise FileNotFoundError(f"DXL file not found: {path}")
+    if not path.is_file():
+        raise ValueError(f"DXL path is not a file: {path}")
+
+    try:
+        return ET.parse(path).getroot()
+    except ET.ParseError as exc:
+        raise ValueError(f"Failed to parse DXL file: {path}") from exc
 
 
 def _join_clean(values: List[str]) -> str:
@@ -101,7 +115,7 @@ def dxl_to_onenote_row(dxl_path: str) -> OneNoteRow:
     - 存在しないフィールドは extra に入れる
     - 添付名は attachments、doclinkは notes_links に入れる
     """
-    root = ET.parse(dxl_path).getroot()
+    root = _parse_dxl_root(dxl_path)
 
     # OneNoteRow が持つフィールド名セット（extra/attachments/notes_links含む）
     model_field_names = {f.name for f in fields(OneNoteRow)}

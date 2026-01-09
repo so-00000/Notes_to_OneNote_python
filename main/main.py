@@ -87,6 +87,25 @@ def _post_onenote_page_multipart(
 
 # ========= helpers =========
 
+def _validate_config() -> Path:
+    if not NOTEBOOK_NAME or not NOTEBOOK_NAME.strip():
+        raise RuntimeError("NOTEBOOK_NAME is empty. Set it in config.py")
+
+    if not SECTION_NAME or not SECTION_NAME.strip():
+        raise RuntimeError("SECTION_NAME is empty. Set it in config.py")
+
+    if not DXL_DIR or not str(DXL_DIR).strip():
+        raise RuntimeError("DXL_DIR is empty. Set it in config.py")
+
+    dxl_dir = Path(DXL_DIR)
+    if not dxl_dir.exists():
+        raise RuntimeError(f"DXL_DIR not found: {dxl_dir}")
+    if not dxl_dir.is_dir():
+        raise RuntimeError(f"DXL_DIR is not a directory: {dxl_dir}")
+
+    return dxl_dir
+
+
 def _make_title(note, dxl_filename: str) -> str:
     if TITLE_COLUMN:
         v = getattr(note, TITLE_COLUMN, None)
@@ -173,9 +192,7 @@ def main() -> None:
     if not ACCESS_TOKEN or not ACCESS_TOKEN.strip():
         raise RuntimeError("ACCESS_TOKEN is empty. Set it in config.py")
 
-    dxl_dir = Path(DXL_DIR)
-    if not dxl_dir.exists():
-        raise RuntimeError(f"DXL_DIR not found: {dxl_dir}")
+    dxl_dir = _validate_config()
 
     dxl_files = sorted(dxl_dir.glob("*.dxl"))
     if not dxl_files:
