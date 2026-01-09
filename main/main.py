@@ -9,8 +9,9 @@ from urllib.parse import quote
 
 import requests
 
+from .ignore_git import token
+
 from .config import (
-    ACCESS_TOKEN,
     NOTEBOOK_NAME,
     SECTION_NAME,
     DXL_DIR,
@@ -186,6 +187,8 @@ def delete_all_pages_in_section(
 # ========= main =========
 
 def main() -> None:
+
+    ACCESS_TOKEN = token.ACCESS_TOKEN
     if not ACCESS_TOKEN or not ACCESS_TOKEN.strip():
         raise RuntimeError("ACCESS_TOKEN is empty. Set it in config.py")
 
