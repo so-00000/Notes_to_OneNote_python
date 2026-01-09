@@ -11,21 +11,25 @@ from .models import OneNoteRow
 # ========== small helpers ==========
 
 def _esc(s: Optional[str]) -> str:
+    """HTMLエスケープ（Noneは空文字）。"""
     return "" if s is None else html.escape(str(s))
 
 def _nl2br(s: Optional[str]) -> str:
+    """改行を<br/>に変換してHTMLエスケープ。"""
     if not s:
         return ""
     t = str(s).replace("\r\n", "\n").replace("\r", "\n")
     return html.escape(t).replace("\n", "<br/>")
 
 def _join_nonempty(*parts: Optional[str], sep: str = " ") -> str:
+    """空文字を除外して結合。"""
     xs = [p.strip() for p in parts if p and str(p).strip()]
     return sep.join(xs)
 
 
 
 def _normalize_notes_dt(s: Optional[str]) -> str:
+    """Notesの日時表記を人間が読みやすい形に整形。"""
     if not s:
         return ""
     t = str(s).strip()
@@ -66,6 +70,7 @@ def _fmt_dt(date_s: Optional[str], time_s: Optional[str]) -> str:
 
 
 def _split_multi(s: Optional[str]) -> list[str]:
+    """区切り文字で複数値に分割する（現在は未使用）。"""
     if not s:
         return []
     t = str(s).strip().replace("　", " ")
@@ -73,10 +78,12 @@ def _split_multi(s: Optional[str]) -> list[str]:
     return [p for p in (x.strip() for x in parts) if p]
 
 def _checkbox(label: str, checked: bool) -> str:
+    """チェックボックス風の文字列（現在は未使用）。"""
     mark = "■" if checked else "□"
     return f"<span style='margin-right:10px; white-space:nowrap;'>{mark} {_esc(label)}</span>"
 
 def _kv_row(k: str, v_html: str) -> str:
+    """2カラムのテーブル行（左：キー／右：値HTML）。"""
     return (
         "<tr>"
         f"<td style='width:180px; background:#f5f5f5; border:1px solid #ddd; padding:6px; vertical-align:top;'><b>{_esc(k)}</b></td>"
@@ -85,6 +92,7 @@ def _kv_row(k: str, v_html: str) -> str:
     )
 
 def _section_title(title: str) -> str:
+    """セクションの見出し。"""
     return (
         "<div style='margin-top:16px; padding:8px 10px; background:#eef6ff; border:1px solid #cfe6ff;'>"
         f"<b>{_esc(title)}</b>"
@@ -92,6 +100,7 @@ def _section_title(title: str) -> str:
     )
 
 def _as_html_or_text(s: Optional[str]) -> str:
+    """HTML断片が来たらそのまま、そうでなければテキストとして改行変換。"""
     if not s:
         return ""
     t = str(s)
