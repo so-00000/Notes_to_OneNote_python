@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import html
 import re
-from typing import Iterable, Optional
+from typing import Optional
 
 from models import NoteRow
 
