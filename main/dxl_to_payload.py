@@ -29,6 +29,7 @@ _BINARY_TAG_TO_MIME = {
     "jpeg": "image/jpeg",
     "jpg": "image/jpeg",
 }
+_SKIP_TEXT_TAGS = {"picture", "notesbitmap", "gif", "png", "jpeg", "jpg"}
 
 def _local_tag(tag: str) -> str:
     """XMLの名前空間を剥がしてローカル名だけ返す。"""
@@ -40,6 +41,22 @@ def _safe_px(v: Optional[str]) -> Optional[int]:
         return None
     m = re.search(r"(\d+)", v)
     return int(m.group(1)) if m else None
+
+def _collect_text_without_binary(node: ET.Element) -> str:
+    """画像バイナリ系のノードを除外してテキストを集める。"""
+    if _local_tag(node.tag) in _SKIP_TEXT_TAGS:
+        return ""
+
+    parts: list[str] = []
+    if node.text:
+        parts.append(node.text)
+
+    for child in list(node):
+        parts.append(_collect_text_without_binary(child))
+        if child.tail:
+            parts.append(child.tail)
+
+    return "".join(parts)
 
 def _richtext_item_to_html_and_parts(item_el: ET.Element, *, field_name: str, part_prefix: str) -> Tuple[str, List[BinaryPart]]:
     """
@@ -57,15 +74,20 @@ def _richtext_item_to_html_and_parts(item_el: ET.Element, *, field_name: str, pa
 
     for par in rt.findall("dxl:par", DXL_NS):
         # 画像の有無を判定（<picture>があれば画像扱い）
-        pic = par.find("dxl:picture", DXL_NS)
-        if pic is not None:
+        pictures = par.findall(".//dxl:picture", DXL_NS)
+        for pic in pictures:
             w = _safe_px(pic.get("width"))
             h = _safe_px(pic.get("height"))
 
             handled = False
+            has_notesbitmap = False
             for child in list(pic):
                 # 画像タグの種類(gif/png/jpeg等)を拾う
                 tag = _local_tag(child.tag)
+                if tag == "notesbitmap":
+                    has_notesbitmap = True
+                    continue
+
                 mime = _BINARY_TAG_TO_MIME.get(tag)
                 if not mime:
                     continue
@@ -100,15 +122,14 @@ def _richtext_item_to_html_and_parts(item_el: ET.Element, *, field_name: str, pa
                 handled = True
                 break
 
-            if not handled:
+            if not handled and not has_notesbitmap:
                 out.append("<div style='color:#888;'>[画像（未対応形式）]</div>")
-            continue
 
-        # テキスト（最低限：par配下のテキストをescapeしてpで囲う）
-        txt = "".join(par.itertext()).strip()
+        # テキスト（バイナリは除外してescapeしてpで囲う）
+        txt = _collect_text_without_binary(par).strip()
         if txt:
             out.append(f"<p>{html.escape(txt)}</p>")
-        else:
+        elif not pictures:
             out.append("<p><br/></p>")
 
     return "\n".join(out), parts
