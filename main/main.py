@@ -8,9 +8,12 @@ from pathlib import Path
 from urllib.parse import quote
 
 import requests
+from .ignore_git.token import ACCESS_TOKEN
+
+
+
 
 from config import (
-    ACCESS_TOKEN,
     NOTEBOOK_NAME,
     SECTION_NAME,
     DXL_DIR,
