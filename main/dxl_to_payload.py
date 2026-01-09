@@ -9,8 +9,8 @@ from dataclasses import replace
 from dataclasses import dataclass
 from typing import Optional, List, Tuple
 
-from models import OneNoteRow
-from dxl_to_model import dxl_to_onenote_row  # 既存
+from .models import OneNoteRow
+from .dxl_to_model import dxl_to_onenote_row  # 既存
 
 DXL_NS = {"dxl": "http://www.lotus.com/dxl"}
 
