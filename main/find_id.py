@@ -2,7 +2,6 @@
 import requests
 from urllib.parse import quote
 
-
 def _graph_get(access_token: str, url: str) -> dict:
     r = requests.get(url, headers={"Authorization": f"Bearer {access_token}"})
     r.raise_for_status()
