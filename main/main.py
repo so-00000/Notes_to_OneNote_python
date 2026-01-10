@@ -18,7 +18,7 @@ from .find_id import find_notebook_id, find_section_id
 from .graph_client import GraphClient
 from .renderer_rich import render_incident_like_page
 from .dxl_to_payload import dxl_to_onenote_payload, BinaryPart
-
+from .delete_all_pages_in_section import delete_all_pages_in_section
 
 @dataclass(frozen=True)
 class AppSettings:
@@ -132,9 +132,18 @@ def _build_page_payload(
 
 def main() -> None:
     settings = _load_settings()
+
     dxl_files = _load_dxl_files(settings.dxl_dir)
 
     client = GraphClient(settings.access_token)
+
+    # # 削除したいとき
+    # notebook_id = find_notebook_id(client, settings.notebook_name)
+    # section_id = find_section_id(client, notebook_id, settings.section_name)
+    # delete_all_pages_in_section(client, section_id)
+
+    # #########################################################
+
     created = 0
 
     try:
