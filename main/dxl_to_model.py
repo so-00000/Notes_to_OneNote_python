@@ -12,7 +12,7 @@ DXL_NS = {"dxl": "http://www.lotus.com/dxl"}
 
 
 def _join_clean(values: List[str]) -> str:
-    """複数値を 1 文字列にまとめる（空は落として、改行で結合）"""
+    """複数値を 1 文字列にまとめる（空は落として、改行で結合）。"""
     vals = [v.strip() for v in values if (v or "").strip()]
     # 空白が多すぎると見づらいので軽く正規化（必要なら外してOK）
     vals = [re.sub(r"[ \t]+", " ", v) for v in vals]

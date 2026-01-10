@@ -1,21 +1,17 @@
 # find_id.py
-import requests
 from urllib.parse import quote
 
-
-def _graph_get(access_token: str, url: str) -> dict:
-    r = requests.get(url, headers={"Authorization": f"Bearer {access_token}"})
-    r.raise_for_status()
-    return r.json()
+from .graph_client import GraphClient
 
 
-def find_notebook_id(access_token: str, notebook_name: str) -> str:
+def find_notebook_id(client: GraphClient, notebook_name: str) -> str:
+    """表示名からノートブックIDを取得する。"""
     safe = notebook_name.replace("'", "''")
     url = (
         "https://graph.microsoft.com/v1.0/me/onenote/notebooks"
         f"?$filter=displayName eq '{safe}'&$select=id,displayName"
     )
-    data = _graph_get(access_token, url)
+    data = client.get_json(url)
     items = data.get("value", [])
     if not items:
         raise RuntimeError(f"Notebook not found: {notebook_name}")
@@ -24,13 +20,14 @@ def find_notebook_id(access_token: str, notebook_name: str) -> str:
     return items[0]["id"]
 
 
-def find_section_id(access_token: str, notebook_id: str, section_name: str) -> str:
+def find_section_id(client: GraphClient, notebook_id: str, section_name: str) -> str:
+    """表示名からセクションIDを取得する。"""
     safe = section_name.replace("'", "''")
     url = (
         f"https://graph.microsoft.com/v1.0/me/onenote/notebooks/{quote(notebook_id)}/sections"
         f"?$filter=displayName eq '{safe}'&$select=id,displayName"
     )
-    data = _graph_get(access_token, url)
+    data = client.get_json(url)
     items = data.get("value", [])
     if not items:
         raise RuntimeError(f"Section not found in notebook: {section_name}")
