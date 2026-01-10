@@ -1,1 +1,3 @@
 main/ignore_git/token.py
+__pycache__/
+target_dxl/

@@ -79,7 +79,7 @@ def _load_settings() -> AppSettings:
     """config.pyとtokenからAppSettingsを組み立てる。"""
     access_token = token.ACCESS_TOKEN
     if not access_token or not access_token.strip():
-        raise RuntimeError("ACCESS_TOKEN is empty. Set it in config.py")
+        raise RuntimeError("ACCESS_TOKEN is empty.")
 
     _validate_config()
 
@@ -167,7 +167,11 @@ def main() -> None:
 
             web_url = (page.get("links", {}).get("oneNoteWebUrl", {}) or {}).get("href")
             created += 1
-            print(f"[OK] {created}: title='{title}' images={len(parts)} url={web_url}")
+
+            img_count = sum(1 for p in parts if p.content_type.startswith("image/"))
+            att_count = len(parts) - img_count
+            print(f"[OK] {created}: title='{title}' images={img_count} attachments={att_count} url={web_url}")
+
 
             if settings.sleep_sec:
                 time.sleep(settings.sleep_sec)

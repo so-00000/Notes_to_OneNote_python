@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Optional, Dict, List
+from .dxl_attachments import DxlAttachment
 
 
 @dataclass(frozen=True)
@@ -89,5 +90,6 @@ class OneNoteRow:
     extra: Dict[str, str] = field(default_factory=dict)
 
     # OneNote化で使用
-    attachments: List[str] = field(default_factory=list)  # $FILEのファイル名一覧
+    attachments: List[str] = field(default_factory=list)         # 表示/参照用
+    attachment_objs: List[DxlAttachment] = field(default_factory=list)  # 送信用（本体）
     notes_links: List[str] = field(default_factory=list)  # doclink等を仮リンク文字列で保持

@@ -154,29 +154,40 @@ def render_incident_like_page(note: OneNoteRow, *, source_file: str | None = Non
     fd_id_1_html = _as_html_or_text(note.Fd_Id_1)
 
     # --- 暫定/恒久の本文
-    # temp_text = _join_nonempty(note.Temporary, note.Temporary_Plan, note.Temporary_Comp, sep="\n")
-    # perm_text = _join_nonempty(note.Parmanent, note.Parmanet_Plan, note.Parmanet_Comp, sep="\n")
-
     temp_html = _as_html_or_text(note.Temporary)
     perm_html = _as_html_or_text(note.Parmanent)
 
-
-    # --- 添付（DXL由来の attachments があればそれを優先。従来の Fd_Link_1 / Fd_Text_1 も残す）
+    # --- 添付
+    #   - 優先：DXL $FILE から抽出済みの attachment_objs を <object> として埋め込む
+    #   - フォールバック：note.attachments (ファイル名配列) をただ表示
+    #   ※ <object data="name:att1"> の att1/att2... は POST multipart 側のパート名と一致させること！
     attachments_li: list[str] = []
 
-    # 1) DXL $FILE の添付名一覧（実ファイル添付はGraph送信側でやる想定）
-    if getattr(note, "attachments", None):
+    # 1) DXL $FILE 実体付き（attachment_objs）
+    if getattr(note, "attachment_objs", None):
+        for i, a in enumerate(note.attachment_objs, start=1):
+            part = f"att{i}"
+            attachments_li.append(
+                "<li>"
+                f"<object data-attachment=\"{_esc(a.filename)}\" "
+                f"data=\"name:{_esc(part)}\" "
+                f"type=\"{_esc(a.mime)}\"></object>"
+                "</li>"
+            )
+
+    # 2) 旧：ファイル名のみ（互換）
+    elif getattr(note, "attachments", None):
         for fn in note.attachments:
             attachments_li.append(f"<li>{_esc(fn)}</li>")
 
-    # 2) 既存のリンク/表示名（あれば）
+    # 3) 既存のリンク/表示名（あれば）
     if note.Fd_Link_1:
         label = note.Fd_Text_1 or "Attachment"
         attachments_li.append(
             f"<li><a href='{html.escape(note.Fd_Link_1, quote=True)}'>{_esc(label)}</a></li>"
         )
 
-    # 3) 参照ID（念のため）
+    # 4) 参照ID（念のため）
     if note.Fd_Id_1:
         attachments_li.append(f"<li>Fd_Id_1: {_esc(note.Fd_Id_1)}</li>")
 
@@ -233,7 +244,6 @@ def render_incident_like_page(note: OneNoteRow, *, source_file: str | None = Non
         "承認（完了）",
         _nl2br(_join_nonempty(approver2, _normalize_notes_dt(note.ApproveTime_2), note.ApproveStatus_2, sep="\n"))
     ))
-
     parts.append("</table>")
 
     parts.append(_section_title("管理番号"))
@@ -255,44 +265,51 @@ def render_incident_like_page(note: OneNoteRow, *, source_file: str | None = Non
     parts.append(_kv_row("工数", _esc(work_time) + (" 分" if work_time else "")))
     parts.append("</table>")
 
-    # 件名/内容
+    # =========================
+    # 件名 / 内容（表形式をやめる）
+    # =========================
     parts.append(_section_title("件名 / 内容"))
-    parts.append("<table style='width:100%; border-collapse:collapse;'>")
-    parts.append(_kv_row("件名", subject_html))
-    parts.append(_kv_row("内容", detail_html))
-    parts.append(_kv_row("理由・原因", reason_html))
-    parts.append(_kv_row("対応（メモ）", measure_memo_html))
-    parts.append("</table>")
 
-    # # 件名/内容
-    # parts.append(_section_title("件名"))
-    # parts.append(subject_html)
-    # parts.append(_section_title("内容"))
-    # parts.append(detail_html)
-    # parts.append(_section_title("理由・原因"))
-    # parts.append(reason_html)
-    # parts.append(_section_title("対応（メモ）"))
-    # parts.append(measure_memo_html)
+    # 以降は「見出し + 本文」の縦積み
+    parts.append(_section_title("件名"))
+    parts.append(subject_html)
 
+    parts.append(_section_title("内容"))
+    parts.append(detail_html)
 
-    # 分析
+    parts.append(_section_title("理由・原因"))
+    parts.append(reason_html)
+
+    parts.append(_section_title("対応（メモ）"))
+    parts.append(measure_memo_html)
+
+    # =========================
+    # 分析（表形式をやめる）
+    # =========================
     parts.append(_section_title("分析"))
-    parts.append("<table style='width:100%; border-collapse:collapse;'>")
-    parts.append(_kv_row("影響範囲", fd_id_1_html))
 
-    parts.append(_kv_row("暫定策", _nl2br(temp_html)))
-    parts.append(_kv_row("暫定策予定日付", _esc(note.Temporary_Plan)))
-    parts.append(_kv_row("暫定策完了日付", _esc(note.Temporary_Comp)))
+    parts.append(_section_title("影響範囲"))
+    parts.append(fd_id_1_html)
 
-    parts.append(_kv_row("恒久策", _nl2br(perm_html)))
-    parts.append(_kv_row("恒久策予定日付", _esc(note.Parmanet_Plan)))
-    parts.append(_kv_row("恒久策完了日付", _esc(note.Parmanet_Comp)))
+    parts.append(_section_title("暫定策"))
+    parts.append(temp_html)
+    parts.append(_section_title("暫定策予定日付"))
+    parts.append(_esc(note.Temporary_Plan))
+    parts.append(_section_title("暫定策完了日付"))
+    parts.append(_esc(note.Temporary_Comp))
 
-    parts.append(_kv_row("添付", attachments_html))
-    parts.append(_kv_row("Notesリンク", notes_links_html))
-    parts.append(_kv_row("予定日付", _esc(note.Temporary_Plan)))
-    parts.append(_kv_row("完了日付", _esc(note.Temporary_Comp)))
-    parts.append("</table>")
+    parts.append(_section_title("恒久策"))
+    parts.append(perm_html)
+    parts.append(_section_title("恒久策予定日付"))
+    parts.append(_esc(note.Parmanet_Plan))
+    parts.append(_section_title("恒久策完了日付"))
+    parts.append(_esc(note.Parmanet_Comp))
+
+    parts.append(_section_title("添付"))
+    parts.append(attachments_html)
+
+    parts.append(_section_title("Notesリンク"))
+    parts.append(notes_links_html)
 
     parts.append(src_html)
 
