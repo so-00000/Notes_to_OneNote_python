@@ -18,7 +18,7 @@ from .find_id import find_notebook_id, find_section_id
 from .graph_client import GraphClient
 from .renderer_rich import render_incident_like_page
 from .dxl_to_payload import dxl_to_onenote_payload, BinaryPart
-from .logging_config import setup_logging
+from .logging.logging_config import setup_logging
 
 @dataclass(frozen=True)
 class AppSettings:
