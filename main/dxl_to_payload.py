@@ -5,18 +5,22 @@ import base64
 import html
 import re
 import xml.etree.ElementTree as ET
-from dataclasses import dataclass, replace
-from typing import Optional, List, Tuple, Dict
+from dataclasses import replace
+from typing import Optional, Tuple
 
-from .models import OneNoteRow, BinaryPart
+from .models import OneNoteRow
 from .dxl_to_model import dxl_to_onenote_row  # 既存
 from .dxl_attachments import extract_attachments_from_dxl  # 追加
+from .models import PendingPart
+from .config import RICH_FIELDS
+from typing import Any
+import logging
+logger = logging.getLogger(__name__)
+
+
+
 
 DXL_NS = {"dxl": "http://www.lotus.com/dxl"}
-
-# Graph制約：Presentation + バイナリ最大5（合計6パート）
-MAX_BINARY_PARTS_PER_PAGE = 5
-
 
 # DXL内の画像タグ名 -> MIMEタイプ
 _BINARY_TAG_TO_MIME = {
@@ -28,7 +32,7 @@ _BINARY_TAG_TO_MIME = {
 
 
 def _local_tag(tag: str) -> str:
-    """XMLの名前空間を剥がしてローカル名だけ返す。"""
+    """タグのローカル名だけ返す（XMLの名前空間を削除）"""
     return tag.split("}", 1)[1] if "}" in tag else tag
 
 
@@ -70,32 +74,35 @@ def _par_text_without_binary(par: ET.Element) -> str:
     return re.sub(r"\s+\n", "\n", walk(par)).strip()
 
 
-def _attachment_object_html(*, part_name: str, filename: str, mime: str) -> str:
-    """
-    OneNote: 添付ファイルは <object> で埋め込む
-    data="name:att1" が multipart のキーと対応する
-    """
-    fn = html.escape(filename, quote=True)
-    mt = html.escape(mime or "application/octet-stream", quote=True)
-    pn = html.escape(part_name, quote=True)
-    return (
-        "<div style='margin:8px 0; padding:10px; border:1px solid #e3e3e3; "
-        "border-radius:10px; background:#fff;'>"
-        f"<object data='name:{pn}' data-attachment='{fn}' type='{mt}'></object>"
-        "</div>"
-    )
+
+def _sanitize_id(s: str) -> str:
+    s = s.lower()
+    s = re.sub(r"[^a-z0-9_-]+", "-", s)
+    s = re.sub(r"-{2,}", "-", s).strip("-")
+    return s or "field"
+
+def _make_ph_id(field_name: str, kind: str, idx: int) -> str:
+    return f"ph-{_sanitize_id(field_name)}-{kind}-{idx:03d}"
+
+def _ph_div(ph_id: str, *, filename: str | None = None) -> str:
+    if filename:
+        fn = html.escape(filename, quote=True)
+        return f"<div data-id='{ph_id}' data-filename='{fn}'></div>"
+    return f"<div data-id='{ph_id}'></div>"
 
 
-def _picture_to_html_and_parts(
+
+# picture要素からHTML（マーカー込み）・バイナリデータを作成する
+def _picture_to_html_and_pending(
     pic: ET.Element,
     *,
     field_name: str,
-    part_prefix: str,
-    parts: List[BinaryPart],
-) -> Optional[str]:
-    """<picture> を見つけたら画像BinaryPartを積み、<img> HTMLを返す（対応できない場合 None）。"""
+    img_index: int,
+) -> tuple[str, PendingPart | None]:
     w = _safe_px(pic.get("width"))
     h = _safe_px(pic.get("height"))
+
+    ph_id = _make_ph_id(field_name, "img", img_index)
 
     for child in list(pic):
         tag = _local_tag(child.tag)
@@ -107,98 +114,72 @@ def _picture_to_html_and_parts(
         if not b64:
             continue
 
-        data = base64.b64decode(b64)
-        part_name = f"{part_prefix}{len(parts) + 1}"
-        filename = f"{part_name}.{tag}"
+        try:
+            data = base64.b64decode(b64)
+        except Exception:
+            return _ph_div(ph_id), None
 
-        parts.append(
-            BinaryPart(
-                name=part_name,
-                filename=filename,
-                content_type=mime,
-                data=data,
-                origin_field=field_name,
-            )
+        filename = f"{ph_id}.{tag}"
+        pending = PendingPart(
+            placeholder_id=ph_id,
+            kind="image",
+            filename=filename,
+            content_type=mime,
+            data=data,
+            origin_field=field_name,
+            width=w,
+            height=h,
         )
+        return _ph_div(ph_id), pending
 
-        style = "max-width:100%;"
-        if w:
-            style += f" width:{w}px;"
-        if h:
-            style += f" height:{h}px;"
-
-        return (
-            f"<div style='margin:8px 0;'>"
-            f"<img src='name:{html.escape(part_name)}' style='{style}'/>"
-            f"</div>"
-        )
-
-    return None
+    # 画像の形式が未対応でも位置は残す
+    return _ph_div(ph_id), None
 
 
-def _table_to_html(
-    table_el: ET.Element,
+
+def _attref_to_placeholder_and_pending(
     *,
     field_name: str,
-    part_prefix: str,
-    parts: List[BinaryPart],
-    attachment_slots: Dict[str, str],
-    attachment_mimes: Dict[str, str],
-) -> str:
-    """
-    richtext 内の <table> をHTML tableに起こす。
-    - “基本情報”のkvテーブルと見た目が被らないよう、カード＋別デザインにする
-    - セル内の <par> は最低限テキスト化（画像/添付refがあればそれも可能な範囲で出す）
-    """
-    rows_html: List[str] = []
+    att_index: int,
+    filename: str,
+    attachment_by_name: dict[str, Any],   # extract_attachments_from_dxl が返すオブジェクト
+) -> tuple[str, PendingPart | None]:
+    ph_id = _make_ph_id(field_name, "att", att_index)
+    html_ph = _ph_div(ph_id, filename=filename)
 
+    a = attachment_by_name.get(filename)
+    if not a:
+        # 実体ないので placeholder は残すが pending は None
+        return html_ph, None
+
+    pending = PendingPart(
+        placeholder_id=ph_id,
+        kind="attachment",
+        filename=a.filename,
+        content_type=a.mime or "application/octet-stream",
+        data=a.content,
+        origin_field="$FILE",
+    )
+    return html_ph, pending
+
+
+
+def _table_to_html(table_el: ET.Element) -> str:
+    """
+    richtext 内の <table> をシンプルに HTML table に変換する（テキストのみ）。
+    - セル内の画像/添付(ref)は想定しない（あっても無視）
+    - 余計な装飾は最低限
+    """
+    rows: list[str] = []
+
+    # DXL: <table> -> <tablerow> -> <tablecell>
     tablerows = table_el.findall("dxl:tablerow", DXL_NS)
-    for r_i, tr in enumerate(tablerows):
-        cells_html: List[str] = []
+    for tr in tablerows:
+        cells_html: list[str] = []
         cells = tr.findall("dxl:tablecell", DXL_NS)
 
         for td in cells:
-            # セル内に picture があれば画像として出す（あれば）
-            pic = td.find(".//dxl:picture", DXL_NS)
-            if pic is not None:
-                img_html = _picture_to_html_and_parts(
-                    pic, field_name=field_name, part_prefix=part_prefix, parts=parts
-                )
-                if img_html:
-                    cell_body = img_html
-                else:
-                    cell_body = "<span style='color:#888;'>[画像（未対応形式）]</span>"
-                cells_html.append(
-                    f"<td style='border:1px solid #ddd; padding:6px; vertical-align:top;'>{cell_body}</td>"
-                )
-                continue
-
-            # 添付参照がセル内にあれば object を出す（可能なら）
-            attrefs = td.findall(".//dxl:attachmentref", DXL_NS)
-            if attrefs:
-                segs: List[str] = []
-                for a in attrefs:
-                    fn = (a.get("displayname") or a.get("name") or "").strip()
-                    if not fn:
-                        continue
-                    slot = attachment_slots.get(fn)
-                    if slot:
-                        segs.append(
-                            _attachment_object_html(
-                                part_name=slot,
-                                filename=fn,
-                                mime=attachment_mimes.get(fn, "application/octet-stream"),
-                            )
-                        )
-                    else:
-                        segs.append(f"<div style='color:#888;'>[添付: {html.escape(fn)}]</div>")
-                cell_body = "".join(segs) if segs else ""
-                cells_html.append(
-                    f"<td style='border:1px solid #ddd; padding:6px; vertical-align:top;'>{cell_body}</td>"
-                )
-                continue
-
-            # テキスト
+            # セル内テキスト（子孫含めて全部）を取得
             txt = "".join(td.itertext()).strip()
             txt = re.sub(r"\s+\n", "\n", txt)
             safe = html.escape(txt).replace("\n", "<br/>") if txt else ""
@@ -206,250 +187,162 @@ def _table_to_html(
                 f"<td style='border:1px solid #ddd; padding:6px; vertical-align:top;'>{safe}</td>"
             )
 
-        # 1行目はヘッダーっぽく
-        if r_i == 0:
-            cells_html = [
-                c.replace("padding:6px;", "padding:7px; font-weight:bold; background:#f2f7ff;")
-                for c in cells_html
-            ]
+        rows.append("<tr>" + "".join(cells_html) + "</tr>")
 
-        rows_html.append("<tr>" + "".join(cells_html) + "</tr>")
-
+    # 全体を軽く囲う（見やすさ用）
     return (
-        "<div style='margin:10px 0; padding:10px; border:1px solid #cfd7e6; "
-        "border-radius:12px; background:#fbfcff;'>"
-        "<div style='font-size:12px; color:#667; margin-bottom:6px;'>表</div>"
+        "<div style='margin:10px 0;'>"
         "<table style='border-collapse:collapse; width:100%;'>"
-        + "".join(rows_html)
+        + "".join(rows)
         + "</table>"
         "</div>"
     )
 
 
-def _richtext_item_to_html_and_parts(
-    item_el: ET.Element,
-    *,
-    field_name: str,
-    part_prefix: str,
-    attachment_slots: Dict[str, str],
-    attachment_mimes: Dict[str, str],
-) -> Tuple[str, List[BinaryPart]]:
-    """
-    <item name="Detail"> の <richtext> を
-    - HTML（画像位置・添付位置・表）
-    - BinaryPart（画像）
-    に変換する。
-    """
+
+def richtext_item_to_html_and_pending(
+    item_el: ET.Element,    # DXLのitem要素
+    attachment_by_name: dict[str, Any],
+) -> tuple[str, list[PendingPart], dict[str, PendingPart]]:
+    
+    # フィールド名取得
+    field_name = (item_el.get("name") or "unknown").strip()
+
+    # 実際にリッチテキストが入っていなければ処理をスキップ（消していいかも）
     rt = item_el.find("dxl:richtext", DXL_NS)
     if rt is None:
-        return "", []
+        logger.warning("richtext not found. skip field=%s", field_name)
+        return "", [], {}
 
-    parts: List[BinaryPart] = []
-    out: List[str] = []
 
-    # richtext直下の子を“順番通り”に処理（parとtableが混在するため）
+
+    # 返却するHTML要素
+    out: list[str] = []
+    # バイナリデータ（添付ファイル / 画像など）のリスト
+    pending_list: list[PendingPart] = []
+
+    # 画像ファイル連番
+    img_i = 1
+    # 添付ファイル連番
+    att_i = 1
+
     for child in list(rt):
-        t = _local_tag(child.tag)
+        tag = _local_tag(child.tag)
 
-        if t == "par":
+        # 「parタグ」の走査
+        if tag == "par":
             par = child
 
-            # 1) 添付参照（本文中の位置を復元）
+            # 添付ファイル
             attrefs = par.findall(".//dxl:attachmentref", DXL_NS)
+
             if attrefs:
+                # ラベル作成
                 label = _par_text_without_binary(par)
                 if label:
+                    # ラベルを埋め込んだHTML作成
                     out.append(f"<p>{html.escape(label)}</p>")
 
                 for a in attrefs:
                     fn = (a.get("displayname") or a.get("name") or "").strip()
                     if not fn:
                         continue
-
-                    slot = attachment_slots.get(fn)
-                    if slot:
-                        out.append(
-                            _attachment_object_html(
-                                part_name=slot,
-                                filename=fn,
-                                mime=attachment_mimes.get(fn, "application/octet-stream"),
-                            )
-                        )
-                    else:
-                        # 送れなかった（Graph制約など）
-                        out.append(
-                            f"<div style='color:#888; margin:6px 0;'>"
-                            f"[添付: {html.escape(fn)}（未送信）]"
-                            f"</div>"
-                        )
+                    ph_html, pending = _attref_to_placeholder_and_pending(
+                        field_name=field_name,
+                        att_index=att_i,
+                        filename=fn,
+                        attachment_by_name=attachment_by_name,
+                    )
+                    out.append(ph_html)
+                    if pending:
+                        pending_list.append(pending)
+                    att_i += 1
                 continue
 
-            # 2) 画像
+            # 画像データ（キャプチャ）の走査
             pic = par.find(".//dxl:picture", DXL_NS)
+
             if pic is not None:
-                img_html = _picture_to_html_and_parts(
-                    pic, field_name=field_name, part_prefix=part_prefix, parts=parts
+                # HTML（マーカー込み）・バイナリデータの作成
+                ph_html, pending = _picture_to_html_and_pending(
+                    pic, field_name=field_name, img_index=img_i
                 )
-                if img_html:
-                    out.append(img_html)
-                # 未対応なら何も出さない（アイコン等は不要方針）
+
+                # HTML追加
+                if pending:
+                    pending_list.append(pending)
+
+
+                # バイナリリスト追加
+                pending_list.append(pending)
+ 
+                img_i += 1
+
                 continue
 
-            # 3) テキスト
+            # テキストの走査
             txt = _par_text_without_binary(par)
-            if txt:
-                out.append(f"<p>{html.escape(txt)}</p>")
-            else:
-                out.append("<p><br/></p>")
+            out.append(f"<p>{html.escape(txt)}</p>" if txt)
             continue
 
-        if t == "table":
-            out.append(
-                _table_to_html(
-                    child,
-                    field_name=field_name,
-                    part_prefix=part_prefix,
-                    parts=parts,
-                    attachment_slots=attachment_slots,
-                    attachment_mimes=attachment_mimes,
-                )
-            )
-            continue
 
-        # その他は現状無視（pardef等）
-        continue
-
-    return "\n".join(out), parts
+        # 「tableタグ」の走査
+        if tag == "table":
+            table_html = _table_to_html(child)
+            out.append(table_html)
 
 
-def _attachments_to_parts(attachment_objs, *, name_map: Dict[str, str]) -> List[BinaryPart]:
-    """$FILEから抽出した添付を、Graph multipart用 BinaryPart に変換（nameは本文側の割当を使う）。"""
-    parts: List[BinaryPart] = []
-    for a in attachment_objs:
-        part_name = name_map.get(a.filename)
-        if not part_name:
-            continue
-        parts.append(
-            BinaryPart(
-                name=part_name,
-                filename=a.filename,
-                content_type=a.mime,
-                data=a.content,
-                origin_field="$FILE",
-            )
-        )
-    return parts
 
 
-def dxl_to_onenote_payload(dxl_path: str, *, rich_fields: List[str]) -> Tuple[OneNoteRow, List[BinaryPart]]:
-    """
-    DXL -> (OneNoteRow, parts)
-    - OneNoteRow: 文字フィールドは既存ロジック、rich_fieldsはDXL直読みでHTMLへ差し替え
-    - parts: rich_fields内の画像 + $FILE（添付）のうち送れる分を返す
-    """
+    ph_map = {p.placeholder_id: p for p in pending_list}
+
+    return "\n".join(out), pending_list, ph_map
+
+
+
+def create_contents_from_dxl(
+    dxl_path: str,
+) -> tuple[OneNoteRow, list[PendingPart], dict[str, PendingPart]]:
+
+    all_pending: list[PendingPart] = []
+    all_map: dict[str, PendingPart] = {}
+
+
+    # 1件分の全データ取得
     note = dxl_to_onenote_row(dxl_path)
     root = ET.parse(dxl_path).getroot()
 
-    replace_kwargs = {}
-
-    # --- $FILE 添付（全件）を先に抽出してマップ化
+    # 添付ファイル（$FILE）全件を抽出
     attachment_objs_all = extract_attachments_from_dxl(dxl_path) or []
     attachment_by_name = {a.filename: a for a in attachment_objs_all}
 
-    # ついでにmime参照用
-    attachment_mimes_all = {a.filename: (a.mime or "application/octet-stream") for a in attachment_objs_all}
+    # RichTextフィールドに対して下記を行う
+    # ・HTML変換
+    # ・埋め込みファイル（キャプチャ画像やExcelなど）の抽出
+    for field_name in RICH_FIELDS:
 
-    # --- 本文中に登場する添付ref名を “登場順” に拾う（rich_fieldsの順に走査）
-    attref_names_in_body: List[str] = []
-    for field_name in rich_fields:
-        item = root.find(f".//dxl:item[@name='{field_name}']", DXL_NS)
-        if item is None:
-            continue
-        rt = item.find("dxl:richtext", DXL_NS)
-        if rt is None:
-            continue
-
-        for el in rt.iter():
-            if _local_tag(el.tag) == "attachmentref":
-                fn = (el.get("displayname") or el.get("name") or "").strip()
-                if fn:
-                    attref_names_in_body.append(fn)
-
-    # 重複を潰しつつ順序は保持
-    seen = set()
-    attref_names_in_body = [x for x in attref_names_in_body if not (x in seen or seen.add(x))]
-
-    parts_all: List[BinaryPart] = []
-
-    # --- いったん画像HTML生成に必要な “添付スロット割当” を準備（この時点では枠未確定）
-    # ここでは「送れた添付だけ slot を持つ」ので、まずは空で作っておく → 画像数が決まってから割り当てる
-    attachment_slots: Dict[str, str] = {}
-
-    # --- 画像（rich_fields）を先に生成（既存方針：画像優先）
-    for field_name in rich_fields:
+        # 対象フィールド（型：RichText）をセット
         item = root.find(f".//dxl:item[@name='{field_name}']", DXL_NS)
         if item is None:
             continue
 
-        field_html, img_parts = _richtext_item_to_html_and_parts(
+        # フィールド（RichText）から下記を取得
+        # 変換後HTML
+        # バイナリデータ一時リスト
+        # バイナリデータ変換リスト
+        field_html, pending_list, ph_map = richtext_item_to_html_and_pending(
             item,
-            field_name=field_name,
-            part_prefix=f"{field_name.lower()}_img_",
-            attachment_slots=attachment_slots,          # まだ空（添付objectは後でslotが入ると有効化）
-            attachment_mimes=attachment_mimes_all,
+            attachment_by_name,
         )
+
         if field_html:
-            replace_kwargs[field_name] = field_html
-        parts_all.extend(img_parts)
+            setattr(note, field_name, field_html)
 
-    # --- 添付は「画像で使った残り枠」だけ送る（Graph制約）
-    remain = max(0, MAX_BINARY_PARTS_PER_PAGE - len(parts_all))
+        all_pending.extend(pending_list)
+        all_map.update(ph_map)
 
-    # 送る候補：本文中で参照された順 → 余ればその他
-    send_names: List[str] = []
-    for fn in attref_names_in_body:
-        if fn in attachment_by_name:
-            send_names.append(fn)
-    if len(send_names) < remain:
-        for fn in attachment_by_name.keys():
-            if fn not in send_names:
-                send_names.append(fn)
-
-    send_names = send_names[:remain]
-    attachment_objs_send = [attachment_by_name[n] for n in send_names]
-
-    # slot割当（本文中の <object data="name:attX"> に使う）
-    attachment_slots = {fn: f"att{i}" for i, fn in enumerate(send_names, start=1)}
-
-    # note側には “全ファイル名” は残す
+    # note側には全添付名だけ残す（メタとして）
     if attachment_objs_all:
-        replace_kwargs["attachments"] = [a.filename for a in attachment_objs_all]
-        replace_kwargs["attachment_objs"] = attachment_objs_send  # 使ってるなら維持
+        note.attachments = [a.filename for a in attachment_objs_all]
 
-    # --- ここで「添付slotが確定」したので、rich_fields のHTMLを作り直して“本文中にobjectを差し込む”
-    # （最初の生成はslot空なので、attachmentrefがあってもobject化されない）
-    for field_name in rich_fields:
-        item = root.find(f".//dxl:item[@name='{field_name}']", DXL_NS)
-        if item is None:
-            continue
-        field_html, img_parts_dummy = _richtext_item_to_html_and_parts(
-            item,
-            field_name=field_name,
-            part_prefix=f"{field_name.lower()}_img_",
-            attachment_slots=attachment_slots,
-            attachment_mimes=attachment_mimes_all,
-        )
-        if field_html:
-            replace_kwargs[field_name] = field_html
-
-    # 添付BinaryPartsを追加
-    parts_all.extend(_attachments_to_parts(attachment_objs_send, name_map=attachment_slots))
-
-    # frozen dataclass なので replace で差し替え
-    if replace_kwargs:
-        note = replace(note, **replace_kwargs)
-
-    # 最終保険：Graph制約に合わせて5件まで（Presentation除く）
-    parts_all = parts_all[:MAX_BINARY_PARTS_PER_PAGE]
-
-    return note, parts_all
+    return note, all_pending, all_map

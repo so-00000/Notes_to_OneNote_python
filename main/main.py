@@ -1,7 +1,5 @@
 # main.py
 from __future__ import annotations
-
-import os
 import time
 from pathlib import Path
 from dataclasses import dataclass
@@ -16,9 +14,8 @@ from .config import (
 )
 from .find_id import find_notebook_id, find_section_id
 from .graph_client import GraphClient
-from .renderer_rich import render_incident_like_page
-from .dxl_to_payload import dxl_to_onenote_payload, BinaryPart
 from .logging.logging_config import setup_logging
+from .page_payload_builder import build_page_payload
 
 @dataclass(frozen=True)
 class AppSettings:
@@ -68,18 +65,6 @@ def _load_settings() -> AppSettings:
     if not dxl_dir.is_dir():
         raise RuntimeError(f"DXL_DIR is not a directory: {dxl_dir}")
 
-    # RichText（画像 / リンク / 表などを拾う可能性のあるフィールド）
-    # タスク：動的にする
-    rich_fields = [
-        "Agenda",
-        "Detail",
-        "Detail_1",
-        "Fd_Link_1",
-        "Parmanent",
-        "Reason",
-        "Temporary",
-    ]
-
     return AppSettings(
         access_token=access_token,
         notebook_name=NOTEBOOK_NAME,
@@ -87,7 +72,6 @@ def _load_settings() -> AppSettings:
         dxl_dir=dxl_dir,
         title_column=TITLE_COLUMN or None,
         sleep_sec=SLEEP_SEC,
-        rich_fields=rich_fields,
     )
 
 
@@ -97,31 +81,6 @@ def _load_dxl_files(dxl_dir: Path) -> list[Path]:
     if not dxl_files:
         raise RuntimeError(f"No DXL files found in: {dxl_dir}")
     return dxl_files
-
-
-
-def _build_page_payload(
-    dxl_path: Path,
-    *,
-    row_no: int,
-    title_column: str | None,
-    rich_fields: list[str],
-) -> tuple[str, str, list[BinaryPart]]:
-    """
-    DXL1件を読み込み、OneNoteへ送るための情報を作る。
-
-    戻り値: (title, body_html, parts)
-    """
-    base = os.path.basename(str(dxl_path))
-    note, parts = dxl_to_onenote_payload(str(dxl_path), rich_fields=rich_fields)
-
-    # ページタイトル作成（ドキュメント番号_件名）
-    title = note.DocumentNo + "_" + note.Fd_Text_1
-
-    # 本文（HTML）作成
-    body_html = render_incident_like_page(note, source_file=base, row_no=row_no)
-
-    return title, body_html, parts
 
 
 
@@ -144,27 +103,21 @@ def main() -> None:
         for i, dxl_path in enumerate(dxl_files, start=1):
 
             # タイトル・本文・画像/添付ファイルの作成
-            title, body_html, parts = _build_page_payload(
+            payload = build_page_payload(
                 dxl_path,
                 row_no=i,
-                title_column=settings.title_column,
-                rich_fields=settings.rich_fields,
             )
+
 
             # OneNoteページ作成のリクエスト
-            page = client.create_onenote_page(
+            client.create_onenote_page(
                 section_id=section_id,
-                page_title=title,
-                body_html=body_html,
-                binary_parts=parts,
+                page_title=mat.page_title,
+                body_html=mat.body_html,
+                data_parts=mat.parts,
             )
 
-            web_url = (page.get("links", {}).get("oneNoteWebUrl", {}) or {}).get("href")
             created += 1
-
-            img_count = sum(1 for p in parts if p.content_type.startswith("image/"))
-            att_count = len(parts) - img_count
-            print(f"[OK] {created}: title='{title}' images={img_count} attachments={att_count} url={web_url}")
 
 
             if settings.sleep_sec:

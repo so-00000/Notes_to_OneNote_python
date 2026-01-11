@@ -10,7 +10,7 @@ import requests
 import logging
 
 
-from .dxl_to_payload import BinaryPart
+from models import  MultipartPageRequest
 
 from .logging.graph_logging import mask_headers, summarize_request_kwargs, truncate_text
 
@@ -256,9 +256,7 @@ class GraphClient:
         self,
         *,
         section_id: str,
-        page_title: str,
-        body_html: str,
-        binary_parts: Iterable[BinaryPart],
+        req: MultipartPageRequest
     ) -> dict:
         """
         OneNoteのページをmultipartで作成する。
@@ -275,10 +273,10 @@ class GraphClient:
         xhtml = f"""<!DOCTYPE html>
 <html>
 <head>
-    <title>{html.escape(page_title)}</title>
+    <title>{html.escape(req.title)}</title>
 </head>
 <body>
-{body_html}
+{req.body_html}
 </body>
 </html>"""
 
@@ -288,7 +286,8 @@ class GraphClient:
 
 
         # Graph制約: Presentation + 画像(最大5)
-        limited_parts = list(binary_parts)[:5]
+        # 要修正（分割対応）
+        limited_parts = list(req.binary_parts)[:5]
         for binary_part in limited_parts:
             # <img src="name:{part.name}"> に対応するキーで送る
             data_parts[binary_part.name] = (binary_part.filename, binary_part.data, binary_part.content_type)
