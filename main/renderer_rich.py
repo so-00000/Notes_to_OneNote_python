@@ -109,10 +109,6 @@ def _as_html_or_text(s: Optional[str]) -> str:
 # ========== main renderer ==========
 
 def render_incident_like_page(note: OneNoteRow, *, source_file: str | None = None, row_no: int | None = None) -> str:
-    """
-    「システム管理」っぽいブロック構成でOneNote用HTML（<body>に入れる断片）を組み立てる。
-    DXL→OneNoteRow版。
-    """
 
     container_start = """
     <div style="
@@ -144,7 +140,7 @@ def render_incident_like_page(note: OneNoteRow, *, source_file: str | None = Non
     work_time = note.WorkTime
 
     # --- 本文/件名
-    subject_html = _as_html_or_text(note.Fd_Text_1 or note.DetailSubject or note.ReasonSubject)
+    subject_html = _as_html_or_text(note.Fd_Text_1)
     detail_html = _as_html_or_text(note.Detail)
     reason_html = _as_html_or_text(note.Reason)
     measure_memo_html = _as_html_or_text(note.Measure)
@@ -257,7 +253,7 @@ def render_incident_like_page(note: OneNoteRow, *, source_file: str | None = Non
     parts.append("</table>")
 
     # =========================
-    # 件名 / 内容（表形式をやめる）
+    # 件名 / 内容
     # =========================
     parts.append(_section_title("件名 / 内容"))
 
@@ -270,10 +266,6 @@ def render_incident_like_page(note: OneNoteRow, *, source_file: str | None = Non
 
     parts.append(_section_title("理由・原因"))
     parts.append(reason_html)
-
-    print(r"================================")
-    print(reason_html)
-    print(r"================================")
 
     parts.append(_section_title("対応（メモ）"))
     parts.append(measure_memo_html)
@@ -309,4 +301,5 @@ def render_incident_like_page(note: OneNoteRow, *, source_file: str | None = Non
     parts.append(src_html)
 
     container_end = "</div>"
+    
     return container_start + "\n".join(parts) + container_end

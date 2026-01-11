@@ -22,8 +22,7 @@ from .logging_config import setup_logging
 
 @dataclass(frozen=True)
 class AppSettings:
-    """アプリ全体で使う設定値をひとまとめにする。"""
-
+    """アプリ全体で使う設定値"""
     access_token: str
     notebook_name: str
     section_name: str
@@ -32,26 +31,6 @@ class AppSettings:
     sleep_sec: float
     rich_fields: list[str]
 
-
-def _make_title(note: object, dxl_filename: str, *, title_column: str | None) -> str:
-    """
-    タイトルの決定ルール。
-
-    1. config.TITLE_COLUMN があればその値を優先
-    2. DocumentNo/DetailSubject/ReasonSubject を順に探す
-    3. それも無い場合はファイル名
-    """
-    if title_column:
-        v = getattr(note, title_column, None)
-        if v and str(v).strip():
-            return str(v).strip()
-
-    for key in ("DocumentNo", "DetailSubject", "ReasonSubject"):
-        v = getattr(note, key, None)
-        if v and str(v).strip():
-            return str(v).strip()
-
-    return dxl_filename
 
 
 def _resolve_dxl_dir(config_value: str) -> Path:
@@ -96,7 +75,7 @@ def _load_settings() -> AppSettings:
         "Detail",
         "Detail_1",
         "Fd_Link_1",
-        "Parmanent"
+        "Parmanent",
         "Reason",
         "Temporary",
     ]
@@ -120,6 +99,7 @@ def _load_dxl_files(dxl_dir: Path) -> list[Path]:
     return dxl_files
 
 
+
 def _build_page_payload(
     dxl_path: Path,
     *,
@@ -130,13 +110,13 @@ def _build_page_payload(
     """
     DXL1件を読み込み、OneNoteへ送るための情報を作る。
 
-    戻り値: (title, body_html, image_parts)
+    戻り値: (title, body_html, parts)
     """
     base = os.path.basename(str(dxl_path))
     note, parts = dxl_to_onenote_payload(str(dxl_path), rich_fields=rich_fields)
 
-    # ページタイトル作成
-    title = _make_title(note, base, title_column=title_column)
+    # ページタイトル作成（ドキュメント番号_件名）
+    title = note.DocumentNo + "_" + note.Fd_Text_1
 
     # 本文（HTML）作成
     body_html = render_incident_like_page(note, source_file=base, row_no=row_no)
@@ -144,19 +124,14 @@ def _build_page_payload(
     return title, body_html, parts
 
 
-def main() -> None:
 
-    
+def main() -> None:
 
     setup_logging(level="DEBUG")
     
     settings = _load_settings()
-
     dxl_files = _load_dxl_files(settings.dxl_dir)
     client = GraphClient(settings.access_token)
-
-    
-
 
     created = 0
 
@@ -168,6 +143,7 @@ def main() -> None:
         # DXLファイルを1件ずつ処理
         for i, dxl_path in enumerate(dxl_files, start=1):
 
+            # タイトル・本文・画像/添付ファイルの作成
             title, body_html, parts = _build_page_payload(
                 dxl_path,
                 row_no=i,
@@ -175,7 +151,7 @@ def main() -> None:
                 rich_fields=settings.rich_fields,
             )
 
-            # OneNoteページの作成
+            # OneNoteページ作成のリクエスト
             page = client.create_onenote_page(
                 section_id=section_id,
                 page_title=title,
