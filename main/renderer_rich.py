@@ -100,7 +100,7 @@ def _as_html_or_text(s: Optional[str]) -> str:
     if not s:
         return ""
     t = str(s)
-    if "<img" in t or "<p" in t or "<div" in t:
+    if "<img" in t or "<p" in t or "<P" in t or "<div" in t:
         return t
     return _nl2br(t)
 
@@ -125,7 +125,6 @@ def render_incident_like_page(note: OneNoteRow, *, source_file: str | None = Non
 
     # --- タイトル/識別
     management_no = note.DocumentNo or ""
-    title_line = _join_nonempty("システム管理", "（移行）", sep=" ")
 
     # --- 承認系
     reporter1 = _join_nonempty(note.ReporterNm_1, f"({note.ReporterDep_1})" if note.ReporterDep_1 else None)
@@ -218,15 +217,7 @@ def render_incident_like_page(note: OneNoteRow, *, source_file: str | None = Non
     # ===== assemble =====
     parts: list[str] = []
 
-    # ヘッダー帯
-    parts.append(
-        "<div style='padding:10px; background:#d81b60; color:#fff; font-size:18px; font-weight:bold;'>"
-        f"{_esc(title_line)}"
-        "</div>"
-    )
-
     # 承認経路 / 経過
-    parts.append(_section_title("承認経路 / 経過"))
     parts.append("<table style='width:100%; border-collapse:collapse;'>")
     parts.append(_kv_row(
         "発生報告",
@@ -279,6 +270,10 @@ def render_incident_like_page(note: OneNoteRow, *, source_file: str | None = Non
 
     parts.append(_section_title("理由・原因"))
     parts.append(reason_html)
+
+    print(r"================================")
+    print(reason_html)
+    print(r"================================")
 
     parts.append(_section_title("対応（メモ）"))
     parts.append(measure_memo_html)

@@ -18,7 +18,7 @@ from .find_id import find_notebook_id, find_section_id
 from .graph_client import GraphClient
 from .renderer_rich import render_incident_like_page
 from .dxl_to_payload import dxl_to_onenote_payload, BinaryPart
-from .delete_all_pages_in_section import delete_all_pages_in_section
+from .logging_config import setup_logging
 
 @dataclass(frozen=True)
 class AppSettings:
@@ -89,8 +89,17 @@ def _load_settings() -> AppSettings:
     if not dxl_dir.is_dir():
         raise RuntimeError(f"DXL_DIR is not a directory: {dxl_dir}")
 
-    # 画像（スクショ）を拾う可能性のあるRichTextフィールド
-    rich_fields = ["Detail", "Reason", "Temporary", "Parmanent"]
+    # RichText（画像 / リンク / 表などを拾う可能性のあるフィールド）
+    # タスク：動的にする
+    rich_fields = [
+        "Agenda",
+        "Detail",
+        "Detail_1",
+        "Fd_Link_1",
+        "Parmanent"
+        "Reason",
+        "Temporary",
+    ]
 
     return AppSettings(
         access_token=access_token,
@@ -125,32 +134,40 @@ def _build_page_payload(
     """
     base = os.path.basename(str(dxl_path))
     note, parts = dxl_to_onenote_payload(str(dxl_path), rich_fields=rich_fields)
+
+    # ページタイトル作成
     title = _make_title(note, base, title_column=title_column)
+
+    # 本文（HTML）作成
     body_html = render_incident_like_page(note, source_file=base, row_no=row_no)
+
     return title, body_html, parts
 
 
 def main() -> None:
+
+    
+
+    setup_logging(level="DEBUG")
+    
     settings = _load_settings()
 
     dxl_files = _load_dxl_files(settings.dxl_dir)
-
     client = GraphClient(settings.access_token)
 
-    # # 削除したいとき
-    # notebook_id = find_notebook_id(client, settings.notebook_name)
-    # section_id = find_section_id(client, notebook_id, settings.section_name)
-    # delete_all_pages_in_section(client, section_id)
+    
 
-    # #########################################################
 
     created = 0
 
     try:
+        # 対象OneNoteのノートブックID・セクションIDの取得
         notebook_id = find_notebook_id(client, settings.notebook_name)
         section_id = find_section_id(client, notebook_id, settings.section_name)
 
+        # DXLファイルを1件ずつ処理
         for i, dxl_path in enumerate(dxl_files, start=1):
+
             title, body_html, parts = _build_page_payload(
                 dxl_path,
                 row_no=i,
@@ -158,11 +175,12 @@ def main() -> None:
                 rich_fields=settings.rich_fields,
             )
 
+            # OneNoteページの作成
             page = client.create_onenote_page(
                 section_id=section_id,
                 page_title=title,
                 body_html=body_html,
-                parts=parts,
+                binary_parts=parts,
             )
 
             web_url = (page.get("links", {}).get("oneNoteWebUrl", {}) or {}).get("href")

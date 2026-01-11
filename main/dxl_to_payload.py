@@ -8,7 +8,7 @@ import xml.etree.ElementTree as ET
 from dataclasses import dataclass, replace
 from typing import Optional, List, Tuple, Dict
 
-from .models import OneNoteRow
+from .models import OneNoteRow, BinaryPart
 from .dxl_to_model import dxl_to_onenote_row  # 既存
 from .dxl_attachments import extract_attachments_from_dxl  # 追加
 
@@ -16,16 +16,6 @@ DXL_NS = {"dxl": "http://www.lotus.com/dxl"}
 
 # Graph制約：Presentation + バイナリ最大5（合計6パート）
 MAX_BINARY_PARTS_PER_PAGE = 5
-
-
-@dataclass
-class BinaryPart:
-    """Graphへmultipart送信するバイナリパート（画像/添付 共通）。"""
-    name: str
-    filename: str
-    content_type: str
-    data: bytes
-    origin_field: str
 
 
 # DXL内の画像タグ名 -> MIMEタイプ

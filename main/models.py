@@ -93,3 +93,24 @@ class OneNoteRow:
     attachments: List[str] = field(default_factory=list)         # 表示/参照用
     attachment_objs: List[DxlAttachment] = field(default_factory=list)  # 送信用（本体）
     notes_links: List[str] = field(default_factory=list)  # doclink等を仮リンク文字列で保持
+
+
+# OneNoteページ作成時のバイナリパートデータモデル
+@dataclass(frozen=True)
+class BinaryPart:
+    # multipart の「データ部分」1つ
+    name: str          # multipart のキー。HTML の name:参照にも使う（例: "img1"）
+    filename: str      # 送信するファイル名（例: "a.png" / "b.xlsx"）
+    content_type: str  # MIME（例: "image/png"）
+    data: bytes        # バイナリ
+    origin_field: str  # 元のDXLフィールド名など（デバッグ用
+
+
+
+# OneNoteページ作成時のペイロードデータモデル
+@dataclass(frozen=True)
+class OneNoteCreatePagePayload:
+    section_id: str
+    page_title: str
+    body_html: str
+    parts: list[BinaryPart] = field(default_factory=list)

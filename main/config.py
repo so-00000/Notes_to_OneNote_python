@@ -1,4 +1,3 @@
-ACCESS_TOKEN = ""
 NOTEBOOK_NAME = "TEST_Notes_to_OneNote"
 SECTION_NAME = "障害DB"
 
