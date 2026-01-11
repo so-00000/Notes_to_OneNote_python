@@ -12,7 +12,7 @@ import logging
 
 from .dxl_to_payload import BinaryPart
 
-from .graph_logging import mask_headers, summarize_request_kwargs, truncate_text
+from .logging.graph_logging import mask_headers, summarize_request_kwargs, truncate_text
 
 MultipartPart = Tuple[str, bytes, str]  # (filename, content, content_type)
 
