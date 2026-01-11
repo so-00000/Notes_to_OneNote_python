@@ -1,17 +1,16 @@
-# dxl_to_payload.py
+# dxl_to_page_material.py
 from __future__ import annotations
 
 import base64
 import html
 import re
 import xml.etree.ElementTree as ET
-from dataclasses import replace
-from typing import Optional, Tuple
+from typing import Optional
 
 from .models import OneNoteRow
-from .dxl_to_model import dxl_to_onenote_row  # 既存
-from .dxl_attachments import extract_attachments_from_dxl  # 追加
-from .models import PendingPart
+from .dxl_to_model import dxl_to_onenote_row
+from .dxl_attachments import extract_attachments_from_dxl
+from .models import Segment, BinaryPart
 from .config import RICH_FIELDS
 from typing import Any
 import logging
@@ -31,9 +30,16 @@ _BINARY_TAG_TO_MIME = {
 }
 
 
+def make_anchor(seg_id: str) -> str:
+    sid = html.escape(seg_id, quote=True)
+    return f"<div id='{sid}' data-id='{sid}'></div>"
+
+
+
 def _local_tag(tag: str) -> str:
     """タグのローカル名だけ返す（XMLの名前空間を削除）"""
     return tag.split("}", 1)[1] if "}" in tag else tag
+
 
 
 def _safe_px(v: Optional[str]) -> Optional[int]:
@@ -44,10 +50,10 @@ def _safe_px(v: Optional[str]) -> Optional[int]:
     return int(m.group(1)) if m else None
 
 
+
 def _par_text_without_binary(par: ET.Element) -> str:
     """
-    par 内のテキストを取るが、バイナリ系/添付参照系は本文に混ぜない。
-    ※ attachmentref はファイル名などが入っていても、object化するので本文には出さない
+    par 内のテキストのみ抽出（バイナリの文字列削除）
     """
     skip = {
         "picture",
@@ -75,35 +81,42 @@ def _par_text_without_binary(par: ET.Element) -> str:
 
 
 
-def _sanitize_id(s: str) -> str:
-    s = s.lower()
-    s = re.sub(r"[^a-z0-9_-]+", "-", s)
-    s = re.sub(r"-{2,}", "-", s).strip("-")
-    return s or "field"
+# 添付ファイル要素からセグメントデータを作成する
+def _attref_to_segment(
+    *,
+    filename: str,
+    field_name: str,
+    segment_id: str,
+    attachment_by_name: dict[str, Any],
+) -> Segment | None:
+    a = attachment_by_name.get(filename)
+    if not a:
+        # 実体が無いなら埋め込みできない（アンカーは残る）
+        return None
 
-def _make_ph_id(field_name: str, kind: str, idx: int) -> str:
-    return f"ph-{_sanitize_id(field_name)}-{kind}-{idx:03d}"
+    binary = BinaryPart(
+        kind="attachment",
+        filename=a.filename,
+        content_type=(a.mime or "application/octet-stream"),
+        data=a.content,
+        origin_field="$FILE",
+    )
+    return Segment(segment_id=segment_id, kind="attachment", binary_part=binary)
 
-def _ph_div(ph_id: str, *, filename: str | None = None) -> str:
-    if filename:
-        fn = html.escape(filename, quote=True)
-        return f"<div data-id='{ph_id}' data-filename='{fn}'></div>"
-    return f"<div data-id='{ph_id}'></div>"
 
 
-
-# picture要素からHTML（マーカー込み）・バイナリデータを作成する
-def _picture_to_html_and_pending(
+# picture要素からセグメントデータを作成する
+def _picture_to_segment(
     pic: ET.Element,
     *,
     field_name: str,
+    seg_id: str,
     img_index: int,
-) -> tuple[str, PendingPart | None]:
+) -> Segment | None:
     w = _safe_px(pic.get("width"))
     h = _safe_px(pic.get("height"))
 
-    ph_id = _make_ph_id(field_name, "img", img_index)
-
+    # 画像バイナリの取り出し
     for child in list(pic):
         tag = _local_tag(child.tag)
         mime = _BINARY_TAG_TO_MIME.get(tag)
@@ -117,11 +130,11 @@ def _picture_to_html_and_pending(
         try:
             data = base64.b64decode(b64)
         except Exception:
-            return _ph_div(ph_id), None
+            return None
 
-        filename = f"{ph_id}.{tag}"
-        pending = PendingPart(
-            placeholder_id=ph_id,
+        filename = f"{seg_id}.{tag}"
+
+        binary = BinaryPart(
             kind="image",
             filename=filename,
             content_type=mime,
@@ -130,37 +143,9 @@ def _picture_to_html_and_pending(
             width=w,
             height=h,
         )
-        return _ph_div(ph_id), pending
+        return Segment(segment_id=seg_id, kind="image", binary_part=binary)
 
-    # 画像の形式が未対応でも位置は残す
-    return _ph_div(ph_id), None
-
-
-
-def _attref_to_placeholder_and_pending(
-    *,
-    field_name: str,
-    att_index: int,
-    filename: str,
-    attachment_by_name: dict[str, Any],   # extract_attachments_from_dxl が返すオブジェクト
-) -> tuple[str, PendingPart | None]:
-    ph_id = _make_ph_id(field_name, "att", att_index)
-    html_ph = _ph_div(ph_id, filename=filename)
-
-    a = attachment_by_name.get(filename)
-    if not a:
-        # 実体ないので placeholder は残すが pending は None
-        return html_ph, None
-
-    pending = PendingPart(
-        placeholder_id=ph_id,
-        kind="attachment",
-        filename=a.filename,
-        content_type=a.mime or "application/octet-stream",
-        data=a.content,
-        origin_field="$FILE",
-    )
-    return html_ph, pending
+    return None
 
 
 
@@ -200,10 +185,10 @@ def _table_to_html(table_el: ET.Element) -> str:
 
 
 
-def richtext_item_to_html_and_pending(
+def richtext_item_to_html_and_segment(
     item_el: ET.Element,    # DXLのitem要素
     attachment_by_name: dict[str, Any],
-) -> tuple[str, list[PendingPart], dict[str, PendingPart]]:
+) -> tuple[str, list[Segment]]:
     
     # フィールド名取得
     field_name = (item_el.get("name") or "unknown").strip()
@@ -212,19 +197,18 @@ def richtext_item_to_html_and_pending(
     rt = item_el.find("dxl:richtext", DXL_NS)
     if rt is None:
         logger.warning("richtext not found. skip field=%s", field_name)
-        return "", [], {}
+        return "", []
 
 
 
     # 返却するHTML要素
     out: list[str] = []
-    # バイナリデータ（添付ファイル / 画像など）のリスト
-    pending_list: list[PendingPart] = []
+    # セグメントデータ（バイナリデータを内包）のリスト
+    segment_list: list[Segment] = []
 
-    # 画像ファイル連番
-    img_i = 1
-    # 添付ファイル連番
-    att_i = 1
+
+    # セグメント連番
+    seg_i = 1
 
     for child in list(rt):
         tag = _local_tag(child.tag)
@@ -237,52 +221,62 @@ def richtext_item_to_html_and_pending(
             attrefs = par.findall(".//dxl:attachmentref", DXL_NS)
 
             if attrefs:
-                # ラベル作成
-                label = _par_text_without_binary(par)
-                if label:
-                    # ラベルを埋め込んだHTML作成
-                    out.append(f"<p>{html.escape(label)}</p>")
-
                 for a in attrefs:
                     fn = (a.get("displayname") or a.get("name") or "").strip()
                     if not fn:
                         continue
-                    ph_html, pending = _attref_to_placeholder_and_pending(
-                        field_name=field_name,
-                        att_index=att_i,
+
+                    # セグメントIDの作成
+                    seg_id = f"seg-{seg_i:03d}"
+
+                    # セグメントアンカーの埋め込み（後続処理でBinaryデータを含むHTMLに置換）
+                    out.append(make_anchor(seg_id))
+
+                    # セグメントデータの作成
+                    seg = _attref_to_segment(
                         filename=fn,
+                        field_name=field_name,
+                        segment_id=seg_id,
                         attachment_by_name=attachment_by_name,
                     )
-                    out.append(ph_html)
-                    if pending:
-                        pending_list.append(pending)
-                    att_i += 1
+
+                    if seg:
+                        segment_list.append(seg)
+
+                    seg_i += 1
+
                 continue
+
+
 
             # 画像データ（キャプチャ）の走査
             pic = par.find(".//dxl:picture", DXL_NS)
 
             if pic is not None:
-                # HTML（マーカー込み）・バイナリデータの作成
-                ph_html, pending = _picture_to_html_and_pending(
-                    pic, field_name=field_name, img_index=img_i
+
+                # セグメントIDの作成
+                seg_id = f"seg-{seg_i:03d}"
+
+                # セグメントアンカーの埋め込み（後続処理でBinaryデータを含むHTMLに置換）
+                out.append(make_anchor(seg_id))
+
+                # セグメントデータの作成
+                seg = _picture_to_segment(
+                    pic,
+                    field_name=field_name,
+                    seg_id=seg_id,
                 )
 
-                # HTML追加
-                if pending:
-                    pending_list.append(pending)
+                if seg:
+                    segment_list.append(seg)
 
-
-                # バイナリリスト追加
-                pending_list.append(pending)
- 
-                img_i += 1
+                seg_i += 1
 
                 continue
 
             # テキストの走査
             txt = _par_text_without_binary(par)
-            out.append(f"<p>{html.escape(txt)}</p>" if txt)
+            out.append(f"<p>{html.escape(txt)}</p>")
             continue
 
 
@@ -293,19 +287,15 @@ def richtext_item_to_html_and_pending(
 
 
 
-
-    ph_map = {p.placeholder_id: p for p in pending_list}
-
-    return "\n".join(out), pending_list, ph_map
+    return "\n".join(out), segment_list
 
 
 
-def create_contents_from_dxl(
+def create_materials_from_dxl(
     dxl_path: str,
-) -> tuple[OneNoteRow, list[PendingPart], dict[str, PendingPart]]:
+) -> tuple[OneNoteRow, list[Segment]]:
 
-    all_pending: list[PendingPart] = []
-    all_map: dict[str, PendingPart] = {}
+    all_segment: list[Segment] = []
 
 
     # 1件分の全データ取得
@@ -327,22 +317,20 @@ def create_contents_from_dxl(
             continue
 
         # フィールド（RichText）から下記を取得
-        # 変換後HTML
+        # 変換後HTML（segment_id付与）
         # バイナリデータ一時リスト
-        # バイナリデータ変換リスト
-        field_html, pending_list, ph_map = richtext_item_to_html_and_pending(
+        field_html, segment_list = richtext_item_to_html_and_segment(
             item,
             attachment_by_name,
         )
 
-        if field_html:
-            setattr(note, field_name, field_html)
+        field_html, segment_list = richtext_item_to_html_and_segment(item, attachment_by_name)
+        setattr(note, field_name, field_html or "")
 
-        all_pending.extend(pending_list)
-        all_map.update(ph_map)
+        all_segment.extend(segment_list)
 
     # note側には全添付名だけ残す（メタとして）
     if attachment_objs_all:
         note.attachments = [a.filename for a in attachment_objs_all]
 
-    return note, all_pending, all_map
+    return note, all_segment

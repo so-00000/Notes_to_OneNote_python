@@ -7,6 +7,23 @@ from typing import Literal
 
 
 # =========================
+#  ページ作成用のコンテンツ一式
+# =========================
+@dataclass(slots=True)
+class PagePayload:
+    """
+    Uploader（Graph送信）はこれを受け取り、制約（最大5バイナリ/回）に合わせて分割送信する。
+
+    - page_title        ページタイトル
+    - body_html         ページ本文（プレースホルダ込み）
+    - segment_list      セグメントデータ全件（バイナリデータを内包）
+    """
+    page_title: str
+    body_html: str
+    segment_list: List[Segment] = field(default_factory=list)
+
+
+# =========================
 #  ページ作成（multipart）用のリクエストパラメータ
 # =========================
 @dataclass(slots=True)
@@ -122,15 +139,27 @@ class OneNoteRow:
     notes_links: List[str] = field(default_factory=list)  # doclink等を仮リンク文字列で保持
 
 
+
+@dataclass(slots=True)
+class Segment:
+    segment_id: str          # data-id に使用
+    kind: Literal["image", "attachment"]
+    binary_part: BinaryPart  # 埋め込むバイナリデータ
+
+
+
 # OneNoteページ作成時のバイナリパートデータモデル
 @dataclass(frozen=True)
 class BinaryPart:
-    # multipart の「データ部分」1つ
-    name: str          # multipart のキー。HTML の name:参照にも使う（例: "img1"）
-    filename: str      # 送信するファイル名（例: "a.png" / "b.xlsx"）
-    content_type: str  # MIME（例: "image/png"）
-    data: bytes        # バイナリ
-    origin_field: str  # 元のDXLフィールド名など（デバッグ用
+    kind: Literal["image", "attachment"]
+    filename: str
+    content_type: str
+    data: bytes
+    origin_field: str
+    width: int | None = None
+    height: int | None = None
+
+
 
 
 

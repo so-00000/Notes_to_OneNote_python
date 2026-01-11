@@ -108,13 +108,10 @@ def main() -> None:
                 row_no=i,
             )
 
-
             # OneNoteページ作成のリクエスト
             client.create_onenote_page(
                 section_id=section_id,
-                page_title=mat.page_title,
-                body_html=mat.body_html,
-                data_parts=mat.parts,
+                page_payload=payload
             )
 
             created += 1

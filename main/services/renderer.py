@@ -1,4 +1,4 @@
-# renderer_rich.py
+# renderer.py
 from __future__ import annotations
 
 import html
@@ -87,37 +87,19 @@ def render_to_html_body(
     note: OneNoteRow,
     *,
     source_file: str | None = None,
-    row_no: int | None = None,
+    row_no: int | None = None
 ) -> str:
-    """
-    rendererのルール：
-    - “HTML断片”として扱うのは、DXL変換済みのRichTextフィールドだけ（ここで明示して append）
-    - それ以外は全部プレーンテキストとして escape + 改行<br/> で出す
-    """
-
-    container_start = (
-        "<div style='max-width:1100px; min-width:900px; margin:0 auto; padding:8px;'>"
-    )
-
+    container_start = "<div style='max-width:1100px; min-width:900px; margin:0 auto; padding:8px;'>"
     parts: list[str] = []
 
     def add_title(title: str) -> None:
         parts.append(_section_title(title))
 
     def add_text_block(s: Optional[str]) -> None:
-        # 空のときも高さを作って見た目を揃える
         parts.append(f"<p>{_nl2br(s) or '<br/>'}</p>")
 
-    def add_text_inline(s: Optional[str]) -> str:
-        return _esc(s)
 
-    def add_html_block(fragment: Optional[str]) -> None:
-        # “HTML断片” 前提。Noneなら空でOK
-        parts.append(fragment or "")
-
-    # -------------------------
-    # 承認経路（テーブル）
-    # -------------------------
+    # --- 承認経路 ---
     reporter1 = _join_nonempty(note.ReporterNm_1, note.ReporterDep_1)
     approver1 = _join_nonempty(note.ApproverNm_1, note.ApproverDep_1)
     reporter2 = _join_nonempty(note.ReporterNm_2, note.ReporterDep_2)
@@ -130,83 +112,65 @@ def render_to_html_body(
     parts.append(_kv_row("承認（完了）", _nl2br(_join_nonempty(approver2, _normalize_notes_dt(note.ApproveTime_2), note.ApproveStatus_2, sep="\n"))))
     parts.append("</table>")
 
-    # -------------------------
-    # 管理番号
-    # -------------------------
+    # --- 管理番号 ---
     add_title("管理番号")
     parts.append("<table style='width:100%; border-collapse:collapse;'>")
-    parts.append(
-        _kv_row(
-            "管理番号",
-            f"<span style='font-size:16px; font-weight:bold;'>{_esc(note.DocumentNo)}</span>",
-        )
-    )
+    parts.append(_kv_row("管理番号", f"<span style='font-size:16px; font-weight:bold;'>{_esc(note.DocumentNo)}</span>"))
     parts.append("</table>")
 
-    # -------------------------
-    # 基本情報（全部テキスト）
-    # -------------------------
+    # --- 基本情報 ---
     add_title("基本情報")
-
     entry_user = _join_nonempty(note.EntryUser, note.EntryDept)
     started = _fmt_dt(note.DocumentDate, note.DocumentTime)
     finished = _fmt_dt(note.ReplyDate, note.ReplyTime)
     work_time = (note.WorkTime or "").strip()
 
     parts.append("<table style='width:100%; border-collapse:collapse;'>")
-    parts.append(_kv_row("入力者", add_text_inline(entry_user)))
+    parts.append(_kv_row("入力者", _esc(entry_user)))
     parts.append(_kv_row("分類", _nl2br(note.Syogai_ck)))
-    parts.append(_kv_row("システム", add_text_inline(note.System)))
-    parts.append(_kv_row("サブシステム", add_text_inline(note.SubSystem)))
-    parts.append(_kv_row("処理名", add_text_inline(note.Task)))
-    parts.append(_kv_row("ステータス", add_text_inline(note.ActionStatus)))
-    parts.append(_kv_row("開始日時", add_text_inline(started)))
-    parts.append(_kv_row("完了日時", add_text_inline(finished)))
-    parts.append(_kv_row("工数", add_text_inline(work_time) + (" 分" if work_time else "")))
+    parts.append(_kv_row("システム", _esc(note.System)))
+    parts.append(_kv_row("サブシステム", _esc(note.SubSystem)))
+    parts.append(_kv_row("処理名", _esc(note.Task)))
+    parts.append(_kv_row("ステータス", _esc(note.ActionStatus)))
+    parts.append(_kv_row("開始日時", _esc(started)))
+    parts.append(_kv_row("完了日時", _esc(finished)))
+    parts.append(_kv_row("工数", _esc(work_time) + (" 分" if work_time else "")))
     parts.append("</table>")
 
-    # =========================
-    # 件名 / 内容
-    # =========================
+    # --- 件名 / 内容 ---
     add_title("件名 / 内容")
-
     add_title("件名")
-    add_text_block(note.Fd_Text_1)  # 件名はテキスト想定
+    add_text_block(note.Fd_Text_1)
 
     add_title("内容")
-    add_html_block(note.Detail)   
+    parts.append(note.Detail)
 
     add_title("理由・原因")
-    add_html_block(note.Reason)   
+    note.Reason
 
     add_title("対応（メモ）")
-    add_text_block(note.Measure)    # 対応メモはテキスト想定（必要なら後でRich化）
+    add_text_block(note.Measure)
 
-    # =========================
-    # 分析
-    # =========================
+    # --- 分析 ---
     add_title("分析")
-
     add_title("影響範囲")
-    add_text_block(note.Fd_Id_1)    # 影響範囲はテキスト想定
+    add_text_block(note.Fd_Id_1)
 
     add_title("暫定策")
-    add_html_block(note.Temporary)
+    parts.append(note.Temporary)
     add_title("暫定策予定日付")
     add_text_block(note.Temporary_Plan)
     add_title("暫定策完了日付")
     add_text_block(note.Temporary_Comp)
 
     add_title("恒久策")
-    add_html_block(note.Parmanent)
+    parts.append(note.Parmanent)
     add_title("恒久策予定日付")
     add_text_block(note.Parmanet_Plan)
     add_title("恒久策完了日付")
     add_text_block(note.Parmanet_Comp)
 
-    # -------------------------
-    # Notesリンク
-    # -------------------------
+    # --- Notesリンク ---
     add_title("Notesリンク")
     notes_links_li: list[str] = []
     for s in (getattr(note, "notes_links", None) or []):
@@ -217,9 +181,7 @@ def render_to_html_body(
             notes_links_li.append(f"<li><a href='{_esc(s)}'>{_esc(s)}</a></li>")
     parts.append("<ul>" + "".join(notes_links_li) + "</ul>" if notes_links_li else "<span style='color:#888;'>（なし）</span>")
 
-    # -------------------------
-    # ソース情報
-    # -------------------------
+    # --- ソース情報 ---
     if source_file is not None and row_no is not None:
         parts.append(
             "<div style='margin-top:10px; color:#888; font-size:12px;'>"

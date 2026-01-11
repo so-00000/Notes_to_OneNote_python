@@ -10,9 +10,10 @@ import requests
 import logging
 
 
-from models import  MultipartPageRequest
+from models import  PagePayload
 
 from .logging.graph_logging import mask_headers, summarize_request_kwargs, truncate_text
+from .segments_body import _segment_to_html, _inject_segments_into_body
 
 MultipartPart = Tuple[str, bytes, str]  # (filename, content, content_type)
 
@@ -252,45 +253,49 @@ class GraphClient:
 
 
 
-    def create_onenote_page(
-        self,
-        *,
-        section_id: str,
-        req: MultipartPageRequest
-    ) -> dict:
-        """
-        OneNoteのページをmultipartで作成する。
+def create_onenote_page(
+    self,
+    *,
+    section_id: str,
+    page_payload: PagePayload,
+) -> dict:
+    url = f"https://graph.microsoft.com/v1.0/me/onenote/sections/{quote(section_id)}/pages"
 
-        ※GraphAPI制約によりdata partは最大6パートまで。
+    # Graph制約: Presentation + バイナリ最大5
+    send_segments = page_payload.segment_list[:5]
 
-        Presentation：（必須）ページのHTMLを入れるパート
-        他：任意項目（画像、添付ファイルなど）
+    # セグメントID -> (inner html)
+    seg_to_inner_html: dict[str, str] = {}
+    data_parts = {}
 
-        """
-        url = f"https://graph.microsoft.com/v1.0/me/onenote/sections/{quote(section_id)}/pages"
+    # multipart key は att1..att5 にする（任意名でOK。本文の name: と一致させる）
+    for i, seg in enumerate(send_segments, start=1):
+        part_name = f"att{i}"
+        seg_to_inner_html[seg.segment_id] = _segment_to_html(seg, part_name=part_name)
 
-        # PresentationパートをXHTMLで作成
-        xhtml = f"""<!DOCTYPE html>
+        b = seg.binary_part
+        data_parts[part_name] = (b.filename, b.data, b.content_type)
+
+    # 本文にセグメントを埋め込む（送る分だけ）
+    body_html = _inject_segments_into_body(page_payload.body_html, seg_to_inner_html)
+
+    # Presentation (XHTML)
+    xhtml = f"""<!DOCTYPE html>
 <html>
 <head>
-    <title>{html.escape(req.title)}</title>
+  <title>{html.escape(page_payload.page_title)}</title>
 </head>
 <body>
-{req.body_html}
+{body_html}
 </body>
 </html>"""
 
-        data_parts = {
-            "Presentation": ("presentation.html", xhtml.encode("utf-8"), "text/html"),
-        }
+    # files / data_parts
+    files = {
+        "Presentation": ("presentation.html", xhtml.encode("utf-8"), "text/html"),
+        **data_parts,
+    }
 
-
-        # Graph制約: Presentation + 画像(最大5)
-        # 要修正（分割対応）
-        limited_parts = list(req.binary_parts)[:5]
-        for binary_part in limited_parts:
-            # <img src="name:{part.name}"> に対応するキーで送る
-            data_parts[binary_part.name] = (binary_part.filename, binary_part.data, binary_part.content_type)
-
-        response = self._request_multipart("POST", url, data_parts=data_parts)
-        return response.json()
+    r = self._request_multipart("POST", url, data_parts=files)
+    r.raise_for_status()
+    return r.json()

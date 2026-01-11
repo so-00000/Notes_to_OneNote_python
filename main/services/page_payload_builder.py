@@ -1,7 +1,7 @@
 # page_payload_builder.py
 from __future__ import annotations
 from pathlib import Path
-from .dxl_to_payload import create_contents_from_dxl
+from .dxl_to_payload import create_materials_from_dxl
 from .renderer_rich import render_to_html_body
 from .models import  PagePayload
 
@@ -18,8 +18,8 @@ def build_page_payload(
     """
     base = dxl_path.name
     
-    # 各コンテンツデータの抽出（各項目/値・バイナリデータ・位置情報など）
-    note, pending_parts, placeholder_map = create_contents_from_dxl(str(dxl_path))
+    # 各コンテンツデータの抽出（各項目/値・セグメントデータ（バイナリデータ・位置情報）など）
+    note, segment_list = create_materials_from_dxl(str(dxl_path))
 
     # ページタイトル作成（ドキュメント番号_件名）
     page_title = note.DocumentNo + "_" + note.Fd_Text_1
@@ -31,6 +31,5 @@ def build_page_payload(
     return PagePayload(
         page_title = page_title,
         body_html =  body_html,
-        pending_parts =  pending_parts,
-        placeholder_map = placeholder_map
+        segment_list =  segment_list,
     )
