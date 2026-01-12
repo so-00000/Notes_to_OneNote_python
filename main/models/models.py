@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Optional, Dict, List
-from .dxl_attachments import DxlAttachment
+from ..dxl_attachments import DxlAttachment
 from typing import Literal
 
 

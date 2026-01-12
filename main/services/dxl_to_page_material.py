@@ -7,10 +7,10 @@ import re
 import xml.etree.ElementTree as ET
 from typing import Optional
 
-from ..models import OneNoteRow
+from ..models.models import OneNoteRow
 from ..dxl_to_model import dxl_to_onenote_row
 from ..dxl_attachments import extract_attachments_from_dxl
-from ..models import Segment, BinaryPart
+from ..models.models import Segment, BinaryPart
 from ..config import RICH_FIELDS
 from typing import Any
 from pprint import pprint
