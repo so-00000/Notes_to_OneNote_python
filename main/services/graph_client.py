@@ -9,9 +9,14 @@ from urllib.parse import quote
 import requests
 import logging
 
-from ..models.models import PagePayload
+from ..models.models import PagePayload, Segment
 from ..logging.graph_logging import mask_headers, summarize_request_kwargs, truncate_text
-from .segments_body import _segment_to_html, _inject_segments_into_body
+from .segments_body import _segment_to_html, _inject_segments_into_body, _inject_first_segments
+import json
+from typing import List
+
+
+
 from pprint import pprint
 
 MultipartPart = Tuple[str, bytes, str]  # (filename, content, content_type)
@@ -252,51 +257,125 @@ class GraphClient:
 
 
 
+
+    def update_onenote_page_segments(
+        self,
+        *,
+        page_id: str,
+        segments: List[Segment],
+        name_prefix: str = "p",
+    ) -> None:
+        """
+        既存ページに対して、アンカー（data-id）をターゲットに
+        画像/添付を append で差し込む。
+
+        multipart:
+        - Commands: patch commands (application/json)
+        - p1..pN  : binary parts
+        """
+
+        url = f"https://graph.microsoft.com/v1.0/me/onenote/pages/{page_id}/content"
+
+        commands = []
+        data_parts = {}
+
+        # Commands パートは必須（バイナリ参照するため） :contentReference[oaicite:5]{index=5}
+        # → ただし data_parts に入れるのは最後にまとめてOK
+
+        for i, seg in enumerate(segments, start=1):
+            part_name = f"{name_prefix}{i}"
+            bp = seg.binary_part
+
+            # 1) HTML断片（この seg 用に name:part_name を参照するHTMLを作る）
+            if bp.kind == "image":
+                style = "max-width:100%;"
+                if bp.width:
+                    style += f" width:{bp.width}px;"
+                if bp.height:
+                    style += f" height:{bp.height}px;"
+                content_html = (
+                    "<div style='margin:8px 0;'>"
+                    f"<img src='name:{html.escape(part_name, quote=True)}' style='{style}'/>"
+                    "</div>"
+                )
+            else:
+                fn = html.escape(bp.filename, quote=True)
+                mt = html.escape(bp.content_type or "application/octet-stream", quote=True)
+                pn = html.escape(part_name, quote=True)
+                content_html = (
+                    "<div style='margin:8px 0; padding:10px; border:1px solid #e3e3e3; "
+                    "border-radius:10px; background:#fff;'>"
+                    f"<object data='name:{pn}' data-attachment='{fn}' type='{mt}'></object>"
+                    "</div>"
+                )
+
+            # 2) patch command：アンカー（data-id）に append
+            # data-id を付けた要素は #<data-id> で target 指定できる :contentReference[oaicite:6]{index=6}
+            commands.append(
+                {
+                    "target": f"#{seg.segment_id}",
+                    "action": "append",
+                    "content": content_html,
+                }
+            )
+
+            # 3) バイナリパート追加
+            data_parts[part_name] = (bp.filename, bp.data, bp.content_type)
+
+        # Commands パートを multipart に入れる
+        commands_json = json.dumps(commands, ensure_ascii=False).encode("utf-8")
+        data_parts["Commands"] = ("commands.json", commands_json, "application/json")
+
+        # PATCH multipart
+        res = self._request_multipart("PATCH", url, data_parts=data_parts)
+        res.raise_for_status()
+
+
+
+
     def create_onenote_page(
         self,
         *,
         section_id: str,
         page_payload: PagePayload,
     ) -> dict:
-        url = f"https://graph.microsoft.com/v1.0/me/onenote/sections/{quote(section_id)}/pages"
+        url = f"https://graph.microsoft.com/v1.0/me/onenote/sections/{section_id}/pages"
 
         # Graph制約: Presentation + バイナリ最大5
-        send_segments = page_payload.segment_list[:5]
+        MAX_BIN_PER_REQUEST = 3
+        
+        all_segments = list(page_payload.segment_list or [])
+        firstSeg = all_segments[:MAX_BIN_PER_REQUEST]
+        restSeg = all_segments[MAX_BIN_PER_REQUEST:]
 
-        # セグメントID -> (inner html)
-        seg_to_inner_html: dict[str, str] = {}
-        data_parts = {}
 
-        # multipart key は att1..att5 にする（任意名でOK。本文の name: と一致させる）
-        for i, seg in enumerate(send_segments, start=1):
-            part_name = f"att{i}"
-            seg_to_inner_html[seg.segment_id] = _segment_to_html(seg, part_name=part_name)
+        # 初回送信分の作成（上限件数までバイナリデータセグメント埋め込みを行ったHTML作成）
+        body_html, parts = _inject_first_segments(page_payload.body_html, firstSeg, name_prefix="p")
 
-            b = seg.binary_part
-            data_parts[part_name] = (b.filename, b.data, b.content_type)
-
-        # 本文にセグメントを埋め込む（送る分だけ）
-        body_html = _inject_segments_into_body(page_payload.body_html, seg_to_inner_html)
-
-        # Presentation (XHTML)
         xhtml = f"""<!DOCTYPE html>
-    <html>
-    <head>
-    <title>{html.escape(page_payload.page_title)}</title>
-    </head>
-    <body>
-    {body_html}
-    </body>
-    </html>"""
+        <html>
+        <head>
+        <title>{html.escape(page_payload.page_title)}</title>
+        </head>
+        <body>
+        {body_html}
+        </body>
+        </html>"""
 
-        # files / data_parts
-        files = {
+        data_parts = {
             "Presentation": ("presentation.html", xhtml.encode("utf-8"), "text/html"),
-            **data_parts,
         }
+        for part_name, bp in parts:
+            data_parts[part_name] = (bp.filename, bp.data, bp.content_type)
 
-        print(xhtml)
+        res = self._request_multipart("POST", url, data_parts=data_parts)
+        res.raise_for_status()
+        page = res.json()
+        page_id = page["id"]
 
-        r = self._request_multipart("POST", url, data_parts=files)
-        r.raise_for_status()
-        return r.json()
+        # 残りがあれば PATCH で 5個ずつ埋めていく
+        for off in range(0, len(restSeg), MAX_BIN_PER_REQUEST):
+            chunk = restSeg[off : off + MAX_BIN_PER_REQUEST]
+            self.update_onenote_page_segments(page_id=page_id, segments=chunk)
+
+        return page
