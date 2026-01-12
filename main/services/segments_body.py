@@ -1,6 +1,6 @@
 import re
 import html as _html
-from ..models.models import Segment
+from main.models.models import Segment
 
 def _segment_to_html(seg: Segment, *, part_name: str) -> str:
 
@@ -107,7 +107,6 @@ def _inject_first_segments(body_html: str, segments: list, name_prefix: str = "p
         # n==0 の場合：アンカーが無い（DXL→HTML 側の不整合）なのでログ出すのが吉
 
     return out, parts
-
 
 
 

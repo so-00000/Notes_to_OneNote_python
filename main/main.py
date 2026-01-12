@@ -4,18 +4,18 @@ import time
 from pathlib import Path
 from dataclasses import dataclass
 
-from .ignore_git import token
-from .config import (
+from main.ignore_git import token
+from main.config import (
     NOTEBOOK_NAME,
     SECTION_NAME,
     DXL_DIR,
     TITLE_COLUMN,
     SLEEP_SEC,
 )
-from .find_id import find_notebook_id, find_section_id
-from .services.graph_client import GraphClient
-from .logging.logging_config import setup_logging
-from .services.page_payload_builder import build_page_payload
+from main.find_id import find_notebook_id, find_section_id
+from main.services.graph_client import GraphClient
+from main.logging.logging_config import setup_logging
+from main.services.page_payload_builder import build_page_payload
 
 @dataclass(frozen=True)
 class AppSettings:
