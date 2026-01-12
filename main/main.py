@@ -13,9 +13,9 @@ from .config import (
     SLEEP_SEC,
 )
 from .find_id import find_notebook_id, find_section_id
-from .graph_client import GraphClient
+from .services.graph_client import GraphClient
 from .logging.logging_config import setup_logging
-from .page_payload_builder import build_page_payload
+from .services.page_payload_builder import build_page_payload
 
 @dataclass(frozen=True)
 class AppSettings:
