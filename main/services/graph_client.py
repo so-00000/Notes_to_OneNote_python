@@ -373,9 +373,9 @@ class GraphClient:
         page = res.json()
         page_id = page["id"]
 
-        # # 残りがあれば PATCH で 5個ずつ埋めていく
-        # for off in range(0, len(restSeg), MAX_BIN_PER_REQUEST):
-        #     chunk = restSeg[off : off + MAX_BIN_PER_REQUEST]
-        #     self.update_onenote_page_segments(page_id=page_id, segments=chunk)
+        # 残りがあれば PATCH で 5個ずつ埋めていく
+        for off in range(0, len(restSeg), MAX_BIN_PER_REQUEST):
+            chunk = restSeg[off : off + MAX_BIN_PER_REQUEST]
+            self.update_onenote_page_segments(page_id=page_id, segments=chunk)
 
         return page
