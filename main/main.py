@@ -17,6 +17,9 @@ from main.services.graph_client import GraphClient
 from main.logging.logging_config import setup_logging
 from main.services.page_payload_builder import build_page_payload
 
+from .delete_all_pages_in_section import delete_all_pages_in_section
+
+
 @dataclass(frozen=True)
 class AppSettings:
     """アプリ全体で使う設定値"""
@@ -26,7 +29,8 @@ class AppSettings:
     dxl_dir: Path
     title_column: str | None
     sleep_sec: float
-    rich_fields: list[str]
+
+
 
 
 
@@ -99,29 +103,33 @@ def main() -> None:
         notebook_id = find_notebook_id(client, settings.notebook_name)
         section_id = find_section_id(client, notebook_id, settings.section_name)
 
-        # DXLファイルを1件ずつ処理
-        for i, dxl_path in enumerate(dxl_files, start=1):
 
-            # タイトル・本文・画像/添付ファイルの作成
-            payload = build_page_payload(
-                dxl_path,
-                row_no=i,
-            )
+        # 削除したいとき
+        delete_all_pages_in_section(client, section_id)
 
+        # # DXLファイルを1件ずつ処理
+        # for i, dxl_path in enumerate(dxl_files, start=1):
 
-            # OneNoteページ作成のリクエスト
-            client.create_onenote_page(
-                section_id=section_id,
-                page_payload=payload
-            )
-
-            created += 1
+        #     # タイトル・本文・画像/添付ファイルの作成
+        #     payload = build_page_payload(
+        #         dxl_path,
+        #         row_no=i,
+        #     )
 
 
-            if settings.sleep_sec:
-                time.sleep(settings.sleep_sec)
+        #     # OneNoteページ作成のリクエスト
+        #     client.create_onenote_page(
+        #         section_id=section_id,
+        #         page_payload=payload
+        #     )
 
-        print(f"Done. Created pages: {created}")
+        #     created += 1
+
+
+        #     if settings.sleep_sec:
+        #         time.sleep(settings.sleep_sec)
+
+        # print(f"Done. Created pages: {created}")
 
     finally:
         client.close()

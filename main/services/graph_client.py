@@ -342,7 +342,7 @@ class GraphClient:
         url = f"https://graph.microsoft.com/v1.0/me/onenote/sections/{section_id}/pages"
 
         # Graph制約: Presentation + バイナリ最大5
-        MAX_BIN_PER_REQUEST = 3
+        MAX_BIN_PER_REQUEST = 5
         
         all_segments = list(page_payload.segment_list or [])
         firstSeg = all_segments[:MAX_BIN_PER_REQUEST]
@@ -373,9 +373,9 @@ class GraphClient:
         page = res.json()
         page_id = page["id"]
 
-        # 残りがあれば PATCH で 5個ずつ埋めていく
-        for off in range(0, len(restSeg), MAX_BIN_PER_REQUEST):
-            chunk = restSeg[off : off + MAX_BIN_PER_REQUEST]
-            self.update_onenote_page_segments(page_id=page_id, segments=chunk)
+        # # 残りがあれば PATCH で 5個ずつ埋めていく
+        # for off in range(0, len(restSeg), MAX_BIN_PER_REQUEST):
+        #     chunk = restSeg[off : off + MAX_BIN_PER_REQUEST]
+        #     self.update_onenote_page_segments(page_id=page_id, segments=chunk)
 
         return page

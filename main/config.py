@@ -1,5 +1,6 @@
 NOTEBOOK_NAME = "TEST_Notes_to_OneNote"
-SECTION_NAME = "障害DB"
+# SECTION_NAME = "障害DB"
+SECTION_NAME = "CallDB"
 
 DXL_DIR = "target_dxl"
 TITLE_COLUMN = "DocumentNo"  # ページタイトルに使う列名
