@@ -9,10 +9,8 @@ from urllib.parse import quote
 import requests
 import logging
 
-
-from models import  PagePayload
-
-from .logging.graph_logging import mask_headers, summarize_request_kwargs, truncate_text
+from ..models import PagePayload
+from ..logging.graph_logging import mask_headers, summarize_request_kwargs, truncate_text
 from .segments_body import _segment_to_html, _inject_segments_into_body
 
 MultipartPart = Tuple[str, bytes, str]  # (filename, content, content_type)

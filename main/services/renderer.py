@@ -5,7 +5,7 @@ import html
 import re
 from typing import Optional
 
-from .models import OneNoteRow
+from ..models import OneNoteRow
 
 
 def _nl2br(s: Optional[str]) -> str:
