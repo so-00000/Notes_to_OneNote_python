@@ -1,59 +1,76 @@
-import sys
-import time
+# main.py
+from __future__ import annotations
 from pathlib import Path
-from urllib.parse import quote
+from dataclasses import dataclass
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-if str(REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(REPO_ROOT))
+from .ignore_git import token
+from .config import (
+    NOTEBOOK_NAME,
+    SECTION_NAME,
+    DXL_DIR,
+    TITLE_COLUMN,
+    SLEEP_SEC,
+)
+from .find_id import find_notebook_id, find_section_id
+from .services.graph_client import GraphClient
+from .logging.logging_config import setup_logging
+from .delete_all_pages_in_section import delete_all_pages_in_section
 
-from main.services.graph_client import GraphClient
+@dataclass(frozen=True)
+class AppSettings:
+    """アプリ全体で使う設定値"""
+    access_token: str
+    notebook_name: str
+    section_name: str
+    dxl_dir: Path
+    title_column: str | None
+    sleep_sec: float
 
 
+def _validate_config() -> None:
+    """必須設定のバリデーション。"""
+    if not NOTEBOOK_NAME or not str(NOTEBOOK_NAME).strip():
+        raise RuntimeError("NOTEBOOK_NAME is empty. Set it in config.py")
+    if not SECTION_NAME or not str(SECTION_NAME).strip():
+        raise RuntimeError("SECTION_NAME is empty. Set it in config.py")
 
-import time
-from urllib.parse import quote
 
-from .graph_client import GraphClient
+def _load_settings() -> AppSettings:
+    """config.pyとtokenからAppSettingsを組み立てる。"""
+    access_token = token.ACCESS_TOKEN
+    if not access_token or not access_token.strip():
+        raise RuntimeError("ACCESS_TOKEN is empty.")
+
+    _validate_config()
 
 
-def delete_all_pages_in_section(
-    client: GraphClient,
-    *,
-    section_id: str,
-    sleep_sec: float = 0.2,
-) -> int:
-    """
-    指定セクションのページを全削除するユーティリティ。
-
-    - Graphのpagingに対応
-    - 連続削除で429を避けるためにsleepを挟む
-    """
-    url = (
-        "https://graph.microsoft.com/v1.0/me/onenote/"
-        f"sections/{quote(section_id)}/pages?$select=id,title&$top=100"
+    return AppSettings(
+        access_token=access_token,
+        notebook_name=NOTEBOOK_NAME,
+        section_name=SECTION_NAME,
+        dxl_dir="",
+        title_column=TITLE_COLUMN or None,
+        sleep_sec=SLEEP_SEC,
     )
 
-    deleted = 0
-    while url:
-        data = client.get_json(url)
-        pages = data.get("value", [])
 
-        for page in pages:
-            page_id = page.get("id")
-            title = page.get("title", "")
-            if not page_id:
-                continue
 
-            del_url = f"https://graph.microsoft.com/v1.0/me/onenote/pages/{quote(page_id)}"
-            client.delete(del_url)
 
-            deleted += 1
-            print(f"[DEL] {deleted}: {title} ({page_id})")
 
-            if sleep_sec:
-                time.sleep(sleep_sec)
+def main() -> None:
 
-        url = data.get("@odata.nextLink")
+    setup_logging(level="DEBUG")
+    
+    settings = _load_settings()
+    client = GraphClient(settings.access_token)
 
-    return deleted
+    # 対象OneNoteのノートブックID・セクションIDの取得
+    notebook_id = find_notebook_id(client, settings.notebook_name)
+    section_id = find_section_id(client, notebook_id, settings.section_name)
+    delete_all_pages_in_section(client, section_id)
+
+    client.close()
+
+
+if __name__ == "__main__":
+    main()

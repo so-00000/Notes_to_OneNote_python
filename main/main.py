@@ -26,6 +26,7 @@ class AppSettings:
     dxl_dir: Path
     title_column: str | None
     sleep_sec: float
+    rich_fields: list[str]
 
 
 
@@ -106,6 +107,7 @@ def main() -> None:
                 dxl_path,
                 row_no=i,
             )
+
 
             # OneNoteページ作成のリクエスト
             client.create_onenote_page(
