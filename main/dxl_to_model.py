@@ -6,7 +6,7 @@ import xml.etree.ElementTree as ET
 from dataclasses import fields
 from typing import Dict, List, Optional
 
-from .models import OneNoteRow
+from main.models.models import OneNoteRow
 
 DXL_NS = {"dxl": "http://www.lotus.com/dxl"}
 

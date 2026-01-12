@@ -1,0 +1,1975 @@
+{
+  "meta": {
+    "dxl_files": 1,
+    "documents": 1,
+    "items": 80,
+    "parse_errors": 0
+  },
+  "fields": {
+    "Author": {
+      "name": "Author",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Author"
+        ],
+        "authors": [
+          "true"
+        ],
+        "names": [
+          "true"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "DelFlg": {
+      "name": "DelFlg",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "DelFlg"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Status": {
+      "name": "Status",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Status"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "ApplicantRole": {
+      "name": "ApplicantRole",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "ApplicantRole"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Step1": {
+      "name": "Step1",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Step1"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "ReporterNm_1": {
+      "name": "ReporterNm_1",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "ReporterNm_1"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "ReporterDep_1": {
+      "name": "ReporterDep_1",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "ReporterDep_1"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "ReportTime_1": {
+      "name": "ReportTime_1",
+      "types": [
+        "DATETIME"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "datetime"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "ReportTime_1"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "ApproverNm_1": {
+      "name": "ApproverNm_1",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "ApproverNm_1"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "ApproveStatus_1": {
+      "name": "ApproveStatus_1",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "ApproveStatus_1"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "ApproverDep_1": {
+      "name": "ApproverDep_1",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "ApproverDep_1"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "ApproveTime_1": {
+      "name": "ApproveTime_1",
+      "types": [
+        "DATETIME"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "datetime"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "ApproveTime_1"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "ReporterNm_2": {
+      "name": "ReporterNm_2",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "ReporterNm_2"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "ReporterDep_2": {
+      "name": "ReporterDep_2",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "ReporterDep_2"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "ReportTime_2": {
+      "name": "ReportTime_2",
+      "types": [
+        "DATETIME"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "datetime"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "ReportTime_2"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "ApproverNm_2": {
+      "name": "ApproverNm_2",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "ApproverNm_2"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "ApproveStatus_2": {
+      "name": "ApproveStatus_2",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "ApproveStatus_2"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "ApproverDep_2": {
+      "name": "ApproverDep_2",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "ApproverDep_2"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "ApproveTime_2": {
+      "name": "ApproveTime_2",
+      "types": [
+        "DATETIME"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "datetime"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "ApproveTime_2"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "DocumentNo": {
+      "name": "DocumentNo",
+      "types": [
+        "NUMBER"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "number"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "DocumentNo"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "EntryUser": {
+      "name": "EntryUser",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "EntryUser"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "EntryDept": {
+      "name": "EntryDept",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "EntryDept"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Ask": {
+      "name": "Ask",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Ask"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "AskUser": {
+      "name": "AskUser",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "AskUser"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Syogai_ck": {
+      "name": "Syogai_ck",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Syogai_ck"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "System": {
+      "name": "System",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "System"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "SubSystem": {
+      "name": "SubSystem",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "SubSystem"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Task": {
+      "name": "Task",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Task"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "ActionStatus": {
+      "name": "ActionStatus",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "ActionStatus"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "DocumentDate": {
+      "name": "DocumentDate",
+      "types": [
+        "DATETIME"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "datetime"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "DocumentDate"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "DocumentTime": {
+      "name": "DocumentTime",
+      "types": [
+        "DATETIME"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "datetime"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "DocumentTime"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "ReplyDate": {
+      "name": "ReplyDate",
+      "types": [
+        "DATETIME"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "datetime"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "ReplyDate"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "ReplyTime": {
+      "name": "ReplyTime",
+      "types": [
+        "DATETIME"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "datetime"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "ReplyTime"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "WorkTime": {
+      "name": "WorkTime",
+      "types": [
+        "NUMBER"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "number"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "WorkTime"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "事業所マスタID": {
+      "name": "事業所マスタID",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "事業所マスタID"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "発生年月": {
+      "name": "発生年月",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "発生年月"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Detail": {
+      "name": "Detail",
+      "types": [
+        "RICHTEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": true,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "richtext"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Detail"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Reason": {
+      "name": "Reason",
+      "types": [
+        "RICHTEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": true,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "richtext"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Reason"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Detail_1": {
+      "name": "Detail_1",
+      "types": [
+        "RICHTEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": true,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "richtext"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Detail_1"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Fd_Link_1": {
+      "name": "Fd_Link_1",
+      "types": [
+        "RICHTEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": true,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "richtext"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Fd_Link_1"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Fd_Id_1": {
+      "name": "Fd_Id_1",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Fd_Id_1"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Measure": {
+      "name": "Measure",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Measure"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Temporary": {
+      "name": "Temporary",
+      "types": [
+        "RICHTEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": true,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "richtext"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Temporary"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Temporary_Plan": {
+      "name": "Temporary_Plan",
+      "types": [
+        "DATETIME"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "datetime"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Temporary_Plan"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Temporary_Comp": {
+      "name": "Temporary_Comp",
+      "types": [
+        "DATETIME"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "datetime"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Temporary_Comp"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Parmanent": {
+      "name": "Parmanent",
+      "types": [
+        "RICHTEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": true,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "richtext"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Parmanent"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Parmanet_Plan": {
+      "name": "Parmanet_Plan",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Parmanet_Plan"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Parmanet_Comp": {
+      "name": "Parmanet_Comp",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Parmanet_Comp"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Agenda_Text": {
+      "name": "Agenda_Text",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Agenda_Text"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Agenda": {
+      "name": "Agenda",
+      "types": [
+        "RICHTEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": true,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "richtext"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Agenda"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Leaders_1": {
+      "name": "Leaders_1",
+      "types": [
+        "TEXT_LIST"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": true,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "textlist"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Leaders_1"
+        ],
+        "names": [
+          "true"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Leaders_2": {
+      "name": "Leaders_2",
+      "types": [
+        "TEXT_LIST"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": true,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "textlist"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Leaders_2"
+        ],
+        "names": [
+          "true"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Leaders_3": {
+      "name": "Leaders_3",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Leaders_3"
+        ],
+        "names": [
+          "true"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Leaders_4": {
+      "name": "Leaders_4",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Leaders_4"
+        ],
+        "names": [
+          "true"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Leaders_5": {
+      "name": "Leaders_5",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Leaders_5"
+        ],
+        "names": [
+          "true"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Directors_1": {
+      "name": "Directors_1",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Directors_1"
+        ],
+        "names": [
+          "true"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Directors_2": {
+      "name": "Directors_2",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Directors_2"
+        ],
+        "names": [
+          "true"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Directors_3": {
+      "name": "Directors_3",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Directors_3"
+        ],
+        "names": [
+          "true"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Directors_4": {
+      "name": "Directors_4",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Directors_4"
+        ],
+        "names": [
+          "true"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Directors_5": {
+      "name": "Directors_5",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Directors_5"
+        ],
+        "names": [
+          "true"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Agents_1": {
+      "name": "Agents_1",
+      "types": [
+        "TEXT_LIST"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": true,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "textlist"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Agents_1"
+        ],
+        "names": [
+          "true"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Agents_2": {
+      "name": "Agents_2",
+      "types": [
+        "TEXT_LIST"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": true,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "textlist"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Agents_2"
+        ],
+        "names": [
+          "true"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Agents_3": {
+      "name": "Agents_3",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Agents_3"
+        ],
+        "names": [
+          "true"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Agents_4": {
+      "name": "Agents_4",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Agents_4"
+        ],
+        "names": [
+          "true"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Agents_5": {
+      "name": "Agents_5",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Agents_5"
+        ],
+        "names": [
+          "true"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "ApplicantUser": {
+      "name": "ApplicantUser",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "ApplicantUser"
+        ],
+        "names": [
+          "true"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "ApproverRole": {
+      "name": "ApproverRole",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "ApproverRole"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "ApproverUser": {
+      "name": "ApproverUser",
+      "types": [
+        "TEXT_LIST"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": true,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "textlist"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "ApproverUser"
+        ],
+        "names": [
+          "true"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "AgentRole": {
+      "name": "AgentRole",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "AgentRole"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "AgentUser": {
+      "name": "AgentUser",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "AgentUser"
+        ],
+        "names": [
+          "true"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Step2": {
+      "name": "Step2",
+      "types": [
+        "TEXT_LIST"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": true,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "textlist"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Step2"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Division": {
+      "name": "Division",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Division"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "No_Category": {
+      "name": "No_Category",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "No_Category"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "No_Num": {
+      "name": "No_Num",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "No_Num"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Fd_Text_1": {
+      "name": "Fd_Text_1",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Fd_Text_1"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "DetailSubject": {
+      "name": "DetailSubject",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "DetailSubject"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "ReasonSubject": {
+      "name": "ReasonSubject",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "ReasonSubject"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "Adjustment": {
+      "name": "Adjustment",
+      "types": [
+        "TEXT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 1,
+      "is_multi_value_observed": false,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "text"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "Adjustment"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    },
+    "$FILE": {
+      "name": "$FILE",
+      "types": [
+        "OBJECT"
+      ],
+      "doc_occurrences": 1,
+      "file_count": 1,
+      "files": [
+        "7461_FF8729AA100AC72349258BC7001FE9BF.dxl"
+      ],
+      "total_item_elements": 2,
+      "is_multi_value_observed": true,
+      "max_sample_text_len": 0,
+      "samples": [],
+      "child_tags": [
+        "object"
+      ],
+      "item_attrs_seen": {
+        "name": [
+          "$FILE"
+        ],
+        "summary": [
+          "true"
+        ],
+        "sign": [
+          "true"
+        ],
+        "seal": [
+          "true"
+        ]
+      },
+      "by_form_doc_occurrences": {}
+    }
+  }
+}

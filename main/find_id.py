@@ -1,7 +1,7 @@
 # find_id.py
 from urllib.parse import quote
 
-from .graph_client import GraphClient
+from main.services.graph_client import GraphClient
 
 
 def find_notebook_id(client: GraphClient, notebook_name: str) -> str:

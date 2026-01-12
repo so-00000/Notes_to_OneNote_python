@@ -1,7 +1,7 @@
 import time
 from urllib.parse import quote
 
-from .graph_client import GraphClient
+from main.services.graph_client import GraphClient
 
 def delete_all_pages_in_section(
     client: GraphClient,
