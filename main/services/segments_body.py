@@ -1,6 +1,6 @@
 import re
 import html as _html
-from ..models import Segment
+from ..models.models import Segment
 
 def _segment_to_html(seg: Segment, *, part_name: str) -> str:
 
