@@ -9,9 +9,9 @@ from urllib.parse import quote
 import requests
 import logging
 
-from ..models.models import PagePayload, Segment
-from ..logging.graph_logging import mask_headers, summarize_request_kwargs, truncate_text
-from .segments_body import _segment_to_html, _inject_segments_into_body, _inject_first_segments
+from main.models.models import PagePayload, Segment
+from main.logging.graph_logging import mask_headers, summarize_request_kwargs, truncate_text
+from main.services.segments_body import _segment_to_html, _inject_segments_into_body, _inject_first_segments
 import json
 from typing import List
 
