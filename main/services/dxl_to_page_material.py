@@ -111,7 +111,6 @@ def _picture_to_segment(
     *,
     field_name: str,
     seg_id: str,
-    img_index: int,
 ) -> Segment | None:
     w = _safe_px(pic.get("width"))
     h = _safe_px(pic.get("height"))

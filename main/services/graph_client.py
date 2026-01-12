@@ -251,49 +251,49 @@ class GraphClient:
 
 
 
-def create_onenote_page(
-    self,
-    *,
-    section_id: str,
-    page_payload: PagePayload,
-) -> dict:
-    url = f"https://graph.microsoft.com/v1.0/me/onenote/sections/{quote(section_id)}/pages"
+    def create_onenote_page(
+        self,
+        *,
+        section_id: str,
+        page_payload: PagePayload,
+    ) -> dict:
+        url = f"https://graph.microsoft.com/v1.0/me/onenote/sections/{quote(section_id)}/pages"
 
-    # Graph制約: Presentation + バイナリ最大5
-    send_segments = page_payload.segment_list[:5]
+        # Graph制約: Presentation + バイナリ最大5
+        send_segments = page_payload.segment_list[:5]
 
-    # セグメントID -> (inner html)
-    seg_to_inner_html: dict[str, str] = {}
-    data_parts = {}
+        # セグメントID -> (inner html)
+        seg_to_inner_html: dict[str, str] = {}
+        data_parts = {}
 
-    # multipart key は att1..att5 にする（任意名でOK。本文の name: と一致させる）
-    for i, seg in enumerate(send_segments, start=1):
-        part_name = f"att{i}"
-        seg_to_inner_html[seg.segment_id] = _segment_to_html(seg, part_name=part_name)
+        # multipart key は att1..att5 にする（任意名でOK。本文の name: と一致させる）
+        for i, seg in enumerate(send_segments, start=1):
+            part_name = f"att{i}"
+            seg_to_inner_html[seg.segment_id] = _segment_to_html(seg, part_name=part_name)
 
-        b = seg.binary_part
-        data_parts[part_name] = (b.filename, b.data, b.content_type)
+            b = seg.binary_part
+            data_parts[part_name] = (b.filename, b.data, b.content_type)
 
-    # 本文にセグメントを埋め込む（送る分だけ）
-    body_html = _inject_segments_into_body(page_payload.body_html, seg_to_inner_html)
+        # 本文にセグメントを埋め込む（送る分だけ）
+        body_html = _inject_segments_into_body(page_payload.body_html, seg_to_inner_html)
 
-    # Presentation (XHTML)
-    xhtml = f"""<!DOCTYPE html>
-<html>
-<head>
-  <title>{html.escape(page_payload.page_title)}</title>
-</head>
-<body>
-{body_html}
-</body>
-</html>"""
+        # Presentation (XHTML)
+        xhtml = f"""<!DOCTYPE html>
+    <html>
+    <head>
+    <title>{html.escape(page_payload.page_title)}</title>
+    </head>
+    <body>
+    {body_html}
+    </body>
+    </html>"""
 
-    # files / data_parts
-    files = {
-        "Presentation": ("presentation.html", xhtml.encode("utf-8"), "text/html"),
-        **data_parts,
-    }
+        # files / data_parts
+        files = {
+            "Presentation": ("presentation.html", xhtml.encode("utf-8"), "text/html"),
+            **data_parts,
+        }
 
-    r = self._request_multipart("POST", url, data_parts=files)
-    r.raise_for_status()
-    return r.json()
+        r = self._request_multipart("POST", url, data_parts=files)
+        r.raise_for_status()
+        return r.json()

@@ -26,7 +26,6 @@ class AppSettings:
     dxl_dir: Path
     title_column: str | None
     sleep_sec: float
-    rich_fields: list[str]
 
 
 
