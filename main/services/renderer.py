@@ -146,7 +146,7 @@ def render_to_html_body(
     parts.append(note.Detail)
 
     add_title("理由・原因")
-    note.Reason
+    parts.append(note.Reason)
 
     add_title("対応（メモ）")
     add_text_block(note.Measure)

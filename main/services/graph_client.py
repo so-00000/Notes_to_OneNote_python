@@ -12,6 +12,7 @@ import logging
 from ..models import PagePayload
 from ..logging.graph_logging import mask_headers, summarize_request_kwargs, truncate_text
 from .segments_body import _segment_to_html, _inject_segments_into_body
+from pprint import pprint
 
 MultipartPart = Tuple[str, bytes, str]  # (filename, content, content_type)
 
@@ -293,6 +294,8 @@ class GraphClient:
             "Presentation": ("presentation.html", xhtml.encode("utf-8"), "text/html"),
             **data_parts,
         }
+
+        print(xhtml)
 
         r = self._request_multipart("POST", url, data_parts=files)
         r.raise_for_status()

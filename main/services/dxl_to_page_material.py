@@ -13,6 +13,7 @@ from ..dxl_attachments import extract_attachments_from_dxl
 from ..models import Segment, BinaryPart
 from ..config import RICH_FIELDS
 from typing import Any
+from pprint import pprint
 import logging
 logger = logging.getLogger(__name__)
 
@@ -187,7 +188,9 @@ def _table_to_html(table_el: ET.Element) -> str:
 def richtext_item_to_html_and_segment(
     item_el: ET.Element,    # DXLのitem要素
     attachment_by_name: dict[str, Any],
-) -> tuple[str, list[Segment]]:
+    *,
+    seg_i: int,
+) -> tuple[str, list[Segment], int]:
     
     # フィールド名取得
     field_name = (item_el.get("name") or "unknown").strip()
@@ -196,7 +199,8 @@ def richtext_item_to_html_and_segment(
     rt = item_el.find("dxl:richtext", DXL_NS)
     if rt is None:
         logger.warning("richtext not found. skip field=%s", field_name)
-        return "", []
+        return "", [], seg_i
+
 
 
 
@@ -204,10 +208,6 @@ def richtext_item_to_html_and_segment(
     out: list[str] = []
     # セグメントデータ（バイナリデータを内包）のリスト
     segment_list: list[Segment] = []
-
-
-    # セグメント連番
-    seg_i = 1
 
     for child in list(rt):
         tag = _local_tag(child.tag)
@@ -284,9 +284,7 @@ def richtext_item_to_html_and_segment(
             table_html = _table_to_html(child)
             out.append(table_html)
 
-
-
-    return "\n".join(out), segment_list
+    return "\n".join(out), segment_list, seg_i
 
 
 
@@ -305,6 +303,11 @@ def create_materials_from_dxl(
     attachment_objs_all = extract_attachments_from_dxl(dxl_path) or []
     attachment_by_name = {a.filename: a for a in attachment_objs_all}
 
+
+    # セグメント連番
+    seg_i = 1
+
+
     # RichTextフィールドに対して下記を行う
     # ・HTML変換
     # ・埋め込みファイル（キャプチャ画像やExcelなど）の抽出
@@ -318,12 +321,12 @@ def create_materials_from_dxl(
         # フィールド（RichText）から下記を取得
         # 変換後HTML（segment_id付与）
         # バイナリデータ一時リスト
-        field_html, segment_list = richtext_item_to_html_and_segment(
+        field_html, segment_list, seg_i = richtext_item_to_html_and_segment(
             item,
             attachment_by_name,
+            seg_i=seg_i,
         )
 
-        field_html, segment_list = richtext_item_to_html_and_segment(item, attachment_by_name)
         setattr(note, field_name, field_html or "")
 
         all_segment.extend(segment_list)
@@ -331,5 +334,10 @@ def create_materials_from_dxl(
     # note側には全添付名だけ残す（メタとして）
     if attachment_objs_all:
         note.attachments = [a.filename for a in attachment_objs_all]
+
+
+    for s in all_segment:
+        print(s.segment_id)
+
 
     return note, all_segment
