@@ -34,6 +34,7 @@ def _load_settings() -> AppSettings:
     _validate_config()
 
 
+    settings = get_data_type_settings()
     return AppSettings(
         access_token=access_token,
         notebook_name=NOTEBOOK_NAME,
