@@ -5,8 +5,13 @@ from pathlib import Path
 from dataclasses import dataclass
 
 from main.ignore_git import token
-from main.config import NOTEBOOK_NAME, DXL_DIR, SLEEP_SEC
-from main.data_type_config import get_data_type_settings
+from main.config import (
+    NOTEBOOK_NAME,
+    SECTION_NAME,
+    DXL_DIR,
+    TITLE_COLUMN,
+    SLEEP_SEC,
+)
 from main.find_id import find_notebook_id, find_section_id
 from main.services.graph_client import GraphClient
 from main.logging.logging_config import setup_logging
@@ -22,6 +27,7 @@ class AppSettings:
     notebook_name: str
     section_name: str
     dxl_dir: Path
+    title_column: str | None
     sleep_sec: float
 
 
@@ -45,7 +51,8 @@ def _validate_config() -> None:
     """必須設定のバリデーション。"""
     if not NOTEBOOK_NAME or not str(NOTEBOOK_NAME).strip():
         raise RuntimeError("NOTEBOOK_NAME is empty. Set it in config.py")
-    get_data_type_settings()
+    if not SECTION_NAME or not str(SECTION_NAME).strip():
+        raise RuntimeError("SECTION_NAME is empty. Set it in config.py")
 
 
 def _load_settings() -> AppSettings:
@@ -65,8 +72,9 @@ def _load_settings() -> AppSettings:
     return AppSettings(
         access_token=access_token,
         notebook_name=NOTEBOOK_NAME,
-        section_name=get_data_type_settings().section_name,
+        section_name=SECTION_NAME,
         dxl_dir=dxl_dir,
+        title_column=TITLE_COLUMN or None,
         sleep_sec=SLEEP_SEC,
     )
 
