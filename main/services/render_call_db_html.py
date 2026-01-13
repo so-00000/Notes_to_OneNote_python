@@ -45,6 +45,20 @@ def render_call_db_html(
         if (html or "").strip():
             parts.append(_kv_row(_esc(label), html))
 
+    def _looks_like_html(value: Optional[str]) -> bool:
+        if not value:
+            return False
+        return "<" in str(value) and ">" in str(value)
+
+    def add_rich_row(label: str, value: Optional[str]) -> None:
+        if not (value or "").strip():
+            parts.append(_kv_row(_esc(label), "<p><br/></p>"))
+            return
+        if _looks_like_html(value):
+            parts.append(_kv_row(_esc(label), str(value)))
+            return
+        parts.append(_kv_row(_esc(label), f"<p>{_nl2br(value) or '<br/>'}</p>"))
+
     def _pick_first(*vals: Optional[str]) -> Optional[str]:
         for v in vals:
             if v is None:
@@ -165,17 +179,18 @@ def render_call_db_html(
     parts.append("<table style='width:100%; border-collapse:collapse;'>")
     add_text_row("質問概要", note.outline)
 
-    # 問合せ内容（詳細）：body（rich）を優先。inquiry があれば補助で出す。
-    add_html_row("問合せ内容（詳細）", note.body)
+    # 問合せ内容（詳細）：body/Detail のリッチテキストを優先。
+    detail_main = _pick_first(note.body, note.Detail)
+    add_rich_row("問合せ内容（詳細）", detail_main)
+    detail_extra = _pick_first(note.body_1, note.Detail_1)
+    if detail_extra and detail_extra != detail_main:
+        add_rich_row("問合せ内容（詳細・追記）", detail_extra)
     if (note.inquiry or "").strip():
         add_text_row("問合せ内容（補足）", note.inquiry)
-    
-
-    parts.append(note.Detail)
 
     # 対応内容（最終回答）：answer → 無ければ Measure/Memo/TAIOU/Detail_1 の順で補完
     answer_like = _pick_first(note.answer, note.Measure, note.Memo if hasattr(note, "Memo") else None, note.TAIOU, note.Detail_1)
-    add_text_row("対応内容（最終回答）", answer_like)
+    add_rich_row("対応内容（最終回答）", answer_like)
 
     parts.append("</table>")
 
