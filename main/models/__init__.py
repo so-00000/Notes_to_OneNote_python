@@ -2,17 +2,17 @@ from .models import (
     BinaryPart,
     MultipartPageRequest,
     OneNoteCreatePagePayload,
-    OneNoteRow,
     PagePayload,
     PendingPart,
     Segment,
 )
+from .SyogaiDb import SyogaiDbRaw
 
 __all__ = [
     "BinaryPart",
     "MultipartPageRequest",
     "OneNoteCreatePagePayload",
-    "OneNoteRow",
+    "SyogaiDbRaw",
     "PagePayload",
     "PendingPart",
     "Segment",
