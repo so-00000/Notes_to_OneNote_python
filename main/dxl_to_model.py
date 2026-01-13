@@ -4,11 +4,11 @@ from __future__ import annotations
 import re
 import xml.etree.ElementTree as ET
 from dataclasses import fields
-from typing import Dict, List, Optional
-
-from main.models.SyogaiDb import SyogaiDbRaw
+from typing import Dict, List, Optional, Type, TypeVar
 
 DXL_NS = {"dxl": "http://www.lotus.com/dxl"}
+
+TNote = TypeVar("TNote")
 
 
 def _join_clean(values: List[str]) -> str:
@@ -94,19 +94,19 @@ def _extract_doclinks(root: ET.Element) -> List[str]:
     return links
 
 
-def dxl_to_onenote_row(dxl_path: str) -> SyogaiDbRaw:
+def dxl_to_onenote_row(dxl_path: str, *, model_cls: Type[TNote]) -> TNote:
     """
-    DXLファイル1件 → SyogaiDbRaw（全部str）
-    - SyogaiDbRawに存在するフィールド名はそのままセット
+    DXLファイル1件 → データクラス（全部str）
+    - データクラスに存在するフィールド名はそのままセット
     - 存在しないフィールドは extra に入れる
     - 添付名は attachments、doclinkは notes_links に入れる
     """
     root = ET.parse(dxl_path).getroot()
 
-    # SyogaiDbRaw が持つフィールド名セット（extra/attachments/notes_links含む）
-    model_field_names = {f.name for f in fields(SyogaiDbRaw)}
+    # 対象データクラスが持つフィールド名セット（extra/attachments/notes_links含む）
+    model_field_names = {f.name for f in fields(model_cls)}
 
-    # SyogaiDbRawに渡すkwargs
+    # データクラスに渡すkwargs
     kwargs: Dict[str, object] = {}
 
     extra: Dict[str, str] = {}
@@ -150,4 +150,4 @@ def dxl_to_onenote_row(dxl_path: str) -> SyogaiDbRaw:
         kwargs["notes_links"] = _extract_doclinks(root)
 
     # frozen dataclass なのでコンストラクタで一発生成
-    return SyogaiDbRaw(**kwargs)  # type: ignore[arg-type]
+    return model_cls(**kwargs)  # type: ignore[arg-type]
