@@ -5,18 +5,12 @@ from pathlib import Path
 from dataclasses import dataclass
 
 from main.ignore_git import token
-from main.config import (
-    NOTEBOOK_NAME,
-    SECTION_NAME,
-    DXL_DIR,
-    TITLE_COLUMN,
-    SLEEP_SEC,
-)
+from main.config import NOTEBOOK_NAME, DXL_DIR, SLEEP_SEC
+from main.data_type_config import get_data_type_settings
 from main.find_id import find_notebook_id, find_section_id
 from main.services.graph_client import GraphClient
 from main.logging.logging_config import setup_logging
 from main.services.page_payload_builder import build_page_payload
-from .delete_all_pages_in_section import delete_all_pages_in_section
 
 
 
@@ -27,7 +21,6 @@ class AppSettings:
     notebook_name: str
     section_name: str
     dxl_dir: Path
-    title_column: str | None
     sleep_sec: float
 
 
@@ -51,8 +44,7 @@ def _validate_config() -> None:
     """必須設定のバリデーション。"""
     if not NOTEBOOK_NAME or not str(NOTEBOOK_NAME).strip():
         raise RuntimeError("NOTEBOOK_NAME is empty. Set it in config.py")
-    if not SECTION_NAME or not str(SECTION_NAME).strip():
-        raise RuntimeError("SECTION_NAME is empty. Set it in config.py")
+    get_data_type_settings()
 
 
 def _load_settings() -> AppSettings:
@@ -72,9 +64,8 @@ def _load_settings() -> AppSettings:
     return AppSettings(
         access_token=access_token,
         notebook_name=NOTEBOOK_NAME,
-        section_name=SECTION_NAME,
+        section_name=get_data_type_settings().section_name,
         dxl_dir=dxl_dir,
-        title_column=TITLE_COLUMN or None,
         sleep_sec=SLEEP_SEC,
     )
 
@@ -102,10 +93,6 @@ def main() -> None:
         # 対象OneNoteのノートブックID・セクションIDの取得
         notebook_id = find_notebook_id(client, settings.notebook_name)
         section_id = find_section_id(client, notebook_id, settings.section_name)
-
-        # # 削除したいとき
-        # delete_all_pages_in_section(client, section_id)
-
 
         # DXLファイルを1件ずつ処理
         for i, dxl_path in enumerate(dxl_files, start=1):
