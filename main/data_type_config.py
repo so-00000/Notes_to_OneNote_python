@@ -6,7 +6,8 @@ from typing import Any, Callable
 from main import config
 from main.models.CallDb import CallDbRaw
 from main.models.SyogaiDb import SyogaiDbRaw
-from main.services.renderer import render_call_db_html, render_syogai_db_html
+from main.services.render_syogai_db_html import render_syogai_db_html
+from main.services.util_render import render_call_db_html
 
 
 @dataclass(frozen=True)
