@@ -22,7 +22,11 @@ def build_page_payload(
     note, segment_list = create_materials_from_dxl(str(dxl_path))
 
     # ページタイトル作成（ドキュメント番号_件名）
-    page_title = note.DocumentNo + "_" + note.Fd_Text_1
+    # 障害DB用
+    # page_title = note.DocumentNo + "_" + note.Fd_Text_1
+
+    # CallDB用
+    page_title = note.mng_no + "_" + note.outline
 
     # 本文作成（HTML）
     body_html = render_to_html_body(note, source_file=base, row_no=row_no)
