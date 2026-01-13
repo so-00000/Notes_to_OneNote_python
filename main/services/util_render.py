@@ -5,7 +5,6 @@ import html
 import re
 from typing import Optional
 
-from main.models.CallDb import CallDbRaw
 
 
 def _nl2br(s: Optional[str]) -> str:
@@ -82,14 +81,3 @@ def _section_title(title: str) -> str:
         "</div>"
     )
 
-
-def render_call_db_html(
-    note: CallDbRaw,
-    *,
-    source_file: str | None = None,
-    row_no: int | None = None,
-) -> str:
-    raise NotImplementedError(
-        "CallDBのHTMLレンダーは未対応です。"
-        "DATA_TYPEを障害DBにするか、CallDB用HTML生成を実装してください。"
-    )
