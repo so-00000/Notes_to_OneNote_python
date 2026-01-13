@@ -2,13 +2,13 @@
 from __future__ import annotations
 from dataclasses import dataclass
 
-from main.ignore_git import token
-from main.config import NOTEBOOK_NAME, SLEEP_SEC
-from main.data_type_config import get_data_type_settings
-from main.find_id import find_notebook_id, find_section_id
-from main.services.graph_client import GraphClient
-from main.logging.logging_config import setup_logging
-from main.delete_all_pages_in_section import delete_all_pages_in_section
+from .ignore_git import token
+from .config import NOTEBOOK_NAME
+from .data_type_config import get_data_type_settings
+from .find_id import find_notebook_id, find_section_id
+from .services.graph_client import GraphClient
+from .logging.logging_config import setup_logging
+from .delete_all_pages_in_section import delete_all_pages_in_section
 
 @dataclass(frozen=True)
 class AppSettings:
@@ -16,7 +16,6 @@ class AppSettings:
     access_token: str
     notebook_name: str
     section_name: str
-    sleep_sec: float
 
 
 def _validate_config() -> None:
@@ -39,8 +38,7 @@ def _load_settings() -> AppSettings:
     return AppSettings(
         access_token=access_token,
         notebook_name=NOTEBOOK_NAME,
-        section_name=settings.section_name,
-        sleep_sec=SLEEP_SEC,
+        section_name=get_data_type_settings().section_name,
     )
 
 
