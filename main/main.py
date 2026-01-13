@@ -11,7 +11,7 @@ from main.find_id import find_notebook_id, find_section_id
 from main.services.graph_client import GraphClient
 from main.logging.logging_config import setup_logging
 from main.services.page_payload_builder import build_page_payload
-from .delete_all_pages_in_section import delete_all_pages_in_section
+from main.delete_all_pages_in_section import delete_all_pages_in_section
 
 
 
