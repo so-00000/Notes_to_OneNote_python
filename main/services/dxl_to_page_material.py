@@ -7,10 +7,11 @@ import re
 import xml.etree.ElementTree as ET
 from typing import Optional
 
-from main.data_type_config import get_data_type_settings
+from main.models.SyogaiDb import SyogaiDbRaw
 from main.dxl_to_model import dxl_to_onenote_row
 from main.dxl_attachments import extract_attachments_from_dxl
 from main.models.models import Segment, BinaryPart
+from main.config import RICH_FIELDS
 from typing import Any
 from pprint import pprint
 import logging
@@ -289,15 +290,13 @@ def richtext_item_to_html_and_segment(
 
 def create_materials_from_dxl(
     dxl_path: str,
-) -> tuple[Any, list[Segment]]:
+) -> tuple[SyogaiDbRaw, list[Segment]]:
 
     all_segment: list[Segment] = []
 
 
-    data_type = get_data_type_settings()
-
     # 1件分の全データ取得
-    note = dxl_to_onenote_row(dxl_path, model_cls=data_type.model_cls)
+    note = dxl_to_onenote_row(dxl_path)
     root = ET.parse(dxl_path).getroot()
 
     # 添付ファイル（$FILE）全件を抽出
@@ -312,7 +311,7 @@ def create_materials_from_dxl(
     # RichTextフィールドに対して下記を行う
     # ・HTML変換
     # ・埋め込みファイル（キャプチャ画像やExcelなど）の抽出
-    for field_name in data_type.rich_fields:
+    for field_name in RICH_FIELDS:
 
         # 対象フィールド（型：RichText）をセット
         item = root.find(f".//dxl:item[@name='{field_name}']", DXL_NS)

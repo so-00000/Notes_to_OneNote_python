@@ -5,7 +5,6 @@ import html
 import re
 from typing import Optional
 
-from main.models.CallDb import CallDbRaw
 from main.models.SyogaiDb import SyogaiDbRaw
 
 
@@ -84,7 +83,7 @@ def _section_title(title: str) -> str:
     )
 
 
-def render_syogai_db_html(
+def render_to_html_body(
     note: SyogaiDbRaw,
     *,
     source_file: str | None = None,
@@ -191,15 +190,3 @@ def render_syogai_db_html(
         )
 
     return container_start + "\n".join(parts) + "</div>"
-
-
-def render_call_db_html(
-    note: CallDbRaw,
-    *,
-    source_file: str | None = None,
-    row_no: int | None = None,
-) -> str:
-    raise NotImplementedError(
-        "CallDBのHTMLレンダーは未対応です。"
-        "DATA_TYPEを障害DBにするか、CallDB用HTML生成を実装してください。"
-    )
