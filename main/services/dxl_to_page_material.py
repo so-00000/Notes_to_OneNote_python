@@ -318,6 +318,8 @@ def create_materials_from_dxl(
         item = root.find(f".//dxl:item[@name='{field_name}']", DXL_NS)
         if item is None:
             continue
+        if item.find("dxl:richtext", DXL_NS) is None:
+            continue
 
         # フィールド（RichText）から下記を取得
         # 変換後HTML（segment_id付与）
