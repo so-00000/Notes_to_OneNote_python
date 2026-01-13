@@ -1,76 +1,22 @@
-# main.py
 from __future__ import annotations
-from pathlib import Path
-from dataclasses import dataclass
 
-from .ignore_git import token
-from .config import (
-    NOTEBOOK_NAME,
-    SECTION_NAME,
-    DXL_DIR,
-    TITLE_COLUMN,
-    SLEEP_SEC,
-)
-from .find_id import find_notebook_id, find_section_id
-from .services.graph_client import GraphClient
-from .logging.logging_config import setup_logging
-from .delete_all_pages_in_section import delete_all_pages_in_section
-
-@dataclass(frozen=True)
-class AppSettings:
-    """アプリ全体で使う設定値"""
-    access_token: str
-    notebook_name: str
-    section_name: str
-    dxl_dir: Path
-    title_column: str | None
-    sleep_sec: float
+from main.services.graph_client import GraphClient
 
 
-def _validate_config() -> None:
-    """必須設定のバリデーション。"""
-    if not NOTEBOOK_NAME or not str(NOTEBOOK_NAME).strip():
-        raise RuntimeError("NOTEBOOK_NAME is empty. Set it in config.py")
-    if not SECTION_NAME or not str(SECTION_NAME).strip():
-        raise RuntimeError("SECTION_NAME is empty. Set it in config.py")
+def delete_all_pages_in_section(client: GraphClient, section_id: str) -> int:
+    """指定セクション内の全ページを削除する。"""
+    url = f"https://graph.microsoft.com/v1.0/me/onenote/sections/{section_id}/pages"
+    deleted = 0
 
+    while url:
+        payload = client.get_json(url)
+        for page in payload.get("value", []):
+            page_id = page.get("id")
+            if not page_id:
+                continue
+            client.delete(f"https://graph.microsoft.com/v1.0/me/onenote/pages/{page_id}")
+            deleted += 1
 
-def _load_settings() -> AppSettings:
-    """config.pyとtokenからAppSettingsを組み立てる。"""
-    access_token = token.ACCESS_TOKEN
-    if not access_token or not access_token.strip():
-        raise RuntimeError("ACCESS_TOKEN is empty.")
+        url = payload.get("@odata.nextLink")
 
-    _validate_config()
-
-
-    return AppSettings(
-        access_token=access_token,
-        notebook_name=NOTEBOOK_NAME,
-        section_name=SECTION_NAME,
-        dxl_dir="",
-        title_column=TITLE_COLUMN or None,
-        sleep_sec=SLEEP_SEC,
-    )
-
-
-
-
-
-def main() -> None:
-
-    setup_logging(level="DEBUG")
-    
-    settings = _load_settings()
-    client = GraphClient(settings.access_token)
-
-    # 対象OneNoteのノートブックID・セクションIDの取得
-    notebook_id = find_notebook_id(client, settings.notebook_name)
-    section_id = find_section_id(client, notebook_id, settings.section_name)
-    delete_all_pages_in_section(client, section_id)
-
-    client.close()
-
-
-if __name__ == "__main__":
-    main()
+    return deleted
