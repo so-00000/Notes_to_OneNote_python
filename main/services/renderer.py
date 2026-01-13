@@ -5,7 +5,7 @@ import html
 import re
 from typing import Optional
 
-from main.models.models import OneNoteRow
+from main.models.SyogaiDb import SyogaiDbRaw
 
 
 def _nl2br(s: Optional[str]) -> str:
@@ -84,7 +84,7 @@ def _section_title(title: str) -> str:
 
 
 def render_to_html_body(
-    note: OneNoteRow,
+    note: SyogaiDbRaw,
     *,
     source_file: str | None = None,
     row_no: int | None = None

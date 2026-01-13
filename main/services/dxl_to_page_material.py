@@ -7,7 +7,7 @@ import re
 import xml.etree.ElementTree as ET
 from typing import Optional
 
-from main.models.models import OneNoteRow
+from main.models.SyogaiDb import SyogaiDbRaw
 from main.dxl_to_model import dxl_to_onenote_row
 from main.dxl_attachments import extract_attachments_from_dxl
 from main.models.models import Segment, BinaryPart
@@ -290,7 +290,7 @@ def richtext_item_to_html_and_segment(
 
 def create_materials_from_dxl(
     dxl_path: str,
-) -> tuple[OneNoteRow, list[Segment]]:
+) -> tuple[SyogaiDbRaw, list[Segment]]:
 
     all_segment: list[Segment] = []
 
