@@ -195,6 +195,19 @@ def render_call_db_html(
     parts.append("</table>")
 
     # =========================
+    # 2.1) リッチテキスト補足（Agenda/Reason/Temporary 等）
+    # =========================
+    add_title("リッチテキスト補足")
+
+    parts.append("<table style='width:100%; border-collapse:collapse;'>")
+    add_rich_row("Agenda", note.Agenda)
+    add_rich_row("Reason", note.Reason)
+    add_rich_row("Temporary", note.Temporary)
+    add_rich_row("Parmanent", note.Parmanent)
+    add_rich_row("リンク（Fd_Link_1）", note.Fd_Link_1)
+    parts.append("</table>")
+
+    # =========================
     # 3) 管理情報（PDFの2ページ相当を要約して1ページ内に）
     # =========================
     add_title("管理情報")
