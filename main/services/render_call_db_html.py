@@ -155,14 +155,20 @@ def render_call_db_html(
     parts.append("<table style='width:100%; border-collapse:collapse; margin-top:6px;'>")
     parts.append(_kv_row("問合せ発生時間", _esc(occurred)))
     parts.append(_kv_row("対応開始時間", _esc(started)))
+
+    parts.append("<br>")
+
     parts.append(_kv_row("事業所名", _esc(office_name)))
     parts.append(_kv_row("事業所名（カナ）", _esc(office_kana)))
     parts.append(_kv_row("所属", _esc(affiliation)))
-    parts.append(_kv_row("部門名", _esc(note.BUMON)))
     parts.append(_kv_row("住所", _nl2br(address)))
     parts.append(_kv_row("電話", _esc(note.tel)))
     parts.append(_kv_row("FAX", _esc(note.fax)))
+    parts.append(_kv_row("部門名", _esc(note.BUMON)))
+    parts.append(_kv_row("会社区分", _esc(note.KAISHA)))
     parts.append("</table>")
+
+    parts.append("<br>")
 
     # 問合せ者（氏名/カナ/連絡先）
     parts.append("<table style='width:100%; border-collapse:collapse; margin-top:6px;'>")
@@ -175,9 +181,10 @@ def render_call_db_html(
 
 
     # =========================
-    # 2) 一次
+    # 一次 問い合わせ内容
     # =========================
 
+    parts.append("<br>")
     add_title("一次 問い合わせ内容")
 
     endDateTime = _compose_dt(note.EDATE_Y, note.EDATE_M, note.EDATE_D, note.ETIME_H, note.ETIME_M)
@@ -200,6 +207,7 @@ def render_call_db_html(
     # 対象者情報
     # =========================
 
+    parts.append("<br>")
     add_title("対象者情報")
     parts.append("<table style='width:100%; border-collapse:collapse; margin-top:6px;'>")
     parts.append(_kv_row("対象者氏名", _esc(note.name)))
@@ -212,6 +220,7 @@ def render_call_db_html(
     # Office365情報
     # =========================
 
+    parts.append("<br>")
     add_title("Office365情報")
 
     parts.append("<table style='width:100%; border-collapse:collapse; margin-top:6px;'>")
@@ -219,8 +228,9 @@ def render_call_db_html(
     parts.append(_kv_row("Outlook使用アプリ", _esc(note.OutlookApri)))
     parts.append(_kv_row("利用環境_端末", _esc(note.plathome)))
     parts.append(_kv_row("スマートデバイス回線番号", _esc(note.mobile_tel_no)))
-    parts.append(_kv_row("利用環境_種類", _esc(note.O365SYURUI)))
-    parts.append(_kv_row("ブラウザ", _esc(note.BROWSER)))
+
+    O365SYURUI_BROWSER = _join_nonempty(note.O365SYURUI, note.BROWSER, " ")
+    parts.append(_kv_row("利用環境_種類", _esc(O365SYURUI_BROWSER)))
     parts.append(_kv_row("実施作業", _esc(note.SAGYO)))
     parts.append("</table>")
 
@@ -229,6 +239,7 @@ def render_call_db_html(
     # 
     # =========================
 
+    parts.append("<br>")
     add_title("")
 
     parts.append("<table style='width:100%; border-collapse:collapse; margin-top:6px;'>")
@@ -274,6 +285,15 @@ def render_call_db_html(
     parts.append("</table>")
 
 
+    parts.append("<br>")
+
+    parts.append("<table style='width:100%; border-collapse:collapse; margin-top:6px;'>")
+    parts.append(_kv_row("Hardware", _esc(note.HW)))
+    # parts.append(_kv_row("", _esc(note.)))
+    parts.append("</table>")
+
+
+    parts.append("<br>")
     add_title("")
     add_title("")
     add_title("略！！！")
@@ -282,16 +302,48 @@ def render_call_db_html(
 
 
 
+    parts.append("<br>")
     add_title("関連部門")
+
+
+    SDATE = _compose_dt(note.SDATE_Y_2, note.SDATE_M_2, note.SDATE_D_2, note.STIME_H_2, note.STIME_M_2)
+    # KDATE = _compose_dt(note.KDATE_Y_2, note.KDATE_M_2, note.KDATE_D_2, note.KTIME_H_2, note.KTIME_M_2)
+    CDATE = _compose_dt(note.CDATE_Y_2, note.CDATE_M_2, note.CDATE_D_2, note.CTIME_H_2, note.CTIME_M_2)
+    EDATE = _compose_dt(note.EDATE_Y_2, note.EDATE_M_2, note.EDATE_D_2, note.ETIME_H_2, note.ETIME_M_2)
+    ADATE = _compose_dt(note.ADATE_Y_2, note.ADATE_M_2, note.ADATE_D_2, note.ATIME_H_2, note.ATIME_M_2)
 
     parts.append("<table style='width:100%; border-collapse:collapse; margin-top:6px;'>")
     parts.append(_kv_row("区分", _esc(note.Third_Type)))
     parts.append(_kv_row("担当者", _esc(note.Third_Person)))
     parts.append(_kv_row("所属部署", _esc(note.Third_Dept)))
-    # parts.append(_kv_row("", _esc(note.)))
-    # parts.append(_kv_row("", _esc(note.)))
+    parts.append(_kv_row("連絡先", _esc(note.Third_Contact)))
+    parts.append(_kv_row("受付日時", _esc(SDATE)))
+    parts.append(_kv_row("中間回答日時", _esc(CDATE)))
+    parts.append(_kv_row("途中経過内容（作業内容）", _esc(note.Third_half)))
+    parts.append(_kv_row("最終回答日時", _esc(EDATE)))
+    parts.append(_kv_row("回答内容", _esc(note.Third_answer)))
+    parts.append(_kv_row("問合せ種別", _esc(note.Second_category1)))
 
+    parts.append(_kv_row("問合せ内容", _esc(note.Second_category2)))
+    parts.append(_kv_row("問合せ内容", _esc(note.Second_category3)))
+
+    parts.append(_kv_row("対応時間", _esc(note.JIKAN_2_1)))
+    parts.append(_kv_row("調査時間", _esc(note.JIKAN_2_2)))
+    parts.append(_kv_row("障害", _esc(note.Trouble_2)))
+    parts.append(_kv_row("上長コメント", _esc(note.Third_comment)))
+    parts.append(_kv_row("上長承認", _esc(note.Trouble_Approve_2)))
+    parts.append(_kv_row("承認日時", _esc(ADATE)))
     parts.append("</table>")
+
+
+
+    # parts.append(_kv_row("", _esc(note.)))
+    # parts.append(_kv_row("", _esc(note.)))
+    # parts.append(_kv_row("", _esc(note.)))
+    # parts.append(_kv_row("", _esc(note.)))
+    # parts.append(_kv_row("", _esc(note.)))
+    # parts.append(_kv_row("", _esc(note.)))
+    # parts.append(_kv_row("", _esc(note.)))
 
 
 
@@ -301,6 +353,7 @@ def render_call_db_html(
     # =========================
     # 添付資料
     # =========================
+    parts.append("<br>")
     add_title("対応メモ")
     parts.append(note.body_1)
 
@@ -309,6 +362,7 @@ def render_call_db_html(
     # =========================
     # 添付資料
     # =========================
+    parts.append("<br>")
     add_title("添付資料")
     parts.append(note.body)    
 
@@ -316,6 +370,7 @@ def render_call_db_html(
     # =========================
     # 履歴
     # =========================
+    parts.append("<br>")
     add_title("履歴情報")
 
     history = _pick_first(note.lasthistory, note.history)
