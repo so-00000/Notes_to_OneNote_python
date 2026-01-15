@@ -1,15 +1,16 @@
 # render_call_db_html.py
 from __future__ import annotations
 
-from typing import Optional
-
 from main.models.CallDb import CallDbRaw
 from main.services.util_render import (
     _esc,
     _join_nonempty,
     _kv_row,
     _nl2br,
-    _section_title,
+    add_text_row,
+    add_title,
+    compose_dt,
+    pick_first,
 )
 
 
@@ -35,81 +36,11 @@ def render_call_db_html(
     )
     parts: list[str] = []
 
-    def add_title(title: str) -> None:
-        parts.append(_section_title(title))
+    def add_section_title(title: str) -> None:
+        add_title(parts, title)
 
-
-    def add_text_row(label: str, s: Optional[str]) -> None:
-        parts.append(_kv_row(_esc(label), f"<p>{_nl2br(s) or '<br/>'}</p>"))
-
-    def add_html_row(label: str, html: Optional[str]) -> None:
-        if (html or "").strip():
-            parts.append(_kv_row(_esc(label), html))
-
-    def _looks_like_html(value: Optional[str]) -> bool:
-        if not value:
-            return False
-        return "<" in str(value) and ">" in str(value)
-
-    def add_rich_row(label: str, value: Optional[str]) -> None:
-        if not (value or "").strip():
-            parts.append(_kv_row(_esc(label), "<p><br/></p>"))
-            return
-        if _looks_like_html(value):
-            parts.append(_kv_row(_esc(label), str(value)))
-            return
-        parts.append(_kv_row(_esc(label), f"<p>{_nl2br(value) or '<br/>'}</p>"))
-
-    def _pick_first(*vals: Optional[str]) -> Optional[str]:
-        for v in vals:
-            if v is None:
-                continue
-            if str(v).strip():
-                return v
-        return None
-
-    def _compose_dt(
-        y: Optional[str],
-        m: Optional[str],
-        d: Optional[str],
-        hh: Optional[str],
-        mm: Optional[str],
-    ) -> str:
-        """
-        SDATE/TDATE + STIME/TTIME のような分割フィールドを "YYYY/MM/DD HH:MM" に整形。
-        欠けがあれば可能な範囲で結合し、空なら空文字。
-        """
-        yy = (y or "").strip()
-        mo = (m or "").strip()
-        dd = (d or "").strip()
-        h = (hh or "").strip()
-        mi = (mm or "").strip()
-
-        date = ""
-        if yy and mo and dd:
-            date = f"{yy}/{mo.zfill(2)}/{dd.zfill(2)}"
-        elif yy or mo or dd:
-            date = "/".join(
-                [
-                    x
-                    for x in [
-                        yy,
-                        mo.zfill(2) if mo else "",
-                        dd.zfill(2) if dd else "",
-                    ]
-                    if x
-                ]
-            )
-
-        time = ""
-        if h and mi:
-            time = f"{h.zfill(2)}:{mi.zfill(2)}"
-        elif h:
-            time = f"{h.zfill(2)}"
-        elif mi:
-            time = f"{mi.zfill(2)}"
-
-        return _join_nonempty(date, time, sep=" ")
+    def add_section_text_row(label: str, s: str | None) -> None:
+        add_text_row(parts, label, s)
 
     # =========================
     # 0) ヘッダー（1ページ内の見出し）
@@ -126,14 +57,14 @@ def render_call_db_html(
     # =========================
     # 1) 一次対応（上部テーブル）
     # =========================
-    add_title("一次対応")
+    add_section_title("一次対応")
 
 
 
-    occurred = _compose_dt(
+    occurred = compose_dt(
         note.SDATE_Y, note.SDATE_M, note.SDATE_D, note.STIME_H, note.STIME_M
     )
-    started = _compose_dt(
+    started = compose_dt(
         note.TDATE_Y, note.TDATE_M, note.TDATE_D, note.TTIME_H, note.TTIME_M
     )
 
@@ -147,8 +78,8 @@ def render_call_db_html(
 
 
     # 事業所/所属/連絡
-    office_name = _pick_first(note.customername, note.SEC3)
-    office_kana = _pick_first(note.kana, note.es_namew)
+    office_name = pick_first(note.customername, note.SEC3)
+    office_kana = pick_first(note.kana, note.es_namew)
     affiliation = _join_nonempty(note.sec1, note.SEC2, note.SEC3, sep=" / ")
     address = _join_nonempty(note.ADDRESS1, note.ADDRESS2, note.ADDRESS3, sep=" ")
 
@@ -175,7 +106,7 @@ def render_call_db_html(
     parts.append(_kv_row("問合せ者氏名", _esc(note.customername_1)))
     parts.append(_kv_row("問合せ者氏名（カナ）", _esc(note.customername_2)))
     parts.append(_kv_row("問合せ者ユーザーID", _esc(note.customerID)))
-    parts.append(_kv_row("連絡先", _esc(_pick_first(note.mobile_tel_no, note.customerkeitai))))
+    parts.append(_kv_row("連絡先", _esc(pick_first(note.mobile_tel_no, note.customerkeitai))))
     parts.append("</table>")
 
 
@@ -185,16 +116,16 @@ def render_call_db_html(
     # =========================
 
     parts.append("<br>")
-    add_title("一次 問い合わせ内容")
+    add_section_title("一次 問い合わせ内容")
 
-    endDateTime = _compose_dt(note.EDATE_Y, note.EDATE_M, note.EDATE_D, note.ETIME_H, note.ETIME_M)
+    endDateTime = compose_dt(note.EDATE_Y, note.EDATE_M, note.EDATE_D, note.ETIME_H, note.ETIME_M)
 
     parts.append("<table style='width:100%; border-collapse:collapse; margin-top:6px;'>")
     parts.append(_kv_row("質問概要", _esc(note.outline)))
     # parts.append(_kv_row("問合せ内容（詳細）", note.inquiry))
     # add_rich_row("対応内容（最終回答）", note.answer)
-    add_text_row("問合せ内容（詳細）", note.inquiry)
-    add_text_row("対応内容（最終回答）", note.answer)
+    add_section_text_row("問合せ内容（詳細）", note.inquiry)
+    add_section_text_row("対応内容（最終回答）", note.answer)
 
     parts.append(_kv_row("対応完了日時", endDateTime))
 
@@ -208,7 +139,7 @@ def render_call_db_html(
     # =========================
 
     parts.append("<br>")
-    add_title("対象者情報")
+    add_section_title("対象者情報")
     parts.append("<table style='width:100%; border-collapse:collapse; margin-top:6px;'>")
     parts.append(_kv_row("対象者氏名", _esc(note.name)))
     parts.append(_kv_row("ADユーザーID", _esc(note.ADID)))
@@ -221,7 +152,7 @@ def render_call_db_html(
     # =========================
 
     parts.append("<br>")
-    add_title("Office365情報")
+    add_section_title("Office365情報")
 
     parts.append("<table style='width:100%; border-collapse:collapse; margin-top:6px;'>")
     parts.append(_kv_row("O365ライセンス", _esc(note.O365License)))
@@ -240,7 +171,7 @@ def render_call_db_html(
     # =========================
 
     parts.append("<br>")
-    add_title("")
+    add_section_title("")
 
     parts.append("<table style='width:100%; border-collapse:collapse; margin-top:6px;'>")
     parts.append(_kv_row("問合せ種別", _esc(note.category1)))
@@ -251,7 +182,7 @@ def render_call_db_html(
     parts.append(_kv_row("カテゴリ6", _esc(note.category6)))
     parts.append("</table>")
 
-    add_title("サポートデスクDB")
+    add_section_title("サポートデスクDB")
 
     parts.append("<table style='width:100%; border-collapse:collapse; margin-top:6px;'>")
     parts.append(_kv_row("カテゴリ1", _esc(note.S_Category1)))
@@ -260,7 +191,7 @@ def render_call_db_html(
     parts.append(_kv_row("件名", _esc(note.S_Outline)))
     parts.append("</table>")
 
-    add_title("ヘルプマニュアル")
+    add_section_title("ヘルプマニュアル")
 
     parts.append("<table style='width:100%; border-collapse:collapse; margin-top:6px;'>")
     parts.append(_kv_row("カテゴリ1", _esc(note.H_Category1)))
@@ -268,7 +199,7 @@ def render_call_db_html(
     parts.append(_kv_row("件名", _esc(note.H_Outline)))
     parts.append("</table>")
 
-    add_title("関連部門のエスカレーション先")
+    add_section_title("関連部門のエスカレーション先")
 
     parts.append("<table style='width:100%; border-collapse:collapse; margin-top:6px;'>")
     parts.append(_kv_row("システム名", _esc(note.Escalation_1)))
@@ -276,7 +207,7 @@ def render_call_db_html(
     parts.append(_kv_row("送信先のCC", _esc(note.SCC_1)))
     parts.append("</table>")
 
-    add_title("対応依頼先")
+    add_section_title("対応依頼先")
 
     parts.append("<table style='width:100%; border-collapse:collapse; margin-top:6px;'>")
     parts.append(_kv_row("システム名", _esc(note.Escalation_0_1)))
@@ -294,23 +225,23 @@ def render_call_db_html(
 
 
     parts.append("<br>")
-    add_title("")
-    add_title("")
-    add_title("略！！！")
-    add_title("")
-    add_title("")
+    add_section_title("")
+    add_section_title("")
+    add_section_title("略！！！")
+    add_section_title("")
+    add_section_title("")
 
 
 
     parts.append("<br>")
-    add_title("関連部門")
+    add_section_title("関連部門")
 
 
-    SDATE = _compose_dt(note.SDATE_Y_2, note.SDATE_M_2, note.SDATE_D_2, note.STIME_H_2, note.STIME_M_2)
+    SDATE = compose_dt(note.SDATE_Y_2, note.SDATE_M_2, note.SDATE_D_2, note.STIME_H_2, note.STIME_M_2)
     # KDATE = _compose_dt(note.KDATE_Y_2, note.KDATE_M_2, note.KDATE_D_2, note.KTIME_H_2, note.KTIME_M_2)
-    CDATE = _compose_dt(note.CDATE_Y_2, note.CDATE_M_2, note.CDATE_D_2, note.CTIME_H_2, note.CTIME_M_2)
-    EDATE = _compose_dt(note.EDATE_Y_2, note.EDATE_M_2, note.EDATE_D_2, note.ETIME_H_2, note.ETIME_M_2)
-    ADATE = _compose_dt(note.ADATE_Y_2, note.ADATE_M_2, note.ADATE_D_2, note.ATIME_H_2, note.ATIME_M_2)
+    CDATE = compose_dt(note.CDATE_Y_2, note.CDATE_M_2, note.CDATE_D_2, note.CTIME_H_2, note.CTIME_M_2)
+    EDATE = compose_dt(note.EDATE_Y_2, note.EDATE_M_2, note.EDATE_D_2, note.ETIME_H_2, note.ETIME_M_2)
+    ADATE = compose_dt(note.ADATE_Y_2, note.ADATE_M_2, note.ADATE_D_2, note.ATIME_H_2, note.ATIME_M_2)
 
     parts.append("<table style='width:100%; border-collapse:collapse; margin-top:6px;'>")
     parts.append(_kv_row("区分", _esc(note.Third_Type)))
@@ -354,7 +285,7 @@ def render_call_db_html(
     # 添付資料
     # =========================
     parts.append("<br>")
-    add_title("対応メモ")
+    add_section_title("対応メモ")
     parts.append(note.body_1)
 
 
@@ -363,7 +294,7 @@ def render_call_db_html(
     # 添付資料
     # =========================
     parts.append("<br>")
-    add_title("添付資料")
+    add_section_title("添付資料")
     parts.append(note.body)    
 
 
@@ -371,9 +302,9 @@ def render_call_db_html(
     # 履歴
     # =========================
     parts.append("<br>")
-    add_title("履歴情報")
+    add_section_title("履歴情報")
 
-    history = _pick_first(note.lasthistory, note.history)
+    history = pick_first(note.lasthistory, note.history)
     if history and "|" in history:
         rows = [x.strip() for x in history.split("|") if x.strip()]
         parts.append("<table style='width:100%; border-collapse:collapse;'>")
@@ -383,7 +314,7 @@ def render_call_db_html(
         parts.append("</table>")
     else:
         parts.append("<table style='width:100%; border-collapse:collapse;'>")
-        add_text_row("履歴", history)
+        add_section_text_row("履歴", history)
         parts.append("</table>")
 
 
