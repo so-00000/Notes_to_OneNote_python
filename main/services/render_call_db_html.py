@@ -186,8 +186,8 @@ def render_call_db_html(
     parts.append(_kv_row("質問概要", _esc(note.outline)))
     # parts.append(_kv_row("問合せ内容（詳細）", note.inquiry))
     # add_rich_row("対応内容（最終回答）", note.answer)
-    parts.append(_kv_row("問合せ内容（詳細）", _esc(note.inquiry)))
-    parts.append(_kv_row("対応内容（最終回答）", _esc(note.answer)))
+    add_text_row("問合せ内容（詳細）", note.inquiry)
+    add_text_row("対応内容（最終回答）", note.answer)
 
     parts.append(_kv_row("対応完了日時", endDateTime))
 

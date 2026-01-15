@@ -32,7 +32,20 @@ def _extract_item_as_str(item: ET.Element) -> Optional[str]:
         return txt or None
 
     # text
-    texts = [t.text or "" for t in item.findall(".//dxl:text", DXL_NS)]
+    def _extract_text_element_text(text_el: ET.Element) -> str:
+        parts: List[str] = []
+        if text_el.text:
+            parts.append(text_el.text)
+        for child in list(text_el):
+            if child.tag.endswith("break"):
+                parts.append("\n")
+            if child.text:
+                parts.append(child.text)
+            if child.tail:
+                parts.append(child.tail)
+        return "".join(parts)
+
+    texts = [_extract_text_element_text(t) for t in item.findall(".//dxl:text", DXL_NS)]
     if texts:
         s = _join_clean(texts)
         return s or None
