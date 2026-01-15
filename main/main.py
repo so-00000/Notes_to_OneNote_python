@@ -5,7 +5,7 @@ from pathlib import Path
 from dataclasses import dataclass
 
 from main.ignore_git import token
-from main.config import NOTEBOOK_NAME, DXL_DIR, SLEEP_SEC
+from main.config import NOTEBOOK_NAME, SLEEP_SEC
 from main.data_type_config import get_data_type_settings
 from main.find_id import find_notebook_id, find_section_id
 from main.services.graph_client import GraphClient
@@ -58,7 +58,8 @@ def _load_settings() -> AppSettings:
 
     _validate_config()
 
-    dxl_dir = _resolve_dxl_dir(DXL_DIR)
+    data_type_settings = get_data_type_settings()
+    dxl_dir = _resolve_dxl_dir(data_type_settings.dxl_dir)
     if not dxl_dir.exists():
         raise RuntimeError(f"DXL_DIR not found: {dxl_dir}")
     if not dxl_dir.is_dir():
@@ -67,7 +68,7 @@ def _load_settings() -> AppSettings:
     return AppSettings(
         access_token=access_token,
         notebook_name=NOTEBOOK_NAME,
-        section_name=get_data_type_settings().section_name,
+        section_name=data_type_settings.section_name,
         dxl_dir=dxl_dir,
         sleep_sec=SLEEP_SEC,
     )

@@ -15,6 +15,7 @@ class DataTypeSettings:
     key: str
     label: str
     section_name: str
+    dxl_dir: str
     title_fields: tuple[str, ...]
     rich_fields: tuple[str, ...]
     model_cls: type
