@@ -26,6 +26,7 @@ _SETTINGS: dict[str, DataTypeSettings] = {
         key="syogai",
         label="障害DB",
         section_name="障害DB",
+        dxl_dir = "target_dxl_syogai_db",
         title_fields=("DocumentNo", "Fd_Text_1"),
         rich_fields=(
             "Agenda",
@@ -43,6 +44,7 @@ _SETTINGS: dict[str, DataTypeSettings] = {
         key="call",
         label="CallDB",
         section_name="CallDB",
+        dxl_dir = "target_dxl_call_db",
         title_fields=("mng_no", "outline"),
         rich_fields=(
             # "Agenda",

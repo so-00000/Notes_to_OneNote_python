@@ -150,7 +150,7 @@ def render_call_db_html(
     office_name = _pick_first(note.customername, note.SEC3)
     office_kana = _pick_first(note.kana, note.es_namew)
     affiliation = _join_nonempty(note.sec1, note.SEC2, note.SEC3, sep=" / ")
-    address = _join_nonempty(note.ADDRESS1, note.ADDRESS2, note.ADDRESS3, sep="\n")
+    address = _join_nonempty(note.ADDRESS1, note.ADDRESS2, note.ADDRESS3, sep=" ")
 
     parts.append("<table style='width:100%; border-collapse:collapse; margin-top:6px;'>")
     parts.append(_kv_row("問合せ発生時間", _esc(occurred)))
@@ -274,13 +274,27 @@ def render_call_db_html(
     parts.append("</table>")
 
 
-
-
     add_title("")
     add_title("")
     add_title("略！！！")
     add_title("")
     add_title("")
+
+
+
+    add_title("関連部門")
+
+    parts.append("<table style='width:100%; border-collapse:collapse; margin-top:6px;'>")
+    parts.append(_kv_row("区分", _esc(note.Third_Type)))
+    parts.append(_kv_row("担当者", _esc(note.Third_Person)))
+    parts.append(_kv_row("所属部署", _esc(note.Third_Dept)))
+    # parts.append(_kv_row("", _esc(note.)))
+    # parts.append(_kv_row("", _esc(note.)))
+
+    parts.append("</table>")
+
+
+
 
 
 
