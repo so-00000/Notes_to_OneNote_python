@@ -1,8 +1,6 @@
 # render_syogai_db_html.py
 from __future__ import annotations
 
-from typing import Optional
-
 from main.models.SyogaiDb import SyogaiDbRaw
 from main.services.util_render import (
     _esc,
@@ -11,7 +9,8 @@ from main.services.util_render import (
     _kv_row,
     _nl2br,
     _normalize_notes_dt,
-    _section_title,
+    add_text_block,
+    add_title,
 )
 
 
@@ -24,11 +23,11 @@ def render_syogai_db_html(
     container_start = "<div style='max-width:1100px; min-width:900px; margin:0 auto; padding:8px;'>"
     parts: list[str] = []
 
-    def add_title(title: str) -> None:
-        parts.append(_section_title(title))
+    def add_section_title(title: str) -> None:
+        add_title(parts, title)
 
-    def add_text_block(s: Optional[str]) -> None:
-        parts.append(f"<p>{_nl2br(s) or '<br/>'}</p>")
+    def add_section_text_block(s: str | None) -> None:
+        add_text_block(parts, s)
 
     # --- 承認経路 ---
     reporter1 = _join_nonempty(note.ReporterNm_1, note.ReporterDep_1)
@@ -44,13 +43,13 @@ def render_syogai_db_html(
     parts.append("</table>")
 
     # --- 管理番号 ---
-    add_title("管理番号")
+    add_section_title("管理番号")
     parts.append("<table style='width:100%; border-collapse:collapse;'>")
     parts.append(_kv_row("管理番号", f"<span style='font-size:16px; font-weight:bold;'>{_esc(note.DocumentNo)}</span>"))
     parts.append("</table>")
 
     # --- 基本情報 ---
-    add_title("基本情報")
+    add_section_title("基本情報")
     entry_user = _join_nonempty(note.EntryUser, note.EntryDept)
     started = _fmt_dt(note.DocumentDate, note.DocumentTime)
     finished = _fmt_dt(note.ReplyDate, note.ReplyTime)
@@ -69,40 +68,40 @@ def render_syogai_db_html(
     parts.append("</table>")
 
     # --- 件名 / 内容 ---
-    add_title("件名 / 内容")
-    add_title("件名")
-    add_text_block(note.Fd_Text_1)
+    add_section_title("件名 / 内容")
+    add_section_title("件名")
+    add_section_text_block(note.Fd_Text_1)
 
-    add_title("内容")
+    add_section_title("内容")
     parts.append(note.Detail)
 
-    add_title("理由・原因")
+    add_section_title("理由・原因")
     parts.append(note.Reason)
 
-    add_title("対応（メモ）")
-    add_text_block(note.Measure)
+    add_section_title("対応（メモ）")
+    add_section_text_block(note.Measure)
 
     # --- 分析 ---
-    add_title("分析")
-    add_title("影響範囲")
-    add_text_block(note.Fd_Id_1)
+    add_section_title("分析")
+    add_section_title("影響範囲")
+    add_section_text_block(note.Fd_Id_1)
 
-    add_title("暫定策")
+    add_section_title("暫定策")
     parts.append(note.Temporary)
-    add_title("暫定策予定日付")
-    add_text_block(note.Temporary_Plan)
-    add_title("暫定策完了日付")
-    add_text_block(note.Temporary_Comp)
+    add_section_title("暫定策予定日付")
+    add_section_text_block(note.Temporary_Plan)
+    add_section_title("暫定策完了日付")
+    add_section_text_block(note.Temporary_Comp)
 
-    add_title("恒久策")
+    add_section_title("恒久策")
     parts.append(note.Parmanent)
-    add_title("恒久策予定日付")
-    add_text_block(note.Parmanet_Plan)
-    add_title("恒久策完了日付")
-    add_text_block(note.Parmanet_Comp)
+    add_section_title("恒久策予定日付")
+    add_section_text_block(note.Parmanet_Plan)
+    add_section_title("恒久策完了日付")
+    add_section_text_block(note.Parmanet_Comp)
 
     # --- Notesリンク ---
-    add_title("Notesリンク")
+    add_section_title("Notesリンク")
     notes_links_li: list[str] = []
     for s in (getattr(note, "notes_links", None) or []):
         if "|" in s:
