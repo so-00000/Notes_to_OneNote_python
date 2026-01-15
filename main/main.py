@@ -12,6 +12,9 @@ from main.services.graph_client import GraphClient
 from main.logging.logging_config import setup_logging
 from main.services.page_payload_builder import build_page_payload
 
+from .delete_all_pages_in_section import delete_all_pages_in_section
+
+
 
 
 @dataclass(frozen=True)
@@ -93,6 +96,10 @@ def main() -> None:
         # 対象OneNoteのノートブックID・セクションIDの取得
         notebook_id = find_notebook_id(client, settings.notebook_name)
         section_id = find_section_id(client, notebook_id, settings.section_name)
+
+        # # 削除したいとき
+        # delete_all_pages_in_section(client, section_id)
+
 
         # DXLファイルを1件ずつ処理
         for i, dxl_path in enumerate(dxl_files, start=1):

@@ -38,6 +38,7 @@ def render_call_db_html(
     def add_title(title: str) -> None:
         parts.append(_section_title(title))
 
+
     def add_text_row(label: str, s: Optional[str]) -> None:
         parts.append(_kv_row(_esc(label), f"<p>{_nl2br(s) or '<br/>'}</p>"))
 
@@ -115,21 +116,19 @@ def render_call_db_html(
     # =========================
     # OneNoteページタイトル自体は title_fields で別途付く想定だが、
     # HTML内にも読みやすい見出しとして出す。
-    headline = _join_nonempty(note.mng_no, note.outline, sep="  /  ")
-    parts.append(
-        "<div style='font-size:18px; font-weight:bold; margin:4px 0 10px;'>"
-        f"{_esc(headline) if headline else 'CallDB'}"
-        "</div>"
-    )
+    # headline = _join_nonempty(note.mng_no, note.outline, sep="  /  ")
+    # parts.append(
+    #     "<div style='font-size:18px; font-weight:bold; margin:4px 0 10px;'>"
+    #     f"{_esc(headline) if headline else 'CallDB'}"
+    #     "</div>"
+    # )
 
     # =========================
     # 1) 一次対応（上部テーブル）
     # =========================
     add_title("一次対応")
 
-    # 画面合わせ：ユーザー番号=customerID、問合せ者ユーザーID=pass_1
-    user_no = (note.customerID or "").strip()
-    user_id = (note.pass_1 or "").strip()
+
 
     occurred = _compose_dt(
         note.SDATE_Y, note.SDATE_M, note.SDATE_D, note.STIME_H, note.STIME_M
@@ -138,22 +137,24 @@ def render_call_db_html(
         note.TDATE_Y, note.TDATE_M, note.TDATE_D, note.TTIME_H, note.TTIME_M
     )
 
+
     parts.append("<table style='width:100%; border-collapse:collapse;'>")
     parts.append(_kv_row("問題番号", _esc(note.mng_no)))
-    parts.append(_kv_row("ユーザー番号", _esc(user_no)))
-    parts.append(_kv_row("問合せ者ユーザーID", _esc(user_id)))
+    parts.append(_kv_row("ユーザー番号", _esc(note.customerno)))
     parts.append(_kv_row("会社CD", _esc(note.customercompanycd)))
-    parts.append(_kv_row("問合せ発生時間", _esc(occurred)))
-    parts.append(_kv_row("対応開始時間", _esc(started)))
     parts.append("</table>")
 
-    # 事業所/所属/連絡（PDFの上部ブロックに相当）
+
+
+    # 事業所/所属/連絡
     office_name = _pick_first(note.customername, note.SEC3)
     office_kana = _pick_first(note.kana, note.es_namew)
     affiliation = _join_nonempty(note.sec1, note.SEC2, note.SEC3, sep=" / ")
     address = _join_nonempty(note.ADDRESS1, note.ADDRESS2, note.ADDRESS3, sep="\n")
 
     parts.append("<table style='width:100%; border-collapse:collapse; margin-top:6px;'>")
+    parts.append(_kv_row("問合せ発生時間", _esc(occurred)))
+    parts.append(_kv_row("対応開始時間", _esc(started)))
     parts.append(_kv_row("事業所名", _esc(office_name)))
     parts.append(_kv_row("事業所名（カナ）", _esc(office_kana)))
     parts.append(_kv_row("所属", _esc(affiliation)))
@@ -167,89 +168,141 @@ def render_call_db_html(
     parts.append("<table style='width:100%; border-collapse:collapse; margin-top:6px;'>")
     parts.append(_kv_row("問合せ者氏名", _esc(note.customername_1)))
     parts.append(_kv_row("問合せ者氏名（カナ）", _esc(note.customername_2)))
-    # 連絡先はPDF上「携帯/内線」だが、実データ的にはここに入ることが多い想定で並べる
+    parts.append(_kv_row("問合せ者ユーザーID", _esc(note.customerID)))
     parts.append(_kv_row("連絡先", _esc(_pick_first(note.mobile_tel_no, note.customerkeitai))))
     parts.append("</table>")
 
+
+
     # =========================
-    # 2) 一次 問い合わせ内容（下部3枠）
+    # 2) 一次
     # =========================
+
     add_title("一次 問い合わせ内容")
 
-    parts.append("<table style='width:100%; border-collapse:collapse;'>")
-    add_text_row("質問概要", note.outline)
+    endDateTime = _compose_dt(note.EDATE_Y, note.EDATE_M, note.EDATE_D, note.ETIME_H, note.ETIME_M)
 
-    # 問合せ内容（詳細）：body/Detail のリッチテキストを優先。
-    detail_main = _pick_first(note.body, note.Detail)
-    add_rich_row("問合せ内容（詳細）", detail_main)
-    detail_extra = _pick_first(note.body_1, note.Detail_1)
-    if detail_extra and detail_extra != detail_main:
-        add_rich_row("問合せ内容（詳細・追記）", detail_extra)
-    if (note.inquiry or "").strip():
-        add_text_row("問合せ内容（補足）", note.inquiry)
-
-    # 対応内容（最終回答）：answer → 無ければ Measure/Memo/TAIOU/Detail_1 の順で補完
-    answer_like = _pick_first(note.answer, note.Measure, note.Memo if hasattr(note, "Memo") else None, note.TAIOU, note.Detail_1)
-    add_rich_row("対応内容（最終回答）", answer_like)
-
-    parts.append("</table>")
-
-    # =========================
-    # 2.1) リッチテキスト補足（Agenda/Reason/Temporary 等）
-    # =========================
-    add_title("リッチテキスト補足")
-
-    parts.append("<table style='width:100%; border-collapse:collapse;'>")
-    add_rich_row("Agenda", note.Agenda)
-    add_rich_row("Reason", note.Reason)
-    add_rich_row("Temporary", note.Temporary)
-    add_rich_row("Parmanent", note.Parmanent)
-    add_rich_row("リンク（Fd_Link_1）", note.Fd_Link_1)
-    parts.append("</table>")
-
-    # =========================
-    # 3) 管理情報（PDFの2ページ相当を要約して1ページ内に）
-    # =========================
-    add_title("管理情報")
-
-    closed = _pick_first(
-        note.CloseDateTime,
-        _join_nonempty(note.ReplyDate, note.ReplyTime, sep=" "),
-    )
-
-    parts.append("<table style='width:100%; border-collapse:collapse;'>")
-    parts.append(_kv_row("対応状況", _esc(_pick_first(note.status, note.Status, note.ActionStatus))))
-    parts.append(_kv_row("OPEN中ステータス", _esc(note.status_open)))
-    parts.append(_kv_row("完了タイプ", _esc(note.statusTYPE)))
-    parts.append(_kv_row("重要度", _esc(note.urgent)))
-    parts.append(_kv_row("対応完了日時", _esc(closed)))
-    parts.append(_kv_row("対応手段", _esc(note.TAIOU)))
-    parts.append(_kv_row("レベル", _esc(note.LEVEL2)))
-    parts.append("</table>")
-
-    # カテゴリ（必要最低限でPDF寄せ）
     parts.append("<table style='width:100%; border-collapse:collapse; margin-top:6px;'>")
-    parts.append(_kv_row("カテゴリ1", _esc(note.category1)))
-    parts.append(_kv_row("カテゴリ2", _esc(note.category2)))
-    parts.append(_kv_row("カテゴリ3", _esc(note.category3)))
-    parts.append(_kv_row("カテゴリ4", _esc(note.category4)))
-    parts.append(_kv_row("カテゴリ5", _esc(note.category5)))
+    parts.append(_kv_row("質問概要", _esc(note.outline)))
+    # parts.append(_kv_row("問合せ内容（詳細）", note.inquiry))
+    # add_rich_row("対応内容（最終回答）", note.answer)
+    parts.append(_kv_row("問合せ内容（詳細）", _esc(note.inquiry)))
+    parts.append(_kv_row("対応内容（最終回答）", _esc(note.answer)))
+
+    parts.append(_kv_row("対応完了日時", endDateTime))
+
+    parts.append("</table>")
+
+
+
+
+    # =========================
+    # 対象者情報
+    # =========================
+
+    add_title("対象者情報")
+    parts.append("<table style='width:100%; border-collapse:collapse; margin-top:6px;'>")
+    parts.append(_kv_row("対象者氏名", _esc(note.name)))
+    parts.append(_kv_row("ADユーザーID", _esc(note.ADID)))
+    parts.append(_kv_row("コンピューター名", _esc(note.pc_name)))
+    parts.append(_kv_row("メールアドレス", _esc(note.MailAddress)))
+    parts.append("</table>")
+
+    # =========================
+    # Office365情報
+    # =========================
+
+    add_title("Office365情報")
+
+    parts.append("<table style='width:100%; border-collapse:collapse; margin-top:6px;'>")
+    parts.append(_kv_row("O365ライセンス", _esc(note.O365License)))
+    parts.append(_kv_row("Outlook使用アプリ", _esc(note.OutlookApri)))
+    parts.append(_kv_row("利用環境_端末", _esc(note.plathome)))
+    parts.append(_kv_row("スマートデバイス回線番号", _esc(note.mobile_tel_no)))
+    parts.append(_kv_row("利用環境_種類", _esc(note.O365SYURUI)))
+    parts.append(_kv_row("ブラウザ", _esc(note.BROWSER)))
+    parts.append(_kv_row("実施作業", _esc(note.SAGYO)))
+    parts.append("</table>")
+
+
+    # =========================
+    # 
+    # =========================
+
+    add_title("")
+
+    parts.append("<table style='width:100%; border-collapse:collapse; margin-top:6px;'>")
+    parts.append(_kv_row("問合せ種別", _esc(note.category1)))
+    parts.append(_kv_row("問合せチャネル", _esc(note.category5)))
+    parts.append(_kv_row("問合せ内容", _esc(note.category3)))
+    parts.append(_kv_row("問合せ内容（詳細）", _esc(note.category4)))
+    # parts.append(_kv_row("カテゴリ5", _esc(note.category5)))
     parts.append(_kv_row("カテゴリ6", _esc(note.category6)))
     parts.append("</table>")
 
-    # Office/端末系（あれば）
+    add_title("サポートデスクDB")
+
     parts.append("<table style='width:100%; border-collapse:collapse; margin-top:6px;'>")
-    parts.append(_kv_row("O365License", _esc(note.O365License)))
-    parts.append(_kv_row("OutlookApri", _esc(note.OutlookApri)))
-    parts.append(_kv_row("BROWSER", _esc(note.BROWSER)))
-    parts.append(_kv_row("PCNAME", _esc(note.PCNAME)))
-    parts.append(_kv_row("MailAddress", _esc(note.MailAddress)))
+    parts.append(_kv_row("カテゴリ1", _esc(note.S_Category1)))
+    parts.append(_kv_row("カテゴリ2", _esc(note.S_Category2)))
+    parts.append(_kv_row("カテゴリ3", _esc(note.S_Category3)))
+    parts.append(_kv_row("件名", _esc(note.S_Outline)))
     parts.append("</table>")
 
+    add_title("ヘルプマニュアル")
+
+    parts.append("<table style='width:100%; border-collapse:collapse; margin-top:6px;'>")
+    parts.append(_kv_row("カテゴリ1", _esc(note.H_Category1)))
+    parts.append(_kv_row("カテゴリ2", _esc(note.H_Category2)))
+    parts.append(_kv_row("件名", _esc(note.H_Outline)))
+    parts.append("</table>")
+
+    add_title("関連部門のエスカレーション先")
+
+    parts.append("<table style='width:100%; border-collapse:collapse; margin-top:6px;'>")
+    parts.append(_kv_row("システム名", _esc(note.Escalation_1)))
+    parts.append(_kv_row("送信先の宛先", _esc(note.SSendTo_1)))
+    parts.append(_kv_row("送信先のCC", _esc(note.SCC_1)))
+    parts.append("</table>")
+
+    add_title("対応依頼先")
+
+    parts.append("<table style='width:100%; border-collapse:collapse; margin-top:6px;'>")
+    parts.append(_kv_row("システム名", _esc(note.Escalation_0_1)))
+    parts.append(_kv_row("送信先の宛先", _esc(note.HSendTo_1)))
+    parts.append(_kv_row("送信先のCC", _esc(note.HCC_1)))
+    parts.append("</table>")
+
+
+
+
+    add_title("")
+    add_title("")
+    add_title("略！！！")
+    add_title("")
+    add_title("")
+
+
+
     # =========================
-    # 4) 履歴（PDFの履歴/添付資料っぽい部分）
+    # 添付資料
     # =========================
-    add_title("履歴")
+    add_title("対応メモ")
+    parts.append(note.body_1)
+
+
+
+    # =========================
+    # 添付資料
+    # =========================
+    add_title("添付資料")
+    parts.append(note.body)    
+
+
+    # =========================
+    # 履歴
+    # =========================
+    add_title("履歴情報")
 
     history = _pick_first(note.lasthistory, note.history)
     if history and "|" in history:
@@ -264,40 +317,6 @@ def render_call_db_html(
         add_text_row("履歴", history)
         parts.append("</table>")
 
-    # =========================
-    # 5) 添付 / Notesリンク
-    # =========================
-    add_title("添付・リンク")
-
-    # 添付（表示用）
-    if getattr(note, "attachments", None):
-        li = "".join(
-            f"<li>{_esc(a)}</li>"
-            for a in (note.attachments or [])
-            if str(a).strip()
-        )
-        parts.append("<div><b>添付資料</b></div>")
-        parts.append("<ul>" + li + "</ul>" if li else "<span style='color:#888;'>（なし）</span>")
-    else:
-        parts.append("<div><b>添付資料</b></div><span style='color:#888;'>（なし）</span>")
-
-    # Notesリンク（doclink等）
-    notes_links_li: list[str] = []
-    for s in (getattr(note, "notes_links", None) or []):
-        if not str(s).strip():
-            continue
-        if "|" in s:
-            desc, href = [x.strip() for x in s.split("|", 1)]
-            notes_links_li.append(f"<li><a href='{_esc(href)}'>{_esc(desc)}</a></li>")
-        else:
-            notes_links_li.append(f"<li><a href='{_esc(s)}'>{_esc(s)}</a></li>")
-
-    parts.append("<div style='margin-top:6px;'><b>Notesリンク</b></div>")
-    parts.append(
-        "<ul>" + "".join(notes_links_li) + "</ul>"
-        if notes_links_li
-        else "<span style='color:#888;'>（なし）</span>"
-    )
 
     # =========================
     # 6) ソース情報（任意）
