@@ -61,37 +61,32 @@ def render_call_db_html(
 
 
 
-    occurred = compose_dt(
-        note.SDATE_Y, note.SDATE_M, note.SDATE_D, note.STIME_H, note.STIME_M
-    )
-    started = compose_dt(
-        note.TDATE_Y, note.TDATE_M, note.TDATE_D, note.TTIME_H, note.TTIME_M
-    )
-
-
     parts.append("<table style='width:100%; border-collapse:collapse;'>")
     parts.append(_kv_row("問題番号", _esc(note.mng_no)))
     parts.append(_kv_row("ユーザー番号", _esc(note.customerno)))
     parts.append(_kv_row("会社CD", _esc(note.customercompanycd)))
     parts.append("</table>")
 
+    # 問合せ発生時間
+    sDate = compose_dt(note.SDATE_Y, note.SDATE_M, note.SDATE_D, note.STIME_H, note.STIME_M)
+    # 対応開始時間
+    tDate = compose_dt(note.TDATE_Y, note.TDATE_M, note.TDATE_D, note.TTIME_H, note.TTIME_M)
 
+    parts.append("<table style='width:100%; border-collapse:collapse; margin-top:6px;'>")
+    parts.append(_kv_row("問合せ発生時間", _esc(sDate)))
+    parts.append(_kv_row("対応開始時間", _esc(tDate)))
+    parts.append("</table>")
+    
+    parts.append("<br>")
 
     # 事業所/所属/連絡
-    office_name = pick_first(note.customername, note.SEC3)
-    office_kana = pick_first(note.kana, note.es_namew)
-    affiliation = _join_nonempty(note.sec1, note.SEC2, note.SEC3, sep=" / ")
+    sec = _join_nonempty(note.sec1, note.SEC2, note.SEC3, sep=" / ")
     address = _join_nonempty(note.ADDRESS1, note.ADDRESS2, note.ADDRESS3, sep=" ")
 
     parts.append("<table style='width:100%; border-collapse:collapse; margin-top:6px;'>")
-    parts.append(_kv_row("問合せ発生時間", _esc(occurred)))
-    parts.append(_kv_row("対応開始時間", _esc(started)))
-
-    parts.append("<br>")
-
-    parts.append(_kv_row("事業所名", _esc(office_name)))
-    parts.append(_kv_row("事業所名（カナ）", _esc(office_kana)))
-    parts.append(_kv_row("所属", _esc(affiliation)))
+    parts.append(_kv_row("事業所名", _esc(note.customername)))
+    parts.append(_kv_row("事業所名（カナ）", _esc(note.kana)))
+    parts.append(_kv_row("所属", _esc(sec)))
     parts.append(_kv_row("住所", _nl2br(address)))
     parts.append(_kv_row("電話", _esc(note.tel)))
     parts.append(_kv_row("FAX", _esc(note.fax)))
@@ -106,7 +101,7 @@ def render_call_db_html(
     parts.append(_kv_row("問合せ者氏名", _esc(note.customername_1)))
     parts.append(_kv_row("問合せ者氏名（カナ）", _esc(note.customername_2)))
     parts.append(_kv_row("問合せ者ユーザーID", _esc(note.customerID)))
-    parts.append(_kv_row("連絡先", _esc(pick_first(note.mobile_tel_no, note.customerkeitai))))
+    parts.append(_kv_row("連絡先", _esc(note.customerkeitai)))
     parts.append("</table>")
 
 
@@ -118,17 +113,13 @@ def render_call_db_html(
     parts.append("<br>")
     add_section_title("一次 問い合わせ内容")
 
-    endDateTime = compose_dt(note.EDATE_Y, note.EDATE_M, note.EDATE_D, note.ETIME_H, note.ETIME_M)
+    eDate = compose_dt(note.EDATE_Y, note.EDATE_M, note.EDATE_D, note.ETIME_H, note.ETIME_M)
 
     parts.append("<table style='width:100%; border-collapse:collapse; margin-top:6px;'>")
     parts.append(_kv_row("質問概要", _esc(note.outline)))
-    # parts.append(_kv_row("問合せ内容（詳細）", note.inquiry))
-    # add_rich_row("対応内容（最終回答）", note.answer)
-    add_section_text_row("問合せ内容（詳細）", note.inquiry)
-    add_section_text_row("対応内容（最終回答）", note.answer)
-
-    parts.append(_kv_row("対応完了日時", endDateTime))
-
+    parts.append(_kv_row("問合せ内容（詳細）", _esc(note.inquiry)))
+    parts.append(_kv_row("対応内容（最終回答）", _esc(note.answer)))
+    parts.append(_kv_row("対応完了日時", eDate))
     parts.append("</table>")
 
 
@@ -178,7 +169,6 @@ def render_call_db_html(
     parts.append(_kv_row("問合せチャネル", _esc(note.category5)))
     parts.append(_kv_row("問合せ内容", _esc(note.category3)))
     parts.append(_kv_row("問合せ内容（詳細）", _esc(note.category4)))
-    # parts.append(_kv_row("カテゴリ5", _esc(note.category5)))
     parts.append(_kv_row("カテゴリ6", _esc(note.category6)))
     parts.append("</table>")
 
@@ -220,7 +210,12 @@ def render_call_db_html(
 
     parts.append("<table style='width:100%; border-collapse:collapse; margin-top:6px;'>")
     parts.append(_kv_row("Hardware", _esc(note.HW)))
-    # parts.append(_kv_row("", _esc(note.)))
+    parts.append(_kv_row("", _esc(note.SEIHIN)))
+    parts.append(_kv_row("", _esc(note.PCSN)))
+    parts.append(_kv_row("", _esc(note.TRWORK)))
+        parts.append(_kv_row("", _esc(note.CYU1)))
+            parts.append(_kv_row("", _esc(note.KYOUIKU)))
+                parts.append(_kv_row("", _esc(note.)))
     parts.append("</table>")
 
 

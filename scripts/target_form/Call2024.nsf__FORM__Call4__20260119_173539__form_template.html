@@ -1,0 +1,3219 @@
+<style>.notes-form{font-family:Segoe UI,Arial,sans-serif;font-size:11pt;}.notes-form table{border-collapse:collapse;width:100%;}.notes-form td,.notes-form th{border:1px solid #999;padding:4px;vertical-align:top;}.notes-form .notes-par{margin:2px 0;}.notes-form .notes-field{display:inline-block;min-width:6em;border-bottom:1px dotted #666;padding:0 2px;}.notes-form .notes-subform{border:1px dashed #bbb;padding:6px;margin:6px 0;}.notes-form .notes-subform-title{font-weight:bold;margin-bottom:4px;}</style><div class='notes-form' data-design='コール受付(改4) (Call4)'>
+
+<div class='notes-par'><span class='notes-field' data-field='mng_no' data-type='text' data-kind='editable' data-allowmultivalues='true'>{{mng_no}}</span><span class='notes-field' data-field='status_open' data-type='text' data-kind='editable'>{{status_open}}</span><span class='notes-field' data-field='access_no' data-type='number' data-kind='editable'>{{access_no}}</span><span class='notes-field' data-field='saveswich' data-type='text' data-kind='editable'>{{saveswich}}</span><span class='notes-field' data-field='KOUSINBI' data-type='text' data-kind='editable'>{{KOUSINBI}}</span><span class='notes-field' data-field='事業所マスタID' data-type='text' data-kind='computedwhencomposed'>{{事業所マスタID}}</span>FLG:0=ﾍﾙﾌﾟ 1=ｱﾌﾟﾘ <span class='notes-field' data-field='FLG' data-type='number' data-kind='editable'>{{FLG}}</span> </div>
+<div class='notes-par'><span class='notes-field' data-field='DbLookupServer' data-type='text' data-kind='computedfordisplay'>{{DbLookupServer}}</span> <span class='notes-field' data-field='CustomDBName' data-type='text' data-kind='computedfordisplay'>{{CustomDBName}}</span> <span class='notes-field' data-field='KnowDBName' data-type='text' data-kind='computedfordisplay'>{{KnowDBName}}</span> <span class='notes-field' data-field='ListDBName' data-type='text' data-kind='computedfordisplay'>{{ListDBName}}</span> <span class='notes-field' data-field='DbLookupServer_1' data-type='text' data-kind='computedfordisplay'>{{DbLookupServer_1}}</span><span class='notes-field' data-field='DbLookupServer_2' data-type='text' data-kind='computedfordisplay'>{{DbLookupServer_2}}</span>  <span class='notes-field' data-field='CustomDBName_1' data-type='text' data-kind='computedfordisplay'>{{CustomDBName_1}}</span><span class='notes-field' data-field='DbLookupServer_2_1' data-type='text' data-kind='computedfordisplay'>{{DbLookupServer_2_1}}</span> <span class='notes-field' data-field='KnowDBName_1' data-type='text' data-kind='computedfordisplay'>{{KnowDBName_1}}</span> <span class='notes-field' data-field='Form' data-type='text' data-kind='computed'>{{Form}}</span></div>
+<div class='notes-par'><span class='notes-field' data-field='保守ID' data-type='text' data-kind='computedwhencomposed'>{{保守ID}}</span></div>
+
+<div class='notes-par'><span class='notes-field' data-field='DbLookupServer_3' data-type='text' data-kind='computedfordisplay'>{{DbLookupServer_3}}</span></div>
+<div class='notes-par'>問い合わせ対応履歴DB<span class='notes-field' data-field='DblookupID_1_1_1' data-type='text' data-kind='editable'>{{DblookupID_1_1_1}}</span></div>
+<div class='notes-par'>HELPDESKﾒｰﾙDB<span class='notes-field' data-field='DblookupID_1_1_2' data-type='text' data-kind='editable'>{{DblookupID_1_1_2}}</span></div>
+<div class='notes-par'>NHSSサポートデスクDB<span class='notes-field' data-field='DblookupID_1_1_3' data-type='text' data-kind='editable'>{{DblookupID_1_1_3}}</span></div>
+<div class='notes-par'>ヘルプマニュアル<span class='notes-field' data-field='DblookupID_1_1_4' data-type='text' data-kind='editable'>{{DblookupID_1_1_4}}</span></div>
+<div class='notes-par'>CTSリスト<span class='notes-field' data-field='DblookupID_1_1_4_1' data-type='text' data-kind='editable'>{{DblookupID_1_1_4_1}}</span></div>
+<div class='notes-subform'><div class='notes-subform-title'>SUBFORM: SubUserInfo (missing DXL)</div></div>
+
+<div class='notes-par'>&nbsp;</div>
+
+<div class='notes-par'>アンケート依頼のステーショナリーを開く</div>
+<div class='notes-par'>&nbsp;</div>
+
+一次対応&quot;[HELP]&quot;
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'><span class='notes-field' data-field='Title' data-type='text' data-kind='computedwhencomposed'>{{Title}}</span>　（2024年度）</div>
+
+<div class='notes-par'>month:=@Right(&quot;0&quot;+@Text(@Month(@Now));2);
+day:= @Right(&quot;0&quot;+@Text(@Day(@Now));2);
+hour:=@Right(&quot;0&quot;+@Text(@Hour(@Now));2) ;
+minute:=@Right(&quot;0&quot;+@Text(@Minute(@Now));2);
+second:=@Right(&quot;0&quot;+@Text(@Second(@Now));2);
+
+no:=@RightBack(@Text(@Year(@Now)); 3) + month +day +@Environment(&quot;UserNo&quot;)+hour+minute+second;
+no_1:=&quot;新規コール受付（問題番号：&quot;+no+&quot;）&quot;;
+
+@SetField(&quot;mng_no&quot;;no);
+@SetField(&quot;title&quot;;no_1);
+@SetField(&quot;CreateDateTime&quot;;@Now);
+@SetField(&quot;CreateDateTime_p&quot;;@Now);
+@SetField(&quot;acc_main&quot;;c_This_UserNameJ );
+@SetField(&quot;acc_name&quot;;c_This_UserNameJ );
+@SetField(&quot;create_name&quot;;c_This_UserNameJ );
+@SetField(&quot;lasthistory&quot;;&quot;&quot;);
+@SetField(&quot;es_nemew&quot;;&quot;&quot;);
+@SetField(&quot;SecondLinew&quot;;&quot;&quot;);
+@SetField(&quot;CloseDateTime&quot;;&quot;&quot;);
+@SetField(&quot;SDATE_Y&quot;;@Year(@Now));
+@SetField(&quot;SDATE_M&quot;;@Month(@Now));
+@SetField(&quot;SDATE_D&quot;;@Day(@Now));
+@SetField(&quot;STIME_H&quot;;@Hour(@Now));
+@SetField(&quot;STIME_M&quot;;@Minute(@Now));
+@SetField(&quot;EDATE_Y&quot;;@Year(@Now));
+@SetField(&quot;EDATE_M&quot;;@Month(@Now));
+@SetField(&quot;EDATE_D&quot;;@Day(@Now));
+@SetField(&quot;ETIME_H&quot;;@Hour(@Now));
+@SetField(&quot;ETIME_M&quot;;@Minute(@Now))問題番号変更&lt;&lt;==文書をコピーした場合、必ず押すこと！！！　このボタンを押すと、新しい番号がセットされます。</div>
+
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>ユーザー番号：<span class='notes-field' data-field='customerno' data-type='text' data-kind='editable'>{{customerno}}</span>allitemw:=@DbLookup(&quot;&quot;:&quot;NoCache&quot;;DbLookupServer_1 :CustomDBname_1 ; &quot;N.HELPJCD&quot; ;customerno;4);
+allitem:=@Explode(allitemw;&quot;;&quot;);
+no:=@Subset(allitem;1);
+namew:=@Subset(allitem;2);
+name:=@Subset(namew;-1);
+kanaw:=@Subset(allitem;3);
+kana:=@Subset(kanaw;-1);
+sec1w:=@Subset(allitem;4);
+sec1:=@Subset(sec1w;-1);
+sec2w:=@Subset(allitem;5);
+sec2:=@Subset(sec2w;-1);
+sec3w:=@Subset(allitem;6);
+sec3:=@Subset(sec3w;-1);
+telw:=@Subset(allitem;7);
+tel:=@Subset(telw;-1);
+address1w:=@Subset(allitem;8);
+address1:=@Subset(address1w;-1);
+address2w:=@Subset(allitem;9);
+address2:=@Subset(address2w;-1);
+address3w:=@Subset(allitem;10);
+address3:=@Subset(address3w;-1);
+BUMONw:=@Subset(allitem;11);
+BUMON:=@Subset(BUMONw;-1);
+KAISHAw:=@Subset(allitem;12);
+KAISHA:=@Subset(KAISHAw;-1);
+KAISHACDw:=@Subset(allitem;14);
+KAISHACD:=@Subset(KAISHACDw;-1);
+@SetField(&quot;customerno&quot;;no);
+@SetField(&quot;kana&quot;;kana);
+
+REM {@SetField(&quot;customername&quot;;name+&quot;(&quot;+@Left(@Right(customername;&quot;(&quot;);&quot;)&quot;)+&quot;)&quot;)};
+@SetField(&quot;customername&quot;;name);
+@SetField(&quot;SEC1&quot;;sec1);
+@SetField(&quot;SEC2&quot;;sec2);
+@SetField(&quot;SEC3&quot;;sec3);
+@SetField(&quot;tel&quot;;tel);
+@SetField(&quot;ADDRESS1&quot;;address1);
+@SetField(&quot;ADDRESS2&quot;;address2);
+@SetField(&quot;ADDRESS3&quot;;address3);
+@SetField(&quot;BUMON&quot;;BUMON);
+@SetField(&quot;KAISHA&quot;;KAISHA);
+@SetField(&quot;customercompanycd&quot;;&quot;0&quot; + KAISHACD)確定allitemw:=@PickList( [Custom] ;DbLookupServer_1 :CustomDBname_1 ; &quot;N.HELPJCD&quot; ; &quot;事業所(事業所コード)の選択&quot; ; &quot;カナの先頭数文字を入力することによりクイック検索ができます。&quot; ; 4 ) ;
+allitem:=@Explode(allitemw;&quot;;&quot;);
+no:=@Subset(allitem;1);
+namew:=@Subset(allitem;2);
+name:=@Subset(namew;-1);
+kanaw:=@Subset(allitem;3);
+kana:=@Subset(kanaw;-1);
+sec1w:=@Subset(allitem;4);
+sec1:=@Subset(sec1w;-1);
+sec2w:=@Subset(allitem;5);
+sec2:=@Subset(sec2w;-1);
+sec3w:=@Subset(allitem;6);
+sec3:=@Subset(sec3w;-1);
+telw:=@Subset(allitem;7);
+tel:=@Subset(telw;-1);
+address1w:=@Subset(allitem;8);
+address1:=@Subset(address1w;-1);
+address2w:=@Subset(allitem;9);
+address2:=@Subset(address2w;-1);
+address3w:=@Subset(allitem;10);
+address3:=@Subset(address3w;-1);
+BUMONw:=@Subset(allitem;11);
+BUMON:=@Subset(BUMONw;-1);
+KAISHAw:=@Subset(allitem;12);
+KAISHA:=@Subset(KAISHAw;-1);
+KAISHACDw:=@Subset(allitem;14);
+KAISHACD:=@Subset(KAISHACDw;-1);
+@SetField(&quot;customerno&quot;;no);
+@SetField(&quot;kana&quot;;kana);
+@SetField(&quot;customername&quot;;name);
+@SetField(&quot;SEC1&quot;;sec1);
+@SetField(&quot;SEC2&quot;;sec2);
+@SetField(&quot;SEC3&quot;;sec3);
+@SetField(&quot;tel&quot;;tel);
+@SetField(&quot;ADDRESS1&quot;;address1);
+@SetField(&quot;ADDRESS2&quot;;address2);
+@SetField(&quot;ADDRESS3&quot;;address3);
+@SetField(&quot;BUMON&quot;;BUMON);
+@SetField(&quot;KAISHA&quot;;KAISHA);
+@SetField(&quot;customercompanycd&quot;;&quot;0&quot; + KAISHACD)事コードno:= &quot;9999&quot;;
+@SetField(&quot;customerno&quot;;no)事コード無allitemw:=@PickList( [Custom] ;DbLookupServer_1 :CustomDBname_1 ; &quot;N.HELP電話&quot; ; &quot;事業所(電話)の選択&quot; ; &quot;カナの先頭数文字を入力することによりクイック検索ができます。&quot; ; 4 );
+allitem:=@Explode(allitemw;&quot;;&quot;);
+no:=@Subset(allitem;1);
+namew:=@Subset(allitem;2);
+name:=@Subset(namew;-1);
+kanaw:=@Subset(allitem;3);
+kana:=@Subset(kanaw;-1);
+sec1w:=@Subset(allitem;4);
+sec1:=@Subset(sec1w;-1);
+sec2w:=@Subset(allitem;5);
+sec2:=@Subset(sec2w;-1);
+sec3w:=@Subset(allitem;6);
+sec3:=@Subset(sec3w;-1);
+telw:=@Subset(allitem;7);
+tel:=@Subset(telw;-1);
+address1w:=@Subset(allitem;8);
+address1:=@Subset(address1w;-1);
+address2w:=@Subset(allitem;9);
+address2:=@Subset(address2w;-1);
+address3w:=@Subset(allitem;10);
+address3:=@Subset(address3w;-1);
+BUMONw:=@Subset(allitem;11);
+BUMON:=@Subset(BUMONw;-1);
+KAISHAw:=@Subset(allitem;12);
+KAISHA:=@Subset(KAISHAw;-1);
+@SetField(&quot;customerno&quot;;no);
+@SetField(&quot;kana&quot;;kana);
+@SetField(&quot;customername&quot;;name);
+@SetField(&quot;SEC1&quot;;sec1);
+@SetField(&quot;SEC2&quot;;sec2);
+@SetField(&quot;SEC3&quot;;sec3);
+@SetField(&quot;tel&quot;;tel);
+@SetField(&quot;ADDRESS1&quot;;address1);
+@SetField(&quot;ADDRESS2&quot;;address2);
+@SetField(&quot;ADDRESS3&quot;;address3);
+@SetField(&quot;BUMON&quot;;BUMON);
+@SetField(&quot;KAISHA&quot;;KAISHA);
+
+allitemw:=@DbLookup(&quot;&quot;:&quot;NoCache&quot;;DbLookupServer_1 :CustomDBname_1 ; &quot;N.HELPJCD&quot; ;customerno;4);
+allitem:=@Explode(allitemw;&quot;;&quot;);
+KAISHACDw:=@Subset(allitem;14);
+KAISHACD:=@Subset(KAISHACDw;-1);
+@SetField(&quot;customercompanycd&quot;;&quot;0&quot; + KAISHACD)電話番号allitemw:=@PickList( [Custom] ;DbLookupServer_1 :CustomDBname_1 ; &quot;N.HELP事ｶﾅ&quot; ; &quot;事業所(カナ)の選択&quot; ; &quot;カナの先頭数文字を入力することによりクイック検索ができます。&quot; ; 3 );
+allitem:=@Explode(allitemw;&quot;;&quot;);
+no:=@Subset(allitem;1);
+namew:=@Subset(allitem;2);
+name:=@Subset(namew;-1);
+kanaw:=@Subset(allitem;3);
+kana:=@Subset(kanaw;-1);
+sec1w:=@Subset(allitem;4);
+sec1:=@Subset(sec1w;-1);
+sec2w:=@Subset(allitem;5);
+sec2:=@Subset(sec2w;-1);
+sec3w:=@Subset(allitem;6);
+sec3:=@Subset(sec3w;-1);
+telw:=@Subset(allitem;7);
+tel:=@Subset(telw;-1);
+address1w:=@Subset(allitem;8);
+address1:=@Subset(address1w;-1);
+address2w:=@Subset(allitem;9);
+address2:=@Subset(address2w;-1);
+address3w:=@Subset(allitem;10);
+address3:=@Subset(address3w;-1);
+BUMONw:=@Subset(allitem;11);
+BUMON:=@Subset(BUMONw;-1);
+KAISHAw:=@Subset(allitem;12);
+KAISHA:=@Subset(KAISHAw;-1);
+@SetField(&quot;customerno&quot;;no);
+@SetField(&quot;kana&quot;;kana);
+@SetField(&quot;customername&quot;;name);
+@SetField(&quot;SEC1&quot;;sec1);
+@SetField(&quot;SEC2&quot;;sec2);
+@SetField(&quot;SEC3&quot;;sec3);
+@SetField(&quot;tel&quot;;tel);
+@SetField(&quot;ADDRESS1&quot;;address1);
+@SetField(&quot;ADDRESS2&quot;;address2);
+@SetField(&quot;ADDRESS3&quot;;address3);
+@SetField(&quot;BUMON&quot;;BUMON);
+@SetField(&quot;KAISHA&quot;;KAISHA);
+
+allitemw:=@DbLookup(&quot;&quot;:&quot;NoCache&quot;;DbLookupServer_1 :CustomDBname_1 ; &quot;N.HELPJCD&quot; ;customerno;4);
+allitem:=@Explode(allitemw;&quot;;&quot;);
+KAISHACDw:=@Subset(allitem;14);
+KAISHACD:=@Subset(KAISHACDw;-1);
+@SetField(&quot;customercompanycd&quot;;&quot;0&quot; + KAISHACD)事ｶﾅallitemw:=@PickList( [Custom] ;DbLookupServer_1 :CustomDBname_1 ; &quot;N.HELP事名&quot; ; &quot;事業所(事業所名)の選択&quot; ; &quot;カナの先頭数文字を入力することによりクイック検索ができます。&quot; ; 3 );
+allitem:=@Explode(allitemw;&quot;;&quot;);
+no:=@Subset(allitem;1);
+namew:=@Subset(allitem;2);
+name:=@Subset(namew;-1);
+kanaw:=@Subset(allitem;3);
+kana:=@Subset(kanaw;-1);
+sec1w:=@Subset(allitem;4);
+sec1:=@Subset(sec1w;-1);
+sec2w:=@Subset(allitem;5);
+sec2:=@Subset(sec2w;-1);
+sec3w:=@Subset(allitem;6);
+sec3:=@Subset(sec3w;-1);
+telw:=@Subset(allitem;7);
+tel:=@Subset(telw;-1);
+address1w:=@Subset(allitem;8);
+address1:=@Subset(address1w;-1);
+address2w:=@Subset(allitem;9);
+address2:=@Subset(address2w;-1);
+address3w:=@Subset(allitem;10);
+address3:=@Subset(address3w;-1);
+BUMONw:=@Subset(allitem;11);
+BUMON:=@Subset(BUMONw;-1);
+KAISHAw:=@Subset(allitem;12);
+KAISHA:=@Subset(KAISHAw;-1);
+@SetField(&quot;customerno&quot;;no);
+@SetField(&quot;kana&quot;;kana);
+@SetField(&quot;customername&quot;;name);
+@SetField(&quot;SEC1&quot;;sec1);
+@SetField(&quot;SEC2&quot;;sec2);
+@SetField(&quot;SEC3&quot;;sec3);
+@SetField(&quot;tel&quot;;tel);
+@SetField(&quot;ADDRESS1&quot;;address1);
+@SetField(&quot;ADDRESS2&quot;;address2);
+@SetField(&quot;ADDRESS3&quot;;address3);
+@SetField(&quot;BUMON&quot;;BUMON);
+@SetField(&quot;KAISHA&quot;;KAISHA);
+
+allitemw:=@DbLookup(&quot;&quot;:&quot;NoCache&quot;;DbLookupServer_1 :CustomDBname_1 ; &quot;N.HELPJCD&quot; ;customerno;4);
+allitem:=@Explode(allitemw;&quot;;&quot;);
+KAISHACDw:=@Subset(allitem;14);
+KAISHACD:=@Subset(KAISHACDw;-1);
+@SetField(&quot;customercompanycd&quot;;&quot;0&quot; + KAISHACD)事名allitemw:=@PickList( [Custom] ;DbLookupServer_1 :CustomDBname_1 ; &quot;N.HELP事住所&quot; ; &quot;事業所(事業所住所)の選択&quot; ; &quot;カナの先頭数文字を入力することによりクイック検索ができます。&quot; ; 3 );
+allitem:=@Explode(allitemw;&quot;;&quot;);
+no:=@Subset(allitem;1);
+namew:=@Subset(allitem;2);
+name:=@Subset(namew;-1);
+kanaw:=@Subset(allitem;3);
+kana:=@Subset(kanaw;-1);
+sec1w:=@Subset(allitem;4);
+sec1:=@Subset(sec1w;-1);
+sec2w:=@Subset(allitem;5);
+sec2:=@Subset(sec2w;-1);
+sec3w:=@Subset(allitem;6);
+sec3:=@Subset(sec3w;-1);
+telw:=@Subset(allitem;7);
+tel:=@Subset(telw;-1);
+address1w:=@Subset(allitem;8);
+address1:=@Subset(address1w;-1);
+address2w:=@Subset(allitem;9);
+address2:=@Subset(address2w;-1);
+address3w:=@Subset(allitem;10);
+address3:=@Subset(address3w;-1);
+BUMONw:=@Subset(allitem;11);
+BUMON:=@Subset(BUMONw;-1);
+KAISHAw:=@Subset(allitem;12);
+KAISHA:=@Subset(KAISHAw;-1);
+@SetField(&quot;customerno&quot;;no);
+@SetField(&quot;kana&quot;;kana);
+@SetField(&quot;customername&quot;;name);
+@SetField(&quot;SEC1&quot;;sec1);
+@SetField(&quot;SEC2&quot;;sec2);
+@SetField(&quot;SEC3&quot;;sec3);
+@SetField(&quot;tel&quot;;tel);
+@SetField(&quot;ADDRESS1&quot;;address1);
+@SetField(&quot;ADDRESS2&quot;;address2);
+@SetField(&quot;ADDRESS3&quot;;address3);
+@SetField(&quot;BUMON&quot;;BUMON);
+@SetField(&quot;KAISHA&quot;;KAISHA);
+
+allitemw:=@DbLookup(&quot;&quot;:&quot;NoCache&quot;;DbLookupServer_1 :CustomDBname_1 ; &quot;N.HELPJCD&quot; ;customerno;4);
+allitem:=@Explode(allitemw;&quot;;&quot;);
+KAISHACDw:=@Subset(allitem;14);
+KAISHACD:=@Subset(KAISHACDw;-1);
+@SetField(&quot;customercompanycd&quot;;&quot;0&quot; + KAISHACD)事住所会社CD：<span class='notes-field' data-field='customercompanycd' data-type='text' data-kind='editable'>{{customercompanycd}}</span>　</div>
+<table>
+<tr>
+<td>
+
+<div class='notes-par'>問合せ発生時間</div></td>
+<td colspan='3'>
+
+<div class='notes-par'><span class='notes-field' data-field='SDATE_Y' data-type='number' data-kind='editable'>{{SDATE_Y}}</span> 年 <span class='notes-field' data-field='SDATE_M' data-type='number' data-kind='editable'>{{SDATE_M}}</span> 月 <span class='notes-field' data-field='SDATE_D' data-type='number' data-kind='editable'>{{SDATE_D}}</span> 日（<span class='notes-field' data-field='STIME_H' data-type='text' data-kind='editable'>{{STIME_H}}</span> 時 <span class='notes-field' data-field='STIME_M' data-type='text' data-kind='editable'>{{STIME_M}}</span> 分）</div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>対応開始時間  FIELD TDATE_Y   :=@Text(@Year(@Now));
+FIELD TDATE_M   :=@Right(@Text(@Month(@Now)+100);2);
+FIELD TDATE_D   :=@Right(@Text(@Day(@Now)+100);2);
+FIELD TTIME_H   :=@Right(@Text(@Hour(@Now)+100);2);
+FIELD TTIME_M   :=@Right(@Text(@Minute(@Now)+100);2);
+@PostedCommand([ViewRefreshFields])1</div></td>
+<td colspan='3'>
+<div class='notes-par'><span class='notes-field' data-field='TDATE_Y' data-type='number' data-kind='editable'>{{TDATE_Y}}</span> 年 <span class='notes-field' data-field='TDATE_M' data-type='number' data-kind='editable'>{{TDATE_M}}</span> 月 <span class='notes-field' data-field='TDATE_D' data-type='number' data-kind='editable'>{{TDATE_D}}</span> 日（<span class='notes-field' data-field='TTIME_H' data-type='text' data-kind='editable'>{{TTIME_H}}</span> 時 <span class='notes-field' data-field='TTIME_M' data-type='text' data-kind='editable'>{{TTIME_M}}</span> 分）</div></td></tr>
+<tr>
+<td>
+
+<div class='notes-par'>事業所名</div></td>
+<td>
+
+<div class='notes-par'><span class='notes-field' data-field='customername' data-type='text' data-kind='editable' data-allowmultivalues='true'>{{customername}}</span></div></td>
+<td>
+
+<div class='notes-par'>事業所名（カナ）</div></td>
+<td>
+
+<div class='notes-par'><span class='notes-field' data-field='kana' data-type='text' data-kind='editable'>{{kana}}</span></div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>所属</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='SEC1' data-type='text' data-kind='editable'>{{SEC1}}</span></div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='SEC2' data-type='text' data-kind='editable'>{{SEC2}}</span></div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='SEC3' data-type='text' data-kind='editable'>{{SEC3}}</span></div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>住所</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='ADDRESS1' data-type='text' data-kind='editable'>{{ADDRESS1}}</span></div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='ADDRESS2' data-type='text' data-kind='editable'>{{ADDRESS2}}</span></div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='ADDRESS3' data-type='text' data-kind='editable'>{{ADDRESS3}}</span></div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>電話</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='tel' data-type='text' data-kind='editable'>{{tel}}</span></div></td>
+<td>
+<div class='notes-par'>部門名</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='BUMON' data-type='text' data-kind='editable'>{{BUMON}}</span></div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>ＦＡＸ</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='fax' data-type='text' data-kind='editable'>{{fax}}</span></div></td>
+<td>
+<div class='notes-par'>会社区分</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='KAISHA' data-type='text' data-kind='editable'>{{KAISHA}}</span></div></td></tr></table>
+<div class='notes-par'>&nbsp;</div>
+<table data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<tr>
+<td>
+
+<div class='notes-par'>問合せ者氏名（漢字）</div></td>
+<td>
+
+<div class='notes-par'><span class='notes-field' data-field='customername_1' data-type='text' data-kind='editable' data-allowmultivalues='true'>{{customername_1}}</span></div></td>
+<td>
+
+<div class='notes-par'>問合せ者氏名（カナ）</div></td>
+<td>
+
+<div class='notes-par'><span class='notes-field' data-field='customername_2' data-type='text' data-kind='editable' data-allowmultivalues='true'>{{customername_2}}</span></div></td></tr>
+<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<td>
+<div class='notes-par'>問合せ者ユーザーID</div></td>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'><span class='notes-field' data-field='customerID' data-type='text' data-kind='editable'>{{customerID}}</span></div></td>
+<td>
+<div class='notes-par'>連絡先（携帯電話/内線番号）</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='customerkeitai' data-type='text' data-kind='editable' data-allowmultivalues='true'>{{customerkeitai}}</span></div></td></tr>
+<tr>
+<td colspan='2'>
+
+<div class='notes-par'>&nbsp;</div></td>
+<td colspan='2'>
+
+<div class='notes-par'> ※「連絡先（携帯電話/内線番号）」に記載の番号へご連絡をお願いします。</div>
+<div class='notes-par'>　  記載なしの場合は上記の「電話」の番号へご連絡をお願いします。</div></td></tr></table>
+
+<div class='notes-par'>&nbsp;</div>
+<table>
+<tr>
+<td>
+
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>＜Ｎｏｔｅｓ／メール 関連＞</div>
+<div class='notes-par'>@SetField(&quot;outline&quot;;&quot;【Notes】ﾊﾟｽﾜｰﾄﾞﾛｯｸ解除依頼&quot;);
+@SetField(&quot;inquiry&quot;;inquiry + @NewLine+@NewLine+&quot;氏名：&quot;+@NewLine+&quot;利用ｼｽﾃﾑ：&quot;+@NewLine+@NewLine);
+@SetField(&quot;answer&quot;;
+&quot;&quot;+@NewLine+
+&quot;===========================================================&quot;+@NewLine+
+&quot;＜ｼｽﾃﾑ毎のｻｰﾊﾞｰ＞&quot;+@NewLine+
+&quot;　NHWORKSPURT/NMP …  稟議書ｼｽﾃﾑ&quot;+@NewLine+
+&quot;  Nhits1SV/NMP    …  Nhits内(Webﾉｰﾂ)&quot;+@NewLine+
+&quot;　Notes07/NMP     …  SIMS／IT請求ｼｽﾃﾑ／Nhits内(育児支援DB)&quot;+@NewLine+
+&quot;　Notes03/NMP     …  Nhits内(ﾉｰﾂﾕｰｻﾞｰ新規設定手順／ﾉｰﾂ環境移行手順／仮想ﾃﾞｽｸﾄｯﾌﾟ用ﾉｰﾂ環境移行ﾂｰﾙ）&quot;+@NewLine+
+&quot;　Notes10/NMP     …  Nhits内(ｺﾝﾌﾟﾗｲｱﾝｽ情報共有DB)&quot;+@NewLine+
+&quot;===========================================================&quot;+@NewLine+@NewLine+
+&quot;対象ｻｰﾊﾞｰの「Internet Password Lockout（9）」DBを開き、ﾊﾟｽﾜｰﾄﾞﾛｯｸ解除実施&quot;+@NewLine+@NewLine+
+&quot;ﾕｰｻﾞｰへ再度ﾛｸﾞｲﾝをお試し頂くよう案内&quot;+@NewLine);
+
+@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;02.Notes&quot;);
+@SetField(&quot;category4&quot;;&quot;13.Webﾛｯｸ解除対応&quot;);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;);
+@SetField(&quot;category5&quot;;&quot;電話&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;02.Notes9&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;ﾊﾟｽﾜｰﾄﾞﾛｯｸ解除手順（Webﾉｰﾂ・SIMS・IT請求ｼｽﾃﾑ・稟議書ｼｽﾃﾑ・OnTime等）,07.InternetExplorer&quot;)【Notesﾊﾟｽﾜｰﾄﾞﾛｯｸ】@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;outline&quot;;&quot;【Notes】｢ｻｰﾊﾞｰが応答しません｣｢ｻｰﾊﾞｰへのﾊﾟｽが見つかりません｣｢ﾘﾓｰﾄｻｰﾊﾞｰはTCP/IPﾎｽﾄとして登録されていません｣「指定したﾎｽﾄから目的のｱﾄﾞﾚｽへのﾙｰﾄがわかりません」と表示される&quot;);
+@SetField(&quot;answer&quot;;
+  &quot;ﾈｯﾄﾜｰｸ接続は問題ないか --&gt;　&quot;+@NewLine +@NewLine +
+  &quot;ﾛｹｰｼｮﾝが「ｵﾌｨｽ(ﾈｯﾄﾜｰｸ接続)」もしくは「ｵﾝﾗｲﾝ」になっているか --&gt;　&quot;+@NewLine +@NewLine +
+  &quot;hostsﾌｧｲﾙ取込処理を送信&quot;+@NewLine+@NewLine +
+  &quot;これでも解決しないのであればﾈｯﾄﾜｰｸﾄﾗﾌﾞﾙ確認&quot;);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;&quot;);
+@SetField(&quot;category3&quot;;&quot;02.Notes&quot;);
+@SetField(&quot;category4&quot;;&quot;09.起動不可/動作不良&quot;)Notes起動時のｴﾗｰ@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;02.Notes&quot;);
+@SetField(&quot;category4&quot;;&quot;07.メール容量・圧縮&quot;);
+@SetField(&quot;outline&quot;;&quot;【Notes】ﾒｰﾙDBを圧縮しても容量が変わらない&quot;);
+@SetField(&quot;answer&quot;;
+answer+&quot;現在の容量：&quot;+@NewLine+@NewLine+
+&quot;ごみ箱内に不要なﾒｰﾙが残っていないか確認（残っていない場合はｲﾝﾌﾗ担当窓口へ圧縮作業を依頼）&quot;+@NewLine+@NewLine+
+&quot;■■■■■■■■■■■■■■■■■■■■&quot; + @NewLine  +
+&quot;ﾕｰｻﾞｰ名:&quot; + @NewLine  +
+&quot;ﾉｰﾂｻｰﾊﾞｰ:&quot; + @NewLine  +
+&quot;ﾌｧｲﾙ名:&quot; + @NewLine  +
+&quot;■■■■■■■■■■■■■■■■■■■■&quot; + @NewLine  + @NewLine +
+
+&quot;ﾒｰﾙDBを閉じてお待ちいただくようお伝え&quot; + @NewLine + @NewLine +
+
+&quot;ｲﾝﾌﾗ担当窓口での作業完了後、ﾕｰｻﾞｰに連絡&quot; + @NewLine
+);
+@SetField(&quot;S_Category1&quot;;&quot;&quot;);
+@SetField(&quot;S_Category2&quot;;&quot;&quot;);
+@SetField(&quot;S_Category3&quot;;&quot;&quot;);
+@SetField(&quot;S_Outline&quot;;&quot;&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;02.Notes9&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;01.障害&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;ﾒｰﾙﾌｧｲﾙの圧縮ができない&quot;)圧縮しても容量が減らない@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;outline&quot;;&quot;【Notes】ﾒｰﾙDBで文書に「✔(ﾁｪｯｸﾏｰｸ)」を入れることが出来ない&quot;);
+@SetField(&quot;answer&quot;;&quot;[ﾌｧｲﾙ]-[設定]-[IBM Notesｸﾗｲｱﾝﾄの基本設定]-[追加のｵﾌﾟｼｮﾝ]で&quot;+@NewLine+&quot;「選択した文書にはﾁｪｯｸﾏｰｸを入れる」のﾁｪｯｸをONにして頂く --&gt; &quot;+@NewLine);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;category3&quot;;&quot;02.Notes&quot;);
+@SetField(&quot;category4&quot;;&quot;10.メール：その他&quot;);
+@SetField(&quot;S_Category1&quot;;&quot;03:パソコン・ソフトＱ＆Ａ&quot;);
+@SetField(&quot;S_Category2&quot;;&quot;02:ノーツ9&quot;);
+@SetField(&quot;S_Category3&quot;;&quot;01:障害&quot;);
+@SetField(&quot;S_Outline&quot;;&quot;受信者欄／送信者欄の隣にチェックを入れる欄が表示されない&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;02.Notes9&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;01.障害&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;＜DB掲載済み＞ﾒｰﾙ毎にﾁｪｯｸを入れることができない&quot;)ﾒｰﾙ選択不可（「✔」を入れることが出来ない）</div>
+<div class='notes-par'>@SetField(&quot;category1&quot;;&quot;質問&quot;);
+@SetField(&quot;category3&quot;;&quot;04.セキュリティ関連&quot;);
+@SetField(&quot;category4&quot;;&quot;02.メール&quot;);
+@SetField(&quot;outline&quot;;&quot;「【通知】迷惑ﾒｰﾙを受信前/送信前に隔離しました」というﾒｰﾙが届いた&quot;);
+@SetField(&quot;answer&quot;;answer+&quot;問い合わせ者：&quot;+@NewLine+@NewLine+
+ &quot;↓ﾛｸﾞの不要箇所は削除して下さい↓（本ﾒｯｾｰｼﾞも含む）&quot;+@NewLine+@NewLine+
+ &quot;① 受信前に隔離したﾒｰﾙか、送信前に隔離したﾒｰﾙか確認　=&gt;　&quot;+@NewLine+@NewLine+
+ &quot; 　　・受信前に隔離したﾒｰﾙの場合　--&gt;　手順②へ&quot;+@NewLine+@NewLine+
+ &quot; 　　・送信前に隔離したﾒｰﾙの場合　--&gt;　必要事項(下記)をﾋｱﾘﾝｸﾞの上、ｲﾝﾌﾗ担当窓口へｴｽｶﾚｰｼｮﾝ&quot;+@NewLine+@NewLine+@NewLine+
+ &quot;② 送信者欄のﾒｰﾙｱﾄﾞﾚｽが得意先など、見覚えのあるﾒｰﾙｱﾄﾞﾚｽか確認　=&gt;　&quot;+@NewLine+@NewLine+
+ &quot; 　　・見覚えのあるﾒｰﾙｱﾄﾞﾚｽの場合　--&gt;　必要事項(下記)をﾋｱﾘﾝｸﾞの上、ｲﾝﾌﾗ担当窓口へｴｽｶﾚｰｼｮﾝ&quot;+@NewLine+@NewLine+
+ &quot; 　　・見覚えのないﾒｰﾙｱﾄﾞﾚｽの場合　--&gt;　以下の3点を説明し、CLOSE&quot;+@NewLine+@NewLine+
+ &quot;　　　　　　　* 迷惑ﾒｰﾙを検知したため、ﾒｰﾙ受信前にｻｰﾊﾞ側で隔離したことを知らせる通知ﾒｰﾙであること&quot;+@NewLine+
+ &quot;　　　　　　　* 通知ﾒｰﾙのため特にPCに影響がないこと&quot;+@NewLine+
+ &quot;　　　　　　　* 見覚えのないﾒｰﾙｱﾄﾞﾚｽよりﾒｰﾙを受信した場合、添付ﾌｧｲﾙやURLを開かずﾒｰﾙを削除していただくこと&quot;+@NewLine+@NewLine+
+ &quot; 　　・どちらか判断が出来ない（ﾕｰｻﾞｰにて見覚えがあるか分からない）場合　--&gt;　必要事項(下記)をﾋｱﾘﾝｸﾞの上、ｲﾝﾌﾗ担当窓口へｴｽｶﾚｰｼｮﾝ&quot;+@NewLine+@NewLine+@NewLine+
+ &quot;③ ご納得頂けない場合や追加でご質問がある場合は、必要事項(下記)をﾋｱﾘﾝｸﾞの上、ｲﾝﾌﾗ担当窓口へｴｽｶﾚｰｼｮﾝ&quot;+@NewLine+@NewLine+
+&quot;*****************************************&quot;+@NewLine+@NewLine+
+&quot;(隔離ﾒｰﾙ記載内容)&quot;+@NewLine+@NewLine+
+&quot;　受信時間    ：&quot; +@NewLine+
+&quot;　送信者   　 ：&quot; +@NewLine+
+&quot;　件名  　　  ：&quot; +@NewLine+
+&quot;　添付ﾌｧｲﾙ　　：&quot; +@NewLine+@NewLine+
+&quot;*****************************************&quot;+@NewLine+@NewLine+
+&quot;(ﾒｰﾙｱﾄﾞﾚｽ情報)&quot;+@NewLine+@NewLine+
+&quot;　ﾕｰｻﾞｰ名	：&quot; +@NewLine+
+&quot;  E-mail	：&quot; +@NewLine+@NewLine+
+&quot;*****************************************&quot;+ @NewLine
+);
+@SetField(&quot;H_Category1&quot;;&quot;10.ｳｲﾙｽ関連&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;『【通知】迷惑ﾒｰﾙを受信前/送信前に隔離しました』というﾒｰﾙが届いた&quot;)【proofpoint】迷惑ﾒｰﾙ隔離@SetField(&quot;category1&quot;;&quot;質問&quot;);
+@SetField(&quot;category3&quot;;&quot;04.セキュリティ関連&quot;);
+@SetField(&quot;category4&quot;;&quot;02.メール&quot;);
+@SetField(&quot;outline&quot;;&quot;「Malware Alert Text.txt」ﾌｧｲﾙが添付されたﾒｰﾙを受信した&quot;);
+@SetField(&quot;answer&quot;;answer+&quot;問い合わせ者：&quot;+@NewLine+@NewLine+
+ &quot;↓ﾛｸﾞの不要箇所は削除して下さい↓（本ﾒｯｾｰｼﾞも含む）&quot;+@NewLine+@NewLine+
+ &quot;① 送信者欄のﾒｰﾙｱﾄﾞﾚｽが得意先など、見覚えのあるﾒｰﾙｱﾄﾞﾚｽか確認　=&gt;　&quot;+@NewLine+@NewLine+
+ &quot; 　　・見覚えのあるﾒｰﾙｱﾄﾞﾚｽの場合　--&gt;　必要事項(下記)をﾋｱﾘﾝｸﾞの上、ｲﾝﾌﾗ担当窓口へｴｽｶﾚｰｼｮﾝ&quot;+@NewLine+@NewLine+
+ &quot; 　　・見覚えのないﾒｰﾙｱﾄﾞﾚｽの場合　--&gt;　以下の3点を説明し、CLOSE&quot;+@NewLine+@NewLine+
+ &quot;　　　　　　　* 社外から届いたｳｲﾙｽ添付ﾒｰﾙを検知したため、添付ﾌｧｲﾙを削除したこと&quot;+@NewLine+
+ &quot;　　　　　　　* 「Malware Alert Text.txt」はｳｲﾙｽ添付ﾒｰﾙとして検知した旨の通知用ﾌｧｲﾙのため、開いても特にPCに影響がないこと&quot;+@NewLine+
+ &quot;　　　　　　　* 見覚えのないﾒｰﾙｱﾄﾞﾚｽよりﾒｰﾙを受信した場合、添付ﾌｧｲﾙやURLを開かずﾒｰﾙを削除していただくこと&quot;+@NewLine+@NewLine+
+ &quot; 　　・どちらか判断が出来ない（ﾕｰｻﾞｰにて見覚えがあるか分からない）場合　--&gt;　必要事項(下記)をﾋｱﾘﾝｸﾞの上、ｲﾝﾌﾗ担当窓口へｴｽｶﾚｰｼｮﾝ&quot;+@NewLine+@NewLine+@NewLine+
+ &quot;② ご納得頂けない場合や追加でご質問がある場合は、必要事項(下記)をﾋｱﾘﾝｸﾞの上、ｲﾝﾌﾗ担当窓口へｴｽｶﾚｰｼｮﾝ&quot;+@NewLine+@NewLine+
+&quot;*****************************************&quot;+@NewLine+@NewLine+
+&quot;(対象ﾒｰﾙ)&quot;+@NewLine+@NewLine+
+&quot;　受信時間　　　 　：&quot; +@NewLine+
+&quot;　送信元ﾒｰﾙｱﾄﾞﾚｽ  ：&quot; +@NewLine+
+&quot;　件名　　　　　　 ：&quot; +@NewLine+
+&quot;　削除されたﾌｧｲﾙ名 ：&quot; +@NewLine+@NewLine+
+&quot;*****************************************&quot;+@NewLine+@NewLine+
+&quot;(受信者情報)&quot;+@NewLine+@NewLine+
+&quot;　ﾕｰｻﾞｰ名（ﾌﾙﾈｰﾑ）：&quot; +@NewLine+
+&quot;  ﾒｰﾙｱﾄﾞﾚｽ	　　：&quot; +@NewLine+@NewLine+
+&quot;*****************************************&quot;+ @NewLine
+);
+@SetField(&quot;H_Category1&quot;;&quot;10.ｳｲﾙｽ関連&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;「Malware Alert Text.txt」 というﾌｧｲﾙが添付されたﾒｰﾙを受信した&quot;)「Malware Alert Text.txt」添付ﾒｰﾙ@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;04.セキュリティ関連&quot;);
+@SetField(&quot;category4&quot;;&quot;02.メール&quot;);
+@SetField(&quot;outline&quot;;&quot;特定の社外E-mailｱﾄﾞﾚｽからのﾒｰﾙ受信が出来なくなった&quot;);
+@SetField(&quot;inquiry&quot;;&quot;特定の社外E-mailｱﾄﾞﾚｽからのﾒｰﾙ受信が出来なくなったので調査してほしい&quot;+@NewLine+@NewLine+inquiry+ @NewLine);
+@SetField(&quot;answer&quot;;
+answer+&quot;問い合わせ者：&quot;+@NewLine+@NewLine+
+&quot;*****************************************&quot;+@NewLine+@NewLine+
+&quot;【該当の社外E-mailｱﾄﾞﾚｽ】&quot;+@NewLine+@NewLine+
+&quot;　* ﾒｰﾙｱﾄﾞﾚｽ ：&quot; +@NewLine+@NewLine+
+&quot;*****************************************&quot;+@NewLine+@NewLine+
+&quot;【ﾒｰﾙが受信出来ないﾕｰｻﾞｰの情報】&quot;+@NewLine+@NewLine+
+&quot;　* ﾕｰｻﾞｰ名  ：&quot; +@NewLine+
+&quot;　* ﾒｰﾙｱﾄﾞﾚｽ ：&quot; +@NewLine+@NewLine+
+&quot;*****************************************&quot;+@NewLine+@NewLine+
+&quot;【先方がﾒｰﾙ送信された日時(分かれば)】&quot;+@NewLine+@NewLine+
+&quot;　* &quot; +@NewLine+@NewLine+
+&quot;*****************************************&quot;+ @NewLine
+);
+@SetField(&quot;H_Category1&quot;;&quot;02.Notes9&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;01.障害&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;特定の社外E-mailｱﾄﾞﾚｽからのﾒｰﾙ受信が出来なくなった,10.ｳｲﾙｽ関連&quot;)特定E-mail受信不可＜検疫ﾌﾞﾛｯｸ＞</div></td></tr>
+<tr>
+<td>
+
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>＜ｓｔｙｌｅ＞</div>
+<div class='notes-par'>@SetField(&quot;category1&quot;;&quot;電話取次&quot;);
+@SetField(&quot;category3&quot;;&quot;30.style&quot;);
+@SetField(&quot;category5&quot;;&quot;電話&quot;);
+@SetField(&quot;category4&quot;;&quot;01.電話取次&quot;);
+@SetField(&quot;category6&quot;;&quot;&quot;);
+@SetField(&quot;outline&quot;;&quot;＜電話取次＞【style】&quot;);
+@SetField(&quot;answer&quot;;  answer+@NewLine+@NewLine+
+
+  &quot;(内線：4231（島本さん）/4231（佐竹さん）/4232（岸野さん）/4231（白松さん）/4223 (南橋さん）/4220（中西さん））&quot;+@NewLine+@NewLine);
+
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;&quot;);
+
+@SetField(&quot;Escalation_1&quot;;&quot;style（日次）電話取次&quot;);
+@SetField(&quot;SSendTo_1&quot;;&quot;島本 隆文（ＤＴＳ）/ＮＭＰ, 岸野 三男/ＮＭＰ, 佐竹 康弘/ＮＭＰ, 白松 桃子/ＮＭＰ, 南橋 睦月/ＮＭＰ,中西 太一/ＮＭＰ&quot;);
+@SetField(&quot;SCC_1&quot;;&quot;川瀬 裕一郎/ＮＭＰ, 辻 竜佳/ＮＭＰ, 松田 勇一（ＳＣＣ）/ＮＭＰ, 水上 龍一（ＳＣＣ）/ＮＭＰ, 田中 寛興（ＮＩＩ）/ＮＭＰ, 北山 隆之/ＮＭＰ, 佐藤 賢/ＮＭＰ, 新里 翼/ＮＭＰ, 菅田 雄斗/ＮＭＰ, ＮＨＳＳ サポートデスク/ＮＭＰ&quot;:acc_main);
+@SetField(&quot;HSendTo_1&quot;;acc_main);
+@SetField(&quot;HCC_1&quot;;&quot;&quot;);
+
+@SetField(&quot;Escalation_0_1&quot;;&quot;加工ＳＣＭ（style）&quot;);
+
+@PostedCommand([ViewRefreshFields])＜ご指名電話＞【style】（日次など）@SetField(&quot;category1&quot;;&quot;電話取次&quot;);
+@SetField(&quot;category3&quot;;&quot;30.style&quot;);
+@SetField(&quot;category4&quot;;&quot;01.電話取次&quot;);
+@SetField(&quot;category6&quot;;&quot;&quot;);
+@SetField(&quot;outline&quot;;&quot;＜電話取次＞【style】&quot;);
+@SetField(&quot;answer&quot;;  answer+@NewLine+@NewLine+
+
+
+  &quot; (内線：4211 (松田さん）/4219（北山さん）/4222（田中さん）/4225（佐藤さん）/4230（水上さん・菅田さん））  &quot;+@NewLine+@NewLine
+);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;&quot;);
+
+@SetField(&quot;Escalation_1&quot;;&quot;style（幹線）電話取次&quot;);
+@SetField(&quot;SSendTo_1&quot;;&quot;松田 勇一（ＳＣＣ）/ＮＭＰ, 水上 龍一（ＳＣＣ）/ＮＭＰ, 田中 寛興（ＮＩＩ）/ＮＭＰ, 北山 隆之/ＮＭＰ, 佐藤 賢/ＮＭＰ, 新里 翼/ＮＭＰ, 菅田 雄斗/ＮＭＰ &quot;);
+@SetField(&quot;SCC_1&quot;;&quot;川瀬 裕一郎/ＮＭＰ, 辻 竜佳/ＮＭＰ, 島本 隆文（ＤＴＳ）/ＮＭＰ, 岸野 三男/ＮＭＰ, 佐竹 康弘/ＮＭＰ, 白松 桃子/ＮＭＰ, 南橋 睦月/ＮＭＰ,中西 太一/ＮＭＰ, ＮＨＳＳ サポートデスク/ＮＭＰ&quot;:acc_main);
+@SetField(&quot;HSendTo_1&quot;;acc_main);
+@SetField(&quot;HCC_1&quot;;&quot;&quot;);
+
+@SetField(&quot;Escalation_0_1&quot;;&quot;加工ＳＣＭ（style）&quot;);
+
+@PostedCommand([ViewRefreshFields])＜ご指名電話＞【style】（幹線など）　</div>
+<div class='notes-par'>@SetField(&quot;category1&quot;;&quot;&quot;);
+@SetField(&quot;category3&quot;;&quot;30.style&quot;);
+@SetField(&quot;category4&quot;;&quot;01.style&quot;);
+@SetField(&quot;category6&quot;;&quot;&quot;);
+@SetField(&quot;outline&quot;;&quot;【style】&quot;);
+
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;)【style】@SetField(&quot;outline&quot;;&quot;【style】ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ依頼&quot;);
+@SetField(&quot;answer&quot;;+@NewLine+
+ &quot;ｼｽﾃﾑ名：style（営業・需給）／幹線style（幹線・着発）／BIstyle／EOS商談者分析／ﾜｰｸﾌﾚﾝﾄﾞ&quot;+@NewLine+@NewLine+
+ &quot;本人の確認→&quot;+@NewLine+
+ &quot;ﾕｰｻﾞｰID：&quot;+@NewLine+@NewLine+
+ &quot;ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ実施&quot;+@NewLine+@NewLine+
+ &quot;ﾕｰｻﾞｰIDと同じものをﾊﾟｽﾜｰﾄﾞ欄に入力いただき、ﾊﾟｽﾜｰﾄﾞ変更して頂くよう依頼&quot;+@NewLine);
+
+@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;30.style&quot;);
+@SetField(&quot;category4&quot;;&quot;01.style&quot;);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;);
+@SetField(&quot;category5&quot;;&quot;電話&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;70.style&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ手順&quot;)【style】ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ@SetField(&quot;category1&quot;;&quot;&quot;);
+@SetField(&quot;category3&quot;;&quot;30.style&quot;);
+@SetField(&quot;category4&quot;;&quot;20.style（需給・幹線エスカレーション）&quot;);
+@SetField(&quot;category6&quot;;&quot;幹線・EOS商談者分析&quot;);
+@SetField(&quot;outline&quot;;&quot;【style】&quot;+outline);
+@SetField(&quot;answer&quot;;+@NewLine+
+ &quot;----------------------------------------&quot;+@NewLine+
+  &quot;&lt;&lt;ﾕｰｻﾞｰ申請関連&gt;&gt;の問い合わせ … 利用ｼｽﾃﾑ・ﾕｰｻﾞｰ部署に関係なく以下の担当者へｴｽｶﾚｰｼｮﾝ&quot;+@NewLine++@NewLine+
+  &quot;　①4230（菅田さん）②4225（佐藤さん）③4211（松田さん）④4230（水上さん）&quot;+@NewLine+
+ &quot;----------------------------------------&quot;+@NewLine+@NewLine+@NewLine);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;70.style&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;08.ｴｽｶﾚｰｼｮﾝ先&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;ｴｽｶﾚｰｼｮﾝ先&quot;);
+
+@SetField(&quot;Escalation_1&quot;;&quot;style（幹線）&quot;);
+@SetField(&quot;SSendTo_1&quot;;&quot;松田 勇一（ＳＣＣ）/ＮＭＰ, 水上 龍一（ＳＣＣ）/ＮＭＰ, 田中 寛興（ＮＩＩ）/ＮＭＰ, 北山 隆之/ＮＭＰ, 佐藤 賢/ＮＭＰ, 新里 翼/ＮＭＰ, 菅田 雄斗/ＮＭＰ&quot;);
+@SetField(&quot;SCC_1&quot;;&quot;川瀬 裕一郎/ＮＭＰ, 辻 竜佳/ＮＭＰ, 島本 隆文（ＤＴＳ）/ＮＭＰ, 岸野 三男/ＮＭＰ, 佐竹 康弘/ＮＭＰ, 白松 桃子/ＮＭＰ, 南橋 睦月/ＮＭＰ,中西 太一/ＮＭＰ, ＮＨＳＳ サポートデスク/ＮＭＰ&quot;:acc_main);
+@SetField(&quot;HSendTo_1&quot;;acc_main);
+@SetField(&quot;HCC_1&quot;;&quot;&quot;);
+
+@SetField(&quot;Escalation_0_1&quot;;&quot;加工ＳＣＭ（style）&quot;);
+
+@PostedCommand([ViewRefreshFields])【style】（ﾕｰｻﾞｰ申請）ｴｽｶﾚｰｼｮﾝ@SetField(&quot;category1&quot;;&quot;&quot;);
+@SetField(&quot;category3&quot;;&quot;30.style&quot;);
+@SetField(&quot;category4&quot;;&quot;10.style（日次エスカレーション）&quot;);
+@SetField(&quot;category6&quot;;&quot;日次&quot;);
+@SetField(&quot;outline&quot;;&quot;【style】&quot;+outline);
+@SetField(&quot;answer&quot;;+@NewLine+
+ &quot;※&lt;&lt;ﾕｰｻﾞｰ申請関連&gt;&gt;の問い合わせ … ﾕｰｻﾞｰ申請関連用の[ｴｽｶﾚｰｼｮﾝﾎﾞﾀﾝ]を押し直す&quot;+@NewLine+
+ &quot;※&lt;&lt;幹線（着発変換/配車/物流実績管理）・需給調整・EOS分析・BIstyle・ﾜｰｸﾌﾚﾝﾄﾞ・ &quot;+@NewLine+
+ &quot;　　　 ｷﾞﾌﾄ（日本ﾃﾞｲﾘｰﾈｯﾄ㈱等のｾﾝﾀｰからの問合せ）&gt;&gt;の問い合わせ … 幹線用の[ｴｽｶﾚｰｼｮﾝﾎﾞﾀﾝ]を押し直す&quot;+@NewLine+
+ &quot;----------------------------------------&quot;+@NewLine+
+  &quot;【日次販売計画】の問合せ&quot;+@NewLine++@NewLine+
+  &quot;　　=&gt;　部署問わず、①4223（南橋さん）②4232（岸野さん）③4231（島本さん）④4231（白松さん）⑤4231（佐竹さん）⑥4220（中西さん）&quot;+@NewLine++@NewLine+
+
+  &quot;【ｷﾞﾌﾄ（日本ﾃﾞｲﾘｰﾈｯﾄ㈱等のｾﾝﾀｰ以外からの問合せ）】&quot;+@NewLine++@NewLine+
+  &quot;　　=&gt;　①4232（岸野さん）②4223（南橋さん）③4231（白松さん）④4231（佐竹さん）⑤4231（島本さん）⑥4220（中西さん）&quot;+@NewLine++@NewLine+
+  &quot;※上記担当者が不在の場合は、在席している担当者へ転送 &quot;+@NewLine+
+ &quot;----------------------------------------&quot;+@NewLine+@NewLine+@NewLine);
+@SetField(&quot;H_Category1&quot;;&quot;70.style&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;08.ｴｽｶﾚｰｼｮﾝ先&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;ｴｽｶﾚｰｼｮﾝ先&quot;);
+
+@SetField(&quot;Escalation_1&quot;;&quot;style（日次）&quot;);
+@SetField(&quot;SSendTo_1&quot;;&quot;島本 隆文（ＤＴＳ）/ＮＭＰ, 岸野 三男/ＮＭＰ, 佐竹 康弘/ＮＭＰ, 白松 桃子/ＮＭＰ, 南橋 睦月/ＮＭＰ,中西 太一/ＮＭＰ&quot;);
+@SetField(&quot;SCC_1&quot;;&quot;川瀬 裕一郎/ＮＭＰ, 辻 竜佳/ＮＭＰ, 松田 勇一（ＳＣＣ）/ＮＭＰ, 水上 龍一（ＳＣＣ）/ＮＭＰ, 田中 寛興（ＮＩＩ）/ＮＭＰ, 北山 隆之/ＮＭＰ, 佐藤 賢/ＮＭＰ, 新里 翼/ＮＭＰ, 菅田 雄斗/ＮＭＰ, ＮＨＳＳ サポートデスク/ＮＭＰ&quot;:acc_main);
+@SetField(&quot;HSendTo_1&quot;;acc_main);
+@SetField(&quot;HCC_1&quot;;&quot;&quot;);
+
+@SetField(&quot;Escalation_0_1&quot;;&quot;加工ＳＣＭ（style）&quot;);
+
+@PostedCommand([ViewRefreshFields])【style】(日次・ｷﾞﾌﾄ（ｾﾝﾀｰ以外）)ｴｽｶﾚｰｼｮﾝ@SetField(&quot;category1&quot;;&quot;&quot;);
+@SetField(&quot;category3&quot;;&quot;30.style&quot;);
+@SetField(&quot;category4&quot;;&quot;20.style（需給・幹線エスカレーション）&quot;);
+@SetField(&quot;category6&quot;;&quot;幹線・EOS商談者分析&quot;);
+@SetField(&quot;outline&quot;;&quot;【style】&quot;+outline);
+@SetField(&quot;answer&quot;;+@NewLine+
+ &quot;※&lt;&lt;ﾕｰｻﾞｰ申請関連&gt;&gt;の問い合わせ … ﾕｰｻﾞｰ申請関連用の[ｴｽｶﾚｰｼｮﾝﾎﾞﾀﾝ]を押し直す&quot;+@NewLine+
+ &quot;※&lt;&lt;日次販売計画・ｷﾞﾌﾄ（日本ﾃﾞｲﾘｰﾈｯﾄ㈱等のｾﾝﾀｰ以外からの問合せ）&gt;&gt;の問い合わせ … 日次用の[ｴｽｶﾚｰｼｮﾝﾎﾞﾀﾝ]を押し直す&quot;+@NewLine+
+ &quot;----------------------------------------&quot;+@NewLine+
+  &quot;【需給調整（〇〇ｾﾝﾀｰ、ﾊﾑｿｰ・ﾃﾞﾘ）、EOS商談者分析（営業部門）・BIstyle（営業部門）・ﾜｰｸﾌﾚﾝﾄﾞ（営業部門）】&quot;+@NewLine++@NewLine+
+  &quot;　　=&gt;　①4211 (松田さん）②4230（水上さん）&quot;+@NewLine++@NewLine+
+  &quot;【幹線（着発変換/配車/物流実績管理）（ﾊﾑｿｰ・ﾃﾞﾘ）】&quot;+@NewLine++@NewLine+
+  &quot;　　=&gt;　①4219（北山さん）②4222（田中さん）③4211（松田さん）④4230（水上さん）&quot;+@NewLine++@NewLine+
+  &quot;【ｷﾞﾌﾄ（日本ﾃﾞｲﾘｰﾈｯﾄ㈱等のｾﾝﾀｰからの問合せ）】&quot;+@NewLine++@NewLine+
+  &quot;　　=&gt;　①4211（松田さん）②4230（水上さん）&quot;+@NewLine++@NewLine+
+  &quot;※上記担当者が不在の場合は、在席している担当者へ転送 &quot;+@NewLine+
+ &quot;----------------------------------------&quot;+@NewLine+@NewLine+@NewLine);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;70.style&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;08.ｴｽｶﾚｰｼｮﾝ先&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;ｴｽｶﾚｰｼｮﾝ先&quot;);
+
+@SetField(&quot;Escalation_1&quot;;&quot;style（幹線）&quot;);
+@SetField(&quot;SSendTo_1&quot;;&quot;松田 勇一（ＳＣＣ）/ＮＭＰ, 水上 龍一（ＳＣＣ）/ＮＭＰ, 田中 寛興（ＮＩＩ）/ＮＭＰ, 北山 隆之/ＮＭＰ, 佐藤 賢/ＮＭＰ, 新里 翼/ＮＭＰ, 菅田 雄斗/ＮＭＰ&quot;);
+@SetField(&quot;SCC_1&quot;;&quot;川瀬 裕一郎/ＮＭＰ, 辻 竜佳/ＮＭＰ, 島本 隆文（ＤＴＳ）/ＮＭＰ, 岸野 三男/ＮＭＰ, 佐竹 康弘/ＮＭＰ, 白松 桃子/ＮＭＰ, 南橋 睦月/ＮＭＰ, 中西 太一/ＮＭＰ,ＮＨＳＳ サポートデスク/ＮＭＰ&quot;:acc_main);
+@SetField(&quot;HSendTo_1&quot;;acc_main);
+@SetField(&quot;HCC_1&quot;;&quot;&quot;);
+
+@SetField(&quot;Escalation_0_1&quot;;&quot;加工ＳＣＭ（style）&quot;);
+
+@PostedCommand([ViewRefreshFields])【style】(幹線・ｷﾞﾌﾄ（〇〇ｾﾝﾀｰ）)ｴｽｶﾚｰｼｮﾝ</div>
+
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>＜業務システムパスワードリセット＞</div>
+<div class='notes-par'>@SetField(&quot;outline&quot;;&quot;DRAGLSのﾊﾟｽﾜｰﾄﾞが分からない&quot;);
+@SetField(&quot;answer&quot;;
+  &quot;氏名：&quot;+@NewLine+
+  &quot;ﾕｰｻﾞｰID：&quot;+@NewLine+
+  &quot;事業所ｺｰﾄﾞor事業所名：&quot;+@NewLine+
+  &quot;ﾒｰﾙｱｶｳﾝﾄの有無：有　無 &quot;+@NewLine+@NewLine+
+
+  &quot;ﾒｰﾙｱｶｳﾝﾄ 無の場合：第一承認者（　様）宛てにﾒｰﾙにて連絡することをお伝え &quot;+@NewLine+@NewLine+
+
+  &quot;ﾊﾟｽﾜｰﾄﾞ照会、ﾒｰﾙでご本人様／第一承認者様に連絡実施 &quot;+@NewLine);
+
+@SetField(&quot;category1&quot;;&quot;照会&quot;);
+@SetField(&quot;category3&quot;;&quot;21.DRAGLS&quot;);
+@SetField(&quot;category4&quot;;&quot;06.ID/パスワード関連&quot;);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;);
+@SetField(&quot;category5&quot;;&quot;電話&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;32.DRAGLS&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;ﾊﾟｽﾜｰﾄﾞ照会手順&quot;)【DRAGLSﾊﾟｽﾜｰﾄﾞ照会】@SetField(&quot;outline&quot;;&quot;【TimeWorks】ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ依頼&quot;+outline);
+@SetField(&quot;answer&quot;;
+  &quot;※原則、初期化後のﾊﾟｽﾜｰﾄﾞはﾕｰｻﾞｰID所有者本人へのみ連絡（ご本人様以外からも依頼自体は受付可能）&quot;+@NewLine+@NewLine+
+  &quot;ID：&quot;+@NewLine+
+  &quot;氏名：&quot;+@NewLine+@NewLine+
+  &quot;ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ実施&quot;+@NewLine+@NewLine+
+  &quot;ﾒｰﾙでﾘｾｯﾄﾊﾟｽﾜｰﾄﾞを連絡、ﾛｸﾞｲﾝ後にﾊﾟｽﾜｰﾄﾞ変更を実施して頂くよう依頼&quot;+@NewLine);
+
+@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;23.TimeWorks&quot;);
+@SetField(&quot;category4&quot;;&quot;04.ID/パスワード関連&quot;);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;);
+@SetField(&quot;category5&quot;;&quot;電話&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;39.TimeWorks&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ手順&quot;)【TimeWorksﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ】@SetField(&quot;outline&quot;;&quot;【会計SAP】ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ依頼&quot;);
+@SetField(&quot;answer&quot;;
+  &quot;※原則、ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄは本人からの依頼のみ受付可能、ﾘｾｯﾄ後のﾊﾟｽﾜｰﾄﾞも本人のﾒｰﾙ（個人）へのみ連絡可能&quot;+@NewLine+
+  &quot;※ﾛｯｸ解除のみであれば本人以外からの依頼で対応可能&quot;+@NewLine+
+  &quot;※個人名ではなく共有名（部署名等）で登録されているﾕｰｻﾞｰIDの場合は、ﾘｾｯﾄせずにR3ﾍﾙﾌﾟﾃﾞｽｸへｴｽｶﾚｰｼｮﾝ&quot;+@NewLine+@NewLine+
+  &quot;本人からの依頼か --&gt; &quot;+@NewLine+@NewLine+
+  &quot;個人のﾒｰﾙをお持ちか --&gt; &quot;+@NewLine+@NewLine+
+  &quot; * ID：&quot;+@NewLine+
+  &quot; * 氏名：&quot;+@NewLine+@NewLine+
+  &quot;ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ実施（ﾛｯｸがかかっている場合は、ﾛｯｸ解除もあわせて行う）&quot;+@NewLine+@NewLine+
+  &quot;本人宛てにﾒｰﾙで連絡&quot;+@NewLine);
+@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;31.会計関連&quot;);
+@SetField(&quot;category4&quot;;&quot;04.会計SAP（R/3）&quot;);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;);
+@SetField(&quot;category5&quot;;&quot;電話&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;38.SAP（会計）&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ手順&quot;)【会計SAPﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ】@SetField(&quot;outline&quot;;&quot;【会計SAP】ﾊﾟｽﾜｰﾄﾞﾛｯｸ解除依頼&quot;);
+@SetField(&quot;answer&quot;;
+  &quot; &quot;+@NewLine+
+  &quot; * ID：&quot;+@NewLine+
+  &quot; * 氏名：&quot;+@NewLine+@NewLine+
+  &quot;ﾊﾟｽﾜｰﾄﾞﾛｯｸ解除実施&quot;+@NewLine+@NewLine+
+  &quot;ﾛｸﾞｲﾝをお試し頂く =&gt; &quot;+@NewLine);
+@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;31.会計関連&quot;);
+@SetField(&quot;category4&quot;;&quot;04.会計SAP（R/3）&quot;);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;);
+@SetField(&quot;category5&quot;;&quot;電話&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;38.SAP（会計）&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;ﾊﾟｽﾜｰﾄﾞﾛｯｸ解除手順&quot;)【会計SAPﾊﾟｽﾜｰﾄﾞﾛｯｸ解除】</div>
+<div class='notes-par'>@SetField(&quot;outline&quot;;&quot;【電子帳票】ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ依頼&quot;);
+@SetField(&quot;answer&quot;;
+  &quot;※留意点についてはOneNoteを参照&quot;+@NewLine+@NewLine+
+  &quot;ID：&quot;+@NewLine+
+  &quot;氏名：&quot;+@NewLine+@NewLine+
+ &quot;ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ実施&quot;+@NewLine+@NewLine+
+ &quot;ﾒｰﾙでﾘｾｯﾄﾊﾟｽﾜｰﾄﾞを連絡、ﾛｸﾞｲﾝ後にﾊﾟｽﾜｰﾄﾞ変更を実施して頂くよう依頼&quot;+@NewLine);
+
+@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;10.共通&quot;);
+@SetField(&quot;category4&quot;;&quot;05.電子帳票（Report ViewerⅡ）&quot;);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;);
+@SetField(&quot;category5&quot;;&quot;電話&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;30.電子帳票（Report ViewerⅡ）&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ手順&quot;)【電子帳票ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ】@SetField(&quot;outline&quot;;&quot;【ProPlus】ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ依頼／ﾛｯｸ解除依頼&quot;);
+@SetField(&quot;answer&quot;;
+&quot;※原則、ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄは本人からの依頼のみ受付可能、ﾘｾｯﾄ後のﾊﾟｽﾜｰﾄﾞも本人のﾒｰﾙ（個人）へのみ連絡可能&quot;+@NewLine+
+&quot;※ﾛｯｸ解除のみであれば本人以外からの依頼で対応可能&quot;+@NewLine+
+&quot;※個人名ではなく共有名（部署名等）で登録されているﾕｰｻﾞｰIDの場合は、ﾘｾｯﾄせずにR3ﾍﾙﾌﾟﾃﾞｽｸへｴｽｶﾚｰｼｮﾝ&quot;+@NewLine+@NewLine+
+&quot;本人からの依頼か --&gt; &quot;+@NewLine+@NewLine+
+&quot;個人のﾒｰﾙをお持ちか --&gt; &quot;+@NewLine+@NewLine+
+&quot; * ID：&quot;+@NewLine+
+&quot; * 氏名：&quot;+@NewLine+@NewLine+
+&quot;ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ実施（ﾛｯｸがかかっている場合は、ﾛｯｸ解除もあわせて行う）&quot;+@NewLine+@NewLine+
+&quot;本人宛てにﾒｰﾙで連絡&quot;+@NewLine+@NewLine+@NewLine+
+&quot;----- ﾊﾟｽﾜｰﾄﾞﾛｯｸ解除のみの場合（不要な場合は削除）-----&quot;+@NewLine+@NewLine+
+&quot; * ID：&quot;+@NewLine+
+&quot; * 氏名：&quot;+@NewLine+@NewLine+
+&quot;ﾊﾟｽﾜｰﾄﾞﾛｯｸ解除実施&quot;+@NewLine+@NewLine+
+&quot;ﾛｸﾞｲﾝをお試し頂く =&gt; &quot;+@NewLine);
+@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;31.会計関連&quot;);
+@SetField(&quot;category4&quot;;&quot;02.ProPlus&quot;);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;);
+@SetField(&quot;category5&quot;;&quot;電話&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;36.ProPlus&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;ﾊﾟｽﾜｰﾄﾞﾛｯｸ解除／ﾘｾｯﾄ手順&quot;)【ProPlusﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ】@SetField(&quot;outline&quot;;&quot;【Diva】ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ依頼／ﾛｯｸ解除依頼&quot;);
+@SetField(&quot;answer&quot;;
+  &quot;※原則、ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄは本人からの依頼のみ受付可能、ﾘｾｯﾄ後のﾊﾟｽﾜｰﾄﾞも本人のﾒｰﾙ（個人）へのみ連絡可能&quot;+@NewLine+
+  &quot;※ﾛｯｸ解除のみであれば本人以外からの依頼で対応可能&quot;+@NewLine+
+  &quot;※個人名ではなく共有名（部署名等）で登録されているﾕｰｻﾞｰIDの場合は、ﾘｾｯﾄせずにR3ﾍﾙﾌﾟﾃﾞｽｸへｴｽｶﾚｰｼｮﾝ&quot;+@NewLine+@NewLine+
+  &quot;本人からの依頼か --&gt; &quot;+@NewLine+@NewLine+
+  &quot;個人のﾒｰﾙをお持ちか --&gt; &quot;+@NewLine+@NewLine+
+  &quot; * ID：&quot;+@NewLine+
+  &quot; * 氏名：&quot;+@NewLine+@NewLine+
+  &quot;ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ実施（ﾛｯｸがかかっている場合は、ﾛｯｸ解除もあわせて行う）&quot;+@NewLine+@NewLine+
+  &quot;本人宛てにﾒｰﾙで連絡&quot;+@NewLine+@NewLine+@NewLine+
+  &quot;----- ﾊﾟｽﾜｰﾄﾞﾛｯｸ解除のみの場合（不要な場合は削除）-----&quot;+@NewLine+@NewLine+
+  &quot; * ID：&quot;+@NewLine+
+  &quot; * 氏名：&quot;+@NewLine+@NewLine+
+  &quot;ﾊﾟｽﾜｰﾄﾞﾛｯｸ解除実施&quot;+@NewLine+@NewLine+
+  &quot;ﾛｸﾞｲﾝをお試し頂く =&gt; &quot;+@NewLine);
+@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;31.会計関連&quot;);
+@SetField(&quot;category4&quot;;&quot;03.Diva&quot;);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;);
+@SetField(&quot;category5&quot;;&quot;電話&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;35.Diva&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;ﾊﾟｽﾜｰﾄﾞﾛｯｸ解除／ﾘｾｯﾄ手順&quot;)【Divaﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ】@SetField(&quot;outline&quot;;&quot;【Generalist（給与）】ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ依頼&quot;+outline);
+@SetField(&quot;answer&quot;;
+  &quot;※原則、初期化後のﾊﾟｽﾜｰﾄﾞはﾕｰｻﾞｰID所有者本人へのみ連絡（ご本人様以外からも依頼自体は受付可能）&quot;+@NewLine+
+  &quot;※個人名ではなく共有名（部署名等）で登録されているﾕｰｻﾞｰIDの場合は、ﾘｾｯﾄせずに人事ｸﾞﾙｰﾌﾟ担当へｴｽｶﾚｰｼｮﾝ&quot;+@NewLine+
+ &quot;※所属が日本ﾊﾑﾏｰｹﾃｨﾝｸﾞ・NH冷凍食品・NHBA・NHSS 以外の場合は、ﾘｾｯﾄせずに人事ｸﾞﾙｰﾌﾟ担当へｴｽｶﾚｰｼｮﾝ&quot;+@NewLine+@NewLine+
+  &quot;ID：&quot;+@NewLine+
+  &quot;氏名：&quot;+@NewLine+@NewLine+
+  &quot;ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ実施&quot;+@NewLine+@NewLine+
+  &quot;ﾒｰﾙでﾘｾｯﾄﾊﾟｽﾜｰﾄﾞを連絡、ﾛｸﾞｲﾝ後にﾊﾟｽﾜｰﾄﾞ変更を実施して頂くよう依頼&quot;+@NewLine);
+
+@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;35.人事関連&quot;);
+@SetField(&quot;category4&quot;;&quot;05.Generalist（給与）&quot;);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;);
+@SetField(&quot;category5&quot;;&quot;電話&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;63.Generalist（給与）&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ手順&quot;)【Generalist給与ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ】@SetField(&quot;outline&quot;;&quot;【Generalist（社宅申請・個人台帳照会）】ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ依頼&quot;+outline);
+@SetField(&quot;answer&quot;;
+  &quot;※原則、初期化後のﾊﾟｽﾜｰﾄﾞはﾕｰｻﾞｰID所有者本人へのみ連絡（ご本人様以外からも依頼自体は受付可能）&quot;+@NewLine+@NewLine+
+  &quot;ID：&quot;+@NewLine+
+  &quot;氏名：&quot;+@NewLine+@NewLine+
+  &quot;ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ実施&quot;+@NewLine+@NewLine+
+  &quot;ﾒｰﾙでﾘｾｯﾄﾊﾟｽﾜｰﾄﾞを連絡、ﾛｸﾞｲﾝ後にﾊﾟｽﾜｰﾄﾞ変更を実施して頂くよう依頼&quot;+@NewLine);
+
+@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;35.人事関連&quot;);
+@SetField(&quot;category4&quot;;&quot;06.Generalist（社宅・個人台帳）&quot;);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;);
+@SetField(&quot;category5&quot;;&quot;電話&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;64.Generalist（社宅・個人台帳）&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ手順（社宅申請／個人台帳照会）&quot;)【Generalist社宅ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ】</div>
+
+<div class='notes-par'>@SetField(&quot;outline&quot;;&quot;【Accela BizAntenna】ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ依頼&quot;+outline);
+@SetField(&quot;answer&quot;;
+&quot;※本人以外からの依頼も手順案内可&quot;+@NewLine+@NewLine+
+&quot;ﾊﾟｽﾜｰﾄﾞ初期化手順案内&quot;+@NewLine+@NewLine+
+&quot;本人宛てにﾒｰﾙが届くためURLへｱｸｾｽし、ﾊﾟｽﾜｰﾄﾞを設定頂く。&quot;+@NewLine);
+@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;11.営業部門&quot;);
+@SetField(&quot;category4&quot;;&quot;26.Accela BizAntenna&quot;);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;);
+@SetField(&quot;category5&quot;;&quot;電話&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;60.Accela BizAntenna&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;ﾊﾟｽﾜｰﾄﾞ初期化手順&quot;)【Accela BizAntennaﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ】@SetField(&quot;outline&quot;;&quot;【EC職域ｼｽﾃﾑ】ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ依頼&quot;);
+@SetField(&quot;answer&quot;;
+  &quot;※原則、初期化後のﾊﾟｽﾜｰﾄﾞはﾕｰｻﾞｰID所有者本人へのみ連絡（ご本人様以外からも依頼自体は受付可能）&quot;+@NewLine+
+  &quot;※本人以外への連絡をご希望の場合は、ﾘｾｯﾄは実施せずに加工営業へｴｽｶﾚｰｼｮﾝ&quot;+@NewLine+
+  &quot;※ﾛｯｸ解除のみであれば本人以外からの依頼で対応可能&quot;+@NewLine+
+  &quot;※個人名ではなく共有名（部署名等）で登録されているﾕｰｻﾞｰIDの場合は、ﾘｾｯﾄは実施せずに加工営業へｴｽｶﾚｰｼｮﾝ&quot;+@NewLine+
+  &quot; （ﾛｯｸ解除のみの依頼であれば、ｻﾎﾟｰﾄﾃﾞｽｸで対応可能）&quot;+@NewLine+@NewLine+
+  &quot;本人からの依頼か --&gt; &quot;+@NewLine+@NewLine+
+  &quot;個人のﾒｰﾙをお持ちか --&gt; &quot;+@NewLine+@NewLine+
+  &quot; * ﾕｰｻﾞｰID：&quot;+@NewLine+
+  &quot; * 氏名：&quot;+@NewLine+
+  &quot; * 部署名：&quot;+@NewLine+@NewLine+
+  &quot;ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ実施（ﾛｯｸがかかっている場合は、ﾛｯｸ解除もあわせて行う）&quot;+@NewLine+@NewLine+
+  &quot;本人宛てにﾒｰﾙで連絡、ﾛｸﾞｲﾝ後にﾊﾟｽﾜｰﾄﾞ変更を実施して頂くよう依頼&quot;+@NewLine);
+@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;11.営業部門&quot;);
+@SetField(&quot;category4&quot;;&quot;04.EC職域システム&quot;);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;);
+@SetField(&quot;category5&quot;;&quot;電話&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;54.EC職域ｼｽﾃﾑ&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ手順&quot;)【EC職域ｼｽﾃﾑﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ】@SetField(&quot;outline&quot;;&quot;【TMS（新CMS）】ﾕｰｻﾞｰﾊﾟｽﾜｰﾄﾞ／実行ﾊﾟｽﾜｰﾄﾞ　ﾘｾｯﾄ依頼&quot;);
+@SetField(&quot;answer&quot;;
+  &quot;※原則、ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄは本人からの依頼のみ受付可能、ﾘｾｯﾄ後のﾊﾟｽﾜｰﾄﾞも本人のﾒｰﾙ（個人）へのみ連絡可能&quot;+@NewLine+
+  &quot;※個人名ではなく共有名（部署名等）で登録されているﾕｰｻﾞｰIDの場合は、ﾘｾｯﾄせずにR3ﾍﾙﾌﾟﾃﾞｽｸへｴｽｶﾚｰｼｮﾝ&quot;+@NewLine+@NewLine+
+  &quot;本人からの依頼か --&gt; &quot;+@NewLine+@NewLine+
+  &quot;個人のﾒｰﾙをお持ちか --&gt; &quot;+@NewLine+@NewLine+
+  &quot; * ID：&quot;+@NewLine+
+  &quot; * 氏名：&quot;+@NewLine+
+  &quot; * ﾘｾｯﾄする会社名：&quot;+@NewLine+
+  &quot; * ﾘｾｯﾄするﾊﾟｽﾜｰﾄﾞの種類：ﾕｰｻﾞｰﾊﾟｽﾜｰﾄﾞ／実行ﾊﾟｽﾜｰﾄﾞ&quot;+@NewLine+@NewLine+
+  &quot;ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ実施&quot;+@NewLine+@NewLine+
+  &quot;本人宛てにﾒｰﾙで連絡&quot;+@NewLine+@NewLine);
+@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;31.会計関連&quot;);
+@SetField(&quot;category4&quot;;&quot;05.TMS&quot;);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;);
+@SetField(&quot;category5&quot;;&quot;電話&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;34.TMS&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;ﾕｰｻﾞｰﾊﾟｽﾜｰﾄﾞ／実行ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ手順&quot;)【TMSﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ】@SetField(&quot;outline&quot;;&quot;【TMS（新CMS）】電子証明書再発行依頼&quot;);
+@SetField(&quot;answer&quot;;
+  &quot;※原則、電子証明書再発行は本人からの依頼のみ受付可能、再発行後の初期ﾊﾟｽﾜｰﾄﾞも本人のﾒｰﾙ（個人）へのみ連絡可能&quot;+@NewLine+
+  &quot;※個人名ではなく共有名（部署名等）で登録されているﾕｰｻﾞｰIDの場合は、ﾘｾｯﾄせずにR3ﾍﾙﾌﾟﾃﾞｽｸへｴｽｶﾚｰｼｮﾝ&quot;+@NewLine+@NewLine+
+  &quot;本人からの依頼か --&gt; &quot;+@NewLine+@NewLine+
+  &quot;個人のﾒｰﾙをお持ちか --&gt; &quot;+@NewLine+@NewLine+
+  &quot; * ID：&quot;+@NewLine+
+  &quot; * 氏名：&quot;+@NewLine+
+  &quot; * ﾘｾｯﾄする会社名：&quot;+@NewLine+@NewLine+
+  &quot;電子証明書発行実施&quot;+@NewLine+@NewLine+
+  &quot;本人宛てにﾒｰﾙで連絡&quot;+@NewLine+@NewLine);
+@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;31.会計関連&quot;);
+@SetField(&quot;category4&quot;;&quot;05.TMS&quot;);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;);
+@SetField(&quot;category5&quot;;&quot;電話&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;34.TMS&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;電子証明書再発行手順&quot;)【TMS電子証明書再発行】</div>
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>＜新販売システム＞</div>
+
+<div class='notes-par'>@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;11.営業部門&quot;);
+@SetField(&quot;category4&quot;;&quot;01.新販売システム&quot;);
+@SetField(&quot;category6&quot;;&quot;01.排他制御&quot;);
+@SetField(&quot;outline&quot;;&quot;【新販売】｢現在、この処理は起動できません｣と表示される&quot;);
+@SetField(&quot;answer&quot;;answer + @NewLine  +
+  &quot;事業所CD・処理中端末番号を確認 --&gt; &quot;+@NewLine+@NewLine+
+  &quot;[10.排他端末確認]で処理中端末・処理日付・処理開始時刻を確認&quot;+@NewLine+@NewLine+
+  &quot;　   処理日付が当日の場合&quot;+@NewLine+@NewLine+
+  &quot;　　    該当の端末ID：&quot;+@NewLine+
+  &quot;　　    開始時刻：&quot;+@NewLine+@NewLine+
+  &quot;　　    =&gt; 該当の端末が立ち上がっておらず、削除してもよいということであれば、【切断】処理後、&quot;+@NewLine+
+  &quot;　　       [13.業務排他管理更新]で削除を実施&quot;+@NewLine+@NewLine+@NewLine+
+  &quot;     処理日付が過去(前日以前)の場合&quot;+@NewLine+@NewLine+
+  &quot;　　    該当の端末ID：&quot;+@NewLine+@NewLine+
+  &quot;　　    =&gt; [13.業務排他管理更新]で削除処理を実施し、ﾕｰｻﾞｰに再度処理を実施してもらう =&gt; 【完了】&quot;+@NewLine+
+ &quot;&quot;);
+
+
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;41.新販売ｼｽﾃﾑ（SIMPLE3）&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;01.障害&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;★「処理が起動できません」と表示 【排他制御】&quot;);
+@SetField(&quot;S_Category1&quot;;&quot;&quot;);
+@SetField(&quot;S_Category2&quot;;&quot;&quot;);
+@SetField(&quot;S_Category3&quot;;&quot;&quot;);
+@SetField(&quot;S_Outline&quot;;&quot;&quot;)排他制御@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;11.営業部門&quot;);
+@SetField(&quot;category4&quot;;&quot;01.新販売システム&quot;);
+@SetField(&quot;category6&quot;;&quot;02.切断&quot;);
+@SetField(&quot;outline&quot;;&quot;【新販売】｢切断されました｣と表示される&quot;);
+@SetField(&quot;answer&quot;;answer + @NewLine  +
+  &quot;WS/LP/SPの番号を確認 --&gt; &quot;+@NewLine+@NewLine+
+  &quot;ﾕｰｻﾞｰにｻｲﾝ･ｵﾝ画面にて[ﾌｧｲﾙ]→[すべて終了]で画面を終了してもらう(LP/SPもなくなっているか確認)&quot;+@NewLine+@NewLine+
+  &quot;〇分後に起動してもらうよう伝える(時間を要すると思われる場合は、折り返し連絡等で調整する)&quot;+@NewLine+@NewLine+
+  &quot;[1.実行ｼﾞｮﾌﾞ確認]で切断処理実施　=&gt;　その後【排他制御】手順実施&quot;+@NewLine+@NewLine+
+  &quot;---------------------------------------------------&quot;+@NewLine+
+  &quot;※上記実施後も事象が解消しない場合は、OneNote[★「切断されました」と表示【切断対応】]の【補足】に記載された手順を実施&quot;+@NewLine);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;41.新販売ｼｽﾃﾑ（SIMPLE3）&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;01.障害&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;★「切断されました」と表示【切断対応】&quot;);
+@SetField(&quot;S_Category1&quot;;&quot;&quot;);
+@SetField(&quot;S_Category2&quot;;&quot;&quot;);
+@SetField(&quot;S_Category3&quot;;&quot;&quot;);
+@SetField(&quot;S_Outline&quot;;&quot;&quot;)切断REM {まだ！！};
+@SetField(&quot;category1&quot;;&quot;質問&quot;);
+@SetField(&quot;category3&quot;;&quot;11.営業部門&quot;);
+@SetField(&quot;category4&quot;;&quot;01.新販売システム&quot;);
+@SetField(&quot;category6&quot;;&quot;03.帳票出力先変更&quot;);
+@SetField(&quot;outline&quot;;&quot;【新販売】帳票出力先変更&quot;);
+@SetField(&quot;answer&quot;;answer + @NewLine  +
+  &quot;WSのIDと変更する出力先LPを確認 --&gt; &quot;+@NewLine+@NewLine+
+  &quot;[14.端末情報入力更新]で出力先を変更&quot;+@NewLine+@NewLine+
+  &quot;(変更内容をこちらへ添付)&quot;+@NewLine+
+  &quot;&quot;);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;41.新販売ｼｽﾃﾑ（SIMPLE3）&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;★帳票出力先LPｾｯｼｮﾝを設定／変更して欲しい&quot;);
+@SetField(&quot;S_Category1&quot;;&quot;&quot;);
+@SetField(&quot;S_Category2&quot;;&quot;&quot;);
+@SetField(&quot;S_Category3&quot;;&quot;&quot;);
+@SetField(&quot;S_Outline&quot;;&quot;&quot;)帳票出力先変更REM {まだ！！};
+@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;11.営業部門&quot;);
+@SetField(&quot;category4&quot;;&quot;01.新販売システム&quot;);
+@SetField(&quot;category6&quot;;&quot;04.帳票出力不可&quot;);
+@SetField(&quot;outline&quot;;&quot;新販売ｼｽﾃﾑの帳票が出力されない&quot;);
+@SetField(&quot;answer&quot;;answer + @NewLine  +
+  &quot;↓ﾛｸﾞの不要箇所は削除して下さい↓（本ﾒｯｾｰｼﾞも含む）&quot;+@NewLine+@NewLine+
+  &quot;■ 事業所CD、LP、SPの番号を確認 --&gt; &quot;+@NewLine+@NewLine+
+  &quot;■ 紐付設定は問題ないか確認 --&gt; &quot;+@NewLine+@NewLine+
+  &quot;■ ﾌﾟﾘﾝﾀ設定を確認 &quot;+@NewLine+@NewLine+
+  &quot;  【ｸﾗｲｱﾝﾄｱｸｾｽ（Windows7）】の場合&quot;+@NewLine+@NewLine+
+  &quot;　　　LPｾｯｼｮﾝを起動し[ﾌｧｲﾙ]-[ﾌﾟﾘﾝﾀ-設定]で該当のﾌﾟﾘﾝﾀが選択されているか確認 &quot;+@NewLine+
+  &quot;　　  ※Canon製ﾌﾟﾘﾝﾀの場合は、「PDTﾌｧｲﾙの使用」にﾁｪｯｸし「ibm5577.pdt」を選択&quot;+@NewLine+@NewLine+@NewLine+
+  &quot;  【ACS（Windows10）】の場合&quot;+@NewLine+@NewLine+
+  &quot;　　　LPｾｯｼｮﾝを起動し、[通信]-[構成]を開く&quot;+@NewLine+@NewLine+
+  &quot;　　　・[ﾌﾟﾘﾝﾀ設定]を開き、下記の設定になっているか確認&quot;+@NewLine+@NewLine+
+  &quot;　　　　　* ﾌﾟﾘﾝﾀ名   ：（任意のﾌﾟﾘﾝﾀ）&quot;+@NewLine+
+  &quot;　　　　　* 印刷の向き ：横&quot;+@NewLine+@NewLine+
+  &quot;　　　・[ﾍﾟｰｼﾞ設定]を開き、下記の設定になっているか確認&quot;+@NewLine+@NewLine+
+  &quot;　　　　　* Java印刷ｻｰﾋﾞｽの使用 ：はい&quot;+@NewLine+
+  &quot;　　　　　* ﾍﾟｰｼﾞの向きの自動決定：はい&quot;+@NewLine+
+  &quot;　　　　　* 最適化 ：はい&quot;+@NewLine+
+  &quot;　　　　　* ﾌｫﾝﾄ名 ：MS明朝&quot;+@NewLine+
+  &quot;　　　　　* [ﾍﾟｰｼﾞ設定]-[印刷の向き]：横&quot;+@NewLine+@NewLine+
+  &quot;■ [2.帳票出力処理（WRKOUTQ）]にてﾌﾟﾘﾝﾀｾｯｼｮﾝの状況を確認し、「状況」「STS」の内容に応じて対応実施&quot;+@NewLine+@NewLine+
+ &quot; 　状況：RLS，RLS/WTR，HLD&quot;+@NewLine+
+ &quot; 　STS：RDY，MSGW，WTR，HLD，HLD/WTR&quot;+@NewLine);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;41.新販売ｼｽﾃﾑ（SIMPLE3）&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;01.障害&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;★帳票が出力されない【帳票出力不可対応】&quot;);
+@SetField(&quot;S_Category1&quot;;&quot;&quot;);
+@SetField(&quot;S_Category2&quot;;&quot;&quot;);
+@SetField(&quot;S_Category3&quot;;&quot;&quot;);
+@SetField(&quot;S_Outline&quot;;&quot;&quot;)帳票出力不可@SetField(&quot;category1&quot;;&quot;質問&quot;);
+@SetField(&quot;category3&quot;;&quot;11.営業部門&quot;);
+@SetField(&quot;category4&quot;;&quot;01.新販売システム&quot;);
+@SetField(&quot;category6&quot;;&quot;05.新販売ｾｯｼｮﾝ作成&quot;);
+@SetField(&quot;outline&quot;;&quot;【新販売ｾｯｼｮﾝ作成】&quot;);
+@SetField(&quot;answer&quot;;answer + @NewLine  +
+  &quot;導入するﾊﾟｿｺﾝのOS：Windows7・Windows10&quot;+@NewLine+
+  &quot;事業所ｺｰﾄﾞ：&quot;+@NewLine+
+  &quot;帳票出力先：&quot;+@NewLine+@NewLine+
+  &quot;作成したｾｯｼｮﾝ番号：&quot;+@NewLine+@NewLine+
+  &quot;ｾｯｼｮﾝ起動確認実施--&gt;&quot;+@NewLine+@NewLine+
+  &quot;[14.端末情報入力更新]で出力先を変更&quot;+@NewLine+@NewLine+
+  &quot;(変更内容をこちらへ添付)&quot;+@NewLine);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;41.新販売ｼｽﾃﾑ（SIMPLE3）&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;★ｾｯｼｮﾝ作成手順&quot;);
+@SetField(&quot;S_Category1&quot;;&quot;&quot;);
+@SetField(&quot;S_Category2&quot;;&quot;&quot;);
+@SetField(&quot;S_Category3&quot;;&quot;&quot;);
+@SetField(&quot;S_Outline&quot;;&quot;&quot;)新販売ｾｯｼｮﾝ作成REM {まだ！！};
+@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;10.共通&quot;);
+@SetField(&quot;category4&quot;;&quot;01.New Work Friend&quot;);
+@SetField(&quot;outline&quot;;&quot;ﾜｰｸﾌﾚﾝﾄﾞを中止して欲しい&quot;);
+@SetField(&quot;answer&quot;;answer + @NewLine  +
+  &quot;JOB番号確認 --&gt; &quot;+@NewLine+@NewLine+
+  &quot;ﾊﾞｯｸｱｯﾌﾟ機を起動し、[20.ﾜｰｸﾌﾚﾝﾄﾞｼﾞｮﾌﾞ確認]より対応実施  &quot;+@NewLine);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;65.New WorkFriend&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;時間が経っても照会が終わらない【ﾜｰｸﾌﾚﾝﾄﾞ中止依頼】&quot;);
+@SetField(&quot;S_Category1&quot;;&quot;&quot;);
+@SetField(&quot;S_Category2&quot;;&quot;&quot;);
+@SetField(&quot;S_Category3&quot;;&quot;&quot;);
+@SetField(&quot;S_Outline&quot;;&quot;&quot;)ﾜｰｸﾌﾚﾝﾄﾞ中止@SetField(&quot;category1&quot;;&quot;質問&quot;);
+@SetField(&quot;category3&quot;;&quot;90.量販フロント・ＥＯＳ関連&quot;);
+@SetField(&quot;category4&quot;;&quot;01.FRセッション作成・移管&quot;);
+@SetField(&quot;outline&quot;;&quot;【量販ﾌﾛﾝﾄ（FR）】ｾｯｼｮﾝ作成手順&quot;);
+@SetField(&quot;answer&quot;;answer +@NewLine+
+&quot;※ﾌﾟﾘﾝﾀｾｯｼｮﾝの作成が必要の場合は、量販担当へｴｽｶﾚｰｼｮﾝ&quot;+@NewLine+@NewLine+
+&quot;導入するﾊﾟｿｺﾝのOS：Windows7／Windows10&quot;+@NewLine+
+&quot;接続する区画：西日本区画／中日本区画／東日本区画&quot;+@NewLine+
+&quot;事業所ｺｰﾄﾞ：&quot;+@NewLine+@NewLine+
+&quot;作成したｾｯｼｮﾝ番号：&quot;+@NewLine);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;42.ﾌﾛﾝﾄ（FR/量販ｼｽﾃﾑ）&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;★【量販ﾌﾛﾝﾄ（FR）】ｾｯｼｮﾝ作成手順&quot;);
+@SetField(&quot;S_Category1&quot;;&quot;&quot;);
+@SetField(&quot;S_Category2&quot;;&quot;&quot;);
+@SetField(&quot;S_Category3&quot;;&quot;&quot;);
+@SetField(&quot;S_Outline&quot;;&quot;&quot;)FRｾｯｼｮﾝ作成@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;11.営業部門&quot;);
+@SetField(&quot;category4&quot;;&quot;01.新販売システム&quot;);
+@SetField(&quot;category6&quot;;&quot;99.その他&quot;);
+@SetField(&quot;outline&quot;;&quot;【新販売】「構成済みｾｯｼｮﾝ」画面に何も表示されない&quot;+outline);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;41.新販売ｼｽﾃﾑ（SIMPLE3）&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;01.障害&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;【ACS】「構成済みｾｯｼｮﾝ」画面に何も表示されない&quot;);
+@SetField(&quot;answer&quot;;  answer+@NewLine+
+ &quot;ACS Session Mgrを起動し、[ﾌｧｲﾙ]-[ﾃﾞｨﾚｸﾄﾘｰの変更]をｸﾘｯｸし &quot;+@NewLine+
+ &quot;「PC」→「Windows(C:)」→「IBMiAccess」→「HOD」を指定する =&gt; &quot;+@NewLine);
+@PostedCommand([ViewRefreshFields])「構成済みｾｯｼｮﾝ」画面に何も表示されない</div>
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>＜ＰＣ不具合＞</div>
+<div class='notes-par'>@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;01.OS&quot;);
+@SetField(&quot;category4&quot;;&quot;03.IPｱﾄﾞﾚｽ・LAN設定&quot;);
+@SetField(&quot;outline&quot;;&quot;無線LANに接続できない【拠点：〇〇】&quot;);
+@SetField(&quot;answer&quot;;
+ +@NewLine+
+  &quot;場所を確認　--&gt; &quot;+@NewLine+@NewLine+
+  &quot;大崎／ﾌﾞﾘｰｾﾞ／東京大崎ｻﾃﾗｲﾄｵﾌｨｽ／NH諫早ﾌﾟﾗﾝﾄ／NH中央研究所／日本ﾎﾜｲﾄﾌｧｰﾑ新潟／日本ﾎﾜｲﾄﾌｧｰﾑ新潟生産部／日本ﾊﾑ北海道ﾌｧｸﾄﾘｰ&quot;+@NewLine+
+  &quot;宝幸㈱名古屋支店／NH冷凍食品㈱中部圏営業所／NHCC㈱名古屋／全日本ﾊﾑ労働組合／協同食品&quot;+@NewLine+@NewLine+
+  &quot;（NHｼﾞｬﾊﾟﾝﾌｰﾄﾞ）松戸営業部・川崎営業部・FS戸田営業部&quot;+@NewLine+
+  &quot;（日本ﾙﾅ）京都・高崎工場・中部圏営業所&quot;+@NewLine+
+  &quot;（ﾏﾘﾝﾌｰｽﾞ）名古屋事業所・三重工場・岡崎事業所・鹿児島事業所・石川事業所・広島事業所・香川事業所・本社&quot;+@NewLine+
+  &quot;（日本ｸﾘｰﾝﾌｧｰﾑ）九州事業所・道南総務課・知床総務課・管理本部&quot;+@NewLine+
+  &quot;（日本ﾋﾟｭｱﾌｰﾄﾞ）西宮・伊勢崎&quot;+@NewLine+
+  &quot;（日本ﾎﾜｲﾄﾌｧｰﾑ）本社管理本部・環境品質保証・札幌製造部・東北食品製造・東北総務部・宮崎生産部・宮崎食品工場・知床食品工場&quot;+@NewLine+
+  &quot;（日本ﾊﾑﾌｧｸﾄﾘｰ）兵庫工場・徳島工場・長崎工場・静岡工場・茨城工場&quot;+@NewLine+
+  &quot;（NH惣菜）北海道・宮崎・新潟&quot;+@NewLine+
+  &quot;（NH食品）関東ﾌﾟﾗﾝﾄ・関西ﾌﾟﾗﾝﾄ・桑名ﾌﾟﾗﾝﾄ&quot;+@NewLine+
+  &quot;（日本ﾌｰﾄﾞﾊﾟｯｶｰ）道東工場・青森工場・諫早工場・川棚工場・四国工場・道南工場・NFP鹿児島㈱&quot;+@NewLine+
+  &quot;（日本ﾃﾞｲﾘｰﾈｯﾄ）北海道ｾﾝﾀｰ・岡山早島ｾﾝﾀｰ・名古屋第二ｾﾝﾀｰ・寝屋川ｾﾝﾀｰ・武蔵中原事業所&quot;+@NewLine+
+ &quot;（日本ﾁﾙﾄﾞ物流）本社・南九州出張所・東京・青森・九州・関西&quot;+@NewLine+
+ &quot;（日本物流ｾﾝﾀｰ）東京・大阪南港・福岡&quot;+@NewLine+
+ &quot;（㈱鎌倉ﾊﾑ富岡商会）鎌倉ｷﾞﾌﾄｾﾝﾀｰ・本社工場&quot;+@NewLine+@NewLine+
+  &quot;（NHMK）&quot;+@NewLine+
+&quot;札幌CS課・横浜営業所・千葉CS課・大宮営業所・仙台営業所・東北販売部・東北量販課・静岡営業所・大阪営業所&quot;+@NewLine+
+&quot;広島営業所・九州特販課・中部販売部・中部特販課・中部圏量販課・名古屋営業所・西宮GC・盛岡営業所&quot;+@NewLine+@NewLine+
+  &quot;（東NF）&quot;+@NewLine+
+  &quot;本社・東北支社・東北広域・旭川・札幌・盛岡・仙台・郡山・函館・会津・苫小牧・道東&quot;+@NewLine+@NewLine+
+  &quot;（関東NF）&quot;+@NewLine+
+  &quot;下越・上越・新越・長岡・能登・石川・福井・富山・水戸・群馬・館林・那須・宇都宮・茨城・越谷&quot;+@NewLine+
+  &quot;京葉・木更津・東松山・常陽・越谷牛加工Ｃ・甲府・首都圏・川崎・新多摩・相模原・埼玉・横浜&quot;+@NewLine+
+  &quot;静岡・横浜青葉・湘南・富士・浜松・北越北陸加工&quot;+@NewLine+@NewLine+
+  &quot;（中NF）&quot;+@NewLine+
+  &quot;中部第一加工・中部第一岡崎・中部第一豊橋・東濃・長野・松本・佐久・岐阜・伊勢・三重・広域営業部・名古屋量販部&quot;+@NewLine+
+  &quot;阪神・兵庫・甲子園・りんくう・滋賀・奈良・御所・和歌山・中部第一中部・京都・枚方・大阪・特販近畿特販・神戸・名古屋
+&quot;+@NewLine+
+  &quot;（西NF）&quot;+@NewLine+
+  &quot;管理本部・香川・高知・四万十・松山・新居浜・徳島・岡山・岩国・広島・山口・鳥取・島根・浜田&quot;+@NewLine+
+  &quot;福山・沖縄営業部・佐賀・大分・鳥栖・福岡・福岡中央・北九州・宮崎・熊本・鹿屋・鹿児島南・鹿児島北・長崎&quot; +@NewLine+@NewLine+
+  &quot;------------------------------------------------------------&quot;+@NewLine+@NewLine+
+  &quot;・Wi-Fiが「ON」になっているか確認（Dynabook製は&lt;FN&gt;+&lt;F8&gt;押下でｵﾝ/ｵﾌを切替え） &quot;+@NewLine+@NewLine+
+  &quot;・auWifiの設定が手動接続になっているか確認&quot;+@NewLine+@NewLine+
+  &quot;（Windows7のみ）&quot;+@NewLine+
+  &quot;・ﾜｲﾔﾚｽﾈｯﾄﾜｰｸの管理の一覧で「tkyttnh-d」が一番上になっているか確認&quot;+@NewLine+
+  &quot;・ﾜｲﾔﾚｽﾈｯﾄﾜｰｸ「tkyttnh-d」の認証設定が正しく設定されているか確認&quot;+@NewLine+@NewLine+
+  &quot;・ﾀｽｸﾊﾞｰの日時が正しいか確認&quot;+@NewLine+@NewLine+
+  &quot;・IPｱﾄﾞﾚｽ／DNSが自動取得になっているか確認&quot;+@NewLine+@NewLine+
+   &quot;・ｻｰﾋﾞｽ「WLAN AutoConfig」が開始されているか確認（再起動実施）&quot;+@NewLine+@NewLine+
+  &quot;・無線LAN証明書の有無／証明書の有効期限が切れていないか確認&quot;+@NewLine+@NewLine+
+  &quot;＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝&quot;+@NewLine+
+  &quot;【証明書無し／有効期限切れの場合】&quot;+@NewLine+@NewLine+
+  &quot;1.有線LAN接続して頂く&quot;+@NewLine+
+  &quot;　※ﾌﾞﾘｰｾﾞで有線LAN環境が無い場合はPCを持ち込んで頂き対応&quot;+@NewLine+
+  &quot;　※ﾌﾞﾘｰｾﾞ以外で有線LAN接続不可の場合は、各ｴｽｶﾚｰｼｮﾝ先へ対応依頼&quot;+@NewLine+@NewLine+
+  &quot;　・東NF・関東NF・中NF・西NF／日本ﾎﾜｲﾄﾌｧｰﾑ／日本ｸﾘｰﾝﾌｧｰﾑ／NHｼﾞｬﾊﾟﾝﾌｰﾄﾞ㈱ ⇒食肉運用Gへｴｽｶﾚｰｼｮﾝ&quot;+@NewLine+
+  &quot;　・大崎ﾕｰｻﾞｰ　⇒ｲﾝﾌﾗ担当窓口へｴｽｶﾚｰｼｮﾝ（【支社ｲﾝﾌﾗ】をつける）&quot;+@NewLine+
+  &quot;　・その他　　 ⇒ｲﾝﾌﾗ担当窓口へｴｽｶﾚｰｼｮﾝ&quot;+@NewLine+@NewLine+
+  &quot;（食肉運用Gご担当者様）&quot;+@NewLine+
+  &quot;　有線LAN接続し、無線LAN接続ができるか確認をお願いします。&quot;+@NewLine+
+  &quot;　無線LAN接続ができた場合は、食肉運用G様にてｲﾝｼﾃﾞﾝﾄをｸﾛｰｽﾞしてください。&quot;+@NewLine+
+  &quot;　無線LAN接続不可の場合は、有線LAN接続した状態でｻﾎﾟｰﾄﾃﾞｽｸへ戻してください。&quot;+@NewLine+@NewLine+
+
+  &quot;2.有線LAN接続ができた場合、証明書が更新され、tkyttnh-dが接続できるか確認&quot;+@NewLine+
+  &quot;3.証明書が自動更新されない場合は手動で証明書を取得し、tkyttnh-dが接続できるか確認&quot;+@NewLine+
+  &quot;4.tkyttnh-dが接続不可の場合は、ｲﾝﾌﾗ担当窓口へｴｽｶﾚｰｼｮﾝ&quot;+@NewLine+@NewLine+
+  &quot;＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝&quot;+@NewLine+
+  &quot;【証明書有効期限に問題がない場合】&quot;+@NewLine+@NewLine+
+  &quot;1.有線LAN接続して頂き、tkyttnh-dが接続できるか確認（ﾌﾞﾘｰｾﾞで有線LAN環境が無い場合はPCを持ち込んで頂き対応）&quot;+@NewLine+
+  &quot;2.有線LAN接続した状態でtkyttnh-dを再作成（ﾘﾓｰﾄ or 口頭案内）&quot;+@NewLine+
+  &quot;3.（大崎ﾕｰｻﾞｰのみ）有線LAN接続している場合はﾘﾓｰﾄ接続し、「shishaevidence2018.vbs」を実行する&quot;+@NewLine+
+  &quot;4.解決不可の場合はｴｽｶﾚｰｼｮﾝ&quot;+@NewLine+@NewLine+
+  &quot;　・大崎ﾕｰｻﾞｰ　⇒ｲﾝﾌﾗ担当窓口へｴｽｶﾚｰｼｮﾝ（【支社ｲﾝﾌﾗ】をつける）&quot;+@NewLine+
+  &quot;　・その他　 　⇒ｲﾝﾌﾗ担当窓口へｴｽｶﾚｰｼｮﾝ&quot;+@NewLine+@NewLine+
+  &quot;------------------------------------------------------------&quot;+@NewLine+@NewLine+
+  &quot;＜記載必須事項＞&quot;+@NewLine+
+  &quot;・ｺﾝﾋﾟｭｰﾀ名：&quot;+@NewLine+
+  &quot;・ﾕｰｻﾞｰ名　：&quot;+@NewLine+
+  &quot;・有線LAN接続：不可　／　接続済み&quot;+@NewLine+
+  &quot;・tkyttnh-dの再作成：未実施　／　有線LAN接続して実施済み　／　有線LAN接続せず実施済み&quot;+@NewLine+@NewLine+
+  &quot;&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;14.ﾈｯﾄﾜｰｸ関連&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;01.障害&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;無線LANがつながらない&quot;)無線LAN接続不可@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;04.セキュリティ関連&quot;);
+@SetField(&quot;category4&quot;;&quot;01.ウイルス関連&quot;);
+@SetField(&quot;answer&quot;;answer + @NewLine  +
+  &quot;**********************************&quot;+@NewLine+
+  &quot;【感染原因と思われる内容】↓件数収集に使用する情報のため、不要箇所は削除して下さい↓&quot;+@NewLine+@NewLine+
+  &quot; * 不審なﾒｰﾙに添付されたﾌｧｲﾙを開いた&quot;+@NewLine+
+  &quot; * 不審なﾒｰﾙに添付されたURLを開いた&quot;+@NewLine+
+ &quot; * 不審なｲﾝﾀｰﾈｯﾄｻｲﾄにｱｸｾｽした&quot;+@NewLine+
+ &quot; * その他　詳細　=&gt;　&quot;+@NewLine+
+ &quot; * 不明&quot;+@NewLine+@NewLine+
+ &quot;【不審ﾒｰﾙ関連の場合】&quot;+@NewLine+@NewLine+
+  &quot; * 受信日時：&quot;+@NewLine+
+  &quot; * 件名：&quot;+@NewLine+@NewLine+
+ &quot;【PC情報】&quot;+@NewLine+@NewLine+
+  &quot; * ｺﾝﾋﾟｭｰﾀ名：&quot;+@NewLine+
+  &quot; * 利用者：&quot;+@NewLine+@NewLine+
+  &quot;**********************************&quot;+@NewLine+@NewLine+
+ &quot;ﾈｯﾄﾜｰｸを遮断頂いた上で、手動でのｳｲﾙｽ検索手順を案内（検索完了後に結果をご連絡頂く）&quot;+@NewLine);
+@SetField(&quot;H_Category1&quot;;&quot;10.ｳｲﾙｽ関連&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;01.障害&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;ｳｲﾙｽに感染した/ｳｲﾙｽを検知した&quot;);
+@SetField(&quot;outline&quot;;&quot;【ｳｲﾙｽ感染】&quot;);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;)【ｳｲﾙｽ感染】@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;08.ハードウェア&quot;);
+@SetField(&quot;category4&quot;;&quot;01.PC&quot;);
+@SetField(&quot;outline&quot;;&quot;起動しない&quot;);
+@SetField(&quot;answer&quot;;answer+@NewLine+
+  &quot;・電源が入っているか (電源ﾗﾝﾌﾟが点灯しているか)--&gt; &quot;+@NewLine+@NewLine+
+  &quot;・ｴﾗｰﾒｯｾｰｼﾞがあるか --&gt;（STOP in PS Main／A Problem has been…／画面左上の_ が点滅している／ｽﾀｰﾄｱｯﾌﾟ修復画面／その他(※内容入力）&quot;+@NewLine+@NewLine+
+  &quot;・電源ｺｰﾄﾞの抜き差しで起動するか --&gt; &quot;+@NewLine+@NewLine+
+  &quot;・電源ｺｰﾄﾞを別のｺﾝｾﾝﾄに差して起動するか --&gt; &quot;+@NewLine+@NewLine+
+  &quot;・別の電源ｺｰﾄﾞに交換して起動するか --&gt; &quot;+@NewLine+@NewLine+
+  &quot;・CD/DVDが挿入されていないか --&gt; &quot;+@NewLine+@NewLine+
+  &quot;・ﾉｰﾄPCの場合：電源を切り、ﾊﾞｯﾃﾘｰを外して電源ｺｰﾄﾞのみで起動するか --&gt; &quot;+@NewLine+
+  &quot;　　　　　　　（起動すれば後ほどﾊﾞｯﾃﾘｰを装着していただく）&quot;+@NewLine+@NewLine+
+  &quot;　　　　　　　 ﾊﾞｯﾃﾘｰ取り外し不可の機種の場合（Dynabook R63/U、R63/B、G83/* 等）&quot;+@NewLine+
+  &quot;　　　　　　　 電源ｺｰﾄﾞを抜いて電源ﾎﾞﾀﾝを1分間長押し後、起動するか --&gt; &quot;+@NewLine+@NewLine+
+  &quot;・ﾃﾞｽｸﾄｯﾌﾟPCの場合：ｹｰﾌﾞﾙ類をすべて抜いて差し直し、起動するか --&gt; &quot;+@NewLine+@NewLine+@NewLine+
+  &quot;・ｽﾀｰﾄｱｯﾌﾟ修復画面の場合、「Windowsを通常起動する」を選択し起動するか --&gt; &quot;+@NewLine+@NewLine+
+  &quot;・ｴﾗｰ回復処理画面の場合、処理終了後にﾊﾟｿｺﾝ再起動し、ｽﾀｰﾄｱｯﾌﾟ修復画面で&quot;+@NewLine+
+  &quot; 「Windowsを通常起動する」を選択し起動するか --&gt; &quot;+@NewLine+@NewLine+@NewLine+
+  &quot;※起動不可 --&gt;ﾒｰｶｰｺｰﾙ実施&quot;+@NewLine+
+  &quot;　　　　　　 （HDD交換やOS再ｾｯﾄｱｯﾌﾟと診断された場合はご連絡頂く）&quot;);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;S_Category1&quot;;&quot;03:パソコン・ソフトＱ＆Ａ&quot;);
+@SetField(&quot;S_Category2&quot;;&quot;01:ＯＳ&quot;);
+@SetField(&quot;S_Category3&quot;;&quot;01:障害&quot;);
+@SetField(&quot;S_Outline&quot;;&quot;起動しない場合の対応&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;&quot;)起動しない@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;07.プリンタ・複合機&quot;);
+@SetField(&quot;category4&quot;;&quot;01.印刷関連&quot;);
+@SetField(&quot;outline&quot;;&quot;印刷できない&quot;);
+@SetField(&quot;answer&quot;;answer +@NewLine+
+ &quot;1.いつから印刷できないのか確認 --&gt; &quot;+@NewLine+
+ &quot;　　・異動後・転勤先で印刷できない場合は、ﾌﾟﾘﾝﾀﾄﾞﾗｲﾊﾞとﾎﾟｰﾄが誤っていないか確認&quot;+@NewLine+@NewLine+
+ &quot;2.ﾈｯﾄﾜｰｸ接続ができているか確認 --&gt; &quot;+@NewLine+@NewLine+
+ &quot;3.一人が全員か? （全員の場合はﾌﾟﾘﾝﾀｰの再起動）&quot;+@NewLine+@NewLine+
+ &quot;4.該当のﾌﾟﾘﾝﾀﾄﾞﾗｲﾊﾞをﾀﾞﾌﾞﾙｸﾘｯｸし&quot;+@NewLine+
+ &quot;　[ﾌﾟﾘﾝﾀ]→[一時停止]、または｢ﾌﾟﾘﾝﾀｰをｵﾌﾗｲﾝで使用する｣にﾁｪｯｸが入っていれば、外す&quot;+@NewLine+@NewLine+
+ &quot;　(ﾄﾞﾒｲﾝﾕｰｻﾞｰで、ｵﾌﾗｲﾝのﾁｪｯｸが外れない場合は再起動)&quot;+@NewLine+@NewLine+
+ &quot;5.該当のﾌﾟﾘﾝﾀﾄﾞﾗｲﾊﾞをﾀﾞﾌﾞﾙｸﾘｯｸし、[ﾌﾟﾘﾝﾀ]→[すべてのﾄﾞｷｭﾒﾝﾄの取り消し]を選択。6へ&quot;+@NewLine+@NewLine+
+ &quot;6.ﾊﾟｿｺﾝを再起動しﾃｽﾄ印刷&quot;+@NewLine+@NewLine+
+ &quot;7.ﾎﾟｰﾄ確認&quot;+@NewLine+@NewLine+@NewLine);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;09.ﾌﾟﾘﾝﾀ・複合機&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;01.障害&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;印刷できない&quot;);
+@SetField(&quot;S_Category1&quot;;&quot;&quot;);
+@SetField(&quot;S_Category2&quot;;&quot;&quot;);
+@SetField(&quot;S_Category3&quot;;&quot;&quot;);
+@SetField(&quot;S_Outline&quot;;&quot;&quot;)印刷できない@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;08.ハードウェア&quot;);
+@SetField(&quot;category4&quot;;&quot;01.PC&quot;);
+@SetField(&quot;outline&quot;;&quot;【再ｾｯﾄｱｯﾌﾟ依頼】&quot;+outline);
+@SetField(&quot;answer&quot;;answer + @NewLine  +
+&quot;↓ﾛｸﾞの不要箇所は削除して下さい↓（本ﾒｯｾｰｼﾞも含む）&quot;+ @NewLine  +  @NewLine  +
+&quot;*********************************&quot;+ @NewLine  +
+&quot;　* ﾒｰｶｰ診断結果 or ﾄﾗﾌﾞﾙ内容 --&gt; &quot;+ @NewLine  +  @NewLine  +
+&quot;　* 型番 --&gt; &quot;+ @NewLine  +  @NewLine  +
+&quot;　* 標準PC or 標準外PC --&gt; &quot;+ @NewLine  +  @NewLine  +
+&quot;　※標準外PCの場合、有償対応になる可能性がある旨お伝えした上でﾋﾞｼﾞﾈｽｻﾎﾟｰﾄGへｴｽｶﾚｰｼｮﾝ&quot;+ @NewLine  +
+&quot;    ﾋﾞｼﾞﾈｽｻﾎﾟｰﾄGにてお客様の修理意思が確認出来るまでは、ｻﾎﾟｰﾄﾃﾞｽｸへPCを送付頂かない&quot;+ @NewLine  +
+&quot;*********************************&quot;+ @NewLine  +  @NewLine  +
+&quot;PC本体・電源ｺｰﾄﾞ・再ｾｯﾄｱｯﾌﾟ依頼書をｻﾎﾟｰﾄﾃﾞｽｸへ送付頂くよう依頼&quot;+ @NewLine  +
+&quot;(依頼書をお持ちでない場合は、ﾒｰﾙで送付 または NHSSｻﾎﾟｰﾄﾃﾞｽｸのﾎﾟｰﾀﾙｻｲﾄの文書を案内)&quot;+ @NewLine  +  @NewLine  +
+&quot;尚、ﾃﾞｰﾀについては取得出来ない場合があることをご理解頂く&quot; + @NewLine);
+@SetField(&quot;status&quot;;&quot;再ｾｯﾄｱｯﾌﾟ&quot;);
+@SetField(&quot;S_Category1&quot;;&quot;01:ご案内&quot;);
+@SetField(&quot;S_Category2&quot;;&quot;－&quot;);
+@SetField(&quot;S_Category3&quot;;&quot;－&quot;);
+@SetField(&quot;S_Outline&quot;;&quot;２．パソコン再セットアップについて&quot;)再ｾｯﾄｱｯﾌﾟ依頼@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;03.Office&quot;);
+@SetField(&quot;category4&quot;;&quot;01.Excel&quot;);
+@SetField(&quot;category6&quot;;&quot;01.Excel&quot;);
+@SetField(&quot;outline&quot;;&quot;Excelﾌｧｲﾙをﾀﾞﾌﾞﾙｸﾘｯｸしても開かない(外枠だけが起動し、ﾌｧｲﾙが開かない)&quot;);
+@SetField(&quot;answer&quot;;
+  &quot;新規のﾜｰｸｼｰﾄを開いていただく&quot;+@NewLine+@NewLine+
+  &quot;(Excel2007、2016の場合)&quot;+@NewLine+
+ &quot;「Excelのｵﾌﾟｼｮﾝ」-「詳細設定」-「全般」内の「Dynamic Data Exchange(DDE)を使用する 他のｱﾌﾟﾘｹｰｼｮﾝを無視する｣のﾁｪｯｸをはずす&quot;+@NewLine+@NewLine+
+  &quot;正常にExcelﾌｧｲﾙが開くことを確認&quot;)+@NewLine+
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;S_Category1&quot;;&quot;03:パソコン・ソフトＱ＆Ａ&quot;);
+@SetField(&quot;S_Category2&quot;;&quot;04:Ｅｘｃｅｌ&quot;);
+@SetField(&quot;S_Category3&quot;;&quot;01:障害&quot;);
+@SetField(&quot;S_Outline&quot;;&quot;Excelファイルをダブルクリックしても開かない（Excel（外枠）だけが起動し、ファイルが開かない）&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;&quot;)Excelが開かない@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;10.共通&quot;);
+@SetField(&quot;category4&quot;;&quot;01.New Work Friend&quot;);
+@SetField(&quot;outline&quot;;&quot;Excelで[ﾆｭｰﾜｰｸﾌﾚﾝﾄﾞ]のﾒﾆｭｰがなくなった&quot;);
+@SetField(&quot;answer&quot;;+@NewLine+
+&quot;「ﾌｧｲﾙ」→「ｵﾌﾟｼｮﾝ」→「ｱﾄﾞｲﾝ」→「設定」ﾎﾞﾀﾝをｸﾘｯｸ&quot;+@NewLine+@NewLine+
+&quot;※64bit版ﾜｰｸﾌﾚﾝﾄﾞを使用中の場合は、「Jbcvxl32.xll」を「Jbcvxl64.xll」に読み替える&quot;+@NewLine+@NewLine+@NewLine+
+&quot;一覧に「Jbcvxl32.xll」又は「New WorkFriend ﾃﾞｰﾀﾍﾞｰｽ･ｱｸｾｽ」がある場合--&gt;&quot;+@NewLine++@NewLine+
+  &quot;  「Jbcvxl32.xll」又は「New WorkFriend ﾃﾞｰﾀﾍﾞｰｽ･ｱｸｾｽ」にﾁｪｯｸを入れる&quot;+@NewLine+
+  &quot;　 ※既にﾁｪｯｸが入っている場合は、ﾁｪｯｸを外してExcel再起動後にﾁｪｯｸを入れる&quot;+@NewLine+
+  &quot;　&quot;+@NewLine+@NewLine+
+  &quot;一覧に「Jbcvxl32.xll」又は「New WorkFriend ﾃﾞｰﾀﾍﾞｰｽ･ｱｸｾｽ」がない場合--&gt;&quot;+@NewLine++@NewLine+
+  &quot;  「参照」ﾎﾞﾀﾝをｸﾘｯｸし、ﾌｧｲﾙの場所を『 C:New WorkFriend 』に変更し「JBCVXL32.xll」を選択し＜OK＞をｸﾘｯｸする&quot;+@NewLine+@NewLine+@NewLine+
+  &quot;『New WorkFriend ﾃﾞｰﾀﾍﾞｰｽ･ｱｸｾｽが導入されました』のﾒｯｾｰｼﾞが表示されるので、「OK」ﾎﾞﾀﾝを押下&quot;+@NewLine);
+@SetField(&quot;S_Category1&quot;;&quot;07:業務系ツールＱ＆Ａ&quot;);
+@SetField(&quot;S_Category2&quot;;&quot;01:ワークフレンド&quot;);
+@SetField(&quot;S_Category3&quot;;&quot;01:障害&quot;);
+@SetField(&quot;S_Outline&quot;;&quot;Excelで[ニューワークフレンド]のメニューがなくなった&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;&quot;)「ﾆｭｰﾜｰｸﾌﾚﾝﾄﾞ」のﾒﾆｭｰが無くなった</div>
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>＜Ｗｉｎｄｏｗｓ関連＞</div>
+<div class='notes-par'>@SetField(&quot;category1&quot;;&quot;質問&quot;);
+@SetField(&quot;category3&quot;;&quot;01.OS&quot;);
+@SetField(&quot;category4&quot;;&quot;03.IPｱﾄﾞﾚｽ・LAN設定&quot;);
+@SetField(&quot;outline&quot;;&quot;【空きIP割振り依頼(営業)】&quot;);
+@SetField(&quot;answer&quot;;answer + @NewLine  +  &quot;一時利用 or 恒久利用　=&gt;　&quot; + @NewLine  +&quot;第3ｵｸﾃｯﾄﾞ確認　=&gt;　&quot; + @NewLine  +@NewLine  +&quot;空きIP「*.*.*.*」を付与&quot;+ @NewLine  + @NewLine  +&quot;以下の内容で管理台帳を更新(一時利用の場合は不要)&quot; + @NewLine  +&quot;*****************************************&quot; + @NewLine  +&quot;氏名:&quot; + @NewLine  +  &quot;旧所属:&quot; + @NewLine  +  &quot;旧IP:&quot; + @NewLine  +  &quot;ﾒｰｶｰ:&quot; + @NewLine  +  &quot;機種:&quot; + @NewLine  +  &quot;ｼﾘｱﾙNo:&quot;  + @NewLine+&quot;*****************************************&quot;  + @NewLine);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;14.ﾈｯﾄﾜｰｸ関連&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;空きIPｱﾄﾞﾚｽの確認・付与について&quot;);
+@SetField(&quot;S_Category1&quot;;&quot;&quot;);
+@SetField(&quot;S_Category2&quot;;&quot;&quot;);
+@SetField(&quot;S_Category3&quot;;&quot;&quot;);
+@SetField(&quot;S_Outline&quot;;&quot;&quot;)【空きIP割振り依頼(営業)】@SetField(&quot;category1&quot;;&quot;&quot;);
+@SetField(&quot;category3&quot;;&quot;&quot;);
+@SetField(&quot;category4&quot;;&quot;&quot;);
+@SetField(&quot;SW&quot;;&quot;&quot;);
+@SetField(&quot;outline&quot;;&quot;&quot;);
+@SetField(&quot;answer&quot;; &quot; &quot;);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;);
+
+@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;01.OS&quot;);
+@SetField(&quot;category4&quot;;&quot;01.ﾛｸﾞｵﾝ/ID・ﾊﾟｽﾜｰﾄﾞ関連&quot;);
+@SetField(&quot;outline&quot;;&quot;【Windows】ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ依頼／ﾛｯｸｱｳﾄ解除依頼&quot;);
+@SetField(&quot;answer&quot;;answer + @NewLine  +  &quot;ﾕｰｻﾞｰID  ：&quot;+ @NewLine  +
+&quot;本人確認  : ○ ／ × --&gt; 本人からかけ直して頂く。&quot;+ @NewLine+ @NewLine  +
+&quot;・ﾛｯｸｱｳﾄ    ： 無 ／ 有 --&gt; ﾛｯｸｱｳﾄ解除実施&quot;+ @NewLine+ @NewLine  +
+&quot;・PW有効期限 : 切れている ／ 切れていない&quot;+ @NewLine+ @NewLine  +
+&quot;・PWﾘｾｯﾄ    ： ﾘｾｯﾄ無し ／ ﾘｾｯﾄ実施（「Nh ＋ yymmdd」／ ﾕｰｻﾞｰ指定のﾊﾟｽﾜｰﾄﾞ で割り当て）&quot;+ @NewLine+ @NewLine  +
+&quot;ﾛｸﾞｲﾝをお試し頂く =&gt; &quot; + @NewLine);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;01.ＯＳ&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;★ADﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ・ﾛｯｸ解除手順&quot;);
+@SetField(&quot;S_Category1&quot;;&quot;&quot;);
+@SetField(&quot;S_Category2&quot;;&quot;&quot;);
+@SetField(&quot;S_Category3&quot;;&quot;&quot;);
+@SetField(&quot;S_Outline&quot;;&quot;&quot;)【Windowsﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ】@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;01.OS&quot;);
+@SetField(&quot;category4&quot;;&quot;01.ﾛｸﾞｵﾝ/ID・ﾊﾟｽﾜｰﾄﾞ関連&quot;);
+@SetField(&quot;outline&quot;;&quot;Windowsのﾊﾟｽﾜｰﾄﾞ変更が上手くいかない&quot;);
+@SetField(&quot;answer&quot;;answer + @NewLine  +  &quot;本人の確認→&quot;
++ @NewLine  +  &quot;　※本人でない場合は本人からかけ直して頂く。&quot;
++ @NewLine+ @NewLine  +  &quot;ﾕｰｻﾞｰID:&quot;
++ @NewLine+ @NewLine  +  &quot;”次回ﾛｸﾞｲﾝ時のﾊﾟｽﾜｰﾄﾞ変更無効”でﾊﾟｽﾜｰﾄﾞをﾘｾｯﾄ&quot;
++ @NewLine+ @NewLine  +  &quot;ﾛｸﾞｲﾝ後にﾕｰｻﾞｰ側でﾊﾟｽﾜｰﾄﾞ変更を実施するようｱﾅｳﾝｽ&quot;
++ @NewLine+ @NewLine+  &quot;ﾘｾｯﾄ後もﾛｸﾞｲﾝ出来ない場合は、15分ほど経過後にﾛｸﾞｵﾝをお試し頂く（それでも不可な場合はｲﾝﾌﾗ担当窓口へｴｽｶﾚｰｼｮﾝ）&quot; + @NewLine);
+@SetField(&quot;H_Category1&quot;;&quot;01.ＯＳ&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;ADﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ手順について&quot;);
+@SetField(&quot;S_Category1&quot;;&quot;&quot;);
+@SetField(&quot;S_Category2&quot;;&quot;&quot;);
+@SetField(&quot;S_Category3&quot;;&quot;&quot;);
+@SetField(&quot;S_Outline&quot;;&quot;&quot;)【ADﾊﾟｽﾜｰﾄﾞ変更不可】@SetField(&quot;category1&quot;;&quot;質問&quot;);
+@SetField(&quot;category3&quot;;&quot;01.OS&quot;);
+@SetField(&quot;category4&quot;;&quot;02.利用者変更&quot;);
+@SetField(&quot;outline&quot;;&quot;【ﾛｰｶﾙ管理者権限付与】&quot;);
+@SetField(&quot;answer&quot;;answer +@NewLine+
+&quot;以下の項目を確認 --&gt;&quot;+@NewLine+
+&quot;IPｱﾄﾞﾚｽ（ｺﾝﾋﾟｭｰﾀ名）:&quot;+@NewLine+
+&quot;ﾕｰｻﾞｰID:&quot; +@NewLine++@NewLine+
+&quot;ﾛｰｶﾙ管理者権限の設定を行う&quot; +@NewLine++@NewLine+
+&quot;ﾊﾟｿｺﾝ再起動をお願いする。&quot; + @NewLine);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;01.ＯＳ&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;★ﾛｰｶﾙ管理者権限付与方法&quot;);
+@SetField(&quot;S_Category1&quot;;&quot;&quot;);
+@SetField(&quot;S_Category2&quot;;&quot;&quot;);
+@SetField(&quot;S_Category3&quot;;&quot;&quot;);
+@SetField(&quot;S_Outline&quot;;&quot;&quot;)【ﾛｰｶﾙ管理者権限付与】@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;01.OS&quot;);
+@SetField(&quot;category4&quot;;&quot;01.ﾛｸﾞｵﾝ/ID・ﾊﾟｽﾜｰﾄﾞ関連&quot;);
+@SetField(&quot;outline&quot;;&quot;Windowsにﾛｸﾞｵﾝできない&quot;);
+@SetField(&quot;answer&quot;;answer +@NewLine+
+&quot;以下および状況を確認&quot;+@NewLine+@NewLine+
+&quot;* ﾛｸﾞｵﾝID　：&quot;+@NewLine+
+&quot;* ﾕｰｻﾞｰ名　：&quot;+@NewLine+
+&quot;* IDｽﾃｰﾀｽ　：稼働中・停止中・廃止&quot;+@NewLine+
+&quot;* PW有効期限：切れている／切れていない&quot;+@NewLine+
+&quot;* PW変更履歴：&quot;+@NewLine+@NewLine+@NewLine+
+&quot;※ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ・ﾛｯｸｱｳﾄ解除の場合は【Windowsﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ】ﾎﾞﾀﾝを押し直す　 ←こちらは消去する&quot;+@NewLine+@NewLine+
+&quot;↓状況に応じて以下対応（不要部分を削除すること）&quot;+@NewLine+
+&quot;-------------------------------------------------------------&quot;+@NewLine+
+&quot;●IDｽﾃｰﾀｽが廃止済みの場合&quot;+@NewLine+@NewLine+
+&quot;IDが廃止済みのためﾛｸﾞｵﾝ不可となっていることを説明&quot;+@NewLine+
+&quot;必要に応じてﾛｸﾞｵﾝID変更方法を案内&quot;+@NewLine+@NewLine+
+&quot;-------------------------------------------------------------&quot;+@NewLine+
+&quot;●IDｽﾃｰﾀｽが停止中の場合&quot;+@NewLine+@NewLine+
+&quot;IDが停止中のためSIMSのｽﾏｰﾄITﾕｰｻﾞｰ申請より、AD申請の「再開」申請して頂く&quot;+@NewLine+@NewLine+
+&quot;-------------------------------------------------------------&quot;+@NewLine+
+&quot;●IDｽﾃｰﾀｽが稼働中の場合&quot;+@NewLine+@NewLine+
+&quot;ﾈｯﾄﾜｰｸ接続状況に問題がないか&quot;+@NewLine+
+&quot;正しくWindowsﾊﾟｽﾜｰﾄﾞが入力されているか&quot;+@NewLine+
+&quot;ﾘﾓｰﾄ接続し、こちらからﾛｸﾞｵﾝ可能か&quot;+@NewLine+
+&quot;どうしてもﾛｸﾞｵﾝ不可の場合は、ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ対応実施&quot;+@NewLine+@NewLine+
+&quot;-------------------------------------------------------------&quot;+@NewLine+
+&quot;●ﾛｸﾞｵﾝIDが使用者のIDではない場合&quot;+@NewLine+@NewLine+
+&quot;PC利用者自身のIDでﾛｸﾞｵﾝして頂く必要があることを説明&quot;+@NewLine+@NewLine+
+&quot;・ﾈｯﾄﾜｰｸ接続できているか確認 ： ○ ／ × --&gt; ﾛｰｶﾙｱｶｳﾝﾄでﾛｸﾞｵﾝし、ﾈｯﾄﾜｰｸ設定実施&quot;+@NewLine+@NewLine+
+&quot;・ﾛｰｶﾙ管理者権限付与を実施&quot;+@NewLine+@NewLine+
+&quot;　* 利用者のADﾕｰｻﾞｰID　 ： &quot;+@NewLine+
+&quot;　* ｺﾝﾋﾟｭｰﾀ名（IPｱﾄﾞﾚｽ）：&quot;+@NewLine+@NewLine+
+&quot;　　※PC利用者がID未登録の場合は[SIMS]-[ｽﾏｰﾄITﾕｰｻﾞｰ申請]-[AD申請]を実施して頂く&quot;+@NewLine+@NewLine+
+&quot;・ﾛｸﾞｵﾝID切替手順を案内し、利用者のIDでﾛｸﾞｵﾝして頂く&quot;+@NewLine+@NewLine+
+&quot;　　※ﾊﾟｽﾜｰﾄﾞ不明の場合は、ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ対応実施&quot;+@NewLine+@NewLine+
+&quot;・前環境のﾃﾞｰﾀが必要な場合は、ﾃﾞｰﾀ移行手順を案内&quot;+@NewLine+@NewLine+
+&quot;-------------------------------------------------------------&quot;+@NewLine);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;&quot;);
+@SetField(&quot;S_Category1&quot;;&quot;03:パソコン・ソフトＱ＆Ａ&quot;);
+@SetField(&quot;S_Category2&quot;;&quot;01:ＯＳ&quot;);
+@SetField(&quot;S_Category3&quot;;&quot;01:障害&quot;);
+@SetField(&quot;S_Outline&quot;;&quot;Windowsにログオンできない／スクリーンセーバーのロックが解除できない&quot;)【Windowsにﾛｸﾞｵﾝできない】　</div>
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>＜暗号化ソフト＞    　　　　　　　　　　　　　　　　＜Office365関連＞ </div>
+<div class='notes-par'>@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;09.暗号化機能&quot;);
+@SetField(&quot;category4&quot;;&quot;01.Pointsec&quot;);
+@SetField(&quot;outline&quot;;&quot;【PointSEC】ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ&quot;);
+@SetField(&quot;answer&quot;;
+  &quot;&quot;+@NewLine+
+  &quot;ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄを実施&quot;+@NewLine++@NewLine+
+  &quot;Windowsが起動したことを確認 &quot;+@NewLine);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;12.PointSec&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;PointSECのﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ手順&quot;)【PointSec】ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;09.暗号化機能&quot;);
+@SetField(&quot;category4&quot;;&quot;02.BitLocker&quot;);
+@SetField(&quot;outline&quot;;&quot;【BitLocker】ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ&quot;);
+@SetField(&quot;answer&quot;;
+&quot;* 該当PCのｺﾝﾋﾟｭｰﾀｰ名： &quot;+@NewLine+
+&quot;* ﾒｰﾙ送付先： &quot;+@NewLine+@NewLine+
+&quot;下記手順でﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ実施&quot;+@NewLine++@NewLine+
+&quot; 1)【SD】該当PCの回復ｷｰを確認&quot;+@NewLine++@NewLine+
+&quot; 2)【ﾕｰｻﾞｰ】&lt;Esc&gt;ｷｰで回復ｷｰ入力画面を表示し、手順1)で確認した回復ｷｰを入力の上 &lt;Enter&gt;ｷｰを押下&quot;+@NewLine++@NewLine+
+&quot; 3)【ﾕｰｻﾞｰ】Windowsへﾛｸﾞｲﾝ&quot;+@NewLine++@NewLine+
+&quot; 4)【SD】ﾒｰﾙでﾊﾟｽﾜｰﾄﾞ再設定手順を送付するので、対応を依頼(手順を実施しなければ次回も起動不可となる旨説明)&quot;+@NewLine++@NewLine+
+&quot;　　　　 &lt;手順提供メールを送信&gt; --&gt; &quot;+@NewLine++@NewLine+
+&quot; 5)【SD】回復ｷｰの再作成 --&gt; &quot;+@NewLine);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;15.BitLocker&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;BitLockerﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ手順&quot;)【BitLocker】ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄ　 @SetField(&quot;outline&quot;;&quot;【Office365】&quot;+outline)【Office365】@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;outline&quot;;&quot;【Office365】&quot;+outline);
+@SetField(&quot;answer&quot;;answer +@NewLine+
+ &quot;・ｻｲﾝｱｳﾄ後にｻｲﾝｲﾝしなおしてどうか　--&gt; &quot;+@NewLine+@NewLine+
+ &quot;・ｷｬｯｼｭｸﾘｱしてどうか　--&gt; &quot;+@NewLine+@NewLine+
+ &quot;・資格情報を削除してどうか　--&gt; &quot;+@NewLine+@NewLine+
+ &quot;・(Outlookの場合のみ)Outlookのﾌﾟﾛﾌｧｲﾙ削除してどうか　--&gt; &quot;+@NewLine+@NewLine+
+ &quot;・端末再起動してどうか　--&gt; &quot;+@NewLine+@NewLine+
+ &quot;・ｱﾌﾟﾘｲﾝｽﾄｰﾙ後に再ｲﾝｽﾄｰﾙしてどうか　--&gt; &quot;+@NewLine+@NewLine+@NewLine)【Office365】不具合@SetField(&quot;outline&quot;;&quot;【Office365】HENNGEｱｶｳﾝﾄﾛｯｸ解除依頼&quot;+outline);
+@SetField(&quot;inquiry&quot;;
+  +@NewLine+
+  &quot;HENNGEｱｶｳﾝﾄﾛｯｸを解除してほしい &quot;+@NewLine);
+@SetField(&quot;answer&quot;;
+  +@NewLine+
+  &quot;本人からの依頼か --&gt; &quot;+@NewLine+
+  &quot;※本人の了承が得られれば代理でのｱｶｳﾝﾄﾛｯｸ解除依頼も受付可能&quot;+@NewLine+@NewLine+
+  &quot; * ﾒｰﾙｱﾄﾞﾚｽ：&quot;+@NewLine+
+  &quot; * 氏名：&quot;+@NewLine+@NewLine+
+  &quot;HENNGEｱｶｳﾝﾄﾛｯｸ解除実施&quot;+@NewLine+@NewLine+
+  &quot;ｻｲﾝｲﾝをお試しいただくよう案内&quot;+@NewLine);
+@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;41.Office365&quot;);
+@SetField(&quot;category4&quot;;&quot;01.Office365共通&quot;);
+@SetField(&quot;category5&quot;;&quot;電話&quot;)【Office365】HENNGEｱｶｳﾝﾄﾛｯｸ解除</div>
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>＜ａｕＷｉｆｉ＞</div>
+<div class='notes-par'>@SetField(&quot;category1&quot;;&quot;&quot;);
+@SetField(&quot;category3&quot;;&quot;06.ネットワーク関連&quot;);
+@SetField(&quot;category4&quot;;&quot;04.auWifi&quot;);
+@SetField(&quot;outline&quot;;&quot;【auWifi】&quot;+outline);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;answer&quot;;answer + @NewLine  +
+  &quot;機種：【 HWD35(白/縦) 】or 【 SHD31(黒) 】 or 【 NAR01(白/横) 】 or 【 NAR03(白/横) 】&quot;+@NewLine+@NewLine);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;);
+@SetField(&quot;S_Category1&quot;;&quot;&quot;);
+@SetField(&quot;S_Category2&quot;;&quot;&quot;);
+@SetField(&quot;S_Category3&quot;;&quot;&quot;);
+@SetField(&quot;S_Outline&quot;;&quot;&quot;)【auWifi】@SetField(&quot;category1&quot;;&quot;&quot;);
+@SetField(&quot;category3&quot;;&quot;06.ネットワーク関連&quot;);
+@SetField(&quot;category4&quot;;&quot;04.auWifi&quot;);
+@SetField(&quot;outline&quot;;&quot;【auWifi(ﾌｰﾄﾞBK回線)】&quot;);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;);
+@SetField(&quot;S_Category1&quot;;&quot;&quot;);
+@SetField(&quot;S_Category2&quot;;&quot;&quot;);
+@SetField(&quot;S_Category3&quot;;&quot;&quot;);
+@SetField(&quot;S_Outline&quot;;&quot;&quot;)【auWifi（ﾌｰﾄﾞBK回線）】@SetField(&quot;category1&quot;;&quot;&quot;);
+@SetField(&quot;category3&quot;;&quot;06.ネットワーク関連&quot;);
+@SetField(&quot;category4&quot;;&quot;04.auWifi&quot;);
+@SetField(&quot;outline&quot;;&quot;【auWifi】&quot;);
+@SetField(&quot;answer&quot;;answer + @NewLine  +
+  &quot;問い合わせ者(ﾌﾙﾈｰﾑ)：&quot;+@NewLine+
+  &quot;auWiFi利用者：※複数人で共有している場合は、接続出来ないﾕｰｻﾞｰの内の1名の名前でも可：&quot;+@NewLine+
+  &quot;auWiFi機種：【 HWD35(白/縦) 】 or 【 SHD31(黒) 】 or 【 NAR01(白/横) 】 or 【 NAR03(白/横) 】&quot;+@NewLine+@NewLine+
+ &quot;------------------------------------------&quot;+@NewLine+
+ &quot;【問合わせ内容】&quot;+@NewLine+@NewLine+@NewLine+@NewLine+
+  &quot;------------------------------------------&quot;+@NewLine+
+ &quot;【auWiFi端末情報】&quot;+@NewLine+@NewLine+
+
+ &quot; &lt; HWD35(白/縦)の場合 &gt;&quot;+@NewLine+@NewLine+
+  &quot;　1） 電池残量状況：充分 / 要充電 / 充電中 &quot;+@NewLine+
+  &quot;　2）-①「受信ﾚﾍﾞﾙ表示」の状態： ｱﾝﾃﾅ3本以上 / ｱﾝﾃﾅ3本未満 / 圏外 &quot;+@NewLine+
+  &quot;　2）-② ﾛｰﾐﾝｸﾞ状態表示 （[R]の表示有無）：有 / 無　※ﾛｰﾐﾝｸﾞ設定が有効になっていても国内ではｱﾝﾃﾅ上部にRは表示されない&quot;+@NewLine+
+  &quot;　3）「通信ﾓｰﾄﾞ表示」の状態：HS / HS+A&quot;+@NewLine+
+  &quot;　4）「無線LAN状態表示/接続端末数表示」の状態：接続端末なし / 接続端末●台&quot;+@NewLine+
+  &quot;　5）「無線LAN周波数帯表示」の状態：5G / 非表示 / 屋内ﾓｰﾄﾞ / DFS&quot;+@NewLine+
+  &quot;　6） auWiFi本体に記載された資産管理No.：&quot;+@NewLine+@NewLine+
+
+&quot; &lt; SHD31(黒)の場合 &gt;&quot;+@NewLine+@NewLine+
+&quot;　1） 電池残量状況：　％ / 充電中&quot;+@NewLine+
+&quot;　2）-①「受信ﾚﾍﾞﾙ表示」の状態： ｱﾝﾃﾅ3本以上 / ｱﾝﾃﾅ3本未満 / 圏外&quot;+@NewLine+
+&quot;　2）-② ﾛｰﾐﾝｸﾞ状態表示 （[R]の表示有無）：有 / 無　※ﾛｰﾐﾝｸﾞ設定が有効になっていても国内ではｱﾝﾃﾅ上部にRは表示されない&quot;+@NewLine+
+&quot;　3）「通信ﾓｰﾄﾞ表示」の状態：HS / HS+A&quot;+@NewLine+
+&quot;　4）「ｲﾝﾀｰﾈｯﾄ接続」の状態：ｲﾝﾀｰﾈｯﾄ接続 / 切断&quot;+@NewLine+
+&quot;　5）「その他」のｱｲｺﾝの表示：無 / 有&quot;+@NewLine+
+&quot;　6） auWiFi本体に記載された資産管理No.：&quot;+@NewLine+@NewLine+
+
+&quot; &lt; NAR01(白/横)の場合 &gt;&quot;+@NewLine+@NewLine+
+&quot;　1）「受信ﾚﾍﾞﾙ表示」の状態：ｱﾝﾃﾅ3本以上 / ｱﾝﾃﾅ3本未満 / 圏外&quot;+@NewLine+
+&quot;　2）「接続ﾈｯﾄﾜｰｸ」の状態： 5G / 4G / 3G / 無&quot;+@NewLine+
+&quot;　3）「接続状態」の状態： ST / +A（白色） / +A（緑色） / AP / Rm&quot;+@NewLine+
+&quot;　4) 「無線LAN周波数帯表示」の状態： 2.4G / 5G(屋外) / 5G(屋内) / 2.4/2.5G(屋外) / 2.4/2.5G(屋内)&quot;+@NewLine+
+&quot;　5）「省電力ﾓｰﾄﾞ」の状態： ECO / NOR(緑色) / NOR(白色) / HI-P&quot;+@NewLine+
+&quot;　6)　電池残量状況：　％ / 充電中&quot;+@NewLine+
+&quot;　7） auWiFi本体に記載された資産管理No.：&quot;+@NewLine+@NewLine+
+
+&quot; &lt; NAR03(白/横)の場合 &gt;&quot;+@NewLine+@NewLine+
+&quot;　1）「受信ﾚﾍﾞﾙ表示」の状態：ｱﾝﾃﾅ3本以上 / ｱﾝﾃﾅ3本未満 / 圏外&quot;+@NewLine+
+&quot;　2）「接続ﾈｯﾄﾜｰｸ」の状態： 5G / 4G / 3G / 無&quot;+@NewLine+
+&quot;　3）「接続状態」の状態： ST / +A（白色） / +A（緑色） / AP / Rm&quot;+@NewLine+
+&quot;　4) 「無線LAN周波数帯表示」の状態： 2.4G / 5G(屋外) / 5G(屋内) / 2.4/2.5G(屋外) / 2.4/2.5G(屋内)&quot;+@NewLine+
+&quot;　5）「省電力ﾓｰﾄﾞ」の状態： ECO / NOR(緑色) / NOR(白色) / HI-P&quot;+@NewLine+
+&quot;　6)　電池残量状況：　％ / 充電中&quot;+@NewLine+
+&quot;　7） auWiFi本体に記載された資産管理No.：&quot;+@NewLine+@NewLine+
+
+  &quot;------------------------------------------&quot;+@NewLine+@NewLine);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;21.auWifi&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;08.ｴｽｶﾚｰｼｮﾝ先&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;auWifiに関するｴｽｶﾚｰｼｮﾝ先&quot;);
+@SetField(&quot;S_Category1&quot;;&quot;&quot;);
+@SetField(&quot;S_Category2&quot;;&quot;&quot;);
+@SetField(&quot;S_Category3&quot;;&quot;&quot;);
+@SetField(&quot;S_Outline&quot;;&quot;&quot;)【auWifi】ｴｽｶﾚｰｼｮﾝ@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;06.ネットワーク関連&quot;);
+@SetField(&quot;category4&quot;;&quot;04.auWifi&quot;);
+@SetField(&quot;outline&quot;;&quot;【auWifi】「ﾈｯﾄﾜｰｸｷｰ(ｾｷｭﾘﾃｨｷｰ)」が分からない&quot;+outline);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;answer&quot;;answer + @NewLine  +
+ &quot;「資産管理No + nh」と入力頂くようお伝え。&quot;+@NewLine);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;);
+@SetField(&quot;S_Category1&quot;;&quot;03:パソコン・ソフトＱ＆Ａ&quot;);
+@SetField(&quot;S_Category2&quot;;&quot;11:auWifi&quot;);
+@SetField(&quot;S_Category3&quot;;&quot;01:障害&quot;);
+@SetField(&quot;S_Outline&quot;;&quot;「ネットワークセキュリティキー(セキュリティキー）」には何を入力すればよいか&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;21.auWifi&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;01.障害&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;＜DB掲載済み＞「ﾈｯﾄﾜｰｸｷｰ(ｾｷｭﾘﾃｨｷｰ)」が分からない&quot;)ｾｷｭﾘﾃｨｷｰが分からない</div>
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>＜ファイルサーバー＞    　　　　　　　　　　　　　　　　＜ＳＩＭＳ関連＞</div>
+<div class='notes-par'>@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;01.OS&quot;);
+@SetField(&quot;category4&quot;;&quot;99.その他&quot;);
+@SetField(&quot;outline&quot;;&quot;ﾌｧｲﾙｻｰﾊﾞｰを元の状態に戻してほしい&quot;);
+@SetField(&quot;answer&quot;;answer + @NewLine  +
+&quot;ﾘﾓｰﾄ接続で対象のﾌｧｲﾙｻｰﾊﾞｰ及び、ﾌｧｲﾙ（ﾌｫﾙﾀﾞ）の保存場所を確認する&quot;+@NewLine+@NewLine+
+&quot;■利用者情報&quot;+@NewLine+@NewLine+
+&quot;　・対象のﾊﾟｿｺﾝ名（IPｱﾄﾞﾚｽ）：&quot;+@NewLine+
+&quot;　・ﾛｸﾞｲﾝﾕｰｻﾞｰ名：&quot;+@NewLine+@NewLine+
+&quot;■対象ﾌｧｲﾙ（ﾌｫﾙﾀﾞ）の保存場所&quot;+@NewLine+@NewLine+
+&quot;　・ﾌｧｲﾙ（ﾌｫﾙﾀﾞ）の保存場所　：&quot;+@NewLine+
+&quot;　・ﾌｧｲﾙ（ﾌｫﾙﾀﾞ）名　：&quot;+@NewLine+
+&quot;　・ﾘｽﾄｱ対象日時　：&quot;+@NewLine+
+&quot;　・依頼内容　：&quot;+@NewLine+@NewLine+@NewLine+
+
+&quot;------------------------------------------------------------------------&quot;+@NewLine+
+&quot;【ﾌｧｲﾙｻｰﾊﾞｰ：NSE-SVR／FSKAKOU01AW／FSNVISFS01AW／NMP-DOM￥NH-FILEの場合】&quot;+@NewLine+@NewLine+
+&quot; ①元の状態に戻したいﾌｧｲﾙ（ﾌｫﾙﾀﾞ）にｱｸｾｽできるか&quot;+@NewLine+@NewLine+
+&quot; 　・ｱｸｾｽできる場合　　　=&gt; 　手順②へ&quot;+@NewLine+
+&quot; 　・ｱｸｾｽできない場合　　=&gt; 　ｲﾝﾌﾗ担当窓口へｴｽｶﾚｰｼｮﾝ&quot;+@NewLine+@NewLine+
+&quot; ②利用可能な以前のﾊﾞｰｼﾞｮﾝはあるか&quot;+@NewLine+@NewLine+
+&quot; 　・ある場合 　=&gt; 　手順③へ&quot;+@NewLine+
+&quot; 　・ない場合　 =&gt; 　ﾘｽﾄｱ可能なﾌｧｲﾙ（ﾌｫﾙﾀﾞ）はないことをﾕｰｻﾞｰへ伝えた上でCLOSE&quot;+@NewLine+@NewLine+
+&quot; ③ﾌｫﾙﾀﾞｻｲｽﾞを確認&quot;+@NewLine+@NewLine+
+&quot; 　・2GBより小さい場合 　=&gt; 　手順④へ&quot;+@NewLine+
+&quot; 　・2GBより大きい場合　 =&gt; 　ｲﾝﾌﾗ担当窓口へｴｽｶﾚｰｼｮﾝ&quot;+@NewLine+@NewLine+
+&quot; ④ﾌｧｲﾙ（ﾌｫﾙﾀﾞ）のﾘｽﾄｱ作業&quot;+@NewLine+@NewLine+
+&quot; 　 ＜ﾌｧｲﾙ（ﾌｫﾙﾀﾞ）を上書き前の状態に戻したい場合＞&quot;+@NewLine+@NewLine+
+&quot;　　　--&gt;　上書き後のﾌｧｲﾙ（ﾌｫﾙﾀﾞ）を保存するか&quot;+@NewLine+@NewLine+
+&quot; 　　　　　・保存する場合　 =&gt;　現在のﾌｧｲﾙ（ﾌｫﾙﾀﾞ）の名前を変更した後に、&quot;+@NewLine+
+&quot;　　　　      　　　　　　　　　ﾘｽﾄｱ分のﾌｧｲﾙ（ﾌｫﾙﾀﾞ）をｺﾋﾟｰ＆貼り付けする&quot;+@NewLine+@NewLine+
+&quot; 　　　　　・保存しない場合 =&gt;  ﾘｽﾄｱ分のﾌｧｲﾙ（ﾌｫﾙﾀﾞ）をｺﾋﾟｰ＆貼り付けで上書き保存する&quot;+@NewLine+@NewLine+@NewLine+
+&quot;　 ＜ﾌｧｲﾙ（ﾌｫﾙﾀﾞ）自体が削除されている場合＞&quot;+@NewLine+@NewLine+
+&quot;　　　--&gt;　必要なﾌｧｲﾙ（ﾌｫﾙﾀﾞ）をｺﾋﾟｰ＆貼り付けする&quot;+@NewLine+@NewLine+
+&quot;------------------------------------------------------------------------&quot;+@NewLine+
+&quot;【ﾌｧｲﾙｻｰﾊﾞｰ：FSMEAT01VM の場合】&quot;+@NewLine+@NewLine+
+&quot;ｲﾝﾌﾗ担当窓口へｴｽｶﾚｰｼｮﾝ&quot;+@NewLine+@NewLine+
+&quot;------------------------------------------------------------------------&quot;+@NewLine+
+&quot;【それ以外のﾌｧｲﾙｻｰﾊﾞｰの場合】&quot;+@NewLine+@NewLine+
+&quot;　ｻｰﾊﾞｰ・ﾈｯﾄ管理ﾏｽﾀDBで対象のﾌｧｲﾙｻｰﾊﾞｰの担当者を確認&quot;+@NewLine+@NewLine+
+&quot;　◆NHSSに在籍している担当者の場合　 =&gt;　　担当者へｴｽｶﾚｰｼｮﾝ&quot;+@NewLine+
+&quot;　◆IBMとなっているの場合　　　　　  =&gt;　　ｲﾝﾌﾗ担当窓口へｴｽｶﾚｰｼｮﾝ&quot;+@NewLine+
+&quot;　◆ﾕｰｻﾞｰ側の担当者の場合　　　　  　=&gt;　　ﾕｰｻﾞｰから担当者へご連絡頂く&quot;+@NewLine+@NewLine+
+  &quot;&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;23.ﾌｧｲﾙｻｰﾊﾞｰ&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;ﾌｧｲﾙｻｰﾊﾞｰを元の状態に戻して欲しい&quot;)ﾌｧｲﾙｻｰﾊﾞｰ復元依頼 @SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;01.OS&quot;);
+@SetField(&quot;category4&quot;;&quot;99.その他&quot;);
+@SetField(&quot;outline&quot;;&quot;ﾌｧｲﾙｻｰﾊﾞｰ内のﾌｧｲﾙを開くと競合ﾒｯｾｰｼﾞが表示される&quot;);
+@SetField(&quot;answer&quot;;answer + @NewLine  +
+&quot;↓ﾛｸﾞの不要箇所は削除して下さい↓（本ﾒｯｾｰｼﾞも含む）&quot;+@NewLine+@NewLine+
+&quot;①周りで開いているﾕｰｻﾞｰがいればﾌｧｲﾙを閉じるよう依頼して頂く&quot;+@NewLine+@NewLine+
+&quot;②ﾌｧｲﾙを開いているﾕｰｻﾞｰがいないにも関わらず、&quot;+@NewLine+
+&quot;　ﾌｧｲﾙが開けない場合は必要事項(下記)をﾋｱﾘﾝｸﾞの上、各担当へｴｽｶﾚｰｼｮﾝ&quot;+@NewLine++@NewLine+
+&quot;　◆FSKAKOU01AW／FSNVISFS01AW／NMP-DOM￥NH-FILEの場合　 =&gt;　ｲﾝﾌﾗ担当窓口へｴｽｶﾚｰｼｮﾝ（【支社ｲﾝﾌﾗ】をつける）&quot;+@NewLine++@NewLine+
+&quot;　◆上記以外の場合　　      　　=&gt;　ｲﾝﾌﾗ担当窓口へｴｽｶﾚｰｼｮﾝ&quot;+@NewLine+@NewLine+
+&quot;**************************************************************&quot;+@NewLine+@NewLine+
+&quot;　＜対象のﾌｧｲﾙｻｰﾊﾞｰ及び、ﾌｧｲﾙの保存場所＞&quot;+@NewLine+@NewLine+
+&quot;　　・ﾌｧｲﾙの保存場所　：&quot;+@NewLine+
+&quot;　　・ﾌｧｲﾙ名　：&quot;+@NewLine+@NewLine+
+&quot;　＜利用者情報＞&quot;+@NewLine+@NewLine+
+&quot;　　・対象のﾊﾟｿｺﾝ名（IPｱﾄﾞﾚｽ）：&quot;+@NewLine+
+&quot;　　・ﾛｸﾞｲﾝﾕｰｻﾞｰ名：&quot;+@NewLine+@NewLine+
+&quot;**************************************************************&quot;+@NewLine+
+  &quot;&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;23.ﾌｧｲﾙｻｰﾊﾞｰ&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;01.障害&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;ﾌｧｲﾙｻｰﾊﾞｰ内のﾌｧｲﾙを開くと競合ﾒｯｾｰｼﾞが表示される&quot;)ﾌｧｲﾙｻｰﾊﾞｰ競合文書解除依頼　　　　@SetField(&quot;category1&quot;;&quot;質問&quot;);
+@SetField(&quot;category3&quot;;&quot;10.共通&quot;);
+@SetField(&quot;category4&quot;;&quot;02.SIMS&quot;);
+@SetField(&quot;outline&quot;;&quot;【SIMS】至急登録依頼（○○申請）&quot;);
+@SetField(&quot;answer&quot;;answer +@NewLine+
+&quot;↓ﾛｸﾞの不要箇所は削除して下さい↓（本ﾒｯｾｰｼﾞも含む）&quot;+@NewLine+@NewLine+
+&quot;①申請およびﾕｰｻﾞｰ側の承認が完了しているか確認&quot;+@NewLine+@NewLine+
+&quot;　完了していない場合 ： ﾕｰｻﾞｰ側の承認を完了させるよう案内&quot;+@NewLine+
+&quot;　完了している場合 　： 手順②へ&quot;+@NewLine+@NewLine+
+&quot;②以下2点を説明し、担当部署へ依頼させて頂く旨をお伝え。&quot;+@NewLine+@NewLine+
+&quot;　* 夜間処理が必要な場合もあるため最短でも翌日反映となること&quot;+@NewLine+
+&quot;　* 申請内容について確認事項などが発生した場合は確認後の反映になること&quot;+@NewLine+@NewLine+
+&quot;③必要事項(下記)をﾋｱﾘﾝｸﾞの上、ｲﾝﾌﾗ担当窓口へｴｽｶﾚｰｼｮﾝ&quot;+@NewLine+@NewLine+
+&quot;　**********************************************&quot;+@NewLine+
+&quot;　＜対象申請＞&quot;+@NewLine+@NewLine+
+&quot;　 ◆申請日：&quot;+@NewLine+
+&quot;　 ◆申請者：様&quot;+@NewLine+
+&quot;　 ◆対象者：様&quot;+@NewLine+
+&quot;　 ◆申請状況 ：ｼｽﾃﾑ管理承認待ち&quot;+@NewLine+
+&quot;　 ◆URL：&quot;+@NewLine+@NewLine+
+&quot;　**********************************************&quot;+@NewLine+
+  &quot;&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;17.SIMS&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;★緊急登録依頼があった場合&quot;)【SIMS】至急登録依頼　@SetField(&quot;category1&quot;;&quot;質問&quot;);
+@SetField(&quot;category3&quot;;&quot;10.共通&quot;);
+@SetField(&quot;category4&quot;;&quot;02.SIMS&quot;);
+@SetField(&quot;outline&quot;;&quot;【SIMS】申請一時権限付与依頼&quot;);
+@SetField(&quot;answer&quot;;answer +@NewLine+
+&quot;■ﾕｰｻﾞｰ申請&quot;+@NewLine+
+&quot;******************************************&quot;+@NewLine+
+&quot;* 申請者：&quot;+@NewLine+
+&quot;* 対象者：&quot;+@NewLine+
+&quot;******************************************&quot;+@NewLine+@NewLine+
+&quot;[SIMS]ﾕｰｻﾞｰﾏｽﾀDBの文書を編集し、索引更新開始&quot;+@NewLine+@NewLine+
+&quot;------------------------------------------&quot;+@NewLine+@NewLine+
+&quot;■機器申請&quot;+@NewLine+
+&quot;******************************************&quot;+@NewLine+
+&quot;* 申請者：&quot;+@NewLine+
+&quot;* 対象のauWifi機器の資産管理No：&quot;+@NewLine+
+&quot;******************************************&quot;+@NewLine+@NewLine+
+&quot;[SIMS]機器ﾏｽﾀDBの文書を編集し、索引更新開始&quot;+@NewLine+
+  &quot;&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;17.SIMS&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;★一時申請権限付与手順&quot;)【SIMS】一時権限付与依頼</div>
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>＜一時対応＞　　　　　　　　　　　　　　　　　　　　　　　　　　　　 　　　　　　　　               　　　　　 　　　　　　　　　　        ＜再セットアップ担当用＞</div>
+<div class='notes-par'>@SetField(&quot;category1&quot;;&quot;&quot;);
+@SetField(&quot;category3&quot;;&quot;01.OS&quot;);
+@SetField(&quot;category4&quot;;&quot;99.その他&quot;);
+@SetField(&quot;outline&quot;;&quot;【Windows11ﾊﾞｰｼﾞｮﾝｱｯﾌﾟ作業】&quot;+outline);
+@SetField(&quot;plathome&quot;;&quot;Windows11&quot;)【Windows11 ﾊﾞｰｼﾞｮﾝｱｯﾌﾟ作業】@SetField(&quot;category1&quot;;&quot;&quot;);
+@SetField(&quot;category3&quot;;&quot;01.OS&quot;);
+@SetField(&quot;category4&quot;;&quot;99.その他&quot;);
+@SetField(&quot;outline&quot;;&quot;【Windows10ﾊﾞｰｼﾞｮﾝｱｯﾌﾟ作業】&quot;+outline);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;01.ＯＳ&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;08.ｴｽｶﾚｰｼｮﾝ先&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;【Windows10】ﾊﾞｰｼﾞｮﾝｱｯﾌﾟ作業について&quot;);
+@SetField(&quot;plathome&quot;;&quot;Windows10&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;)【Windows10 ﾊﾞｰｼﾞｮﾝｱｯﾌﾟ作業】@SetField(&quot;category1&quot;;&quot;&quot;);
+@SetField(&quot;category3&quot;;&quot;01.OS&quot;);
+@SetField(&quot;category4&quot;;&quot;99.その他&quot;);
+@SetField(&quot;outline&quot;;&quot;【ｾｷｭﾘﾃｨﾊﾟｯﾁ適用】&quot;+outline);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;)【ｾｷｭﾘﾃｨﾊﾟｯﾁ適用（Windows Update）】　　　　　　　　　　　　　　　　　　　　　　　　@SetField(&quot;answer&quot;;answer + @NewLine  +
+&quot;--------------------------------------------------&quot;+ @NewLine  +
+&quot;MM/DD　PC着&quot;+@NewLine+@NewLine+
+&quot;利用者名：&quot;+@NewLine+@NewLine+
+&quot;※計量器ﾊﾟｿｺﾝ／携帯端末本番機／標準外ﾊﾟｿｺﾝ／ｳｲﾙｽ感染ﾊﾟｿｺﾝ／NHSSﾃﾞｰﾀ初期化端末／ﾚﾝﾀﾙﾊﾟｿｺﾝ&quot;+@NewLine+
+&quot; ↑特殊ﾊﾟｿｺﾝの場合は選択（質問概要にも≪≫で追記）&quot;+@NewLine+@NewLine+
+&quot;起動確認 =&gt; ◯ or ×（「STOP in PS Main」／「A Problem has been…」／画面左上の「_」が点滅している／「ｽﾀｰﾄｱｯﾌﾟ修復」画面／その他(※内容入力)）&quot;+@NewLine+@NewLine+
+&quot;ﾊﾞｯｸｱｯﾌﾟ取得 =&gt; ◯（保存場所：外付けHDD／helpd） or × &quot;+@NewLine+@NewLine+
+&quot;■Dynabook（東芝）製ﾊﾟｿｺﾝの場合&quot;+@NewLine+@NewLine+
+&quot;　ﾒｰｶｰｺｰﾙ(受付No.　　　／担当者：◯◯様) &quot;+@NewLine+@NewLine+@NewLine+
+&quot;■富士通製ﾊﾟｿｺﾝの場合&quot;+@NewLine+@NewLine+
+&quot;　＜下記以外の場合＞&quot;+@NewLine+@NewLine+
+&quot;　　=&gt; ﾒｰｶｰｺｰﾙ(受付No.　　　／担当者：◯◯様) &quot;+@NewLine+@NewLine+
+&quot;　※ESPRIMO D588/Tの場合、専用のGHOSTﾘｶﾊﾞﾘDVDを使用する（Ver1903適用）&quot;+@NewLine+@NewLine+@NewLine+
+&quot;　＜ESPRIMO D583/K・ARROWS Tab Q509/VB(標準外）の場合＞&quot;+@NewLine+@NewLine+
+&quot;　　=&gt; 保守担当（村上さん）へ富士通へ設置先変更を依頼して頂くよう依頼&quot;+@NewLine+
+&quot; 　 　 保守担当（村上さん）から設置先完了の連絡があり次第、富士通へ修理を依頼&quot;+@NewLine+@NewLine+
+&quot; 　 　 ﾒｰｶｰｺｰﾙ(受付No.　　　／担当者：◯◯様) &quot;+@NewLine+@NewLine+
+&quot; 　 　 修理完了後、保守担当（村上さん）に修理完了の連絡実施&quot;+@NewLine+@NewLine)再ｾｯﾄｱｯﾌﾟ作業 　</div></td></tr>
+<tr>
+<td>
+
+<div class='notes-par'>@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;04.セキュリティ関連&quot;);
+@SetField(&quot;category4&quot;;&quot;02.メール&quot;);
+@SetField(&quot;answer&quot;;answer +
+ &quot;≪※訓練の性格上、ｾｷｭﾘﾃｨ訓練用のﾒｰﾙであることは極力お伝えしない！≫&quot;+@NewLine+@NewLine+
+ &quot;送信者・件名等が訓練ﾒｰﾙの内容に該当するか確認 --&gt; &quot;+@NewLine+@NewLine+
+  &quot; ① 送信元:安全対策事務局&lt;safety@virus-taisaku.jp&gt; / 件名:新型ｺﾛﾅｳｲﾙｽ対策ｶﾞｲﾄﾞﾗｲﾝの更新&quot;+@NewLine+
+  &quot; ② 送信元:福利厚生ｻﾎﾟｰﾄ事務局&lt;benefits@soumujinji.jp&gt; / 件名:【お知らせ】新しい福利厚生ﾌﾟﾛｸﾞﾗﾑのご案内&quot;+@NewLine+
+  &quot; ③ 送信元:経理担当&lt;finance@office-kanri.jp&gt; / 件名:支払い先口座の変更について&quot;+@NewLine+
+  &quot; ④ 送信元:ｼｽﾃﾑ管理部&lt;info@jousys.jp&gt; / 件名:ｼｽﾃﾑﾒﾝﾃﾅﾝｽのお知らせ&quot;+@NewLine+
+  &quot; ⑤ 送信元:人事担当&lt;info@soumujinji.jp&gt; / 件名:社内ｺﾐｭﾆｹｰｼｮﾝ改善に関するｱﾝｹｰﾄのお願い&quot;+@NewLine+
+  &quot; ⑥ 送信元:経理担当&lt;keiri@office-kanri.jp&gt; / 件名:給与明細の確認&quot;+@NewLine+
+  &quot; ⑦ 送信元:ITｻﾎﾟｰﾄ&lt;security@jousys.jp&gt; / 件名:ﾊﾟｽﾜｰﾄﾞﾘｾｯﾄのお願い&quot;+@NewLine+@NewLine+@NewLine+
+  &quot;対象のﾒｰﾙやﾒｰﾙ内URLを開いたか確認 --&gt; &quot;+@NewLine+@NewLine+
+  &quot;【訓練ﾒｰﾙ自体を開いていない場合】&quot;+@NewLine+
+  &quot;　--&gt; ｳｲﾙｽ感染を狙った攻撃ﾒｰﾙだと思われるため、ﾒｰﾙは開かずにそのまま削除して頂くようお伝えする。&quot;+@NewLine+
+  &quot;　　　見覚えのない不審なﾒｰﾙについては、添付ﾌｧｲﾙやURLを開いてしまうとｳｲﾙｽ感染する恐れがあるため、&quot;+@NewLine+
+ &quot;　　　今後も開かずに削除して頂くよう案内。&quot;+@NewLine+@NewLine+
+  &quot;【訓練ﾒｰﾙは開いたが、ﾘﾝｸを開いていない場合】&quot;+@NewLine+
+  &quot;　--&gt; ｳｲﾙｽ感染を狙った攻撃ﾒｰﾙだと思われるが、開いたのがﾒｰﾙだけならｳｲﾙｽ感染のﾘｽｸは低い。&quot;+@NewLine+
+  &quot;　　　ﾒｰﾙ内のURLﾘﾝｸを開くことでｳｲﾙｽ感染する恐れがあるため、ﾘﾝｸは開かず削除して頂くようお伝えする。&quot;+@NewLine+
+  &quot;　　　見覚えのない不審なﾒｰﾙについては、添付ﾌｧｲﾙやURLを開いてしまうとｳｲﾙｽ感染する恐れがあるため、&quot;+@NewLine+
+  &quot;　　　今後も開かずに削除して頂くよう案内。&quot;+@NewLine+@NewLine+
+  &quot;【訓練ﾒｰﾙ、ﾘﾝｸの両方を開いた場合】&quot;+@NewLine+
+  &quot;　--&gt; 今回はｼｽﾃﾑ部門から配信している訓練ﾒｰﾙのため、URLを開いたとしてもｳｲﾙｽ感染の恐れはなくｳｲﾙｽﾁｪｯｸは不要。&quot;+@NewLine+
+  &quot;　　　ただし訓練ではなかった場合、見覚えのない不審なﾒｰﾙの添付ﾌｧｲﾙやURLを開いてしまうと&quot;+@NewLine+
+  &quot;　　　ｳｲﾙｽ感染する恐れがあるため、今後は開かずに削除して頂くよう案内。&quot;+@NewLine+
+  &quot;　　　また、訓練の性格上、ｾｷｭﾘﾃｨ訓練用のﾒｰﾙであることは周囲の方にはお伝えしないよう依頼。&quot;+@NewLine);
+@SetField(&quot;outline&quot;;&quot;【ｾｷｭﾘﾃｨ訓練】不審なﾒｰﾙが届いた&quot;+outline)【ｾｷｭﾘﾃｨ訓練（9/17～10/15）】@SetField(&quot;outline&quot;;&quot;【64bit対応】&quot;+outline)【64bit展開】@SetField(&quot;plathome&quot;;&quot;Windows10&quot;);
+@SetField(&quot;outline&quot;;&quot;【Windows10】&quot;+outline);
+@SetField(&quot;answer&quot;;answer + @NewLine  +
+  &quot;OS：Windows10&quot;+@NewLine+@NewLine+
+ &quot;&quot;)【Windows10】@SetField(&quot;plathome&quot;;&quot;Windows11&quot;);
+@SetField(&quot;outline&quot;;&quot;【Windows11】&quot;+outline);
+@SetField(&quot;answer&quot;;answer + @NewLine  +
+  &quot;OS：Windows11&quot;+@NewLine+@NewLine+
+ &quot;&quot;)【Windows11】　</div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>＜作業依頼＞</div>
+<div class='notes-par'>@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;02.Notes&quot;);
+@SetField(&quot;category4&quot;;&quot;01.UserID/パスワード&quot;);
+@SetField(&quot;outline&quot;;&quot;User.id再作成の依頼&quot;);
+@SetField(&quot;answer&quot;;answer +
+@NewLine  +  &quot;■■■■■■■■■■■■■■■■■■■■&quot; +
+@NewLine  +  &quot;ﾕｰｻﾞｰ名:&quot; +
+@NewLine  +  &quot;■■■■■■■■■■■■■■■■■■■■&quot; +
+@NewLine  +  &quot;理由:&quot; + @NewLine);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;)User.id再作成@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;02.Notes&quot;);
+@SetField(&quot;category4&quot;;&quot;10.メール：その他&quot;);
+@SetField(&quot;outline&quot;;&quot;ﾒｰﾙﾌｧｲﾙのﾘｽﾄｱ依頼&quot;);
+@SetField(&quot;answer&quot;;
+answer + @NewLine  +
+&quot;■■■■■■■■■■■■■■■■■■■■&quot; + @NewLine  +
+&quot;ﾕｰｻﾞｰ名:&quot; + @NewLine  +
+&quot;ﾒｰﾙｻｰﾊﾞｰ:&quot; + @NewLine  +
+&quot;ﾒｰﾙﾌｧｲﾙ:&quot;  + @NewLine  + @NewLine  +
+&quot;ﾘｽﾄｱ対象日:&quot; + @NewLine  + @NewLine  +
+&quot;ﾘｽﾄｱﾌｧｲﾙ名：   同名　or 別名&quot; + @NewLine  +
+&quot;■■■■■■■■■■■■■■■■■■■■&quot; + @NewLine  +
+&quot;(ﾌｧｲﾙが無い場合→　同名&quot; + @NewLine  +
+&quot; ﾌｧｲﾙがある場合→　別名）&quot; + @NewLine  + @NewLine  +
+&quot;理由:&quot; + @NewLine + @NewLine +
+&quot;ﾘｽﾄｱの完了連絡後、お客様へ連絡。&quot; + @NewLine);
+@SetField(&quot;H_Category1&quot;;&quot;02.Notes9&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;★ﾘｽﾄｱ対応手順（ﾒｰﾙDB）&quot;);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;)ﾒｰﾙﾘｽﾄｱ依頼RES:=@Prompt([YesNo];&quot;【確認】関連部門へ送信&quot;;&quot;関連部門へｴｽｶﾚｰｼｮﾝのﾒｰﾙを送信します。問題ありませんか&quot;);
+
+View:=&quot;SendTo&quot;;
+Key:=Escalation_1;
+@If(RES=1;@If(Key=&quot;&quot;;@Return(@Prompt([Ok];&quot;ｴｽｶﾚｰｼｮﾝ先未選択&quot;;&quot;関連部門のｴｽｶﾚｰｼｮﾝ先が選択されておりません。&quot;));&quot;&quot;);&quot;&quot;);
+
+@If(RES=1;@SetField(&quot;answer&quot;;answer + @NewLine + &quot;ノーツ運用担当へﾘｽﾄｱﾌｧｲﾙの削除依頼&quot;);&quot;&quot;);
+@If(RES=1;@Command([ViewRefreshFields]);&quot;&quot;);
+
+mailto:=@DbLookup(&quot;&quot;:&quot;Nocache&quot;;&quot;&quot;;View;Key;2);
+cc:=@DbLookup(&quot;&quot;:&quot;Nocache&quot;;&quot;&quot;;View;Key;3):@Name([CN];@UserName );
+subject:=&quot;【ﾘｽﾄｱﾌｧｲﾙ削除依頼】&quot;+outline;
+bodyw:=@NewLine+@NewLine+&quot;以下に問合せ内容を添付します。&quot;+@NewLine+&quot;対応よろしくお願いします。&quot;+@NewLine+@NewLine+&quot;ＮＨＳＳサポートデスク&quot;+@NewLine+@NewLine + answer+@NewLine+@NewLine;
+@If(RES=1;@MailSend(mailto;cc;&quot;&quot;;subject;bodyw;&quot;&quot;;[IncludeDoclink]);&quot;&quot;);
+
+@If(RES=1;@PostedCommand([FileSave]);&quot;&quot;);
+@If(RES=1;@PostedCommand([FileCloseWindow]);&quot;&quot;)ﾘｽﾄｱﾌｧｲﾙ削除依頼@SetField(&quot;category1&quot;;&quot;トラブル&quot;);
+@SetField(&quot;category3&quot;;&quot;02.Notes&quot;);
+@SetField(&quot;category4&quot;;&quot;11.DB：その他&quot;);
+@SetField(&quot;outline&quot;;&quot;〇〇〇〇DB ﾘｽﾄｱ依頼&quot;);
+@SetField(&quot;answer&quot;;
+answer + @NewLine  +
+&quot;■■■■■■■■■■■■■■■■■■■■&quot; + @NewLine  +
+&quot;　ﾃﾞｰﾀﾍﾞｰｽ名：&quot; + @NewLine  +
+&quot;　ﾃﾞｰﾀﾍﾞｰｽｻｰﾊﾞｰ：&quot; + @NewLine  +
+&quot;　ﾃﾞｰﾀﾍﾞｰｽのﾌｧｲﾙ名：&quot;  + @NewLine  + @NewLine  +
+&quot;　ﾘｽﾄｱ対象日：&quot;+ @NewLine  +
+&quot;　ﾘｽﾄｱﾌｧｲﾙ名：同名　or 別名&quot; + @NewLine  +
+&quot;■■■■■■■■■■■■■■■■■■■■&quot; + @NewLine  +
+&quot;理由:&quot; + @NewLine + @NewLine);
+@SetField(&quot;H_Category1&quot;;&quot;02.Notes9&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;★ﾘｽﾄｱ対応手順（その他DB）&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;)DBﾘｽﾄｱ依頼@SetField(&quot;category1&quot;;&quot;質問&quot;);
+@SetField(&quot;category3&quot;;&quot;01.OS&quot;);
+@SetField(&quot;category4&quot;;&quot;99.その他&quot;);
+@SetField(&quot;outline&quot;;&quot;MACｱﾄﾞﾚｽ登録依頼(拠点：〇〇)&quot;);
+@SetField(&quot;answer&quot;;
+answer + @NewLine  +
+&quot;■■■■■■■■■■■■■■■■■■■■&quot; + @NewLine  +
+&quot;※大崎の場合、不要になった時点でMACｱﾄﾞﾚｽ削除依頼を実施すること&quot; + @NewLine  + @NewLine  +
+
+&quot;　①拠点(件名にも記載)：&quot; + @NewLine  +
+&quot;　②MACｱﾄﾞﾚｽ：&quot; + @NewLine  +
+&quot;　③機器の種類(PC、ﾌﾟﾘﾝﾀ など)：&quot; + @NewLine  +
+&quot;　④利用期間：一時利用 or 恒久利用&quot; + @NewLine  +
+&quot;　⑤登録が必要な理由：&quot; + @NewLine  +
+&quot;■■■■■■■■■■■■■■■■■■■■&quot; + @NewLine  +
+ + @NewLine);
+@SetField(&quot;H_Category1&quot;;&quot;14.ﾈｯﾄﾜｰｸ関連&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;無線LAN拠点の有線LAN接続について&quot;);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;)MACｱﾄﾞﾚｽ登録依頼　　　</div>
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>＜質問概要など＞　　　　</div>
+<div class='notes-par'>@SetField(&quot;category1&quot;;&quot;質問&quot;);
+@SetField(&quot;category3&quot;;&quot;10.共通&quot;);
+@SetField(&quot;category4&quot;;&quot;02.SIMS&quot;);
+@SetField(&quot;outline&quot;;&quot;【SIMS】&quot;+outline)【SIMS】@SetField(&quot;category3&quot;;&quot;40.iPad&quot;);
+@SetField(&quot;category4&quot;;&quot;99.その他&quot;);
+@SetField(&quot;outline&quot;;&quot;【iPad】&quot;+outline);
+@SetField(&quot;answer&quot;;answer + @NewLine  +
+  &quot;≪iPad関連でｴｽｶﾚｰｼｮﾝする場合はﾃﾞｰﾀ通信契約番号をﾋｱﾘﾝｸﾞすること≫&quot;+@NewLine+@NewLine+
+ &quot;&quot;)【iPad】@SetField(&quot;category1&quot;;&quot;&quot;);
+@SetField(&quot;category3&quot;;&quot;99.その他&quot;);
+@SetField(&quot;category4&quot;;&quot;99.その他&quot;);
+@SetField(&quot;category6&quot;;&quot;&quot;);
+@SetField(&quot;outline&quot;;&quot;【TV会議】&quot;+outline);
+@SetField(&quot;answer&quot;;answer + @NewLine  +
+  &quot;≪iPad版のPolycomをｴｽｶﾚｰｼｮﾝする場合はﾃﾞｰﾀ通信契約番号をﾋｱﾘﾝｸﾞすること≫&quot;+@NewLine+@NewLine+
+ &quot;&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;85.その他/各種ｴｽｶﾚｰｼｮﾝ先&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;08.ｴｽｶﾚｰｼｮﾝ先&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;TV会議（ﾃﾚﾋﾞ会議）について&quot;)【TV会議】@SetField(&quot;category1&quot;;&quot;&quot;);
+@SetField(&quot;category3&quot;;&quot;10.共通&quot;);
+@SetField(&quot;category4&quot;;&quot;03.稟議書システム&quot;);
+@SetField(&quot;outline&quot;;&quot;【稟議書】&quot;+outline);
+@SetField(&quot;answer&quot;;answer +@NewLine  +
+&quot;* 利用しているDB名：&quot;+@NewLine+
+&quot;* 稟議の種類：甲稟議・乙稟議・丙稟議・素案稟議・社内稟議・与信限度など&quot;+@NewLine+
+&quot;* 起案日：&quot;+@NewLine+
+&quot;* 起案者（漢字表記）：&quot;+@NewLine+
+&quot;* 件名：&quot;+@NewLine)【稟議書】@SetField(&quot;category1&quot;;&quot;&quot;);
+@SetField(&quot;category3&quot;;&quot;11.営業部門&quot;);
+@SetField(&quot;category4&quot;;&quot;26.Accela BizAntenna&quot;);
+@SetField(&quot;category6&quot;;&quot;&quot;);
+@SetField(&quot;outline&quot;;&quot;【Accela BizAntenna】&quot;+outline)【Accela BizAntenna】@SetField(&quot;category3&quot;;&quot;10.共通&quot;);
+@SetField(&quot;category4&quot;;&quot;05.電子帳票（Report ViewerⅡ）&quot;);
+@SetField(&quot;outline&quot;;&quot;【電子帳票】&quot;+outline)【電子帳票】@SetField(&quot;outline&quot;;&quot;【TimeWorks】&quot;+outline)【TimeWorks】@SetField(&quot;category1&quot;;&quot;&quot;);
+@SetField(&quot;category3&quot;;&quot;35.人事関連&quot;);
+@SetField(&quot;category4&quot;;&quot;05.Generalist（給与）&quot;);
+@SetField(&quot;category6&quot;;&quot;&quot;);
+@SetField(&quot;outline&quot;;&quot;【Generalist（給与）】&quot;+outline)【Generalist 給与】@SetField(&quot;category1&quot;;&quot;&quot;);
+@SetField(&quot;category3&quot;;&quot;35.人事関連&quot;);
+@SetField(&quot;category4&quot;;&quot;06.Generalist（社宅・個人台帳）&quot;);
+@SetField(&quot;category6&quot;;&quot;&quot;);
+@SetField(&quot;outline&quot;;&quot;【Generalist（社宅・個人台帳）】&quot;+outline)【Generalist 社宅・個人台帳】@SetField(&quot;outline&quot;;&quot;【WebNotes】&quot;+outline)【WebNotes】</div>
+<div class='notes-par'>@SetField(&quot;category3&quot;;&quot;99.その他&quot;);
+@SetField(&quot;category4&quot;;&quot;99.その他&quot;);
+@SetField(&quot;outline&quot;;&quot;【SKYSEA】&quot;+outline)【SKYSEA】@SetField(&quot;category3&quot;;&quot;06.ネットワーク関連&quot;);
+@SetField(&quot;category4&quot;;&quot;05.OpenVPN&quot;);
+@SetField(&quot;outline&quot;;&quot;【OpenVPN】&quot;+outline)【OpenVPN】@SetField(&quot;category1&quot;;&quot;&quot;);
+@SetField(&quot;category3&quot;;&quot;11.営業部門&quot;);
+@SetField(&quot;category4&quot;;&quot;04.EC職域システム&quot;);
+@SetField(&quot;category6&quot;;&quot;&quot;);
+@SetField(&quot;outline&quot;;&quot;【EC職域ｼｽﾃﾑ】&quot;+outline)【EC職域ｼｽﾃﾑ】@SetField(&quot;category1&quot;;&quot;&quot;);
+@SetField(&quot;category3&quot;;&quot;11.営業部門&quot;);
+@SetField(&quot;category4&quot;;&quot;05.B to B／FAX-OCR&quot;);
+@SetField(&quot;category6&quot;;&quot;&quot;);
+@SetField(&quot;outline&quot;;&quot;【B to B/FAX-OCR】&quot;+outline)【B to B/FAX-OCR】@SetField(&quot;category1&quot;;&quot;&quot;);
+@SetField(&quot;category3&quot;;&quot;10.共通&quot;);
+@SetField(&quot;category4&quot;;&quot;01.New Work Friend&quot;);
+@SetField(&quot;category6&quot;;&quot;&quot;);
+@SetField(&quot;outline&quot;;&quot;【New WorkFriend】&quot;+outline)【New WorkFriend】@SetField(&quot;outline&quot;;&quot;【e-learning】&quot;+outline);
+@SetField(&quot;category3&quot;;&quot;10.共通&quot;);
+@SetField(&quot;category4&quot;;&quot;09.e-ラーニング&quot;);
+@PostedCommand([ViewRefreshFields])【e-learning】@SetField(&quot;category1&quot;;&quot;受付対象外&quot;);
+@SetField(&quot;category3&quot;;&quot;99.その他&quot;);
+@SetField(&quot;category4&quot;;&quot;02.Web会議&quot;);
+@SetField(&quot;category6&quot;;&quot;&quot;);
+@SetField(&quot;outline&quot;;&quot;&quot;+outline);
+@SetField(&quot;answer&quot;;answer +@NewLine+
+&quot;IT戦略部（東京）へお問い合わせ頂くようお伝え。&quot;+@NewLine+@NewLine);
+@SetField(&quot;H_Category1&quot;;&quot;85.その他/各種ｴｽｶﾚｰｼｮﾝ先&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;08.ｴｽｶﾚｰｼｮﾝ先&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;Web会議（Zoom・LINEWORKS等）について&quot;)【Web会議（Zoom・LINEWORKS）】</div>
+<div class='notes-par'>@SetField(&quot;outline&quot;;&quot;【Prisma】&quot;+outline);
+@SetField(&quot;category3&quot;;&quot;06.ネットワーク関連&quot;);
+@SetField(&quot;category4&quot;;&quot;06.Prismaﾘﾓｰﾄｱｸｾｽ&quot;);
+@SetField(&quot;category6&quot;;&quot;&quot;)【Prisma】@SetField(&quot;outline&quot;;&quot;【intra-mart】&quot;+outline);
+@SetField(&quot;category3&quot;;&quot;10.共通&quot;);
+@SetField(&quot;category4&quot;;&quot;12.intra-mart&quot;)【intra-mart】@SetField(&quot;category1&quot;;&quot;受付対象外&quot;);
+@SetField(&quot;category3&quot;;&quot;99.その他&quot;);
+@SetField(&quot;category4&quot;;&quot;03.携帯電話&quot;);
+@SetField(&quot;category6&quot;;&quot;&quot;);
+@SetField(&quot;outline&quot;;&quot;【携帯電話】&quot;+outline);
+@SetField(&quot;H_Category1&quot;;&quot;85.その他/各種ｴｽｶﾚｰｼｮﾝ先&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;08.ｴｽｶﾚｰｼｮﾝ先&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;携帯電話、ｽﾏｰﾄﾌｫﾝの手続き・請求・操作について&quot;);
+@SetField(&quot;S_Outline&quot;;&quot;&quot;)【携帯電話】@SetField(&quot;category1&quot;;&quot;&quot;);
+@SetField(&quot;category3&quot;;&quot;04.セキュリティ関連&quot;);
+@SetField(&quot;category4&quot;;&quot;03.デバイス制御&quot;);
+@SetField(&quot;outline&quot;;&quot;【ﾃﾞﾊﾞｲｽ制御】&quot;+outline);
+@SetField(&quot;H_Category1&quot;;&quot;85.その他/各種ｴｽｶﾚｰｼｮﾝ先&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;08.ｴｽｶﾚｰｼｮﾝ先&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;外部記憶媒体／暗号化USB／ﾃﾞﾊﾞｲｽ制御について&quot;)【ﾃﾞﾊﾞｲｽ制御・外部記憶媒体】@SetField(&quot;category3&quot;;&quot;10.共通&quot;);
+@SetField(&quot;category4&quot;;&quot;10.シャチハタクラウド&quot;);
+@SetField(&quot;category6&quot;;&quot;&quot;);
+@SetField(&quot;outline&quot;;&quot;【ｼｬﾁﾊﾀｸﾗｳﾄﾞ】&quot;+outline);
+@SetField(&quot;H_Category1&quot;;&quot;85.その他/各種ｴｽｶﾚｰｼｮﾝ先&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;ｼｬﾁﾊﾀｸﾗｳﾄﾞについて&quot;);
+@SetField(&quot;S_Outline&quot;;&quot;&quot;)【ｼｬﾁﾊﾀｸﾗｳﾄﾞ】</div>
+<div class='notes-par'>@SetField(&quot;category1&quot;;&quot;質問&quot;);
+@SetField(&quot;category3&quot;;&quot;10.共通&quot;);
+@SetField(&quot;category4&quot;;&quot;01.New Work Friend&quot;);
+@SetField(&quot;outline&quot;;&quot;【New WorkFriend 導入依頼】&quot;+outline);
+@SetField(&quot;H_Category1&quot;;&quot;65.New WorkFriend&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;ﾜｰｸﾌﾚﾝﾄﾞを導入したい,81.購買関係&quot;);
+@SetField(&quot;answer&quot;;  answer+
+ &quot;見積番号（伝票No）確認　=&gt;　 &quot;+@NewLine+@NewLine);
+
+@PostedCommand([ViewRefreshFields])【New WorkFriend 導入依頼】@SetField(&quot;category1&quot;;&quot;質問&quot;);
+@SetField(&quot;category3&quot;;&quot;11.営業部門&quot;);
+@SetField(&quot;category4&quot;;&quot;21.棚POWER&quot;);
+@SetField(&quot;outline&quot;;&quot;【棚POWER 導入依頼】&quot;+outline);
+@SetField(&quot;H_Category1&quot;;&quot;66.棚POWER&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;棚POWER導入方法,81.購買関係&quot;);
+@SetField(&quot;answer&quot;;  answer+
+ &quot;見積番号（伝票No）確認　=&gt;　 &quot;+@NewLine+@NewLine);
+
+@PostedCommand([ViewRefreshFields])【棚POWER 導入依頼】@SetField(&quot;category1&quot;;&quot;質問&quot;);
+@SetField(&quot;category3&quot;;&quot;03.Office&quot;);
+@SetField(&quot;category4&quot;;&quot;04.Access&quot;);
+@SetField(&quot;category6&quot;;&quot;Office2016&quot;);
+@SetField(&quot;outline&quot;;&quot;【Access2016 導入依頼】&quot;+outline);
+@SetField(&quot;H_Category1&quot;;&quot;03.Office全般&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;Office2016を導入したい／Office2016にｱｯﾌﾟｸﾞﾚｰﾄﾞしたい,81.購買関係&quot;);
+@SetField(&quot;answer&quot;;  answer+
+ &quot;見積番号（伝票No）確認　=&gt;　 &quot;+@NewLine+@NewLine);
+
+@PostedCommand([ViewRefreshFields])【Access2016 導入依頼】@SetField(&quot;category1&quot;;&quot;質問&quot;);
+@SetField(&quot;category3&quot;;&quot;03.Office&quot;);
+@SetField(&quot;category4&quot;;&quot;99.その他&quot;);
+@SetField(&quot;category6&quot;;&quot;Office2016&quot;);
+@SetField(&quot;outline&quot;;&quot;【Office2016 導入依頼】&quot;+outline);
+@SetField(&quot;H_Category1&quot;;&quot;03.Office全般&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;02.操作･設定&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;Office2016を導入したい／Office2016にｱｯﾌﾟｸﾞﾚｰﾄﾞしたい,81.購買関係&quot;);
+@SetField(&quot;answer&quot;;  answer+
+ &quot;見積番号（伝票No）確認　=&gt;　 &quot;+@NewLine+@NewLine);
+@PostedCommand([ViewRefreshFields])【Office2016 導入依頼】</div>
+<div class='notes-par'>@SetField(&quot;category1&quot;;&quot;受付対象外&quot;);
+@SetField(&quot;category3&quot;;&quot;90.量販フロント・ＥＯＳ関連&quot;);
+@SetField(&quot;category4&quot;;&quot;99.その他&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;85.その他/各種ｴｽｶﾚｰｼｮﾝ先&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;08.ｴｽｶﾚｰｼｮﾝ先&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;★ｵｰﾀﾞｰｴﾝﾄﾘｰ／ﾌﾛﾝﾄ／発注支援ｼｽﾃﾑ／EOS／ARMSの問い合わせ&quot;);
+@SetField(&quot;Escalation_0_1&quot;;&quot;ＥＤＩ運用（OE・FR・EOS）&quot;);
+@PostedCommand([ViewRefreshFields])【OE/FR/発注支援/EOS/ARMS】ｴｽｶﾚｰｼｮﾝ@SetField(&quot;category1&quot;;&quot;受付対象外&quot;);
+@SetField(&quot;category3&quot;;&quot;99.その他&quot;);
+@SetField(&quot;category4&quot;;&quot;99.その他&quot;);
+@SetField(&quot;Escalation_1&quot;;&quot;ビジネスサポート&quot;);
+@SetField(&quot;SSendTo_1&quot;;&quot;Z.NHSS(ﾋﾞｼﾞﾈｽｻﾎﾟｰﾄG)&quot;);
+@SetField(&quot;SCC_1&quot;;&quot;ＮＨＳＳ サポートデスク/ＮＭＰ&quot;:acc_main);
+@SetField(&quot;HSendTo_1&quot;;acc_main);
+@SetField(&quot;HCC_1&quot;;&quot;&quot;);
+@SetField(&quot;Escalation_0_1&quot;;&quot;ビジネスサポート&quot;);
+@SetField(&quot;S_Outline&quot;;&quot;&quot;)【機器発注/ﾘｰｽ/保守】ｴｽｶﾚｰｼｮﾝ@SetField(&quot;category1&quot;;&quot;受付対象外&quot;);
+@SetField(&quot;S_Category1&quot;;&quot;02:各種システム問合せ先&quot;);
+@SetField(&quot;S_Category2&quot;;&quot;－&quot;);
+@SetField(&quot;S_Category3&quot;;&quot;－&quot;);
+@SetField(&quot;S_Outline&quot;;&quot;システム別問い合わせ先一覧&quot;);
+@PostedCommand([ViewRefreshFields])【食肉関連】ｴｽｶﾚｰｼｮﾝ@SetField(&quot;answer&quot;;answer + @NewLine  +
+ &quot;----------------------------------------&quot;+@NewLine+
+  &quot;&lt;&lt;月～金 9：00～17：30&gt;&gt;の問い合わせ&quot;+@NewLine++@NewLine+
+  &quot;  ⇒ ①899-8788-7196(朝根さん)　  ②899-2325-4230(李さん)&quot;+@NewLine+
+&quot;　　 ③899-7558-1918(北野さん)　  ④899-6226-3983(山田 達也さん)へｴｽｶﾚｰｼｮﾝ
+&quot;+@NewLine++@NewLine+
+  &quot;&lt;&lt;土曜日 9：00～17：30&gt;&gt;の問い合わせ&quot;+@NewLine++@NewLine+
+  &quot;  ⇒ 基本は翌稼働日の対応で調整&quot;+@NewLine+
+  &quot;　　 ご納得頂けない場合や緊急性の高い案件は、以下へ連絡する&quot;+@NewLine++@NewLine+
+  &quot;　     ・協同食品様の場合　　 … HamIT以外の内容は、①899-7558-1915（坪田さん）へｴｽｶﾚｰｼｮﾝ&quot;+@NewLine++@NewLine+
+  &quot;　     ・協同食品様の場合　　 … HamIT内容は、①899-7558-1918(北野さん) ②899-2325-4230(李さん) &quot;+@NewLine+
+  &quot;　　　　　　　　　　　　　　　　 ③899-8788-7196(朝根さん) ④899-6226-3983(山田 達也さん)へｴｽｶﾚｰｼｮﾝ&quot;+@NewLine++@NewLine+
+  &quot;　     ・協同食品様以外の場合 … ①899-7558-1918(北野さん) ②899-2325-4230(李さん) &quot;+@NewLine+
+  &quot;　　　　　　　　　　　　　　　　 ③899-8788-7196(朝根さん) ④899-6226-3983(山田 達也さん)へｴｽｶﾚｰｼｮﾝ&quot;+@NewLine++@NewLine+
+ &quot;----------------------------------------&quot;+@NewLine+@NewLine+@NewLine);
+@SetField(&quot;H_Category1&quot;;&quot;85.その他/各種ｴｽｶﾚｰｼｮﾝ先&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;08.ｴｽｶﾚｰｼｮﾝ先&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;★「ﾊﾑｿｰ・ﾃﾞﾘ関連」への対応依頼について&quot;);
+@SetField(&quot;Escalation_1&quot;;&quot;ハムソー・デリ関連&quot;);
+@SetField(&quot;SSendTo_1&quot;;&quot;北野 人稔/ＮＭＰ, 李 哲雨/ＮＭＰ, 朝根 友美/ＮＭＰ, 五嶋 剛/ＮＭＰ&quot;);
+@SetField(&quot;SCC_1&quot;;&quot;山田 達也/ＮＭＰ, ＮＨＳＳ サポートデスク/ＮＭＰ&quot;:acc_main);
+@SetField(&quot;HSendTo_1&quot;;acc_main);
+@SetField(&quot;HCC_1&quot;;&quot;&quot;);
+
+@SetField(&quot;Escalation_0_1&quot;;&quot;加工製造&quot;);
+
+@PostedCommand([ViewRefreshFields])【ﾊﾑｿｰ・ﾃﾞﾘ関連】ｴｽｶﾚｰｼｮﾝ@SetField(&quot;outline&quot;;&quot;【TimeWorks】&quot;+outline);
+@SetField(&quot;Escalation_1&quot;;&quot;人事グループ&quot;);
+@SetField(&quot;SSendTo_1&quot;;&quot;豊田 淳司/ＮＭＰ, 渡辺 莉加/ＮＭＰ, 富田 慧輔/ＮＭＰ, 江川 佳穂/ＮＭＰ, 佐藤 薫/ＮＭＰ, 新村 公彦/ＮＭＰ, 小野田 悠矢/ＮＭＰ, 菅野 毅/ＮＭＰ, 大西 務/ＮＭＰ, 小藤 快斗/ＮＭＰ&quot;);
+@SetField(&quot;SCC_1&quot;;&quot;乾 翔伍/ＮＭＰ, ＮＨＳＳ サポートデスク/ＮＭＰ&quot;:acc_main);
+@SetField(&quot;HSendTo_1&quot;;acc_main);
+@SetField(&quot;HCC_1&quot;;&quot;&quot;);
+@SetField(&quot;Escalation_0_1&quot;;&quot;人事グループ&quot;)【TimeWorks】ｴｽｶﾚｰｼｮﾝ@SetField(&quot;outline&quot;;&quot;【支社ｲﾝﾌﾗ】&quot;+outline)【支社ｲﾝﾌﾗ】ｴｽｶﾚｰｼｮﾝ</div>
+<div class='notes-par'>&nbsp;</div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>@SetField(&quot;category1&quot;;&quot;電話取次&quot;);
+@SetField(&quot;category5&quot;;&quot;電話&quot;);
+@SetField(&quot;outline&quot;;&quot;＜電話取次＞&quot;+outline);
+@SetField(&quot;category3&quot;;&quot;99.その他&quot;);
+@SetField(&quot;category4&quot;;&quot;01.電話取次&quot;);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;CLOSE&quot;)＜ご指名電話＞RES:=@Prompt([OkCancelEdit];
+&quot;対応者名の入力&quot;;
+&quot;下記に担当者名を記入し「OK」をクリック。&quot;;&quot;&quot;);
+
+@If(RES!=&quot;&quot;;@SetField(&quot;outline&quot;;outline + &quot; 「&quot; + RES  +  &quot;さんへ対応依頼」&quot;);@SetField(&quot;outline&quot;;outline + &quot; 「＊＊さんへ対応依頼」&quot;))「対応依頼」RES:=@Prompt([OkCancelEdit];
+&quot;電話転送者名の入力&quot;;
+&quot;下記に担当者名を記入し「OK」をクリック。&quot;;&quot;&quot;);
+
+@If(RES!=&quot;&quot;;@SetField(&quot;outline&quot;;outline + &quot; 「&quot; + RES  +  &quot;さんへ電話転送済み」&quot;);@SetField(&quot;outline&quot;;outline + &quot; 「＊＊さんへ電話転送済み」&quot;))「電話転送済み」@SetField(&quot;category5&quot;;&quot;メール&quot;);
+@SetField(&quot;outline&quot;;&quot;【ﾒｰﾙ対応】&quot;+outline)【ﾒｰﾙ対応】@SetField(&quot;category1&quot;;&quot;受付対象外&quot;)【受付対象外】@SetField(&quot;category1&quot;;&quot;障害&quot;);
+@SetField(&quot;outline&quot;;&quot;【障害】&quot;+outline)【障害】@SetField(&quot;category1&quot;;&quot;受付対象外&quot;);
+@SetField(&quot;category3&quot;;&quot;99.その他&quot;);
+@SetField(&quot;category4&quot;;&quot;99.その他&quot;);
+@SetField(&quot;outline&quot;;&quot;間違い電話&quot;);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;CLOSE&quot;)【×間違い電話×】@SetField(&quot;answer&quot;;answer + @NewLine  +  &quot;&lt;手順提供メールを送信/NHSSｻﾎﾟｰﾄﾃﾞｽｸDB内の文書を案内&gt;&quot;)手順提供/DB内文書案内　   　
+@SetField(&quot;answer&quot;;  answer+@NewLine+
+
+ &quot; ※styleﾍﾙﾌﾟﾃﾞｽｸ側受電※ &quot;+@NewLine+@NewLine);
+
+@PostedCommand([ViewRefreshFields])※styleﾍﾙﾌﾟﾃﾞｽｸ側受電※</div>
+<div class='notes-par'>　　　　　　　 　  　  　　　　　 　 　 　　  　 　  　 　 　 　 　　　　　 　   　　　　　　　　　　　　　　　　　　　　　　　　　　  @SetField(&quot;category1&quot;;&quot;&quot;);
+@SetField(&quot;category3&quot;;&quot;&quot;);
+@SetField(&quot;category4&quot;;&quot;&quot;);
+@SetField(&quot;category6&quot;;&quot;&quot;);
+@SetField(&quot;S_Category1&quot;;&quot;&quot;);
+@SetField(&quot;S_Category2&quot;;&quot;&quot;);
+@SetField(&quot;S_Category3&quot;;&quot;&quot;);
+@SetField(&quot;S_Outline&quot;;&quot;&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;&quot;);
+@SetField(&quot;SW&quot;;&quot;&quot;);
+@SetField(&quot;outline&quot;;&quot;&quot;);
+@SetField(&quot;inquiry&quot;;&quot;&quot;);
+@SetField(&quot;answer&quot;; &quot;&quot;);
+@SetField(&quot;keitaitel&quot;; &quot;&quot;);
+@SetField(&quot;pass&quot;; &quot;&quot;);
+@SetField(&quot;pass1&quot;; &quot;&quot;);
+@SetField(&quot;pass2&quot;; &quot;&quot;);
+@SetField(&quot;JIKAN&quot;; &quot;&quot;);
+@SetField(&quot;JDATE_Y&quot;; &quot;&quot;);
+@SetField(&quot;JDATE_M&quot;; &quot;&quot;);
+@SetField(&quot;JDATE_D&quot;; &quot;&quot;);
+@SetField(&quot;JTIME_H&quot;; &quot;&quot;);
+@SetField(&quot;JTIME_M&quot;; &quot;&quot;);
+@SetField(&quot;JIKAN2&quot;; &quot;&quot;);
+@SetField(&quot;JIKAN3&quot;; &quot;&quot;);
+@SetField(&quot;JIKAN4&quot;; &quot;&quot;);
+@SetField(&quot;JIKAN5&quot;; &quot;&quot;);
+@SetField(&quot;EDATE_Y&quot;; &quot;&quot;);
+@SetField(&quot;EDATE_M&quot;; &quot;&quot;);
+@SetField(&quot;EDATE_D&quot;; &quot;&quot;);
+@SetField(&quot;ETIME_H&quot;; &quot;&quot;);
+@SetField(&quot;ETIME_M&quot;; &quot;&quot;);
+@SetField(&quot;FAQ_FLG&quot;; &quot;&quot;);
+@SetField(&quot;Escalation_1&quot;; &quot;&quot;);
+@SetField(&quot;SSendTo_1&quot;; &quot;&quot;);
+@SetField(&quot;SCC_1&quot;; &quot;&quot;);
+@SetField(&quot;HSendTo_1&quot;; &quot;&quot;);
+@SetField(&quot;HCC_1&quot;; &quot;&quot;);
+@SetField(&quot;Escalation_0_1&quot;; &quot;&quot;);
+@SetField(&quot;HW&quot;; &quot;&quot;);
+@SetField(&quot;SEIHIN&quot;; &quot;&quot;);
+@SetField(&quot;PCSN&quot;; &quot;&quot;);
+@SetField(&quot;plathome&quot;; &quot;&quot;);
+@SetField(&quot;PCYY&quot;; &quot;&quot;);
+@SetField(&quot;PCMY&quot;; &quot;&quot;);
+@SetField(&quot;PCDY&quot;; &quot;&quot;);
+@SetField(&quot;saitan&quot;; &quot;&quot;);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;);
+@SetField(&quot;name&quot;; &quot;&quot;);
+@SetField(&quot;ADID&quot;; &quot;&quot;);
+@SetField(&quot;pc_name&quot;; &quot;&quot;);
+@SetField(&quot;MailAddress&quot;; &quot;&quot;);
+@SetField(&quot;O365License&quot;; &quot;&quot;);
+@SetField(&quot;OutlookApri&quot;; &quot;&quot;);
+@SetField(&quot;plathome&quot;; &quot;&quot;);
+@SetField(&quot;mobile_tel_no&quot;; &quot;&quot;);
+@SetField(&quot;O365SYURUI&quot;; &quot;&quot;);
+@SetField(&quot;BROWSER&quot;; &quot;&quot;);
+@SetField(&quot;SAGYO&quot;; &quot;&quot;);
+@SetField(&quot;customername_1&quot;; &quot;&quot;);
+@SetField(&quot;customername_2&quot;; &quot;&quot;);
+@SetField(&quot;customerID&quot;; &quot;&quot;);
+@SetField(&quot;customerkeitai&quot;; &quot;&quot;);
+@SetField(&quot;customername&quot;; &quot;&quot;);
+@SetField(&quot;kana&quot;; &quot;&quot;);
+@SetField(&quot;SEC1&quot;; &quot;&quot;);
+@SetField(&quot;SEC2&quot;; &quot;&quot;);
+@SetField(&quot;SEC3&quot;; &quot;&quot;);
+@SetField(&quot;ADDRESS1&quot;; &quot;&quot;);
+@SetField(&quot;ADDRESS2&quot;; &quot;&quot;);
+@SetField(&quot;ADDRESS3&quot;; &quot;&quot;);
+@SetField(&quot;tel&quot;; &quot;&quot;);
+@SetField(&quot;BUMON&quot;; &quot;&quot;);
+@SetField(&quot;fax&quot;; &quot;&quot;);
+@SetField(&quot;KAISHA&quot;; &quot;&quot;);
+@SetField(&quot;customerno&quot;; &quot;&quot;);
+@SetField(&quot;customercompanycd&quot;; &quot;&quot;)◆全入力分リセット@SetField(&quot;category1&quot;;&quot;&quot;);
+@SetField(&quot;category3&quot;;&quot;&quot;);
+@SetField(&quot;category4&quot;;&quot;&quot;);
+@SetField(&quot;category6&quot;;&quot;&quot;);
+@SetField(&quot;S_Category1&quot;;&quot;&quot;);
+@SetField(&quot;S_Category2&quot;;&quot;&quot;);
+@SetField(&quot;S_Category3&quot;;&quot;&quot;);
+@SetField(&quot;S_Outline&quot;;&quot;&quot;);
+@SetField(&quot;H_Category1&quot;;&quot;&quot;);
+@SetField(&quot;H_Category2&quot;;&quot;&quot;);
+@SetField(&quot;H_Outline&quot;;&quot;&quot;);
+@SetField(&quot;SW&quot;;&quot;&quot;);
+@SetField(&quot;outline&quot;;&quot;&quot;);
+@SetField(&quot;inquiry&quot;;&quot;&quot;);
+@SetField(&quot;answer&quot;; &quot;&quot;);
+@SetField(&quot;keitaitel&quot;; &quot;&quot;);
+@SetField(&quot;pass&quot;; &quot;&quot;);
+@SetField(&quot;pass1&quot;; &quot;&quot;);
+@SetField(&quot;pass2&quot;; &quot;&quot;);
+@SetField(&quot;JIKAN&quot;; &quot;&quot;);
+@SetField(&quot;JDATE_Y&quot;; &quot;&quot;);
+@SetField(&quot;JDATE_M&quot;; &quot;&quot;);
+@SetField(&quot;JDATE_D&quot;; &quot;&quot;);
+@SetField(&quot;JTIME_H&quot;; &quot;&quot;);
+@SetField(&quot;JTIME_M&quot;; &quot;&quot;);
+@SetField(&quot;JIKAN2&quot;; &quot;&quot;);
+@SetField(&quot;JIKAN3&quot;; &quot;&quot;);
+@SetField(&quot;JIKAN4&quot;; &quot;&quot;);
+@SetField(&quot;JIKAN5&quot;; &quot;&quot;);
+@SetField(&quot;EDATE_Y&quot;; &quot;&quot;);
+@SetField(&quot;EDATE_M&quot;; &quot;&quot;);
+@SetField(&quot;EDATE_D&quot;; &quot;&quot;);
+@SetField(&quot;ETIME_H&quot;; &quot;&quot;);
+@SetField(&quot;ETIME_M&quot;; &quot;&quot;);
+@SetField(&quot;FAQ_FLG&quot;; &quot;&quot;);
+@SetField(&quot;Escalation_1&quot;; &quot;&quot;);
+@SetField(&quot;SSendTo_1&quot;; &quot;&quot;);
+@SetField(&quot;SCC_1&quot;; &quot;&quot;);
+@SetField(&quot;HSendTo_1&quot;; &quot;&quot;);
+@SetField(&quot;HCC_1&quot;; &quot;&quot;);
+@SetField(&quot;Escalation_0_1&quot;; &quot;&quot;);
+@SetField(&quot;HW&quot;; &quot;&quot;);
+@SetField(&quot;SEIHIN&quot;; &quot;&quot;);
+@SetField(&quot;PCSN&quot;; &quot;&quot;);
+@SetField(&quot;plathome&quot;; &quot;&quot;);
+@SetField(&quot;PCYY&quot;; &quot;&quot;);
+@SetField(&quot;PCMY&quot;; &quot;&quot;);
+@SetField(&quot;PCDY&quot;; &quot;&quot;);
+@SetField(&quot;saitan&quot;; &quot;&quot;);
+@SetField(&quot;statusTYPE&quot;;&quot;自己解決&quot;);
+@SetField(&quot;status&quot;;&quot;OPEN&quot;);
+@SetField(&quot;name&quot;; &quot;&quot;);
+@SetField(&quot;ADID&quot;; &quot;&quot;);
+@SetField(&quot;pc_name&quot;; &quot;&quot;);
+@SetField(&quot;MailAddress&quot;; &quot;&quot;);
+@SetField(&quot;O365License&quot;; &quot;&quot;);
+@SetField(&quot;OutlookApri&quot;; &quot;&quot;);
+@SetField(&quot;plathome&quot;; &quot;&quot;);
+@SetField(&quot;mobile_tel_no&quot;; &quot;&quot;);
+@SetField(&quot;O365SYURUI&quot;; &quot;&quot;);
+@SetField(&quot;BROWSER&quot;; &quot;&quot;);
+@SetField(&quot;SAGYO&quot;; &quot;&quot;)◆問合せ内容リセット</div></td></tr>
+<tr>
+<td>
+
+<div class='notes-par'>&nbsp;</div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>&nbsp;</div></td></tr></table>
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>一次　問い合わせ内容</div>
+<table data-hidewhen='!(@Contains(@UserRoles;&quot;[HELP]&quot;) | @Contains(@UserRoles;&quot;[二次]&quot;) | @Contains(@UserRoles;&quot;[関連]&quot;) | @Contains(@UserRoles;&quot;[携帯他]&quot;))'>
+<tr>
+<td>
+
+<div class='notes-par'>質問概要</div></td>
+<td>
+
+<div class='notes-par'><span class='notes-field' data-field='outline' data-type='text' data-kind='editable'>{{outline}}</span></div></td></tr>
+<tr>
+<td>
+
+<div class='notes-par'>問合せ内容</div>
+<div class='notes-par'>（詳細）</div>
+<div class='notes-par'>&nbsp;</div></td>
+<td>
+
+<div class='notes-par'><span class='notes-field' data-field='inquiry' data-type='text' data-kind='editable'>{{inquiry}}</span></div></td></tr>
+<tr data-hidewhen='!(@Contains(@UserRoles;&quot;[HELP]&quot;) | @Contains(@UserRoles;&quot;[二次]&quot;) | @Contains(@UserRoles;&quot;[関連]&quot;) | @Contains(@UserRoles;&quot;[携帯他]&quot;))'>
+<td>
+<div class='notes-par'>対応内容</div>
+
+<div class='notes-par'>最終回答</div></td>
+<td data-hidewhen='!(@Contains(@UserRoles;&quot;[HELP]&quot;) | @Contains(@UserRoles;&quot;[二次]&quot;) | @Contains(@UserRoles;&quot;[関連]&quot;) | @Contains(@UserRoles;&quot;[携帯他]&quot;))'>
+<div class='notes-par'><span class='notes-field' data-field='answer' data-type='text' data-kind='editable'>{{answer}}</span></div>
+<div class='notes-par'>&nbsp;</div>
+
+<div class='notes-par'>処理件数：<span class='notes-field' data-field='Processing_number' data-type='text' data-kind='editable'>{{Processing_number}}</span></div>
+
+<div class='notes-par'>ﾊﾟｽﾜｰﾄﾞ　ﾉｰﾂ：<span class='notes-field' data-field='pass' data-type='text' data-kind='editable'>{{pass}}</span>　AD：<span class='notes-field' data-field='pass_1' data-type='text' data-kind='editable'>{{pass_1}}</span>　その他：<span class='notes-field' data-field='pass_2' data-type='text' data-kind='editable'>{{pass_2}}</span>　</div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>対応時間</div>
+<div class='notes-par'>調査時間</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='JIKAN' data-type='number' data-kind='editable'>{{JIKAN}}</span>分　【ログ送信日時】：<span class='notes-field' data-field='JDATE_Y' data-type='text' data-kind='editable'>{{JDATE_Y}}</span> 年 <span class='notes-field' data-field='JDATE_M' data-type='text' data-kind='editable'>{{JDATE_M}}</span> 月 <span class='notes-field' data-field='JDATE_D' data-type='text' data-kind='editable'>{{JDATE_D}}</span> 日（<span class='notes-field' data-field='JTIME_H' data-type='text' data-kind='editable'>{{JTIME_H}}</span> 時 <span class='notes-field' data-field='JTIME_M' data-type='text' data-kind='editable'>{{JTIME_M}}</span> 分）</div>
+<div class='notes-par'><span class='notes-field' data-field='JIKAN2' data-type='number' data-kind='editable'>{{JIKAN2}}</span>分</div>
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>追加対応者 対応時間　<span class='notes-field' data-field='JIKAN_3' data-type='number' data-kind='editable'>{{JIKAN_3}}</span>分　調査時間　<span class='notes-field' data-field='JIKAN_4' data-type='number' data-kind='editable'>{{JIKAN_4}}</span>分　　ログチェック　<span class='notes-field' data-field='JIKAN_5' data-type='number' data-kind='editable'>{{JIKAN_5}}</span> 分</div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>対応完了日時</div>
+<div class='notes-par'>FIELD EDATE_Y   :=@Text(@Year(@Now));
+FIELD EDATE_M   :=@Right(@Text(@Month(@Now)+100);2);
+FIELD EDATE_D   :=@Right(@Text(@Day(@Now)+100);2);
+FIELD ETIME_H   :=@Right(@Text(@Hour(@Now)+100);2);
+FIELD ETIME_M   :=@Right(@Text(@Minute(@Now)+100);2);
+@PostedCommand([ViewRefreshFields])1</div></td>
+<td>
+
+<div class='notes-par'><span class='notes-field' data-field='EDATE_Y' data-type='number' data-kind='editable'>{{EDATE_Y}}</span> 年 <span class='notes-field' data-field='EDATE_M' data-type='number' data-kind='editable'>{{EDATE_M}}</span> 月 <span class='notes-field' data-field='EDATE_D' data-type='number' data-kind='editable'>{{EDATE_D}}</span> 日（<span class='notes-field' data-field='ETIME_H' data-type='text' data-kind='editable'>{{ETIME_H}}</span> 時 <span class='notes-field' data-field='ETIME_M' data-type='text' data-kind='editable'>{{ETIME_M}}</span> 分）</div></td></tr></table>
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>＜対象者情報＞</div>
+<table data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'>対象者氏名：</div></td>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'><span class='notes-field' data-field='name' data-type='text' data-kind='editable'>{{name}}</span></div></td>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'>ADユーザーID：</div></td>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'><span class='notes-field' data-field='ADID' data-type='text' data-kind='editable'>{{ADID}}</span></div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>コンピューター名：</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='pc_name' data-type='text' data-kind='editable'>{{pc_name}}</span></div></td>
+<td>
+<div class='notes-par'>メールアドレス：</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='MailAddress' data-type='text' data-kind='editable'>{{MailAddress}}</span></div></td></tr></table>
+<div class='notes-par'>＜Office365情報＞</div>
+<table data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<tr>
+<td>
+<div class='notes-par'>Offife365ライセンス：</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='O365License' data-type='keyword' data-kind='editable'>{{O365License}}</span></div></td>
+<td>
+<div class='notes-par'>Outlook使用アプリ：</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='OutlookApri' data-type='keyword' data-kind='editable'>{{OutlookApri}}</span></div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>利用環境_端末：</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='plathome' data-type='keyword' data-kind='editable'>{{plathome}}</span></div></td>
+<td>
+<div class='notes-par'>スマートデバイス回線番号：</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='mobile_tel_no' data-type='text' data-kind='editable'>{{mobile_tel_no}}</span></div></td></tr>
+<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'>利用環境_種類：</div></td>
+<td colspan='3' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'><span class='notes-field' data-field='O365SYURUI' data-type='keyword' data-kind='editable' data-allowmultivalues='true'>{{O365SYURUI}}</span>　(<span class='notes-field' data-field='BROWSER' data-type='keyword' data-kind='editable' data-allowmultivalues='true'>{{BROWSER}}</span>)</div></td></tr>
+<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<td>
+<div class='notes-par'>実施作業</div></td>
+<td colspan='3' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'><span class='notes-field' data-field='SAGYO' data-type='keyword' data-kind='editable' data-allowmultivalues='true'>{{SAGYO}}</span></div></td></tr></table>
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>&nbsp;</div>
+<table data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<tr>
+<td>
+
+<div class='notes-par'>問合せ種別：</div></td>
+<td>
+
+<div class='notes-par'><span class='notes-field' data-field='category1' data-type='keyword' data-kind='editable'>{{category1}}</span></div></td>
+<td>
+
+<div class='notes-par'>問合せチャネル：</div></td>
+<td>
+
+<div class='notes-par'><span class='notes-field' data-field='category5' data-type='keyword' data-kind='editable'>{{category5}}</span></div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>問合せ内容：allitemw:=@PickList( [Custom] ;&quot;&quot; ; &quot;inquiryMst&quot; ; &quot;問合せ内容の選択&quot; ; &quot;問合せ内容を選択してください&quot; ; 4 );
+allitem:=@Explode(allitemw;&quot;;&quot;);
+cate1w:=@Subset(allitem;1);
+cate1:=@Subset(cate1w;-1);
+cate2w:=@Subset(allitem;2);
+cate2:=@Subset(cate2w;-1);
+cate3w:=@Subset(allitem;3);
+cate3:=@Subset(cate3w;-1);
+@SetField(&quot;Category3&quot;;cate1);
+@SetField(&quot;Category4&quot;;cate2);
+@SetField(&quot;Category6&quot;;cate3)一覧</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='category3' data-type='text' data-kind='editable'>{{category3}}</span></div>
+<div class='notes-par'>&nbsp;</div></td>
+<td colspan='2'>
+
+<div class='notes-par'><span class='notes-field' data-field='category4' data-type='text' data-kind='editable'>{{category4}}</span></div>
+<div class='notes-par'><span class='notes-field' data-field='category6' data-type='text' data-kind='editable'>{{category6}}</span></div></td></tr>
+<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'>サポートデスクＤＢ</div>
+<div class='notes-par'>allitemw:=@PickList( [Custom] ;DbLookupServer_1 :DblookupID_1_1_3 ; &quot;95View&quot; ; &quot;サポートデスクＤＢの選択&quot; ; &quot;該当する件名を選択してください&quot; ; 5 );
+allitem:=@Explode(allitemw;&quot;;&quot;);
+cate1:=@Subset(allitem;1);
+cate2w:=@Subset(allitem;2);
+cate2:=@Subset(cate2w;-1);
+cate3w:=@Subset(allitem;3);
+cate3:=@Subset(cate3w;-1);
+outlinew:=@Subset(allitem;4);
+outline:=@Subset(outlinew;-1);
+
+@SetField(&quot;S_Category1&quot;;cate1);
+@SetField(&quot;S_Category2&quot;;cate2);
+@SetField(&quot;S_Category3&quot;;cate3);
+@SetField(&quot;S_Outline&quot;;outline)一覧</div></td>
+<td colspan='3' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'>カテゴリ１：<span class='notes-field' data-field='S_Category1' data-type='text' data-kind='editable'>{{S_Category1}}</span></div>
+<div class='notes-par'>カテゴリ２：<span class='notes-field' data-field='S_Category2' data-type='text' data-kind='editable'>{{S_Category2}}</span></div>
+<div class='notes-par'>カテゴリ３：<span class='notes-field' data-field='S_Category3' data-type='text' data-kind='editable'>{{S_Category3}}</span></div>
+<div class='notes-par'>件名：<span class='notes-field' data-field='S_Outline' data-type='text' data-kind='editable'>{{S_Outline}}</span></div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>ヘルプマニュアル</div>
+<div class='notes-par'>allitemw:=@PickList( [Custom] ;DbLookupServer_2_1:DblookupID_1_1_4 ; &quot;VWhelp_category2&quot; ; &quot;ヘルプマニュアルの選択&quot; ; &quot;該当する件名を選択してください&quot;;6);
+allitem:=@Explode(allitemw;&quot;;&quot;);
+cate1:=@Subset(allitem;1);
+cate2w:=@Subset(allitem;2);
+cate2:=@Subset(cate2w;-1);
+outlinew:=@Subset(allitem;3);
+outline:=@Subset(outlinew;-1);
+
+@SetField(&quot;H_Category1&quot;;cate1);
+@SetField(&quot;H_Category2&quot;;cate2);
+@SetField(&quot;H_Outline&quot;;outline)一覧</div></td>
+<td colspan='3'>
+<div class='notes-par'>カテゴリ１：<span class='notes-field' data-field='H_Category1' data-type='text' data-kind='editable'>{{H_Category1}}</span></div>
+<div class='notes-par'>カテゴリ２：<span class='notes-field' data-field='H_Category2' data-type='text' data-kind='editable'>{{H_Category2}}</span></div>
+<div class='notes-par'>件名：<span class='notes-field' data-field='H_Outline' data-type='text' data-kind='editable'>{{H_Outline}}</span></div></td></tr>
+<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'>関連部門の</div>
+<div class='notes-par'>ｴｽｶﾚｰｼｮﾝ先</div>
+
+<div class='notes-par'>allitemw:=@PickList( [Custom] ;&quot;&quot; ; &quot;SendToMst&quot; ; &quot;問合せ内容の選択&quot; ; &quot;問合せ内容を選択してください&quot; ; 6);
+allitem:=@Explode(allitemw;&quot;;&quot;);
+
+@SetField(&quot;Escalation_1&quot;;@Subset(allitem;1));
+
+@SetField(&quot;SSendTo_1&quot;;@DbLookup(&quot;&quot;:&quot;NoCache&quot;;&quot;&quot;;&quot;SendToMst&quot;;Escalation_1;2));
+@SetField(&quot;SCC_1&quot;;@DbLookup(&quot;&quot;:&quot;NoCache&quot;;&quot;&quot;;&quot;SendToMst&quot;;Escalation_1;3):acc_main);
+@SetField(&quot;HSendTo_1&quot;;acc_main);
+@SetField(&quot;HCC_1&quot;;@DbLookup(&quot;&quot;:&quot;NoCache&quot;;&quot;&quot;;&quot;SendToMst&quot;;Escalation_1;4));
+@SetField(&quot;Escalation_0_1&quot;;@DbLookup(&quot;&quot;:&quot;NoCache&quot;;&quot;&quot;;&quot;SendToMst&quot;;Escalation_1;5));
+
+@PostedCommand([ViewRefreshFields])一覧</div>
+<div class='notes-par'>&nbsp;</div></td>
+<td colspan='3' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'><span class='notes-field' data-field='Escalation_1' data-type='text' data-kind='editable'>{{Escalation_1}}</span>※システム名</div>
+<div class='notes-par'><span class='notes-field' data-field='SSendTo_1' data-type='text' data-kind='editable'>{{SSendTo_1}}</span>※送信先の宛先</div>
+<div class='notes-par'><span class='notes-field' data-field='SCC_1' data-type='text' data-kind='editable'>{{SCC_1}}</span>※送信先のCC</div>
+
+<div class='notes-par'><span class='notes-field' data-field='HSendTo_1' data-type='text' data-kind='editable'>{{HSendTo_1}}</span>※返信先の宛先</div>
+<div class='notes-par'><span class='notes-field' data-field='HCC_1' data-type='text' data-kind='editable'>{{HCC_1}}</span>※返信先のCC</div>
+<div class='notes-par'>&nbsp;</div></td></tr>
+<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<div class='notes-par'>対応依頼先</div>
+
+<div class='notes-par'>allitemw:=@PickList( [Custom] ;&quot;&quot; ; &quot;escalation&quot; ; &quot;対応依頼先の選択&quot; ; &quot;対応依頼先部署名を選択してください&quot; ; 1 );
+allitem:=@Explode(allitemw;&quot;;&quot;);
+cate1w:=@Subset(allitem;1);
+cate1:=@Subset(cate1w;-1);
+@SetField(&quot;escalation_0_1&quot;;cate1)一覧</div></td>
+<td colspan='3'>
+<div class='notes-par'><span class='notes-field' data-field='Escalation_0_1' data-type='text' data-kind='editable'>{{Escalation_0_1}}</span></div></td></tr></table>
+<div class='notes-par'>&nbsp;</div>
+<table data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'>Hardware</div></td>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'>allitemw:=@PickList( [Custom] ;DbLookupServer_3:DblookupID_1_1_4_1 ; &quot;HardWareList&quot; ; &quot;ハードウェアの選択&quot; ; &quot;メーカ名及び製品を選択してください&quot; ; 7 );
+allitem:=@Explode(allitemw;&quot;,&quot;);
+@SetField(&quot;HW&quot;;@Subset(allitem;1));
+@SetField(&quot;SEIHIN&quot;;@Subset(allitem;-1))Hard一覧</div></td>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'>&nbsp;</div></td>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'>&nbsp;</div></td></tr>
+<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'>メーカー：</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='HW' data-type='text' data-kind='editable'>{{HW}}</span></div></td>
+<td>
+<div class='notes-par'>&nbsp;</div></td>
+<td>
+<div class='notes-par'>&nbsp;</div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>製品名　：</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='SEIHIN' data-type='text' data-kind='editable'>{{SEIHIN}}</span></div></td>
+<td>
+<div class='notes-par'>&nbsp;</div></td>
+<td>
+<div class='notes-par'>&nbsp;</div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>製造番号：</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='PCSN' data-type='text' data-kind='editable'>{{PCSN}}</span></div></td>
+<td>
+<div class='notes-par'>&nbsp;</div></td>
+<td>
+
+<div class='notes-par'>&nbsp;</div></td></tr></table>
+
+<div class='notes-par'><span class='notes-field' data-field='TRWORK' data-type='text' data-kind='computed'>{{TRWORK}}</span>                         </div>
+
+<div class='notes-par'>抽出区分１：<span class='notes-field' data-field='CYU1' data-type='keyword' data-kind='editable'>{{CYU1}}</span></div>
+
+<div class='notes-par'>（フィードバック先：<span class='notes-field' data-field='KYOUIKU' data-type='keyword' data-kind='editable' data-allowmultivalues='true'>{{KYOUIKU}}</span>）</div>
+<table data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'>対応完了</div></td>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'>&nbsp;</div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>対応方法</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='TAIOU' data-type='keyword' data-kind='editable' data-allowmultivalues='true'>{{TAIOU}}</span></div></td></tr>
+<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'>再ｲﾝｽﾄｰﾙ</div></td>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'>送付到着確認日：FIELD PCYY   :=@Year(@Today);
+FIELD PCMY   :=@Month(@Today);
+FIELD PCDY   :=@Day(@Today);
+@PostedCommand([ViewRefreshFields])1<span class='notes-field' data-field='PCYY' data-type='number' data-kind='editable'>{{PCYY}}</span>年<span class='notes-field' data-field='PCMY' data-type='number' data-kind='editable'>{{PCMY}}</span>月<span class='notes-field' data-field='PCDY' data-type='number' data-kind='editable'>{{PCDY}}</span>日　作業者：<span class='notes-field' data-field='saitan' data-type='text' data-kind='editable'>{{saitan}}</span></div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>質問ﾚﾍﾞﾙ</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='LEVEL' data-type='keyword' data-kind='editable'>{{LEVEL}}</span></div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>操作ﾚﾍﾞﾙ</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='LEVEL2' data-type='keyword' data-kind='editable'>{{LEVEL2}}</span></div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>原　　因</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='genin' data-type='text' data-kind='editable'>{{genin}}</span></div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>対　　処</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='taisyo' data-type='text' data-kind='editable'>{{taisyo}}</span></div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>緊 急 度</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='urgent' data-type='keyword' data-kind='editable'>{{urgent}}</span></div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>完了ﾀｲﾌﾟ</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='statusTYPE' data-type='keyword' data-kind='editable' data-allowmultivalues='true'>{{statusTYPE}}</span></div>
+<div class='notes-par'><span class='notes-field' data-field='MEKER_K' data-type='text' data-kind='editable'>{{MEKER_K}}</span></div></td></tr>
+<tr data-hidewhen='status!=&quot;引継ぎ依頼中&quot;'>
+<td>
+<div class='notes-par'>対応状況</div></td>
+<td data-hidewhen='status!=&quot;引継ぎ依頼中&quot;'>
+<div class='notes-par'><span class='notes-field' data-field='status' data-type='keyword' data-kind='editable'>{{status}}</span></div>
+
+<div class='notes-par'><span class='notes-field' data-field='dispach' data-type='text' data-kind='computed'>{{dispach}}</span></div>
+
+<div class='notes-par'><span class='notes-field' data-field='dispach_1' data-type='text' data-kind='computed'>{{dispach_1}}</span></div>
+<div class='notes-par'>依頼先担当者：<span class='notes-field' data-field='SecondLineName' data-type='text' data-kind='editable'>{{SecondLineName}}</span></div>
+<div class='notes-par'>&nbsp;</div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>担 当 者</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='acc_main' data-type='keyword' data-kind='editable'>{{acc_main}}</span>　　　　　　受付：<span class='notes-field' data-field='create_name' data-type='text' data-kind='computedwhencomposed'>{{create_name}}</span>  前回対応：<span class='notes-field' data-field='acc_name' data-type='text' data-kind='computed' data-allowmultivalues='true'>{{acc_name}}</span></div>
+
+<div class='notes-par'><span class='notes-field' data-field='create_Dept' data-type='text' data-kind='computedwhencomposed'>{{create_Dept}}</span></div></td></tr>
+<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'>承認者</div></td>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'><span class='notes-field' data-field='Escalation_Approve_1' data-type='text' data-kind='editable'>{{Escalation_Approve_1}}</span><span class='notes-field' data-field='ESDATE_Y_1' data-type='number' data-kind='editable'>{{ESDATE_Y_1}}</span> 年 <span class='notes-field' data-field='ESDATE_M_1' data-type='number' data-kind='editable'>{{ESDATE_M_1}}</span> 月 <span class='notes-field' data-field='ESDATE_D_1' data-type='number' data-kind='editable'>{{ESDATE_D_1}}</span> 日（<span class='notes-field' data-field='ESTIME_H_1' data-type='text' data-kind='editable'>{{ESTIME_H_1}}</span>時 <span class='notes-field' data-field='ESTIME_M_1' data-type='text' data-kind='editable'>{{ESTIME_M_1}}</span> 分）@Command([EditDocument];&quot;1&quot;);
+@SetField(&quot;Escalation_Approve_1&quot;;c_This_UserNameJ );
+
+DATE_Y := @Year(@Now);
+DATE_M := @Month(@Now);
+DATE_D := @Day(@Now);
+TIME_H := @Text(@Hour(@Now));
+TIME_M := @Text(@Minute(@Now));
+
+@SetField(&quot;ESDATE_Y_1&quot;;DATE_Y);
+@SetField(&quot;ESDATE_M_1&quot;;DATE_M);
+@SetField(&quot;ESDATE_D_1&quot;;DATE_D);
+@SetField(&quot;ESTIME_H_1&quot;;TIME_H);
+@SetField(&quot;ESTIME_M_1&quot;;TIME_M)承認</div></td></tr></table>
+
+<div class='notes-par'>&nbsp;</div>
+
+関連部門&quot;[関連]&quot;
+
+<div class='notes-par'>&nbsp;</div>
+
+<div class='notes-par'>区分：<span class='notes-field' data-field='Third_Type' data-type='text' data-kind='editable'>{{Third_Type}}</span></div>
+
+<div class='notes-par'><span class='notes-field' data-field='FLG_2' data-type='text' data-kind='editable'>{{FLG_2}}</span></div>
+
+<div class='notes-par'>関連部門　問い合わせ内容</div>
+<table data-hidewhen='Third_Type=&quot;不要&quot;'>
+<tr data-hidewhen='Third_Type=&quot;不要&quot;'>
+<td data-hidewhen='Third_Type=&quot;不要&quot;'>
+
+<div class='notes-par'>担 当 者</div></td>
+<td colspan='2' data-hidewhen='Third_Type=&quot;不要&quot;'>
+
+<div class='notes-par'><span class='notes-field' data-field='Third_Person' data-type='text' data-kind='editable'>{{Third_Person}}</span></div>
+<div class='notes-par'>&nbsp;</div></td></tr>
+<tr data-hidewhen='Third_Type=&quot;不要&quot;'>
+<td>
+<div class='notes-par'>所属部署</div></td>
+<td colspan='2' data-hidewhen='Third_Type=&quot;不要&quot;'>
+
+<div class='notes-par'><span class='notes-field' data-field='Third_Dept' data-type='text' data-kind='editable'>{{Third_Dept}}</span></div>
+<div class='notes-par'>&nbsp;</div></td></tr>
+<tr data-hidewhen='Third_Type=&quot;不要&quot;'>
+<td data-hidewhen='Third_Type=&quot;不要&quot;'>
+
+<div class='notes-par'>連絡先</div></td>
+<td colspan='2' data-hidewhen='Third_Type=&quot;不要&quot;'>
+
+<div class='notes-par'><span class='notes-field' data-field='Third_Contact' data-type='text' data-kind='editable'>{{Third_Contact}}</span></div>
+<div class='notes-par'>&nbsp;</div></td></tr>
+<tr data-hidewhen='Third_Type=&quot;不要&quot;'>
+<td>
+<div class='notes-par'>受付日時</div></td>
+<td colspan='2' data-hidewhen='Third_Type=&quot;不要&quot;'>
+<div class='notes-par'><span class='notes-field' data-field='SDATE_Y_2' data-type='number' data-kind='editable'>{{SDATE_Y_2}}</span> 年 <span class='notes-field' data-field='SDATE_M_2' data-type='number' data-kind='editable'>{{SDATE_M_2}}</span> 月 <span class='notes-field' data-field='SDATE_D_2' data-type='number' data-kind='editable'>{{SDATE_D_2}}</span> 日（<span class='notes-field' data-field='STIME_H_2' data-type='text' data-kind='editable'>{{STIME_H_2}}</span> 時 <span class='notes-field' data-field='STIME_M_2' data-type='text' data-kind='editable'>{{STIME_M_2}}</span> 分）</div>
+
+<div class='notes-par'>DATE_Y := @Year(@Now);
+DATE_M := @Month(@Now);
+DATE_D := @Day(@Now);
+TIME_H := @Text(@Hour(@Now));
+TIME_M := @Text(@Minute(@Now));
+
+@SetField(&quot;SDATE_Y_2&quot;;DATE_Y);
+@SetField(&quot;SDATE_M_2&quot;;DATE_M);
+@SetField(&quot;SDATE_D_2&quot;;DATE_D);
+@SetField(&quot;STIME_H_2&quot;;TIME_H);
+@SetField(&quot;STIME_M_2&quot;;TIME_M)日時代入</div></td></tr>
+<tr data-hidewhen='Third_Type=&quot;不要&quot; |
+@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<td data-hidewhen='Third_Type=&quot;不要&quot; |
+@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'>解決予定日</div></td>
+<td colspan='2' data-hidewhen='Third_Type=&quot;不要&quot; |
+@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'><span class='notes-field' data-field='KDATE_Y_2' data-type='number' data-kind='editable'>{{KDATE_Y_2}}</span> 年 <span class='notes-field' data-field='KDATE_M_2' data-type='number' data-kind='editable'>{{KDATE_M_2}}</span> 月 <span class='notes-field' data-field='KDATE_D_2' data-type='number' data-kind='editable'>{{KDATE_D_2}}</span> 日</div>
+<div class='notes-par'>DATE_Y := @Year(@Now);
+DATE_M := @Month(@Now);
+DATE_D := @Day(@Now);
+
+@SetField(&quot;KDATE_Y_2&quot;;DATE_Y);
+@SetField(&quot;KDATE_M_2&quot;;DATE_M);
+@SetField(&quot;KDATE_D_2&quot;;DATE_D)日付代入</div></td></tr>
+<tr data-hidewhen='Third_Type=&quot;不要&quot; |
+@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<td data-hidewhen='Third_Type=&quot;不要&quot; |
+@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'>次回回答予定日</div></td>
+<td colspan='2' data-hidewhen='Third_Type=&quot;不要&quot; |
+@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'><span class='notes-field' data-field='JDATE_Y_2' data-type='number' data-kind='editable'>{{JDATE_Y_2}}</span> 年 <span class='notes-field' data-field='JDATE_M_2' data-type='number' data-kind='editable'>{{JDATE_M_2}}</span> 月 <span class='notes-field' data-field='JDATE_D_2' data-type='number' data-kind='editable'>{{JDATE_D_2}}</span> 日</div>
+<div class='notes-par'>DATE_Y := @Year(@Now);
+DATE_M := @Month(@Now);
+DATE_D := @Day(@Now);
+
+@SetField(&quot;JDATE_Y_2&quot;;DATE_Y);
+@SetField(&quot;JDATE_M_2&quot;;DATE_M);
+@SetField(&quot;JDATE_D_2&quot;;DATE_D)日付代入</div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>中間回答日時</div></td>
+<td colspan='2'>
+<div class='notes-par'><span class='notes-field' data-field='CDATE_Y_2' data-type='number' data-kind='editable'>{{CDATE_Y_2}}</span> 年 <span class='notes-field' data-field='CDATE_M_2' data-type='number' data-kind='editable'>{{CDATE_M_2}}</span> 月 <span class='notes-field' data-field='CDATE_D_2' data-type='number' data-kind='editable'>{{CDATE_D_2}}</span> 日（<span class='notes-field' data-field='CTIME_H_2' data-type='text' data-kind='editable'>{{CTIME_H_2}}</span> 時 <span class='notes-field' data-field='CTIME_M_2' data-type='text' data-kind='editable'>{{CTIME_M_2}}</span> 分）</div>
+<div class='notes-par'>DATE_Y := @Year(@Now);
+DATE_M := @Month(@Now);
+DATE_D := @Day(@Now);
+TIME_H := @Text(@Hour(@Now));
+TIME_M := @Text(@Minute(@Now));
+
+@SetField(&quot;CDATE_Y_2&quot;;DATE_Y);
+@SetField(&quot;CDATE_M_2&quot;;DATE_M);
+@SetField(&quot;CDATE_D_2&quot;;DATE_D);
+@SetField(&quot;CTIME_H_2&quot;;TIME_H);
+@SetField(&quot;CTIME_M_2&quot;;TIME_M)日時代入</div></td></tr>
+<tr data-hidewhen='Third_Type=&quot;不要&quot;'>
+<td data-hidewhen='Third_Type=&quot;不要&quot;'>
+
+<div class='notes-par'>途中経過内容</div>
+<div class='notes-par'>（作業内容）</div>
+<div class='notes-par'>&nbsp;</div></td>
+<td colspan='2'>
+<div class='notes-par'><span class='notes-field' data-field='Third_half' data-type='text' data-kind='editable'>{{Third_half}}</span></div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>最終回答日時</div></td>
+<td colspan='2'>
+<div class='notes-par'><span class='notes-field' data-field='EDATE_Y_2' data-type='number' data-kind='editable'>{{EDATE_Y_2}}</span> 年 <span class='notes-field' data-field='EDATE_M_2' data-type='number' data-kind='editable'>{{EDATE_M_2}}</span> 月 <span class='notes-field' data-field='EDATE_D_2' data-type='number' data-kind='editable'>{{EDATE_D_2}}</span> 日（<span class='notes-field' data-field='ETIME_H_2' data-type='text' data-kind='editable'>{{ETIME_H_2}}</span> 時 <span class='notes-field' data-field='ETIME_M_2' data-type='text' data-kind='editable'>{{ETIME_M_2}}</span> 分）</div>
+<div class='notes-par'>DATE_Y := @Year(@Now);
+DATE_M := @Month(@Now);
+DATE_D := @Day(@Now);
+TIME_H := @Text(@Hour(@Now));
+TIME_M := @Text(@Minute(@Now));
+
+@SetField(&quot;EDATE_Y_2&quot;;DATE_Y);
+@SetField(&quot;EDATE_M_2&quot;;DATE_M);
+@SetField(&quot;EDATE_D_2&quot;;DATE_D);
+@SetField(&quot;ETIME_H_2&quot;;TIME_H);
+@SetField(&quot;ETIME_M_2&quot;;TIME_M)日時代入</div></td></tr>
+<tr data-hidewhen='Third_Type=&quot;不要&quot; | (Third_Type=&quot;必要&quot; &amp; !(Escalation_1=&quot;UserID再作成&quot; | Escalation_1=&quot;ｾｷｭｱID PWﾘｾｯﾄ依頼&quot; | Escalation_1=&quot;ﾒｰﾙﾘｽﾄｱ依頼&quot;))'>
+<td>
+<div class='notes-par'>回答内容</div></td>
+<td colspan='2' data-hidewhen='Third_Type=&quot;不要&quot; | (Third_Type=&quot;必要&quot; &amp; !(Escalation_1=&quot;UserID再作成&quot; | Escalation_1=&quot;ｾｷｭｱID PWﾘｾｯﾄ依頼&quot; | Escalation_1=&quot;ﾒｰﾙﾘｽﾄｱ依頼&quot;))'>
+<div class='notes-par'><span class='notes-field' data-field='Third_answer' data-type='text' data-kind='editable'>{{Third_answer}}</span></div>
+
+<div class='notes-par'>@SetField(&quot;Third_answer&quot;;Third_answer +  @NewLine  + &quot;対応完了しました。&quot;)対応完了RES:=@Prompt([YesNo];&quot;【確認】対応完了&quot;;&quot;対応を完了し、一次(二次)対応者へ対応完了のﾒｰﾙを送信します。問題ありませんか&quot;);
+
+@If(RES=1;@SetField(&quot;status&quot;;&quot;CLOSE&quot;);&quot;&quot;);
+
+View:=&quot;SendTo&quot;;
+Key:=@If(Escalation_2=&quot;&quot;;Escalation_1;Escalation_2);
+
+mailto:=@If(Second_Person=&quot;&quot;;acc_main;acc_main:Second_Person);
+cc:=@DbLookup(&quot;&quot;:&quot;Nocache&quot;;&quot;&quot;;View;Key;4);
+
+subject:=&quot;【ﾘｽﾄｱﾌｧｲﾙ削除完了】&quot;+outline;
+bodyw:=@NewLine+@NewLine+&quot;以下に問合せ対応結果を添付します。&quot;;
+@If(RES=1;@SetField(&quot;Third_answer&quot;;Third_answer +  @NewLine  + &quot;ﾘｽﾄｱﾌｧｲﾙの削除が完了しました。&quot;);&quot;&quot;);
+@If(RES=1;@MailSend(mailto;cc;&quot;&quot;;subject;bodyw;&quot;&quot;;[IncludeDoclink]);&quot;&quot;);
+
+@If(RES=1;@PostedCommand([ViewRefreshFields]);&quot;&quot;);
+@If(RES=1;@PostedCommand([FileSave]);&quot;&quot;);
+@If(RES=1;@PostedCommand([FileCloseWindow]);&quot;&quot;)ﾘｽﾄｱﾌｧｲﾙ削除完了</div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>問合せ種別</div></td>
+<td colspan='2'>
+<div class='notes-par'><span class='notes-field' data-field='Second_category1' data-type='keyword' data-kind='editable'>{{Second_category1}}</span></div>
+<div class='notes-par'>&nbsp;</div></td></tr>
+<tr data-hidewhen='Third_Type=&quot;不要&quot;'>
+<td data-hidewhen='Third_Type=&quot;不要&quot;'>
+<div class='notes-par'>問合せ内容</div>
+
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>&nbsp;</div></td>
+<td data-hidewhen='Third_Type=&quot;不要&quot;'>
+
+<div class='notes-par'>allitemw:=@PickList( [Custom] ;&quot;&quot; ; &quot;inquiryMst7&quot; ; &quot;問合せ内容の選択&quot; ; &quot;問合せ内容を選択してください&quot; ; 4 );
+allitem:=@Explode(allitemw;&quot;;&quot;);
+cate1w:=@Subset(allitem;1);
+cate1:=@Subset(cate1w;-1);
+cate2w:=@Subset(allitem;2);
+cate2:=@Subset(cate2w;-1);
+cate3w:=@Subset(allitem;3);
+cate3:=@Subset(cate3w;-1);
+@SetField(&quot;Second_category2&quot;;cate1);
+@SetField(&quot;Second_Category3&quot;;cate2);
+@SetField(&quot;Second_Category4&quot;;cate3)一覧</div>
+<div class='notes-par'><span class='notes-field' data-field='Second_category2' data-type='text' data-kind='computed'>{{Second_category2}}</span></div></td>
+<td data-hidewhen='Third_Type=&quot;不要&quot;'>
+
+<div class='notes-par'><span class='notes-field' data-field='Second_category3' data-type='text' data-kind='computed'>{{Second_category3}}</span></div>
+<div class='notes-par'><span class='notes-field' data-field='Second_category4' data-type='text' data-kind='computed'>{{Second_category4}}</span></div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>対応時間</div>
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>調査時間</div></td>
+<td colspan='2'>
+<div class='notes-par'><span class='notes-field' data-field='JIKAN_2_1' data-type='number' data-kind='editable'>{{JIKAN_2_1}}</span>分</div>
+<div class='notes-par'><span class='notes-field' data-field='JIKAN_2_2' data-type='number' data-kind='editable'>{{JIKAN_2_2}}</span>分</div>
+<div class='notes-par'>&nbsp;</div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>障害</div></td>
+<td colspan='2'>
+<div class='notes-par'><span class='notes-field' data-field='Trouble_2' data-type='keyword' data-kind='editable' data-allowmultivalues='true'>{{Trouble_2}}</span></div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>上長コメント</div></td>
+<td colspan='2'>
+<div class='notes-par'><span class='notes-field' data-field='Third_comment' data-type='text' data-kind='editable'>{{Third_comment}}</span>RES:=@Prompt([YesNo];&quot;【確認】上長指示&quot;;&quot;対応内容に対して気づいた点を対応者へﾒｰﾙを送信します。問題ありませんか&quot;);
+
+View:=&quot;SendTo&quot;;
+Key:=@If(Escalation_2=&quot;&quot;;Escalation_1;Escalation_2);
+
+mailto:=Third_Person;
+cc:=@If(Second_Person=&quot;&quot;;@DbLookup(&quot;&quot;:&quot;Nocache&quot;;&quot;&quot;;View;Key;4):acc_main;@DbLookup(&quot;&quot;:&quot;Nocache&quot;;&quot;&quot;;View;Key;4):acc_main:Second_Person);
+
+subject:=&quot;【指示事項】&quot;+outline;
+bodyw:=@NewLine+@NewLine+&quot;以下に問合せ対応内容に対しての上長のコメントを添付します。&quot;;
+@If(RES=1;@MailSend(mailto;cc;&quot;&quot;;subject;bodyw;&quot;&quot;;[IncludeDoclink]);&quot;&quot;);
+
+@If(RES=1;@PostedCommand([ViewRefreshFields]);&quot;&quot;);
+@If(RES=1;@PostedCommand([FileSave]);&quot;&quot;);
+@If(RES=1;@PostedCommand([FileCloseWindow]);&quot;&quot;)上長コメントを送信</div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>上長承認</div></td>
+<td colspan='2'>
+<div class='notes-par'><span class='notes-field' data-field='Trouble_Approve_2' data-type='text' data-kind='editable'>{{Trouble_Approve_2}}</span><span class='notes-field' data-field='ADATE_Y_2' data-type='number' data-kind='editable'>{{ADATE_Y_2}}</span> 年 <span class='notes-field' data-field='ADATE_M_2' data-type='number' data-kind='editable'>{{ADATE_M_2}}</span> 月 <span class='notes-field' data-field='ADATE_D_2' data-type='number' data-kind='editable'>{{ADATE_D_2}}</span> 日（<span class='notes-field' data-field='ATIME_H_2' data-type='text' data-kind='editable'>{{ATIME_H_2}}</span> 時 <span class='notes-field' data-field='ATIME_M_2' data-type='text' data-kind='editable'>{{ATIME_M_2}}</span> 分）@Command([EditDocument];&quot;1&quot;);
+@SetField(&quot;Trouble_Approve_2&quot;;c_This_UserNameJ );
+
+DATE_Y := @Year(@Now);
+DATE_M := @Month(@Now);
+DATE_D := @Day(@Now);
+TIME_H := @Text(@Hour(@Now));
+TIME_M := @Text(@Minute(@Now));
+
+@SetField(&quot;ADATE_Y_2&quot;;DATE_Y);
+@SetField(&quot;ADATE_M_2&quot;;DATE_M);
+@SetField(&quot;ADATE_D_2&quot;;DATE_D);
+@SetField(&quot;ATIME_H_2&quot;;TIME_H);
+@SetField(&quot;ATIME_M_2&quot;;TIME_M)承認</div></td></tr></table>
+
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>トラブルチケット　　@Command([ViewRefreshFields]);
+FIELD TRUMU:=TRUMU;
+FIELD TRMAKER:=TRMAKER;
+FIELD TRKBUSYO:=TRKBUSYO;
+FIELD TRTANTO:=TRTANTO;
+FIELD TRFAX:=TRFAX;
+FIELD TRTEL:=TRTEL;
+FIELD TRNO:=TRNO;
+FIELD TROS:=TROS;
+FIELD TRKISYU:=TRKISYU;
+FIELD TRYNAME:=TRYNAME;
+FIELD TRYTEL:=TRYTEL;
+FIELD TRYKAISHA:=TRYKAISHA;
+FIELD TRYJIGYOU:=TRYJIGYOU;
+FIELD TRYADDRESS:=TRYADDRESS;
+FIELD TRYNAIYOU:=TRYNAIYOU;
+@SetField(&quot;TRUMU&quot;;&quot;有&quot;);
+@SetField(&quot;TRMAKER&quot;;@Word(TRWORK; &quot;;&quot;; 1));
+@SetField(&quot;TRKBUSYO&quot;;@Word(TRWORK; &quot;;&quot;; 2));
+@SetField(&quot;TRTANTO&quot;;@Word(TRWORK; &quot;;&quot;; 3));
+@SetField(&quot;TRFAX&quot;;@Word(TRWORK; &quot;;&quot;; 4));
+@SetField(&quot;TRTEL&quot;;@Word(TRWORK; &quot;;&quot;; 5));
+@SetField(&quot;TRNO&quot;;mng_no);
+@SetField(&quot;TROS&quot;;plathome);
+@SetField(&quot;TRKISYU&quot;;@Left(SEIHIN;&quot;(&quot;));
+@SetField(&quot;TRYNAME&quot;;customername_2);
+@SetField(&quot;TRYTEL&quot;;tel);
+@SetField(&quot;TRYKAISHA&quot;;sec1);
+@SetField(&quot;TRYJIGYOU&quot;;sec3);
+@SetField(&quot;TRYADDRESS&quot;;ADDRESS1+ADDRESS2+ADDRESS3);
+@SetField(&quot;TRYNAIYO&quot;;outline+@NewLine+@NewLine);
+@SetField(&quot;TRSN&quot;;PCSN)保守依頼 (有無：<span class='notes-field' data-field='TRUMU' data-type='keyword' data-kind='editable'>{{TRUMU}}</span>）</div>
+<table data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'> 障害個所：<span class='notes-field' data-field='KOSHO' data-type='keyword' data-kind='editable' data-allowmultivalues='true'>{{KOSHO}}</span></div></td></tr></table>
+
+
+<div class='notes-par'>（保守対応依頼）</div>
+<table data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'>会社名</div></td>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'><span class='notes-field' data-field='TRMAKER' data-type='text' data-kind='editable'>{{TRMAKER}}</span></div></td>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'>&nbsp;</div></td>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'>&nbsp;</div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>部署名</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='TRKBUSYO' data-type='text' data-kind='editable'>{{TRKBUSYO}}</span></div></td>
+<td>
+<div class='notes-par'>&nbsp;</div></td>
+<td>
+<div class='notes-par'>&nbsp;</div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>担当者名</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='TRTANTO' data-type='text' data-kind='editable'>{{TRTANTO}}</span>　様</div></td>
+<td>
+<div class='notes-par'>&nbsp;</div></td>
+<td>
+<div class='notes-par'>&nbsp;</div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>ＦＡＸ</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='TRFAX' data-type='text' data-kind='editable'>{{TRFAX}}</span></div></td>
+<td>
+<div class='notes-par'>&nbsp;</div></td>
+<td>
+<div class='notes-par'>&nbsp;</div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>ＴＥＬ</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='TRTEL' data-type='text' data-kind='editable'>{{TRTEL}}</span></div></td>
+<td>
+<div class='notes-par'>&nbsp;</div></td>
+<td>
+<div class='notes-par'>&nbsp;</div></td></tr></table>
+<div class='notes-par'>&nbsp;</div>
+<table data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<td>
+<div class='notes-par'>チケット№</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='TRNO' data-type='text' data-kind='editable'>{{TRNO}}</span></div></td>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'>ＯＳ</div></td>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'><span class='notes-field' data-field='TROS' data-type='text' data-kind='editable'>{{TROS}}</span></div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>対象機種名</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='TRKISYU' data-type='text' data-kind='editable'>{{TRKISYU}}</span></div></td>
+<td>
+<div class='notes-par'>品番(S/N)</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='TRSN' data-type='text' data-kind='editable'>{{TRSN}}</span></div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>導入時期</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='TRJIKI' data-type='text' data-kind='editable'>{{TRJIKI}}</span></div></td>
+<td>
+<div class='notes-par'>備考</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='TRBIKOU' data-type='text' data-kind='editable'>{{TRBIKOU}}</span></div></td></tr></table>
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>（ユーザー情報）</div>
+<table data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'>氏名</div></td>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'><span class='notes-field' data-field='TRYNAME' data-type='text' data-kind='editable'>{{TRYNAME}}</span></div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>ＴＥＬ</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='TRYTEL' data-type='text' data-kind='editable'>{{TRYTEL}}</span></div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>会社名</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='TRYKAISHA' data-type='text' data-kind='editable'>{{TRYKAISHA}}</span></div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>事業所名</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='TRYJIGYOU' data-type='text' data-kind='editable'>{{TRYJIGYOU}}</span></div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>住所</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='TRYADDRESS' data-type='text' data-kind='editable'>{{TRYADDRESS}}</span></div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>障害内容</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='TRYNAIYO' data-type='text' data-kind='editable'>{{TRYNAIYO}}</span></div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>備考</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='TRYBIKOU' data-type='text' data-kind='editable'>{{TRYBIKOU}}</span></div></td></tr></table>
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>完了</div>
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>ＰＣ再セットアップ　FIELD PCUMU:=PCUMU;
+FIELD PCNAME:=PCNAME;
+FIELD PCKAISHA:=PCKAISHA;
+FIELD PCJIGYOU:=PCJIGYOU;
+FIELD PCADDRESS:=PCADDRESS;
+FIELD PCTEL:=PCTEL;
+FIELD PCHKISYU:=PCHKISYU;
+FIELD PCHMEKAR:=PCHMAKER;
+FIELD PCSN_1:=PCSN_1;
+@SetField(&quot;PCUMU&quot;;&quot;有&quot;);
+@SetField(&quot;PCNAME&quot;;customername_2);
+@SetField(&quot;PCKAISHA&quot;;sec1);
+@SetField(&quot;PCJIGYOU&quot;;sec3);
+@SetField(&quot;PCADDRESS&quot;;ADDRESS1+ADDRESS2+ADDRESS3);
+@SetField(&quot;PCTEL&quot;;tel);
+@SetField(&quot;PCHKISYU&quot;;@Left(SEIHIN;&quot;(&quot;));
+@SetField(&quot;PCHMEKAR&quot;;HW);
+@SetField(&quot;PCSN_1&quot;;PCSN)再ｾｯﾄｱｯﾌﾟ(有無：<span class='notes-field' data-field='PCUMU' data-type='keyword' data-kind='editable'>{{PCUMU}}</span>）</div>
+
+<div class='notes-par'>（ＰＣユーザー）</div>
+<table>
+<tr>
+<td>
+<div class='notes-par'>氏名</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='PCNAME' data-type='text' data-kind='editable'>{{PCNAME}}</span>　様</div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>会社名</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='PCKAISHA' data-type='text' data-kind='editable'>{{PCKAISHA}}</span></div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>事業所名</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='PCJIGYOU' data-type='text' data-kind='editable'>{{PCJIGYOU}}</span></div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>住所</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='PCADDRESS' data-type='text' data-kind='editable'>{{PCADDRESS}}</span></div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>ＴＥＬ</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='PCTEL' data-type='text' data-kind='editable'>{{PCTEL}}</span></div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>ＦＡＸ</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='PCFAX' data-type='text' data-kind='editable'>{{PCFAX}}</span></div></td></tr></table>
+
+<div class='notes-par'><span class='notes-field' data-field='PCHONTAI' data-type='keyword' data-kind='editable'>{{PCHONTAI}}</span></div>
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>（使用ツール）</div>
+<table data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'><span class='notes-field' data-field='TOOL' data-type='keyword' data-kind='editable' data-allowmultivalues='true'>{{TOOL}}</span></div></td></tr></table>
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>備考：<span class='notes-field' data-field='BIKOU' data-type='text' data-kind='editable'>{{BIKOU}}</span></div>
+<div class='notes-par'>&nbsp;</div>
+<table data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'>パソコン返送日　FIELD PCYH   :=@Year(@Today);
+FIELD PCMH   :=@Month(@Today);
+FIELD PCDH   :=@Day(@Today);
+@PostedCommand([ViewRefreshFields])1</div></td>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'><span class='notes-field' data-field='PCYH' data-type='number' data-kind='editable'>{{PCYH}}</span>年<span class='notes-field' data-field='PCMH' data-type='number' data-kind='editable'>{{PCMH}}</span>月<span class='notes-field' data-field='PCDH' data-type='number' data-kind='editable'>{{PCDH}}</span>日</div></td></tr></table>
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>（再セットアップ関係者)</div>
+<table data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'>１</div></td>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'><span class='notes-field' data-field='KANKEI1' data-type='text' data-kind='editable'>{{KANKEI1}}</span>@SetField(&quot;KANKEI1&quot;;c_This_UserNameJ )担当者名代入</div></td>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'><span class='notes-field' data-field='KANJIKAN1' data-type='text' data-kind='editable'>{{KANJIKAN1}}</span>分  FIELD HDATE1   :=@Today;
+@PostedCommand([ViewRefreshFields])1<span class='notes-field' data-field='HDATE1' data-type='datetime' data-kind='editable'>{{HDATE1}}</span></div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>２</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='KANKEI2' data-type='text' data-kind='editable'>{{KANKEI2}}</span>@SetField(&quot;KANKEI2&quot;;c_This_UserNameJ )担当者名代入</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='KANJIKAN2' data-type='text' data-kind='editable'>{{KANJIKAN2}}</span>分  FIELD HDATE2   :=@Today;
+@PostedCommand([ViewRefreshFields])2<span class='notes-field' data-field='HDATE2' data-type='datetime' data-kind='editable'>{{HDATE2}}</span></div></td></tr>
+<tr>
+<td>
+<div class='notes-par'>３</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='KANKEI3' data-type='text' data-kind='editable'>{{KANKEI3}}</span>@SetField(&quot;KANKEI3&quot;;c_This_UserNameJ )担当者名代入</div></td>
+<td>
+<div class='notes-par'><span class='notes-field' data-field='KANJIKAN3' data-type='text' data-kind='editable'>{{KANJIKAN3}}</span>分  FIELD HDATE3   :=@Today;
+@PostedCommand([ViewRefreshFields])3<span class='notes-field' data-field='HDATE3' data-type='datetime' data-kind='editable'>{{HDATE3}}</span></div></td></tr></table>
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>（再インストールソフトウェア）</div>
+<table data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+<td data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+
+<div class='notes-par'>list:=@PickList( [Custom] ;DbLookupServer :ListDBname ; &quot;SWLIST3&quot; ; &quot;ソフトウェアの選択&quot; ; &quot;製品を選択してください&quot; ; 1 );
+@SetField(&quot;PCSOFT1&quot;;@Trim( @Unique(pcsoft1:list)))ｿﾌﾄｳｪｱ</div>
+<div class='notes-par'><span class='notes-field' data-field='PCSOFT1' data-type='text' data-kind='editable' data-allowmultivalues='true'>{{PCSOFT1}}</span></div></td></tr></table>
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>完了</div>
+<div class='notes-par'>&nbsp;</div>
+
+<div class='notes-par'>@PostedCommand([ToolsRunMacro];&quot;(AGdataIF_escalation)&quot;)style起票</div>
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>&nbsp;</div>
+対応ﾒﾓ
+<div class='notes-par'><span class='notes-field' data-field='Memo' data-type='text' data-kind='editable'>{{Memo}}</span></div>
+
+添付資料
+
+<div class='notes-par'>PC修理 ・・・・<span class='notes-field' data-field='body_1' data-type='richtext' data-kind='editable'>{{body_1}}</span></div>
+
+<div class='notes-par'>関連ｺｰﾙ・・・・<span class='notes-field' data-field='body' data-type='richtext' data-kind='editable'>{{body}}</span></div>
+
+<div class='notes-par'>&nbsp;</div>
+
+履歴情報
+
+<div class='notes-par'><span class='notes-field' data-field='lasthistory' data-type='text' data-kind='editable' data-allowmultivalues='true'>{{lasthistory}}</span><span class='notes-field' data-field='es_namew' data-type='text' data-kind='computed'>{{es_namew}}</span><span class='notes-field' data-field='SecondLinew' data-type='text' data-kind='computed'>{{SecondLinew}}</span><span class='notes-field' data-field='CloseDateTime' data-type='text' data-kind='editable'>{{CloseDateTime}}</span><span class='notes-field' data-field='CreateDateTime' data-type='datetime' data-kind='computedwhencomposed'>{{CreateDateTime}}</span><span class='notes-field' data-field='CreateDateTime_P' data-type='text' data-kind='computedwhencomposed'>{{CreateDateTime_P}}</span></div>
+
+<div class='notes-par'><span class='notes-field' data-field='history' data-type='text' data-kind='computed' data-allowmultivalues='true'>{{history}}</span></div>
+
+<div class='notes-par'>－－－－内部処理用領域－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－</div>
+
+<div class='notes-par'><span class='notes-field' data-field='Open_time' data-type='datetime' data-kind='computedfordisplay'>{{Open_time}}</span><span class='notes-field' data-field='refresh_time' data-type='datetime' data-kind='computed'>{{refresh_time}}</span><span class='notes-field' data-field='OpenClose_time' data-type='number' data-kind='computedfordisplay'>{{OpenClose_time}}</span><span class='notes-field' data-field='Pass_time' data-type='number' data-kind='computed'>{{Pass_time}}</span><span class='notes-field' data-field='mailbody' data-type='text' data-kind='computedfordisplay' data-allowmultivalues='true'>{{mailbody}}</span><span class='notes-field' data-field='mailitem' data-type='text' data-kind='computed' data-allowmultivalues='true'>{{mailitem}}</span></div>
+<div class='notes-par'>&nbsp;</div>
+<div class='notes-par'>&lt;H17.1.22までのﾌｨｰﾙﾄﾞ&gt;</div>
+<div class='notes-par'><span class='notes-field' data-field='category2' data-type='keyword' data-kind='editable'>{{category2}}</span></div>
+<div class='notes-par'>&lt;H19.7.31までのﾌｨｰﾙﾄﾞ&gt;</div>
+
+<div class='notes-par'><span class='notes-field' data-field='HWmaker' data-type='keyword' data-kind='editable'>{{HWmaker}}</span><span class='notes-field' data-field='HWname' data-type='text' data-kind='editable'>{{HWname}}</span></div>
+<div class='notes-par'><span class='notes-field' data-field='SW' data-type='text' data-kind='editable'>{{SW}}</span> (<span class='notes-field' data-field='Version' data-type='text' data-kind='editable'>{{Version}}</span>)</div>
+<div class='notes-par'>@SetField(&quot;SW&quot;;@PickList( [Custom] ;DbLookupServer :ListDBname ; &quot;SWLIST4&quot; ; &quot;ソフトウェアの選択&quot; ; &quot;製品を選択してください&quot; ; 1 ))Soft一覧</div>
+<div class='notes-par'>&lt;H19.09.30まで&gt;</div>
+
+<div class='notes-par'>(状況：<span class='notes-field' data-field='TRSTATUS' data-type='keyword' data-kind='editable'>{{TRSTATUS}}</span>）</div>
+<div class='notes-par'>(有償の有無：<span class='notes-field' data-field='PCUSHO' data-type='keyword' data-kind='editable'>{{PCUSHO}}</span>）</div>
+
+<div class='notes-par'>&nbsp;</div></div>
