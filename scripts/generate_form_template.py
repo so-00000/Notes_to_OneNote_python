@@ -6,6 +6,15 @@ import xml.etree.ElementTree as ET
 from typing import Dict, List, Optional, Set
 
 DXL_NS = {"dxl": "http://www.lotus.com/dxl"}
+NON_RENDER_TAGS = {
+    "code",
+    "formula",
+    "lotusscript",
+    "numberformat",
+    "datetimeformat",
+    "keywords",
+    "tablecolumn",
+}
 
 
 def _ln(tag: str) -> str:
@@ -78,6 +87,24 @@ def _find_subform_dxl(subform_name: str, search_dir: Path) -> Optional[Path]:
     return None
 
 
+def _collect_visible_text(el: ET.Element) -> str:
+    parts: List[str] = []
+
+    def walk(node: ET.Element) -> None:
+        tag = _ln(node.tag)
+        if tag in NON_RENDER_TAGS:
+            return
+        if node.text:
+            parts.append(node.text)
+        for child in list(node):
+            walk(child)
+            if child.tail:
+                parts.append(child.tail)
+
+    walk(el)
+    return "".join(parts)
+
+
 class FormToHtml:
     """Best-effort DXL richtext -> simple HTML."""
 
@@ -105,13 +132,23 @@ class FormToHtml:
         # Minimal CSS: OneNote is picky; keep it simple.
         parts.append(
             "<style>"
-            ".notes-form{font-family:Segoe UI,Arial,sans-serif;font-size:11pt;}"
+            ".notes-form{font-family:MS PGothic,Meiryo,'Segoe UI',Arial,sans-serif;font-size:11pt;line-height:1.45;color:#222;}"
             ".notes-form table{border-collapse:collapse;width:100%;}"
-            ".notes-form td,.notes-form th{border:1px solid #999;padding:4px;vertical-align:top;}"
+            ".notes-form td,.notes-form th{border:1px solid #808080;padding:3px 6px;vertical-align:top;}"
+            ".notes-form th{background:#efefef;font-weight:normal;}"
             ".notes-form .notes-par{margin:2px 0;}"
-            ".notes-form .notes-field{display:inline-block;min-width:6em;border-bottom:1px dotted #666;padding:0 2px;}"
-            ".notes-form .notes-subform{border:1px dashed #bbb;padding:6px;margin:6px 0;}"
+            ".notes-form .notes-field{display:inline-block;min-width:6em;min-height:1.2em;border:1px solid #666;background:#fff;padding:1px 4px;border-radius:2px;}"
+            ".notes-form .notes-field[data-kind='computed'],"
+            ".notes-form .notes-field[data-kind='computedfordisplay'],"
+            ".notes-form .notes-field[data-kind='computedwhencomposed']{background:#f7f7f7;color:#555;}"
+            ".notes-form .notes-button{background:#e5e5e5;border:1px solid #777;border-radius:2px;padding:2px 10px;font-size:10.5pt;}"
+            ".notes-form .notes-link{color:#0645ad;text-decoration:underline;}"
+            ".notes-form .notes-subform{border:1px dashed #aaa;padding:6px;margin:6px 0;background:#fafafa;}"
             ".notes-form .notes-subform-title{font-weight:bold;margin-bottom:4px;}"
+            ".notes-form .notes-section{border:1px solid #a0a0a0;margin:6px 0;}"
+            ".notes-form .notes-section-title{background:#d9d9d9;padding:2px 6px;font-weight:bold;}"
+            ".notes-form .notes-section-body{padding:4px 6px;}"
+            ".notes-form .notes-textlist{display:block;margin-left:1em;}"
             "</style>"
         )
 
@@ -154,6 +191,10 @@ class FormToHtml:
 
         # Ignore binary/layout heavy blocks we don't map
         if tag in {"compositedata", "embeddedobject", "picture"}:
+            return ""
+
+        # Ignore non-visible definitions or code blocks
+        if tag in NON_RENDER_TAGS:
             return ""
 
         # Paragraph definition - skip
@@ -205,6 +246,41 @@ class FormToHtml:
                 inner = "&nbsp;"
             return f"<th{attrs}>{inner}</th>"
 
+        if tag == "section":
+            attrs = self._data_attrs_common(el)
+            inner = self._render_children(el)
+            return (
+                f"<div class='notes-section'{attrs}>"
+                f"<div class='notes-section-body'>{inner}</div>"
+                f"</div>"
+            )
+        if tag == "sectiontitle":
+            attrs = self._data_attrs_common(el)
+            title = _collect_visible_text(el).strip()
+            title = html.escape(title) if title else "&nbsp;"
+            return f"<div class='notes-section-title'{attrs}>{title}</div>"
+
+        if tag == "button":
+            attrs = self._data_attrs_common(el)
+            label = _collect_visible_text(el).strip()
+            if not label:
+                label = "Button"
+            return f"<button class='notes-button' type='button'{attrs}>{html.escape(label)}</button>"
+
+        if tag == "urllink":
+            attrs = self._data_attrs_common(el)
+            href = el.attrib.get("href", "")
+            label = _collect_visible_text(el).strip() or href or "link"
+            safe_href = html.escape(href, quote=True)
+            return (
+                f"<a class='notes-link' href='{safe_href}'{attrs}>"
+                f"{html.escape(label)}</a>"
+            )
+
+        if tag == "textlist":
+            content = _collect_visible_text(el).strip()
+            return f"<span class='notes-textlist'>{html.escape(content)}</span>"
+
         # Field placeholder
         if tag == "field":
             name = el.attrib.get("name", "")
@@ -225,6 +301,17 @@ class FormToHtml:
                     f"data-allowmultivalues='{html.escape(amv, quote=True)}'"
                 )
 
+            common = self._data_attrs_common(el)
+            label = html.escape(name)
+            return f"<span {' '.join(attrs)}{common}>{{{{{label}}}}}</span>"
+
+        if tag == "sharedfieldref":
+            name = el.attrib.get("name", "")
+            attrs = [
+                "class='notes-field'",
+                f"data-field='{html.escape(name, quote=True)}'",
+                "data-shared='true'",
+            ]
             common = self._data_attrs_common(el)
             label = html.escape(name)
             return f"<span {' '.join(attrs)}{common}>{{{{{label}}}}}</span>"
