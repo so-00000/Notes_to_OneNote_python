@@ -190,7 +190,11 @@ class FormToHtml:
         tag = _ln(el.tag)
 
         # Ignore binary/layout heavy blocks we don't map
-        if tag in {"compositedata", "embeddedobject", "picture"}:
+        if tag in {"compositedata", "embeddedobject", "picture", "button"}:
+            return ""
+
+        # Ignore non-visible definitions or code blocks
+        if tag in NON_RENDER_TAGS:
             return ""
 
         # Ignore non-visible definitions or code blocks
