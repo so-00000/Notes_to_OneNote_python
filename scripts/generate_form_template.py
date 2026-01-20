@@ -4,6 +4,8 @@ import html
 from pathlib import Path
 import xml.etree.ElementTree as ET
 from typing import Dict, List, Optional, Set
+import re
+
 
 DXL_NS = {"dxl": "http://www.lotus.com/dxl"}
 NON_RENDER_TAGS = {
@@ -55,6 +57,11 @@ def _collect_hide_attr_chain(el: ET.Element, parent: Dict[ET.Element, ET.Element
             break
         cur = parent[cur]
     return modes
+
+
+def _parse_hide_tokens(hide: str) -> Set[str]:
+    """Split hide attr into tokens."""
+    return {t.strip() for t in hide.split() if t.strip()}
 
 
 def _find_body_richtext(root: ET.Element) -> Optional[ET.Element]:
@@ -120,6 +127,39 @@ class FormToHtml:
         self.search_dir = search_dir
         self.visited_subforms = visited_subforms or set()
         self.missing_subforms: Set[str] = set()
+
+        # pardef(id) -> hide tokens
+        self.pardef_hide: Dict[str, Set[str]] = {}
+
+        rich = _find_body_richtext(self.root)
+        if rich is not None:
+            for pd in rich.findall(".//dxl:pardef", DXL_NS):
+                pid = pd.attrib.get("id")
+                hide = pd.attrib.get("hide", "")
+                if pid and hide:
+                    self.pardef_hide[pid] = _parse_hide_tokens(hide)
+
+    def _should_skip_by_hide(self, el: ET.Element) -> bool:
+        """
+        方針：hideが絡む要素はすべてHTML変換対象外（とりあえず全部落とす）。
+        - 自分〜祖先のhide
+        - parの場合は pardef参照(def="X") のhide も含める
+        """
+        modes = _collect_hide_attr_chain(el, self.parent)
+
+        # 念のため自分自身のhideも追加
+        hide = el.attrib.get("hide", "")
+        if hide:
+            modes |= _parse_hide_tokens(hide)
+
+        # parは pardef(def=...) の hide も加味
+        if _ln(el.tag) == "par":
+            pd_id = el.attrib.get("def")
+            if pd_id and pd_id in self.pardef_hide:
+                modes |= self.pardef_hide[pd_id]
+
+        # ★方針：1つでもhideトークンがあればスキップ
+        return bool(modes)
 
     def render_body(self) -> str:
         rich = _find_body_richtext(self.root)
@@ -189,12 +229,12 @@ class FormToHtml:
     def _render_node(self, el: ET.Element) -> str:
         tag = _ln(el.tag)
 
-        # Ignore binary/layout heavy blocks we don't map
-        if tag in {"compositedata", "embeddedobject", "picture", "button"}:
+        # ★ hideが絡む要素は全部変換対象外（とりあえず全スキップ）
+        if self._should_skip_by_hide(el):
             return ""
 
-        # Ignore non-visible definitions or code blocks
-        if tag in NON_RENDER_TAGS:
+        # Ignore binary/layout heavy blocks we don't map
+        if tag in {"compositedata", "embeddedobject", "picture", "button"}:
             return ""
 
         # Ignore non-visible definitions or code blocks
@@ -209,8 +249,10 @@ class FormToHtml:
         if tag == "par":
             attrs = self._data_attrs_common(el)
             inner = self._render_children(el)
+
             if not inner.strip():
-                inner = "&nbsp;"
+                return ""
+
             return f"<div class='notes-par'{attrs}>{inner}</div>"
 
         # Runs/fonts mostly styling - flatten
@@ -227,9 +269,29 @@ class FormToHtml:
         if tag == "table":
             attrs = self._data_attrs_common(el)
             return f"<table{attrs}>{self._render_children(el)}</table>"
+
         if tag == "tablerow":
             attrs = self._data_attrs_common(el)
-            return f"<tr{attrs}>{self._render_children(el)}</tr>"
+
+            cell_htmls: List[str] = []
+            any_nonblank = False
+
+            for ch in list(el):
+                rendered = self._render_node(ch)
+                if rendered:
+                    cell_htmls.append(rendered)
+                    if not _is_blank_html(rendered):
+                        any_nonblank = True
+
+                # tail は tablerow 配下だと基本いらないので無視（必要なら残してもOK）
+
+            # ★ 全セル空なら、この行(tr)ごと出さない
+            if not any_nonblank:
+                return ""
+
+            return f"<tr{attrs}>{''.join(cell_htmls)}</tr>"
+
+
         if tag == "tablecell":
             attrs = self._data_attrs_common(el)
             colspan = el.attrib.get("columnspan") or el.attrib.get("colspan")
@@ -378,9 +440,38 @@ class FormToHtml:
         return self._render_children(el)
 
 
+_TAG_RE = re.compile(r"<[^>]+>")
+
+def _is_blank_html(fragment: str) -> bool:
+    """
+    HTML断片が「実質空」か判定する。
+    - タグ除去
+    - &nbsp; や空白だけなら空扱い
+    """
+    if not fragment:
+        return True
+
+    s = fragment
+    # よくある空表現を潰す
+    s = s.replace("&nbsp;", " ")
+    s = s.replace("&#160;", " ")
+    s = s.replace("<br/>", " ")
+    s = s.replace("<br>", " ")
+
+    # タグ除去
+    s = _TAG_RE.sub("", s)
+    # エスケープ解除（&amp;等）して判定精度を上げる
+    s = html.unescape(s)
+
+    return s.strip() == ""
+
+
+
 def main() -> None:
     # ==== Settings (edit if needed) ====
-    form_dxl_path = Path("C:/Users/SLY/Documents/Python実験/Python - OneNote/Git/Notes_to_OneNote_python/scripts/target_form/Call2024.nsf__FORM__Call4__20260119_173539.dxl")
+    form_dxl_path = Path(
+        "C:/Users/SLY/Documents/Python実験/Python - OneNote/Git/Notes_to_OneNote_python/scripts/target_form/Call2024.nsf__FORM__Call4__20260119_173539.dxl"
+    )
     search_dir = form_dxl_path.parent  # subform dxl search location
 
     root = ET.parse(form_dxl_path).getroot()
