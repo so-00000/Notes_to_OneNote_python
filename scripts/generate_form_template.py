@@ -260,13 +260,6 @@ class FormToHtml:
             title = html.escape(title) if title else "&nbsp;"
             return f"<div class='notes-section-title'{attrs}>{title}</div>"
 
-        if tag == "button":
-            attrs = self._data_attrs_common(el)
-            label = _collect_visible_text(el).strip()
-            if not label:
-                label = "Button"
-            return f"<button class='notes-button' type='button'{attrs}>{html.escape(label)}</button>"
-
         if tag == "urllink":
             attrs = self._data_attrs_common(el)
             href = el.attrib.get("href", "")
