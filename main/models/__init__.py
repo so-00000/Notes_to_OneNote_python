@@ -6,13 +6,13 @@ from .models import (
     PendingPart,
     Segment,
 )
-from .SyogaiDb import SyogaiDbRaw
+# from .SyogaiDb import SyogaiDbRaw
 
 __all__ = [
     "BinaryPart",
     "MultipartPageRequest",
     "OneNoteCreatePagePayload",
-    "SyogaiDbRaw",
+    # "SyogaiDbRaw",
     "PagePayload",
     "PendingPart",
     "Segment",

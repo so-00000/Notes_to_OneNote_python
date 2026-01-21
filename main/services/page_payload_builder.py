@@ -1,9 +1,14 @@
 # page_payload_builder.py
 from __future__ import annotations
+import xml.etree.ElementTree as ET
 from pathlib import Path
 from main.data_type_config import get_data_type_settings
-from main.services.dxl_to_page_material import create_materials_from_dxl
+from main.services.dxl_to_ui_field_map import dxl_to_ui_field_map
+from main.services.render_body_html_and_segments import render_body_html_and_segments
 from main.models.models import PagePayload
+from main.services.load_field import load_visible_field_names, load_richtext_field_names
+
+from pprint import pprint
 
 
 def build_page_payload(
@@ -17,26 +22,65 @@ def build_page_payload(
     戻り値: PagePayload
     """
     base = dxl_path.name
-    
+
     data_type = get_data_type_settings()
 
-    # 各コンテンツデータの抽出（各項目/値・セグメントデータ（バイナリデータ・位置情報）など）
-    note, segment_list = create_materials_from_dxl(str(dxl_path))
+    # DXLファイルの解析（XMLツリーに変換後、ツリーのルート要素を取得）
+    root = ET.parse(dxl_path).getroot()
 
-    # ページタイトル作成（指定フィールドを結合）
-    title_parts = []
-    for field_name in data_type.title_fields:
-        value = getattr(note, field_name, None)
-        if value:
-            title_parts.append(str(value))
-    page_title = "_".join(title_parts) if title_parts else base
-
-    # 本文作成（HTML）
-    body_html = data_type.renderer(note, source_file=base, row_no=row_no)
+    # 画面項目定義の取得（※要対応：動的にする）
+    # fields_json_path = Path("C:/Users/SLY/Documents/Python実験/Python - OneNote/Git/Notes_to_OneNote_python/main/0_build_template/1_output/field_class_json/Call2024.nsf__FORM__Call4__20260119_173539__form_template.fields.json")
+    fields_json_path = Path("C:/Users/SLY/Documents/Python実験/Python - OneNote/Git/Notes_to_OneNote_python/main/0_build_template/1_output/field_class_json/synhbe29.nsf_Fm_Document_2__form_template.fields.json")
 
 
-    return PagePayload(
+    # 表示する画面項目を取得
+    visible_field_names = load_visible_field_names(fields_json_path)
+    # RichTextの画面項目を取得
+    richtext_field_names = load_richtext_field_names(fields_json_path)
+
+
+    # 画面表示する項目を辞書型で取得（※RichTextフィールド除外）
+    ui_field_map = dxl_to_ui_field_map(
+        root = root,
+        visible_field_names = visible_field_names,
+        richtext_field_names = richtext_field_names,
+        )
+
+    pprint("🪅🪅🪅：ui_field_map")
+    pprint(ui_field_map)
+    
+
+    # ページタイトル作成
+    v = ui_field_map.get(data_type.title_field)
+    page_title = str(v).strip() if v is not None else ""
+    if not page_title:
+        page_title = base
+
+    pprint("🪅🪅🪅：page_title")
+    pprint(page_title)
+    
+
+    # HTML・セグメントデータ（バイナリデータ・位置情報）など）
+    body_html, segment_list = render_body_html_and_segments(
+        root=root,
+        ui_field_map=ui_field_map,
+        data_type=data_type,
+        rich_field_names=richtext_field_names,
+    )
+
+    pprint("🪅🪅🪅：body_html")
+    pprint(body_html)
+
+    # pprint("🪅🪅🪅：segment_list")
+    # pprint(segment_list)
+
+    pagePayload = PagePayload(
         page_title = page_title,
         body_html =  body_html,
         segment_list =  segment_list,
     )
+
+    # pprint(pagePayload)
+
+
+    return pagePayload

@@ -94,7 +94,7 @@ def main() -> None:
     created = 0
 
     try:
-        # 対象OneNoteのノートブックID・セクションIDの取得
+        # # 対象OneNoteのノートブックID・セクションIDの取得
         notebook_id = find_notebook_id(client, settings.notebook_name)
         section_id = find_section_id(client, notebook_id, settings.section_name)
 
@@ -128,6 +128,7 @@ def main() -> None:
 
     finally:
         client.close()
+        print("リクエスト失敗")
 
 
 if __name__ == "__main__":

@@ -2,18 +2,23 @@
 from __future__ import annotations
 
 import base64
-import html
-import re
+import logging
 import xml.etree.ElementTree as ET
-from typing import Optional
+from pathlib import Path
+from types import SimpleNamespace
+from typing import Any, Dict, List, Set, Tuple
 
 from main.data_type_config import get_data_type_settings
-from main.dxl_to_model import dxl_to_onenote_row
-from main.dxl_attachments import extract_attachments_from_dxl
+# from main.dxl_to_model import dxl_to_onenote_row
+from main.services.extract_attachments import _extract_attachments
+from main.services.fill_template import fill_template
 from main.models.models import Segment, BinaryPart
 from typing import Any
 from pprint import pprint
 import logging
+import re
+import html
+
 logger = logging.getLogger(__name__)
 
 
@@ -287,32 +292,64 @@ def richtext_item_to_html_and_segment(
 
 
 
-def create_materials_from_dxl(
-    dxl_path: str,
-) -> tuple[Any, list[Segment]]:
+def _detect_richtext_field_names(root: ET.Element, data_type: Any) -> Set[str]:
+    """
+    richtextフィールド名を決める。
+    - data_type.rich_fields があればそれを優先
+    - なければ DXL上で richtext を持つ item を自動検出（type=="richtext" 相当）
+    """
+    rf = getattr(data_type, "rich_fields", None)
+    if rf:
+        return {str(x) for x in rf}
 
-    all_segment: list[Segment] = []
+    out: Set[str] = set()
+    for item in root.findall(".//dxl:item", DXL_NS):
+        name = item.get("name")
+        if not name or name == "$FILE":
+            continue
+        if item.find("dxl:richtext", DXL_NS) is not None:
+            out.add(name)
+    return out
 
 
-    data_type = get_data_type_settings()
 
-    # 1件分の全データ取得
-    note = dxl_to_onenote_row(dxl_path, model_cls=data_type.model_cls)
-    root = ET.parse(dxl_path).getroot()
+def render_body_html_and_segments(
+    *,
+    root: ET.Element,
+    ui_field_map: Dict[str, str],
+    data_type: Any,
+    rich_field_names: str
+) -> Tuple[str, List[Segment]]:
+    """
+    root（DXLをET.parseしてgetrootしたもの）を受け取り、
+    - body_html（テンプレに埋め込み済みHTML）
+    - segment_list（画像/添付の埋め込み用Segment）
+    を返す。
 
-    # 添付ファイル（$FILE）全件を抽出
-    attachment_objs_all = extract_attachments_from_dxl(dxl_path) or []
-    attachment_by_name = {a.filename: a for a in attachment_objs_all}
+    前提:
+    - ui_field_map は「画面表示項目（richtext除外）」の辞書
+    - richtext はここで HTML化して values にマージし、raw_fields としてエスケープせず埋め込む
+    """
+
+    # 添付（$FILE）を root から抽出して参照用mapに変換
+    attachment_objs_all = _extract_attachments(root) or []
+    attachment_map = {obj.filename: obj for obj in attachment_objs_all if getattr(obj, "filename", None)}
+    
+    print("🪅🪅🪅attachments:", len(attachment_map))
+    print("🪅🪅🪅names:", list(attachment_map.keys()))
+
 
 
     # セグメント連番
     seg_i = 1
+    all_segments: List[Segment] = []
+    rich_map: Dict[str, str] = {}
 
 
     # RichTextフィールドに対して下記を行う
     # ・HTML変換
     # ・埋め込みファイル（キャプチャ画像やExcelなど）の抽出
-    for field_name in data_type.rich_fields:
+    for field_name in rich_field_names:
 
         # 対象フィールド（型：RichText）をセット
         item = root.find(f".//dxl:item[@name='{field_name}']", DXL_NS)
@@ -324,23 +361,44 @@ def create_materials_from_dxl(
         # フィールド（RichText）から下記を取得
         # 変換後HTML（segment_id付与）
         # バイナリデータ一時リスト
-        field_html, segment_list, seg_i = richtext_item_to_html_and_segment(
+        field_html, seg_list, seg_i = richtext_item_to_html_and_segment(
             item,
-            attachment_by_name,
+            attachment_map,
             seg_i=seg_i,
         )
 
-        setattr(note, field_name, field_html or "")
+        rich_map[field_name] = field_html or ""
+        all_segments.extend(seg_list)
 
-        all_segment.extend(segment_list)
-
-    # note側には全添付名だけ残す（メタとして）
-    if attachment_objs_all:
-        note.attachments = [a.filename for a in attachment_objs_all]
-
-
-    for s in all_segment:
-        print(s.segment_id)
+        
+    # テンプレ埋め込み用 values を作る（ui_field_map + rich_map）
+    values: Dict[str, str] = dict(ui_field_map)
+    values.update(rich_map)
+    pprint("🪅🪅🪅:rich_map")
+    pprint(rich_map)
 
 
-    return note, all_segment
+    # HTMLテンプレートの読み込み（data_typeで切替）
+    # template_html_path = getattr(data_type, "template_html_path", None)
+    template_html_path = "C:/Users/SLY/Documents/Python実験/Python - OneNote/Git/Notes_to_OneNote_python/main/0_build_template/1_output/template_html/synhbe29.nsf_Fm_Document_2__form_template.html"
+
+    pprint("🪅🪅🪅")
+    pprint(template_html_path)
+
+    print(getattr(data_type, "template_html_path", None))
+
+    template_html = Path(template_html_path).read_text(encoding="utf-8")
+    
+    # # richtextはHTMLとしてそのまま埋め込みたい
+
+    body_html = fill_template(
+        template_html=template_html,
+        values=values,
+        raw_fields=rich_field_names,
+    )
+
+    pprint("🪅🪅🪅:body_html")
+    pprint(body_html)
+
+
+    return body_html, all_segments

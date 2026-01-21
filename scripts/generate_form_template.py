@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 import html
+import json
+from dataclasses import dataclass, asdict
+from datetime import datetime, timezone
 from pathlib import Path
 import xml.etree.ElementTree as ET
 from typing import Dict, List, Optional, Set
 import re
-
 
 DXL_NS = {"dxl": "http://www.lotus.com/dxl"}
 NON_RENDER_TAGS = {
@@ -17,6 +19,33 @@ NON_RENDER_TAGS = {
     "keywords",
     "tablecolumn",
 }
+
+
+_TAG_RE = re.compile(r"<[^>]+>")
+
+def _is_blank_html(fragment: str) -> bool:
+    """
+    HTML断片が「実質空」か判定する。
+    - タグ除去
+    - &nbsp; や空白だけなら空扱い
+    """
+    if not fragment:
+        return True
+
+    s = fragment
+    # よくある空表現を潰す
+    s = s.replace("&nbsp;", " ")
+    s = s.replace("&#160;", " ")
+    s = s.replace("<br/>", " ")
+    s = s.replace("<br>", " ")
+
+    # タグ除去
+    s = _TAG_RE.sub("", s)
+    # エスケープ解除（&amp;等）して判定精度を上げる
+    s = html.unescape(s)
+
+    return s.strip() == ""
+
 
 
 def _ln(tag: str) -> str:
@@ -60,7 +89,6 @@ def _collect_hide_attr_chain(el: ET.Element, parent: Dict[ET.Element, ET.Element
 
 
 def _parse_hide_tokens(hide: str) -> Set[str]:
-    """Split hide attr into tokens."""
     return {t.strip() for t in hide.split() if t.strip()}
 
 
@@ -72,7 +100,6 @@ def _find_body_richtext(root: ET.Element) -> Optional[ET.Element]:
 
 
 def _guess_design_name(root: ET.Element) -> str:
-    # Form/Subform design notes often have name/alias
     name = root.attrib.get("name") or ""
     alias = root.attrib.get("alias") or ""
     if name and alias and name != alias:
@@ -81,7 +108,6 @@ def _guess_design_name(root: ET.Element) -> str:
 
 
 def _find_subform_dxl(subform_name: str, search_dir: Path) -> Optional[Path]:
-    """Try to locate a subform design DXL file near the form DXL."""
     patterns = [
         f"*__SUBFORM__{subform_name}__*.dxl",
         f"*__SUBFORM__{subform_name}*.dxl",
@@ -112,8 +138,18 @@ def _collect_visible_text(el: ET.Element) -> str:
     return "".join(parts)
 
 
+@dataclass(frozen=True)
+class FieldDef:
+    """画面に表示されたフィールド（HTMLに出力されたものだけ）"""
+    name: str
+    type: Optional[str] = None
+    kind: Optional[str] = None
+    allow_multivalues: Optional[str] = None  # DXLが文字列なのでそのまま保持
+    shared: bool = False
+
+
 class FormToHtml:
-    """Best-effort DXL richtext -> simple HTML."""
+    """Best-effort DXL richtext -> simple HTML (and visible field list)."""
 
     def __init__(
         self,
@@ -128,9 +164,8 @@ class FormToHtml:
         self.visited_subforms = visited_subforms or set()
         self.missing_subforms: Set[str] = set()
 
-        # pardef(id) -> hide tokens
+        # pardef(id) -> hide tokens（par def=... の参照用）
         self.pardef_hide: Dict[str, Set[str]] = {}
-
         rich = _find_body_richtext(self.root)
         if rich is not None:
             for pd in rich.findall(".//dxl:pardef", DXL_NS):
@@ -139,27 +174,41 @@ class FormToHtml:
                 if pid and hide:
                     self.pardef_hide[pid] = _parse_hide_tokens(hide)
 
+        # ★「画面に表示された項目」だけを収集する
+        self.visible_fields: Dict[str, FieldDef] = {}
+
     def _should_skip_by_hide(self, el: ET.Element) -> bool:
         """
-        方針：hideが絡む要素はすべてHTML変換対象外（とりあえず全部落とす）。
+        方針：hideが絡む要素はすべてHTML変換対象外（=非表示扱い）
         - 自分〜祖先のhide
         - parの場合は pardef参照(def="X") のhide も含める
         """
         modes = _collect_hide_attr_chain(el, self.parent)
 
-        # 念のため自分自身のhideも追加
         hide = el.attrib.get("hide", "")
         if hide:
             modes |= _parse_hide_tokens(hide)
 
-        # parは pardef(def=...) の hide も加味
         if _ln(el.tag) == "par":
             pd_id = el.attrib.get("def")
             if pd_id and pd_id in self.pardef_hide:
                 modes |= self.pardef_hide[pd_id]
 
-        # ★方針：1つでもhideトークンがあればスキップ
         return bool(modes)
+
+    def _register_field(self, *, name: str, ftype: str, kind: str, amv: str, shared: bool) -> None:
+        """同名は1回だけ登録（最初に見えた属性を採用）"""
+        if not name:
+            return
+        if name in self.visible_fields:
+            return
+        self.visible_fields[name] = FieldDef(
+            name=name,
+            type=ftype or None,
+            kind=kind or None,
+            allow_multivalues=amv or None,
+            shared=shared,
+        )
 
     def render_body(self) -> str:
         rich = _find_body_richtext(self.root)
@@ -169,7 +218,6 @@ class FormToHtml:
         design_name = _guess_design_name(self.root)
         parts: List[str] = []
 
-        # Minimal CSS: OneNote is picky; keep it simple.
         parts.append(
             "<style>"
             ".notes-form{font-family:MS PGothic,Meiryo,'Segoe UI',Arial,sans-serif;font-size:11pt;line-height:1.45;color:#222;}"
@@ -181,7 +229,6 @@ class FormToHtml:
             ".notes-form .notes-field[data-kind='computed'],"
             ".notes-form .notes-field[data-kind='computedfordisplay'],"
             ".notes-form .notes-field[data-kind='computedwhencomposed']{background:#f7f7f7;color:#555;}"
-            ".notes-form .notes-button{background:#e5e5e5;border:1px solid #777;border-radius:2px;padding:2px 10px;font-size:10.5pt;}"
             ".notes-form .notes-link{color:#0645ad;text-decoration:underline;}"
             ".notes-form .notes-subform{border:1px dashed #aaa;padding:6px;margin:6px 0;background:#fafafa;}"
             ".notes-form .notes-subform-title{font-weight:bold;margin-bottom:4px;}"
@@ -229,7 +276,7 @@ class FormToHtml:
     def _render_node(self, el: ET.Element) -> str:
         tag = _ln(el.tag)
 
-        # ★ hideが絡む要素は全部変換対象外（とりあえず全スキップ）
+        # ★ 非表示(hide絡み)は全部変換対象外
         if self._should_skip_by_hide(el):
             return ""
 
@@ -249,10 +296,8 @@ class FormToHtml:
         if tag == "par":
             attrs = self._data_attrs_common(el)
             inner = self._render_children(el)
-
             if not inner.strip():
-                return ""
-
+                return ""  # 空parは出さない
             return f"<div class='notes-par'{attrs}>{inner}</div>"
 
         # Runs/fonts mostly styling - flatten
@@ -268,8 +313,12 @@ class FormToHtml:
         # Tables
         if tag == "table":
             attrs = self._data_attrs_common(el)
-            return f"<table{attrs}>{self._render_children(el)}</table>"
+            inner = self._render_children(el)
+            if _is_blank_html(inner):
+                return ""   # ★空テーブルは消す
+            return f"<table{attrs}>{inner}</table>"
 
+        
         if tag == "tablerow":
             attrs = self._data_attrs_common(el)
 
@@ -340,12 +389,14 @@ class FormToHtml:
             content = _collect_visible_text(el).strip()
             return f"<span class='notes-textlist'>{html.escape(content)}</span>"
 
-        # Field placeholder
+        # Field placeholder（ここで「表示された項目」を収集）
         if tag == "field":
             name = el.attrib.get("name", "")
             ftype = el.attrib.get("type", "")
             kind = el.attrib.get("kind", "")
             amv = el.attrib.get("allowmultivalues", "")
+
+            self._register_field(name=name, ftype=ftype, kind=kind, amv=amv, shared=False)
 
             attrs = [
                 "class='notes-field'",
@@ -356,9 +407,7 @@ class FormToHtml:
             if kind:
                 attrs.append(f"data-kind='{html.escape(kind, quote=True)}'")
             if amv:
-                attrs.append(
-                    f"data-allowmultivalues='{html.escape(amv, quote=True)}'"
-                )
+                attrs.append(f"data-allowmultivalues='{html.escape(amv, quote=True)}'")
 
             common = self._data_attrs_common(el)
             label = html.escape(name)
@@ -366,6 +415,8 @@ class FormToHtml:
 
         if tag == "sharedfieldref":
             name = el.attrib.get("name", "")
+            self._register_field(name=name, ftype="", kind="", amv="", shared=True)
+
             attrs = [
                 "class='notes-field'",
                 f"data-field='{html.escape(name, quote=True)}'",
@@ -385,7 +436,6 @@ class FormToHtml:
                 return f"<div class='notes-subform'{attrs}>[SUBFORM: (no name)]</div>"
 
             if name in self.visited_subforms:
-                # cycle protection
                 return (
                     f"<div class='notes-subform'{attrs}>"
                     f"<div class='notes-subform-title'>SUBFORM: {safe} (cycle)</div>"
@@ -401,7 +451,6 @@ class FormToHtml:
                     f"</div>"
                 )
 
-            # Parse subform DXL and render its body
             sub_root = ET.parse(dxl_path).getroot()
             sub_rich = _find_body_richtext(sub_root)
             if sub_rich is None:
@@ -421,7 +470,11 @@ class FormToHtml:
             )
             html_inner = nested._render_children(sub_rich)
 
-            # merge missing lists upward
+            # ★ subformで見えたフィールドも親へマージ（=画面表示項目として扱う）
+            for k, v in nested.visible_fields.items():
+                if k not in self.visible_fields:
+                    self.visible_fields[k] = v
+
             self.missing_subforms.update(nested.missing_subforms)
 
             return (
@@ -440,55 +493,46 @@ class FormToHtml:
         return self._render_children(el)
 
 
-_TAG_RE = re.compile(r"<[^>]+>")
-
-def _is_blank_html(fragment: str) -> bool:
-    """
-    HTML断片が「実質空」か判定する。
-    - タグ除去
-    - &nbsp; や空白だけなら空扱い
-    """
-    if not fragment:
-        return True
-
-    s = fragment
-    # よくある空表現を潰す
-    s = s.replace("&nbsp;", " ")
-    s = s.replace("&#160;", " ")
-    s = s.replace("<br/>", " ")
-    s = s.replace("<br>", " ")
-
-    # タグ除去
-    s = _TAG_RE.sub("", s)
-    # エスケープ解除（&amp;等）して判定精度を上げる
-    s = html.unescape(s)
-
-    return s.strip() == ""
-
-
-
 def main() -> None:
-    # ==== Settings (edit if needed) ====
+    # ==== Settings ====
     form_dxl_path = Path(
-        "C:/Users/SLY/Documents/Python実験/Python - OneNote/Git/Notes_to_OneNote_python/scripts/target_form/Call2024.nsf__FORM__Call4__20260119_173539.dxl"
+        # "C:/Users/SLY/Documents/Python実験/Python - OneNote/Git/Notes_to_OneNote_python/scripts/target_form/Call2024.nsf__FORM__Call4__20260119_173539.dxl"
+        "C:/Users/SLY/Documents/Python実験/Python - OneNote/Git/Notes_to_OneNote_python/scripts/target_form/synhbe29.nsf_Fm_Document_2.dxl"
     )
-    search_dir = form_dxl_path.parent  # subform dxl search location
+    search_dir = form_dxl_path.parent
 
     root = ET.parse(form_dxl_path).getroot()
     conv = FormToHtml(root=root, search_dir=search_dir)
+
     body_html = conv.render_body()
 
+    # ---- HTML出力
     out_html = form_dxl_path.with_suffix("")
     out_html = out_html.parent / (out_html.name + "__form_template.html")
     out_html.write_text(body_html, encoding="utf-8")
 
+    # ---- missing subforms
     out_missing = out_html.with_suffix(".missing_subforms.txt")
     if conv.missing_subforms:
         out_missing.write_text("\n".join(sorted(conv.missing_subforms)), encoding="utf-8")
     else:
         out_missing.write_text("(none)\n", encoding="utf-8")
 
+    # ---- JSON（画面に表示された項目のみ）
+    design_name = _guess_design_name(root)
+    payload = {
+        "design_name": design_name,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "fields": [asdict(conv.visible_fields[k]) for k in sorted(conv.visible_fields.keys())],
+        "missing_subforms": sorted(conv.missing_subforms),
+        "field_count": len(conv.visible_fields),
+    }
+
+    out_json = out_html.with_suffix(".fields.json")
+    out_json.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+
     print("HTML:", out_html)
+    print("Fields JSON:", out_json)
     print("Missing subforms:", out_missing)
 
 
