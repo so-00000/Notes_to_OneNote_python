@@ -11,6 +11,14 @@ from main.services.load_field import load_visible_field_names, load_richtext_fie
 from pprint import pprint
 
 
+def _resolve_path(value: str | Path) -> Path:
+    p = Path(value)
+    if p.is_absolute():
+        return p
+    base_dir = Path(__file__).resolve().parents[1]
+    return (base_dir / p).resolve()
+
+
 def build_page_payload(
     dxl_path: Path,
     *,
@@ -28,9 +36,7 @@ def build_page_payload(
     # DXLファイルの解析（XMLツリーに変換後、ツリーのルート要素を取得）
     root = ET.parse(dxl_path).getroot()
 
-    # 画面項目定義の取得（※要対応：動的にする）
-    # fields_json_path = Path("C:/Users/SLY/Documents/Python実験/Python - OneNote/Git/Notes_to_OneNote_python/main/0_build_template/1_output/field_class_json/Call2024.nsf__FORM__Call4__20260119_173539__form_template.fields.json")
-    fields_json_path = Path("C:/Users/SLY/Documents/Python実験/Python - OneNote/Git/Notes_to_OneNote_python/main/0_build_template/1_output/field_class_json/synhbe29.nsf_Fm_Document_2__form_template.fields.json")
+    fields_json_path = _resolve_path(data_type.fields_json_path)
 
 
     # 表示する画面項目を取得

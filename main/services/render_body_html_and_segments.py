@@ -6,20 +6,27 @@ import logging
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from types import SimpleNamespace
-from typing import Any, Dict, List, Set, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 from main.data_type_config import get_data_type_settings
 # from main.dxl_to_model import dxl_to_onenote_row
 from main.services.extract_attachments import _extract_attachments
 from main.services.fill_template import fill_template
 from main.models.models import Segment, BinaryPart
-from typing import Any
 from pprint import pprint
 import logging
 import re
 import html
 
 logger = logging.getLogger(__name__)
+
+
+def _resolve_path(value: str | Path) -> Path:
+    p = Path(value)
+    if p.is_absolute():
+        return p
+    base_dir = Path(__file__).resolve().parents[1]
+    return (base_dir / p).resolve()
 
 
 
@@ -379,15 +386,12 @@ def render_body_html_and_segments(
 
 
     # HTMLテンプレートの読み込み（data_typeで切替）
-    # template_html_path = getattr(data_type, "template_html_path", None)
-    template_html_path = "C:/Users/SLY/Documents/Python実験/Python - OneNote/Git/Notes_to_OneNote_python/main/0_build_template/1_output/template_html/synhbe29.nsf_Fm_Document_2__form_template.html"
+    template_html_path = _resolve_path(data_type.template_html_path)
 
     pprint("🪅🪅🪅")
     pprint(template_html_path)
 
-    print(getattr(data_type, "template_html_path", None))
-
-    template_html = Path(template_html_path).read_text(encoding="utf-8")
+    template_html = template_html_path.read_text(encoding="utf-8")
     
     # # richtextはHTMLとしてそのまま埋め込みたい
 
