@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from main.models.CallDb import CallDbRaw
-from main.services.util_render import (
+from main.renderers.common.util_render import (
     _esc,
     _join_nonempty,
     _kv_row,

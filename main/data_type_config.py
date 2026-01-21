@@ -6,8 +6,8 @@ from typing import Any, Callable
 from main import config
 # from main.models.CallDb import CallDbRaw
 # from main.models.SyogaiDb import SyogaiDbRaw
-# from main.services.render_syogai_db_html import render_syogai_db_html
-# from main.services.render_call_db_html import render_call_db_html
+# from main.renderers.syogai.render_syogai_db_html import render_syogai_db_html
+# from main.renderers.call.render_call_db_html import render_call_db_html
 
 
 @dataclass(frozen=True)
@@ -17,6 +17,7 @@ class DataTypeSettings:
     section_name: str
     dxl_dir: str
     template_html_path: str
+    fields_json_path: str
     title_field: tuple[str, ...]
     rich_fields: tuple[str, ...]
     # model_cls: type
@@ -28,8 +29,15 @@ _SETTINGS: dict[str, DataTypeSettings] = {
         key="syogai",
         label="障害DB",
         section_name="障害DB",
-        dxl_dir = "1_target_dxl",
-        template_html_path = "template_html",
+        dxl_dir="resources/forms/synhbe29.nsf_Fm_Document_2",
+        template_html_path=(
+            "templates/synhbe29.nsf_Fm_Document_2/"
+            "synhbe29.nsf_Fm_Document_2__form_template.html"
+        ),
+        fields_json_path=(
+            "resources/forms/synhbe29.nsf_Fm_Document_2/"
+            "synhbe29.nsf_Fm_Document_2__form_template.fields.json"
+        ),
         title_field="Fd_Text_1",
         rich_fields=(
             "Agenda",
@@ -47,8 +55,15 @@ _SETTINGS: dict[str, DataTypeSettings] = {
         key="call",
         label="CallDB",
         section_name="CallDB",
-        dxl_dir = "1_target_dxl",
-        template_html_path = "template_html",
+        dxl_dir="resources/forms/Call2024.nsf__FORM__Call4__20260119_173539",
+        template_html_path=(
+            "templates/Call2024.nsf__FORM__Call4__20260119_173539/"
+            "Call2024.nsf__FORM__Call4__20260119_173539__form_template.html"
+        ),
+        fields_json_path=(
+            "resources/forms/Call2024.nsf__FORM__Call4__20260119_173539/"
+            "Call2024.nsf__FORM__Call4__20260119_173539__form_template.fields.json"
+        ),
         title_field="outline",
         rich_fields=(
             # "Agenda",

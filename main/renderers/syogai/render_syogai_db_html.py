@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from main.models.SyogaiDb import SyogaiDbRaw
-from main.services.util_render import (
+from main.renderers.common.util_render import (
     _esc,
     _fmt_dt,
     _join_nonempty,
