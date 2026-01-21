@@ -20,8 +20,6 @@ class DataTypeSettings:
     fields_json_path: str
     title_field: tuple[str, ...]
     rich_fields: tuple[str, ...]
-    # model_cls: type
-    # renderer: Callable[..., str]
 
 
 _SETTINGS: dict[str, DataTypeSettings] = {
@@ -48,8 +46,6 @@ _SETTINGS: dict[str, DataTypeSettings] = {
             "Reason",
             "Temporary",
         ),
-        # model_cls=SyogaiDbRaw,
-        # renderer=render_syogai_db_html,
     ),
     "call": DataTypeSettings(
         key="call",
@@ -76,8 +72,6 @@ _SETTINGS: dict[str, DataTypeSettings] = {
             "body",
             "body_1",
         ),
-        # model_cls=CallDbRaw,
-        # renderer=render_call_db_html,
     ),
 }
 
