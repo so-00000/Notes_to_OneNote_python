@@ -1,13 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Callable
-
 from main import config
-# from main.models.CallDb import CallDbRaw
-# from main.models.SyogaiDb import SyogaiDbRaw
-# from main.renderers.syogai.render_syogai_db_html import render_syogai_db_html
-# from main.renderers.call.render_call_db_html import render_call_db_html
 
 
 @dataclass(frozen=True)
@@ -37,15 +31,6 @@ _SETTINGS: dict[str, DataTypeSettings] = {
             "synhbe29.nsf_Fm_Document_2__form_template.fields.json"
         ),
         title_field="Fd_Text_1",
-        rich_fields=(
-            "Agenda",
-            "Detail",
-            "Detail_1",
-            "Fd_Link_1",
-            "Parmanent",
-            "Reason",
-            "Temporary",
-        ),
     ),
     "call": DataTypeSettings(
         key="call",
@@ -61,17 +46,6 @@ _SETTINGS: dict[str, DataTypeSettings] = {
             "Call2024.nsf__FORM__Call4__20260119_173539__form_template.fields.json"
         ),
         title_field="outline",
-        rich_fields=(
-            # "Agenda",
-            # "Detail",
-            # "Detail_1",
-            # "Fd_Link_1",
-            # "Parmanent",
-            # "Reason",
-            # "Temporary",
-            "body",
-            "body_1",
-        ),
     ),
 }
 

@@ -102,24 +102,26 @@ def main() -> None:
         # delete_all_pages_in_section(client, section_id)
 
 
+
         # DXLファイルを1件ずつ処理
-        for i, dxl_path in enumerate(dxl_files, start=1):
+        for i, dxl_path in enumerate(
+            dxl_files,
+            start=1
+            ):
 
             # タイトル・本文・画像/添付ファイルの作成
             payload = build_page_payload(
                 dxl_path,
                 row_no=i,
             )
-
-
+            
             # OneNoteページ作成のリクエスト
             client.create_onenote_page(
                 section_id=section_id,
                 page_payload=payload
             )
-
+            
             created += 1
-
 
             if settings.sleep_sec:
                 time.sleep(settings.sleep_sec)
