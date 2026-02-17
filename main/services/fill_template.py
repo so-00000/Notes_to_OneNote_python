@@ -37,6 +37,12 @@ def _escape_value(v: str) -> str:
     return s
 
 
+def _escape_value_or_nbsp(v: str) -> str:
+    if v == "":
+        return "&nbsp;"
+    return _escape_value(v)
+
+
 def fill_template(
     *,
     template_html: str,
@@ -50,7 +56,7 @@ def fill_template(
         v = values.get(key, "") or ""
         if key in raw_fields:
             return v
-        return _escape_value(v)
+        return _escape_value_or_nbsp(v)
 
     return _PLACEHOLDER_RE.sub(repl, template_html)
 

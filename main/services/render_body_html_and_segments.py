@@ -45,8 +45,8 @@ _BINARY_TAG_TO_MIME = {
 
 def make_anchor(seg_id: str) -> str:
     sid = html.escape(seg_id, quote=True)
-    return f"<div id='{sid}' data-id='{sid}'>{sid}</div>"
-
+    # 空divはOnenote側で削除される
+    return f"<div id='{sid}' data-id='{sid}'>&nbsp;</div>"
 
 
 def _local_tag(tag: str) -> str:
