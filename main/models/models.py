@@ -21,31 +21,6 @@ class PagePayload:
     segment_list: List[Segment] = field(default_factory=list)
 
 
-# =========================
-#  ページ作成（multipart）用のリクエストパラメータ
-# =========================
-@dataclass(slots=True)
-class MultipartPageRequest:
-    """
-    Graph送信用の“ページ作成リクエスト（素材）”。
-
-    Uploader/Client はこれを受け取り、
-    Graph制約（最大5バイナリ/回）に合わせて分割しつつ送信する。
-
-    - section_id: 送信先セクションID
-    - page_title: ページタイトル
-    - body_html:  本文HTML（プレースホルダ <div data-id="ph-..."> を含む）
-    - data_parts: 画像/添付の素材（PendingPart）
-    """
-    section_id: str
-    page_title: str
-    body_html: str
-    data_parts: list[PendingPart] = field(default_factory=list)
-
-    source_key: str | None = None
-
-
-
 
 @dataclass(slots=True)
 class Segment:
@@ -65,19 +40,6 @@ class BinaryPart:
     origin_field: str
     width: int | None = None
     height: int | None = None
-
-
-
-
-
-# OneNoteページ作成時のペイロードデータモデル
-@dataclass(frozen=True)
-class OneNoteCreatePagePayload:
-    section_id: str
-    page_title: str
-    body_html: str
-    parts: list[BinaryPart] = field(default_factory=list)
-
 
 
 

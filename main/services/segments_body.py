@@ -44,12 +44,12 @@ def _inject_first_segments(body_html: str, segments: list, name_prefix: str = "p
         parts.append((part_name, seg.binary_part))
 
         sid = re.escape(seg.segment_id)
-        # <div ... data-id="seg-001" ...></div> を、中身ありにする
+        # <div ... data-id="seg-001" ...>...</div> を、中身ありにする
         pat = re.compile(
-            rf"(<div\b[^>]*\bdata-id=['\"]{sid}['\"][^>]*>)(\s*</div>)",
-            re.IGNORECASE,
+            rf"(<div\b[^>]*\bdata-id=['\"]{sid}['\"][^>]*>)(.*?)(</div>)",
+            re.IGNORECASE | re.DOTALL,
         )
-        out, n = pat.subn(rf"\1{content}\2", out, count=1)
+        out, n = pat.subn(rf"\1{content}\3", out, count=1)
         # n==0 の場合：アンカーが無い（DXL→HTML 側の不整合）なのでログ出すのが吉
 
     return out, parts

@@ -11,7 +11,8 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 from main.data_type_config import get_data_type_settings
 # from main.dxl_to_model import dxl_to_onenote_row
 from main.services.extract_attachments import _extract_attachments
-from main.services.fill_template import fill_template
+from main.services.fill_template import fill_template, resolve_template_html_path
+from main.services.load_field import resolve_fields_json_path
 from main.models.models import Segment, BinaryPart
 from pprint import pprint
 import logging
@@ -44,7 +45,7 @@ _BINARY_TAG_TO_MIME = {
 
 def make_anchor(seg_id: str) -> str:
     sid = html.escape(seg_id, quote=True)
-    return f"<div id='{sid}' data-id='{sid}'></div>"
+    return f"<div id='{sid}' data-id='{sid}'>{sid}</div>"
 
 
 
@@ -170,7 +171,7 @@ def _table_to_html(table_el: ET.Element) -> str:
 
     # DXL: <table> -> <tablerow> -> <tablecell>
     tablerows = table_el.findall("dxl:tablerow", DXL_NS)
-    for tr in tablerows:
+    for row_index, tr in enumerate(tablerows):
         cells_html: list[str] = []
         cells = tr.findall("dxl:tablecell", DXL_NS)
 
@@ -179,16 +180,17 @@ def _table_to_html(table_el: ET.Element) -> str:
             txt = "".join(td.itertext()).strip()
             txt = re.sub(r"\s+\n", "\n", txt)
             safe = html.escape(txt).replace("\n", "<br/>") if txt else ""
-            cells_html.append(
-                f"<td style='border:1px solid #ddd; padding:6px; vertical-align:top;'>{safe}</td>"
-            )
+            style = "border:1px solid #808080; padding:3px 6px; vertical-align:top;"
+            if row_index == 0:
+                style += " background:#f6efe6; font-weight:bold;"
+            cells_html.append(f"<td style='{style}'>{safe}</td>")
 
         rows.append("<tr>" + "".join(cells_html) + "</tr>")
 
     # 全体を軽く囲う（見やすさ用）
     return (
         "<div style='margin:10px 0;'>"
-        "<table style='border-collapse:collapse; width:100%;'>"
+        "<table style='border-collapse:collapse; width:720px; table-layout:fixed;' width='720' border='1' cellspacing='0' cellpadding='0'>"
         + "".join(rows)
         + "</table>"
         "</div>"
@@ -299,27 +301,6 @@ def richtext_item_to_html_and_segment(
 
 
 
-def _detect_richtext_field_names(root: ET.Element, data_type: Any) -> Set[str]:
-    """
-    richtextフィールド名を決める。
-    - data_type.rich_fields があればそれを優先
-    - なければ DXL上で richtext を持つ item を自動検出（type=="richtext" 相当）
-    """
-    rf = getattr(data_type, "rich_fields", None)
-    if rf:
-        return {str(x) for x in rf}
-
-    out: Set[str] = set()
-    for item in root.findall(".//dxl:item", DXL_NS):
-        name = item.get("name")
-        if not name or name == "$FILE":
-            continue
-        if item.find("dxl:richtext", DXL_NS) is not None:
-            out.add(name)
-    return out
-
-
-
 def render_body_html_and_segments(
     *,
     root: ET.Element,
@@ -386,13 +367,24 @@ def render_body_html_and_segments(
 
 
     # HTMLテンプレートの読み込み（data_typeで切替）
-    template_html_path = _resolve_path(data_type.template_html_path)
+    template_html_path = resolve_template_html_path(_resolve_path(data_type.template_html_path))
 
     pprint("🪅🪅🪅")
     pprint(template_html_path)
 
     template_html = template_html_path.read_text(encoding="utf-8")
-    
+    print("TEMPLATE_HTML_PATH:", template_html_path)
+    print("TEMPLATE_HTML_BEGIN")
+    print(template_html)
+    print("TEMPLATE_HTML_END")
+
+    fields_json_path = resolve_fields_json_path(_resolve_path(data_type.fields_json_path))
+    fields_json = fields_json_path.read_text(encoding="utf-8")
+    print("FIELDS_JSON_PATH:", fields_json_path)
+    print("FIELDS_JSON_BEGIN")
+    print(fields_json)
+    print("FIELDS_JSON_END")
+
     # # richtextはHTMLとしてそのまま埋め込みたい
 
     body_html = fill_template(
@@ -401,8 +393,8 @@ def render_body_html_and_segments(
         raw_fields=rich_field_names,
     )
 
-    pprint("🪅🪅🪅:body_html")
-    pprint(body_html)
+    # pprint("🪅🪅🪅:body_html")
+    # pprint(body_html)
 
 
     return body_html, all_segments

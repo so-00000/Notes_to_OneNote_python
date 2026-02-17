@@ -52,8 +52,8 @@ def build_page_payload(
         richtext_field_names = richtext_field_names,
         )
 
-    pprint("🪅🪅🪅：ui_field_map")
-    pprint(ui_field_map)
+    # pprint("🪅🪅🪅：ui_field_map")
+    # pprint(ui_field_map)
     
 
     # ページタイトル作成
@@ -74,8 +74,8 @@ def build_page_payload(
         rich_field_names=richtext_field_names,
     )
 
-    pprint("🪅🪅🪅：body_html")
-    pprint(body_html)
+    # pprint("🪅🪅🪅：body_html")
+    # pprint(body_html)
 
     # pprint("🪅🪅🪅：segment_list")
     # pprint(segment_list)

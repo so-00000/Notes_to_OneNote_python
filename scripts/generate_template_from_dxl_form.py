@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import html
 import json
@@ -20,8 +20,16 @@ NON_RENDER_TAGS = {
     "tablecolumn",
 }
 
+TABLE_WIDTH_PX = 800
+TABLE_STYLE = f"border-collapse:collapse; width:{TABLE_WIDTH_PX}px; table-layout:fixed;"
+CELL_STYLE = "border:1px solid #808080; padding:3px 6px; vertical-align:top;"
+HEADER_BG_STYLE = "background:#f2f2f2; font-weight:bold;"
+LABEL_BG_STYLE = "background:#e9f3ff; font-weight:bold;"
+FIRST_COL_STYLE = "width:120px;"
+
 
 _TAG_RE = re.compile(r"<[^>]+>")
+_TAG_SPLIT_RE = re.compile(r"(</?[^>]+>)")
 
 def _is_blank_html(fragment: str) -> bool:
     """
@@ -45,6 +53,96 @@ def _is_blank_html(fragment: str) -> bool:
     s = html.unescape(s)
 
     return s.strip() == ""
+
+def _strip_trailing_colon(s: str) -> str:
+    t = s.rstrip()
+    if t.endswith(":") or t.endswith("："):
+        t = t[:-1].rstrip()
+    return t
+
+def _pretty_html(html_text: str) -> str:
+    block_tags = {
+        "div",
+        "table",
+        "tr",
+        "td",
+        "th",
+        "style",
+    }
+    void_tags = {
+        "br",
+        "hr",
+        "img",
+        "meta",
+        "link",
+        "input",
+    }
+    indent = 0
+    out: List[str] = []
+
+    tokens = _TAG_SPLIT_RE.split(html_text)
+    for tok in tokens:
+        if not tok:
+            continue
+        if tok.startswith("<"):
+            if tok.startswith("<!--"):
+                out.append("\n" + ("\t" * indent) + tok)
+                continue
+
+            m = re.match(r"</?\s*([a-zA-Z0-9]+)", tok)
+            name = (m.group(1).lower() if m else "")
+            is_end = tok.startswith("</")
+            is_self = tok.endswith("/>") or name in void_tags
+            is_block = name in block_tags
+
+            if is_block:
+                if is_end:
+                    indent = max(indent - 1, 0)
+                out.append("\n" + ("\t" * indent) + tok)
+                if (not is_end) and (not is_self):
+                    indent += 1
+            else:
+                out.append(tok)
+        else:
+            out.append(tok)
+
+    return "".join(out).lstrip("\n")
+
+def _inject_td_style(td_html: str, extra_style: str) -> str:
+    if not (td_html.startswith("<td") or td_html.startswith("<th")):
+        return td_html
+    m_bg = re.search(r"background:\\s*([^;]+)", extra_style)
+    bgcolor = m_bg.group(1).strip() if m_bg else ""
+    if bgcolor and "bgcolor=" not in td_html:
+        if td_html.startswith("<td"):
+            td_html = td_html.replace("<td", f"<td bgcolor='{bgcolor}'", 1)
+        else:
+            td_html = td_html.replace("<th", f"<th bgcolor='{bgcolor}'", 1)
+    if "style='" in td_html:
+        return re.sub(
+            r"style='([^']*)'",
+            lambda m: f"style='{m.group(1)} {extra_style}'",
+            td_html,
+            count=1,
+        )
+    if "style=\"" in td_html:
+        return re.sub(
+            r"style=\"([^\"]*)\"",
+            lambda m: f"style=\"{m.group(1)} {extra_style}\"",
+            td_html,
+            count=1,
+        )
+    if td_html.startswith("<td"):
+        return td_html.replace("<td", f"<td style='{extra_style}'", 1)
+    return td_html.replace("<th", f"<th style='{extra_style}'", 1)
+
+def _needs_block_spacing(tag: str) -> bool:
+    return tag in {
+        "table",
+        "section",
+        "sectiontitle",
+        "subformref",
+    }
 
 
 
@@ -128,11 +226,11 @@ def _collect_visible_text(el: ET.Element) -> str:
         if tag in NON_RENDER_TAGS:
             return
         if node.text:
-            parts.append(node.text)
+            parts.append(_strip_trailing_colon(node.text))
         for child in list(node):
             walk(child)
             if child.tail:
-                parts.append(child.tail)
+                parts.append(_strip_trailing_colon(child.tail))
 
     walk(el)
     return "".join(parts)
@@ -219,23 +317,23 @@ class FormToHtml:
         parts: List[str] = []
 
         parts.append(
-            "<style>"
-            ".notes-form{font-family:MS PGothic,Meiryo,'Segoe UI',Arial,sans-serif;font-size:11pt;line-height:1.45;color:#222;}"
-            ".notes-form table{border-collapse:collapse;width:100%;}"
-            ".notes-form td,.notes-form th{border:1px solid #808080;padding:3px 6px;vertical-align:top;}"
-            ".notes-form th{background:#efefef;font-weight:normal;}"
-            ".notes-form .notes-par{margin:2px 0;}"
-            ".notes-form .notes-field{display:inline-block;min-width:6em;min-height:1.2em;border:1px solid #666;background:#fff;padding:1px 4px;border-radius:2px;}"
-            ".notes-form .notes-field[data-kind='computed'],"
-            ".notes-form .notes-field[data-kind='computedfordisplay'],"
-            ".notes-form .notes-field[data-kind='computedwhencomposed']{background:#f7f7f7;color:#555;}"
-            ".notes-form .notes-link{color:#0645ad;text-decoration:underline;}"
-            ".notes-form .notes-subform{border:1px dashed #aaa;padding:6px;margin:6px 0;background:#fafafa;}"
-            ".notes-form .notes-subform-title{font-weight:bold;margin-bottom:4px;}"
-            ".notes-form .notes-section{border:1px solid #a0a0a0;margin:6px 0;}"
-            ".notes-form .notes-section-title{background:#d9d9d9;padding:2px 6px;font-weight:bold;}"
-            ".notes-form .notes-section-body{padding:4px 6px;}"
-            ".notes-form .notes-textlist{display:block;margin-left:1em;}"
+            "<style>\n"
+            ".notes-form{font-family:MS PGothic,Meiryo,'Segoe UI',Arial,sans-serif;font-size:11pt;line-height:1.45;color:#222;}\n"
+            f".notes-form table{{{TABLE_STYLE}}}\n"
+            f".notes-form td,.notes-form th{{{CELL_STYLE}}}\n"
+            ".notes-form th{background:#efefef;font-weight:normal;}\n"
+            ".notes-form .notes-par{margin:2px 0;font-weight:bold;}\n"
+            ".notes-form .notes-field{display:inline-block;min-width:6em;min-height:1.2em;border:1px solid #666;background:#fff;padding:1px 4px;border-radius:2px;}\n"
+            ".notes-form .notes-field[data-kind='computed'],\n"
+            ".notes-form .notes-field[data-kind='computedfordisplay'],\n"
+            ".notes-form .notes-field[data-kind='computedwhencomposed']{background:#f7f7f7;color:#555;}\n"
+            ".notes-form .notes-link{color:#0645ad;text-decoration:underline;}\n"
+            ".notes-form .notes-subform{border:1px dashed #aaa;padding:6px;margin:6px 0;background:#fafafa;}\n"
+            ".notes-form .notes-subform-title{font-weight:bold;margin-bottom:4px;}\n"
+            ".notes-form .notes-section{border:1px solid #a0a0a0;margin:6px 0;}\n"
+            ".notes-form .notes-section-title{background:#d9d9d9;padding:2px 6px;font-weight:bold;}\n"
+            ".notes-form .notes-section-body{padding:4px 6px;}\n"
+            ".notes-form .notes-textlist{display:block;margin-left:1em;}\n"
             "</style>"
         )
 
@@ -249,13 +347,32 @@ class FormToHtml:
 
     def _render_children(self, el: ET.Element) -> str:
         out: List[str] = []
+        last_was_block = False
+        parent_tag = _ln(el.tag)
         if el.text:
-            out.append(html.escape(el.text))
+            out.append(html.escape(_strip_trailing_colon(el.text)))
 
         for ch in list(el):
-            out.append(self._render_node(ch))
+            ch_tag = _ln(ch.tag)
+            rendered = self._render_node(ch)
+            if not rendered or _is_blank_html(rendered):
+                continue
+            if (
+                parent_tag not in {"tablecell", "tablecellheader"}
+                and ch_tag == "par"
+                and out
+                and not out[-1].endswith("<br/>")
+            ):
+                out.append("<br/>")
+            if _needs_block_spacing(ch_tag) and last_was_block:
+                out.append("<br/>")
+            out.append(rendered)
+            if _needs_block_spacing(ch_tag):
+                last_was_block = True
+            else:
+                last_was_block = False
             if ch.tail:
-                out.append(html.escape(ch.tail))
+                out.append(html.escape(_strip_trailing_colon(ch.tail)))
         return "".join(out)
 
     def _data_attrs_common(self, el: ET.Element) -> str:
@@ -295,10 +412,52 @@ class FormToHtml:
         # Paragraph
         if tag == "par":
             attrs = self._data_attrs_common(el)
-            inner = self._render_children(el)
-            if not inner.strip():
+
+            def _bold_text(s: str) -> str:
+                t = html.escape(_strip_trailing_colon(s))
+                return f"<span style='font-weight:bold;'>{t}</span>" if t.strip() else ""
+
+            def _render_children_bold(node: ET.Element) -> str:
+                out: List[str] = []
+                if node.text:
+                    out.append(_bold_text(node.text))
+                for ch in list(node):
+                    ch_tag = _ln(ch.tag)
+                    if ch_tag in {"field", "sharedfieldref"}:
+                        out.append(self._render_node(ch))
+                    elif ch_tag in {"run", "font"}:
+                        out.append(_render_children_bold(ch))
+                    elif ch_tag == "text":
+                        out.append(_bold_text("".join(ch.itertext())))
+                    elif ch_tag == "textlist":
+                        content = _collect_visible_text(ch).strip()
+                        if content:
+                            out.append(
+                                f"<span class='notes-textlist'>{_bold_text(content)}</span>"
+                            )
+                    else:
+                        out.append(self._render_node(ch))
+                    if ch.tail:
+                        out.append(_bold_text(ch.tail))
+                return "".join(out)
+
+            inner = _render_children_bold(el)
+            # Insert a colon when a bold label is followed by a field in the same line.
+            inner = re.sub(
+                r"(<span style='font-weight:bold;'>[^<]*?)(?<![:：])</span>(\s*<span class='notes-field(?:-wrap)?')",
+                r"\1：</span>\2",
+                inner,
+            )
+            # Add spacing between consecutive field values on the same line.
+            inner = re.sub(
+                r"(</span></span>)(\s*<span class='notes-field-wrap'>)",
+                r"\1&nbsp;\2",
+                inner,
+            )
+            if not inner.strip() or _is_blank_html(inner):
                 return ""  # 空parは出さない
             return f"<div class='notes-par'{attrs}>{inner}</div>"
+
 
         # Runs/fonts mostly styling - flatten
         if tag in {"run", "font"}:
@@ -316,17 +475,46 @@ class FormToHtml:
             inner = self._render_children(el)
             if _is_blank_html(inner):
                 return ""   # ★空テーブルは消す
-            return f"<table{attrs}>{inner}</table>"
+            return (
+                f"<table style='margin-top:1em; {TABLE_STYLE}' width='{TABLE_WIDTH_PX}' "
+                f"border='1' cellspacing='0' cellpadding='0'{attrs}>{inner}</table>"
+            )
 
         
         if tag == "tablerow":
             attrs = self._data_attrs_common(el)
 
+            header_row = (
+                el.find(".//dxl:field", DXL_NS) is None
+                and el.find(".//dxl:sharedfieldref", DXL_NS) is None
+            )
+            header_style = HEADER_BG_STYLE
+            label_style = LABEL_BG_STYLE
+
             cell_htmls: List[str] = []
             any_nonblank = False
 
+            cells = [ch for ch in list(el) if _ln(ch.tag) in {"tablecell", "tablecellheader"}]
+            cell_has_field = []
+            for ch in cells:
+                has_field = (
+                    ch.find(".//dxl:field", DXL_NS) is not None
+                    or ch.find(".//dxl:sharedfieldref", DXL_NS) is not None
+                )
+                cell_has_field.append(has_field)
+            row_has_field = any(cell_has_field)
+
             for ch in list(el):
                 rendered = self._render_node(ch)
+                if _ln(ch.tag) in {"tablecell", "tablecellheader"}:
+                    if header_row:
+                        rendered = _inject_td_style(rendered, header_style)
+                    elif row_has_field:
+                        idx = cells.index(ch) if ch in cells else -1
+                        if idx >= 0 and not cell_has_field[idx]:
+                            rendered = _inject_td_style(rendered, label_style)
+                        if idx == 0 and not cell_has_field[idx]:
+                            rendered = _inject_td_style(rendered, FIRST_COL_STYLE)
                 if rendered:
                     cell_htmls.append(rendered)
                     if not _is_blank_html(rendered):
@@ -353,13 +541,13 @@ class FormToHtml:
             inner = self._render_children(el)
             if not inner.strip():
                 inner = "&nbsp;"
-            return f"<td{extra}{attrs}>{inner}</td>"
+            return f"<td style='{CELL_STYLE}'{extra}{attrs}>{inner}</td>"
         if tag == "tablecellheader":
             attrs = self._data_attrs_common(el)
             inner = self._render_children(el)
             if not inner.strip():
                 inner = "&nbsp;"
-            return f"<th{attrs}>{inner}</th>"
+            return f"<th style='{CELL_STYLE} {HEADER_BG_STYLE}'{attrs}>{inner}</th>"
 
         if tag == "section":
             attrs = self._data_attrs_common(el)
@@ -373,7 +561,10 @@ class FormToHtml:
             attrs = self._data_attrs_common(el)
             title = _collect_visible_text(el).strip()
             title = html.escape(title) if title else "&nbsp;"
-            return f"<div class='notes-section-title'{attrs}>{title}</div>"
+            return (
+                f"<div class='notes-section-title' style='margin-top:1em;'{attrs}>"
+                f"{title}</div>"
+            )
 
         if tag == "urllink":
             attrs = self._data_attrs_common(el)
@@ -411,7 +602,11 @@ class FormToHtml:
 
             common = self._data_attrs_common(el)
             label = html.escape(name)
-            return f"<span {' '.join(attrs)}{common}>{{{{{label}}}}}</span>"
+            return (
+                f"<span class='notes-field-wrap'>"
+                f"<span {' '.join(attrs)}{common}>{{{{{label}}}}}</span>"
+                f"</span>"
+            )
 
         if tag == "sharedfieldref":
             name = el.attrib.get("name", "")
@@ -424,7 +619,11 @@ class FormToHtml:
             ]
             common = self._data_attrs_common(el)
             label = html.escape(name)
-            return f"<span {' '.join(attrs)}{common}>{{{{{label}}}}}</span>"
+            return (
+                f"<span class='notes-field-wrap'>"
+                f"<span {' '.join(attrs)}{common}>{{{{{label}}}}}</span>"
+                f"</span>"
+            )
 
         # Subform reference: try to expand
         if tag == "subformref":
@@ -487,7 +686,7 @@ class FormToHtml:
         # Plain text container
         if tag == "text":
             content = "".join(el.itertext())
-            return html.escape(content)
+            return html.escape(_strip_trailing_colon(content))
 
         # Default: best-effort recursion
         return self._render_children(el)
@@ -497,7 +696,15 @@ def main() -> None:
     # ==== Settings ====
     form_dxl_path = Path(
         # "C:/Users/SLY/Documents/Python実験/Python - OneNote/Git/Notes_to_OneNote_python/scripts/target_form/Call2024.nsf__FORM__Call4__20260119_173539.dxl"
-        "C:/Users/SLY/Documents/Python実験/Python - OneNote/Git/Notes_to_OneNote_python/scripts/target_form/synhbe29.nsf_Fm_Document_2.dxl"
+        # "C:/Users/SLY/Documents/Python実験/Python - OneNote/Git/Notes_to_OneNote_python/scripts/target_form/FORM_synhbe29.nsf_Fm_Document_2.dxl"
+        # "C:/Users/SLY/Documents/Python実験/Python - OneNote/Git/Notes_to_OneNote_python/scripts/target_form/FORM_synhbe29.nsf_Fm_Document_5.dxl"
+        # "C:/Users/SLY/Documents/Python実験/Python - OneNote/Git/Notes_to_OneNote_python/scripts/target_form/FORM_synhbe29.nsf_Fm_Document_3.dxl"
+
+        # "C:/Users/SLY/Documents/Python実験/Python - OneNote/Git/Notes_to_OneNote_python/scripts/target_form/FORM_Call2022.nsf_Call3.dxl"
+        # "C:/Users/SLY/Documents/Python実験/Python - OneNote/Git/Notes_to_OneNote_python/scripts/target_form/FORM_Call2021.nsf_Call3.dxl"
+
+        # "C:/Users/SLY/Documents/Python実験/Python - OneNote/Git/Notes_to_OneNote_python/scripts/target_form/FORM_Call2022.nsf_Call4.dxl"
+        "C:/Users/SLY/Documents/Python実験/Python - OneNote/Git/Notes_to_OneNote_python/scripts/target_form/FORM_Call2024.nsf_Call4.dxl"
     )
     search_dir = form_dxl_path.parent
 
@@ -505,10 +712,14 @@ def main() -> None:
     conv = FormToHtml(root=root, search_dir=search_dir)
 
     body_html = conv.render_body()
+    source_comment = f"<!-- source_dxl: {form_dxl_path.resolve()} -->\n"
+    body_html = source_comment + body_html
+    body_html = _pretty_html(body_html)
 
     # ---- HTML出力
-    out_html = form_dxl_path.with_suffix("")
-    out_html = out_html.parent / (out_html.name + "__form_template.html")
+    out_dir = Path("scripts/out/templates")
+    out_dir.mkdir(parents=True, exist_ok=True)
+    out_html = out_dir / (form_dxl_path.with_suffix("").name + "__form_template.html")
     out_html.write_text(body_html, encoding="utf-8")
 
     # ---- missing subforms

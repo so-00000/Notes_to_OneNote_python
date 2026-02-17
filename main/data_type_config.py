@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 from dataclasses import dataclass
 from main import config
@@ -13,38 +13,48 @@ class DataTypeSettings:
     template_html_path: str
     fields_json_path: str
     title_field: tuple[str, ...]
-    rich_fields: tuple[str, ...]
 
 
 _SETTINGS: dict[str, DataTypeSettings] = {
+
     "syogai": DataTypeSettings(
         key="syogai",
         label="障害DB",
         section_name="障害DB",
-        dxl_dir="resources/forms/synhbe29.nsf_Fm_Document_2",
-        template_html_path=(
-            "templates/synhbe29.nsf_Fm_Document_2/"
-            "synhbe29.nsf_Fm_Document_2__form_template.html"
-        ),
-        fields_json_path=(
-            "resources/forms/synhbe29.nsf_Fm_Document_2/"
-            "synhbe29.nsf_Fm_Document_2__form_template.fields.json"
-        ),
+        dxl_dir="1_target_dxl/",
+        template_html_path="resources/templates/synhbe29.nsf/Fm_Document_2/",
+        fields_json_path= "resources/forms/synhbe29.nsf/Fm_Document_2/",
         title_field="Fd_Text_1",
     ),
-    "call": DataTypeSettings(
-        key="call",
-        label="CallDB",
-        section_name="CallDB",
-        dxl_dir="resources/forms/Call2024.nsf__FORM__Call4__20260119_173539",
-        template_html_path=(
-            "templates/Call2024.nsf__FORM__Call4__20260119_173539/"
-            "Call2024.nsf__FORM__Call4__20260119_173539__form_template.html"
-        ),
-        fields_json_path=(
-            "resources/forms/Call2024.nsf__FORM__Call4__20260119_173539/"
-            "Call2024.nsf__FORM__Call4__20260119_173539__form_template.fields.json"
-        ),
+
+    "data_patch": DataTypeSettings(
+        key="data_patch",
+        label="データ強制変更DB",
+        section_name="データ強制変更DB",
+        dxl_dir="1_target_dxl/Fm_Document_3/",
+        template_html_path="resources/templates/synhbe29.nsf/Fm_Document_3/",
+        fields_json_path= "resources/forms/synhbe29.nsf/Fm_Document_3/",
+        title_field="Fd_Text_1",
+    ),
+
+    "hosyu": DataTypeSettings(
+        key="hosyu",
+        label="保守DB",
+        section_name="保守DB",
+        dxl_dir="1_target_dxl/Fm_Document_5/",
+        template_html_path="resources/templates/synhbe29.nsf/Fm_Document_5/",
+        fields_json_path= "resources/forms/synhbe29.nsf/Fm_Document_5/",
+        title_field="Fd_Text_1",
+    ),
+
+
+    "call2024": DataTypeSettings(
+        key="call2024",
+        label="CallDB2024",
+        section_name="CallDB2024",
+        dxl_dir="1_target_dxl/Call2024/",
+        template_html_path="resources/templates/call_gen/Call4/",
+        fields_json_path="resources/forms/call_gen/Call4/",
         title_field="outline",
     ),
 }
@@ -56,10 +66,16 @@ def _normalize_data_type(value: object) -> str:
         return ""
 
     normalized = raw.lower()
-    if normalized in {"1", "syogai", "障害db", "障害"}:
+    if normalized in {"2", "syogai", "障害db", "障害 db"}:
         return "syogai"
-    if normalized in {"2", "call", "calldb", "call db"}:
-        return "call"
+    if normalized in {"3", "data_patch", "データ強制変更db", "データ強制変更 db"}:
+        return "data_patch"
+    if normalized in {"5", "hosyu", "保守db", "保守 db"}:
+        return "hosyu"
+    if normalized in {"2024", "call2024", "calldb2024", "call db2024"}:
+        return "call2024"
+
+
     return normalized
 
 

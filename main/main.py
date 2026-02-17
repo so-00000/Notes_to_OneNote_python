@@ -120,7 +120,7 @@ def main() -> None:
                 section_id=section_id,
                 page_payload=payload
             )
-            
+
             created += 1
 
             if settings.sleep_sec:
@@ -130,8 +130,6 @@ def main() -> None:
 
     finally:
         client.close()
-        print("リクエスト失敗")
-
 
 if __name__ == "__main__":
     main()

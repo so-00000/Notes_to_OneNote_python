@@ -5,6 +5,8 @@ import re
 import xml.etree.ElementTree as ET
 from typing import Dict, List, Optional, Set
 
+from main.renderers.common.util_render import _normalize_notes_dt
+
 DXL_NS = {"dxl": "http://www.lotus.com/dxl"}
 
 
@@ -39,12 +41,17 @@ def _extract_item_as_text(item: ET.Element) -> Optional[str]:
         s = _join_clean(nums)
         return s or None
 
-    dts = ["".join(dt.itertext()).strip() for dt in item.findall(".//dxl:datetime", DXL_NS)]
+    dts = [
+        _normalize_notes_dt("".join(dt.itertext()).strip())
+        for dt in item.findall(".//dxl:datetime", DXL_NS)
+    ]
     if dts:
         s = _join_clean(dts)
         return s or None
 
     fallback = "".join(item.itertext()).strip()
+    if fallback and item.find(".//dxl:rawitemdata", DXL_NS) is not None:
+        return None
     return fallback or None
 
 

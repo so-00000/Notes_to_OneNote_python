@@ -32,6 +32,29 @@ def _normalize_notes_dt(s: Optional[str]) -> str:
         return ""
     t = str(s).strip()
 
+    # Some DXL exports append a base64-like suffix after the date/time value.
+    m = re.fullmatch(r"(\d{8})([A-Za-z0-9+/=]+)", t)
+    if m:
+        t = m.group(1)
+    else:
+        m = re.fullmatch(
+            r"(\d{8}T\d{6}(?:,\d+)?(?:[+-]\d{2})?)([A-Za-z0-9+/=]+)",
+            t,
+        )
+        if m:
+            t = m.group(1)
+        else:
+            m = re.fullmatch(r"(\d{4}/\d{2}/\d{2})([A-Za-z0-9+/=]+)", t)
+            if m:
+                t = m.group(1)
+            else:
+                m = re.fullmatch(
+                    r"(\d{4}/\d{2}/\d{2}\s+\d{2}:\d{2}:\d{2})([A-Za-z0-9+/=]+)",
+                    t,
+                )
+                if m:
+                    t = m.group(1)
+
     m = re.fullmatch(r"(\d{4})(\d{2})(\d{2})", t)
     if m:
         return f"{m.group(1)}/{m.group(2)}/{m.group(3)}"

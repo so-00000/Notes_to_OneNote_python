@@ -9,6 +9,12 @@ from dataclasses import asdict
 from pathlib import Path
 from typing import Dict, Iterable, Optional, Set, Tuple, Any
 
+from main.services.load_field import (
+    load_richtext_field_names,
+    load_visible_field_names,
+    resolve_fields_json_path,
+)
+
 # from dxl_to_values import (
 #     load_visible_field_names,
 #     load_richtext_field_names,
@@ -62,6 +68,22 @@ def iter_doc_dxl_paths(doc_dxl: Path) -> Iterable[Path]:
         yield p
 
 
+def resolve_template_html_path(template_html_path: str | Path) -> Path:
+    template_path = Path(template_html_path)
+    if template_path.is_dir():
+        candidates = sorted(template_path.glob("*.html"))
+        if not candidates:
+            raise FileNotFoundError(f"Template HTML not found in dir: {template_path}")
+        if len(candidates) > 1:
+            names = ", ".join(p.name for p in candidates)
+            raise ValueError(
+                f"Multiple template HTML files in dir: {template_path}. "
+                f"Candidates: {names}"
+            )
+        return candidates[0]
+    return template_path
+
+
 def load_template_and_fields(
     *,
     template_html_path: str | Path,
@@ -74,8 +96,8 @@ def load_template_and_fields(
       richtext_names,
       raw_fields (= richtext_names)
     """
-    template_path = Path(template_html_path)
-    fields_path = Path(fields_json_path)
+    template_path = resolve_template_html_path(template_html_path)
+    fields_path = resolve_fields_json_path(fields_json_path)
 
     if not template_path.exists():
         raise FileNotFoundError(f"Template not found: {template_path}")

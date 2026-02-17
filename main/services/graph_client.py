@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import html
+import re
 import time
 from dataclasses import dataclass
 from typing import Any, Dict, Iterable, Mapping, Optional, Tuple
@@ -51,6 +52,10 @@ class GraphClient:
         self._owns_session = session is None
         self._retry = retry_policy or GraphRetryPolicy()
         self._logger = logging.getLogger(__name__)
+
+
+    def _normalize_onenote_html(self, body_html: str) -> str:
+        return body_html
 
 
     def close(self) -> None:
@@ -311,6 +316,7 @@ class GraphClient:
 
             # 2) patch command：アンカー（data-id）に append
             # data-id を付けた要素は #<data-id> で target 指定できる :contentReference[oaicite:6]{index=6}
+            sid = html.escape(seg.segment_id, quote=True)
             commands.append(
                 {
                     "target": f"#{seg.segment_id}",
@@ -342,7 +348,8 @@ class GraphClient:
         url = f"https://graph.microsoft.com/v1.0/me/onenote/sections/{section_id}/pages"
 
         # Graph制約: Presentation + バイナリ最大5
-        MAX_BIN_PER_REQUEST = 5
+        # MAX_BIN_PER_REQUEST = 5
+        MAX_BIN_PER_REQUEST = 2
         
         all_segments = list(page_payload.segment_list or [])
         firstSeg = all_segments[:MAX_BIN_PER_REQUEST]
@@ -351,6 +358,7 @@ class GraphClient:
 
         # 初回送信分の作成（上限件数までバイナリデータセグメント埋め込みを行ったHTML作成）
         body_html, parts = _inject_first_segments(page_payload.body_html, firstSeg, name_prefix="p")
+        body_html = self._normalize_onenote_html(body_html)
 
         xhtml = f"""<!DOCTYPE html>
         <html>
@@ -367,6 +375,22 @@ class GraphClient:
         }
         for part_name, bp in parts:
             data_parts[part_name] = (bp.filename, bp.data, bp.content_type)
+
+        parts_summary = [
+            {
+                "part_name": part_name,
+                "filename": bp.filename,
+                "content_type": bp.content_type,
+                "size": len(bp.data),
+            }
+            for part_name, bp in parts
+        ]
+        self._logger.info("Create OneNote page XHTML:\n%s", xhtml)
+        self._logger.info(
+            "Create OneNote page parts: count=%s parts=%s",
+            len(parts_summary),
+            parts_summary,
+        )
 
         res = self._request_multipart("POST", url, data_parts=data_parts)
         res.raise_for_status()
