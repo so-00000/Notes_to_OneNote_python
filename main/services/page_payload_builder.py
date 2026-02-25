@@ -11,6 +11,9 @@ from main.services.load_field import load_visible_field_names, load_richtext_fie
 from pprint import pprint
 
 
+DXL_NS = {"dxl": "http://www.lotus.com/dxl"}
+
+
 def _resolve_path(value: str | Path) -> Path:
     p = Path(value)
     if p.is_absolute():
@@ -35,6 +38,9 @@ def build_page_payload(
 
     # DXLファイルの解析（XMLツリーに変換後、ツリーのルート要素を取得）
     root = ET.parse(dxl_path).getroot()
+    doc_replicaid = root.get("replicaid")
+    noteinfo = root.find("dxl:noteinfo", DXL_NS)
+    doc_unid = noteinfo.get("unid") if noteinfo is not None else None
 
     fields_json_path = _resolve_path(data_type.fields_json_path)
 
@@ -62,12 +68,12 @@ def build_page_payload(
     if not page_title:
         page_title = base
 
-    pprint("🪅🪅🪅：page_title")
-    pprint(page_title)
+    # pprint("🪅🪅🪅：page_title")
+    # pprint(page_title)
     
 
     # HTML・セグメントデータ（バイナリデータ・位置情報）など）
-    body_html, segment_list = render_body_html_and_segments(
+    body_html, segment_list, doclink_placeholders = render_body_html_and_segments(
         root=root,
         ui_field_map=ui_field_map,
         data_type=data_type,
@@ -84,6 +90,9 @@ def build_page_payload(
         page_title = page_title,
         body_html =  body_html,
         segment_list =  segment_list,
+        doc_replicaid = doc_replicaid,
+        doc_unid = doc_unid,
+        doclink_placeholders = doclink_placeholders,
     )
 
     # pprint(pagePayload)

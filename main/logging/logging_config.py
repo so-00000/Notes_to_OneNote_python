@@ -7,6 +7,16 @@ from pathlib import Path
 from typing import Optional
 
 
+class _ConsoleExcludeFilter(logging.Filter):
+    def __init__(self, prefixes: tuple[str, ...]) -> None:
+        super().__init__()
+        self._prefixes = prefixes
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        message = record.getMessage()
+        return not any(message.startswith(prefix) for prefix in self._prefixes)
+
+
 def setup_logging(
     *,
     log_dir: str = "logs",
@@ -22,7 +32,22 @@ def setup_logging(
     - ログファイルはローテーションする（サイズ上限 + 世代数）。
     """
     root = logging.getLogger()
+    console_exclude = (
+        "Create OneNote page XHTML:",
+        "TEMPLATE_HTML_PATH:",
+        "TEMPLATE_HTML_BEGIN",
+        "TEMPLATE_HTML_END",
+        "FIELDS_JSON_PATH:",
+        "FIELDS_JSON_BEGIN",
+        "FIELDS_JSON_END",
+        "attachments:",
+        "attachment_names:",
+    )
     if root.handlers:
+        # Ensure console filter is applied even when logging is already configured.
+        for handler in root.handlers:
+            if isinstance(handler, logging.StreamHandler):
+                handler.addFilter(_ConsoleExcludeFilter(console_exclude))
         return  # 二重設定を避ける
 
     Path(log_dir).mkdir(parents=True, exist_ok=True)
@@ -37,6 +62,8 @@ def setup_logging(
     # Console
     ch = logging.StreamHandler()
     ch.setFormatter(fmt)
+    # Avoid dumping large debug payloads to console while keeping them in the log file.
+    ch.addFilter(_ConsoleExcludeFilter(console_exclude))
 
     # File (rotating)
     fh = RotatingFileHandler(

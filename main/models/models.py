@@ -19,6 +19,9 @@ class PagePayload:
     page_title: str
     body_html: str
     segment_list: List[Segment] = field(default_factory=list)
+    doc_replicaid: str | None = None
+    doc_unid: str | None = None
+    doclink_placeholders: List[DocLinkPlaceholder] = field(default_factory=list)
 
 
 
@@ -44,13 +47,9 @@ class BinaryPart:
 
 
 @dataclass(frozen=True)
-class PendingPart:
-    """変換段階の素材（name未確定）。送信段階で BinaryPart に変換する。"""
-    placeholder_id: str             # data-id (ターゲット指定に使う)
-    kind: Literal["image", "attachment"]
-    filename: str
-    content_type: str
-    data: bytes
-    origin_field: str               # どのDXLフィールド由来か（デバッグ用）
-    width: int | None = None
-    height: int | None = None
+class DocLinkPlaceholder:
+    """Notes doclink placeholder info for post-create patching."""
+    placeholder_id: str
+    target_replicaid: str
+    target_unid: str
+    label: str | None = None

@@ -31,7 +31,18 @@ def _extract_item_as_text(item: ET.Element) -> Optional[str]:
     if item.find("./dxl:richtext", DXL_NS) is not None:
         return None
 
-    texts = [t.text or "" for t in item.findall(".//dxl:text", DXL_NS)]
+    def _text_with_breaks(text_elem: ET.Element) -> str:
+        parts: List[str] = []
+        if text_elem.text:
+            parts.append(text_elem.text)
+        for child in list(text_elem):
+            if child.tag == f"{{{DXL_NS['dxl']}}}break":
+                parts.append("\n")
+            if child.tail:
+                parts.append(child.tail)
+        return "".join(parts)
+
+    texts = [_text_with_breaks(t) for t in item.findall(".//dxl:text", DXL_NS)]
     if texts:
         s = _join_clean(texts)
         return s or None

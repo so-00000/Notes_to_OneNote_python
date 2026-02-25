@@ -3,11 +3,7 @@ import html as _html
 def _segment_content_html(seg, part_name: str) -> str:
     bp = seg.binary_part
     if bp.kind == "image":
-        style = "max-width:100%;"
-        if bp.width:
-            style += f" width:{bp.width}px;"
-        if bp.height:
-            style += f" height:{bp.height}px;"
+        style = "max-width:800px; width:100%; height:auto;"
         return f"<img src='name:{_html.escape(part_name, quote=True)}' style='{style}'/>"
 
     # attachment

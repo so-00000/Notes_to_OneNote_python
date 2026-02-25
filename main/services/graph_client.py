@@ -57,6 +57,30 @@ class GraphClient:
     def _normalize_onenote_html(self, body_html: str) -> str:
         return body_html
 
+    def _is_onenote_missing_resource_20102(
+        self, response: Optional[requests.Response]
+    ) -> bool:
+        """
+        OneNote API can briefly return 404/20102 right after page creation
+        while the page ID has not propagated yet.
+        """
+        if response is None or response.status_code != 404:
+            return False
+
+        try:
+            payload = response.json()
+        except ValueError:
+            return False
+
+        if not isinstance(payload, dict):
+            return False
+
+        error = payload.get("error")
+        if not isinstance(error, dict):
+            return False
+
+        return str(error.get("code")) == "20102"
+
 
     def close(self) -> None:
         """必要に応じて内部Sessionを閉じる。"""
@@ -269,6 +293,7 @@ class GraphClient:
         page_id: str,
         segments: List[Segment],
         name_prefix: str = "p",
+        max_not_ready_retries: int = 8,
     ) -> None:
         """
         既存ページに対して、アンカー（data-id）をターゲットに
@@ -293,11 +318,7 @@ class GraphClient:
 
             # 1) HTML断片（この seg 用に name:part_name を参照するHTMLを作る）
             if bp.kind == "image":
-                style = "max-width:100%;"
-                if bp.width:
-                    style += f" width:{bp.width}px;"
-                if bp.height:
-                    style += f" height:{bp.height}px;"
+                style = "max-width:800px; width:100%; height:auto;"
                 content_html = (
                     "<div style='margin:8px 0;'>"
                     f"<img src='name:{html.escape(part_name, quote=True)}' style='{style}'/>"
@@ -333,8 +354,28 @@ class GraphClient:
         data_parts["Commands"] = ("commands.json", commands_json, "application/json")
 
         # PATCH multipart
-        res = self._request_multipart("PATCH", url, data_parts=data_parts)
-        res.raise_for_status()
+        for attempt in range(1, max_not_ready_retries + 1):
+            try:
+                self._request_multipart("PATCH", url, data_parts=data_parts)
+                return
+            except requests.exceptions.HTTPError as exc:
+                response = exc.response
+                is_not_ready = self._is_onenote_missing_resource_20102(response)
+                if (not is_not_ready) or attempt >= max_not_ready_retries:
+                    raise
+
+                wait_seconds = min(5.0, 0.5 * (2 ** (attempt - 1)))
+                self._logger.warning(
+                    (
+                        "OneNote page is not ready for PATCH yet; retrying "
+                        "attempt=%s/%s wait=%.1fs page_id=%s"
+                    ),
+                    attempt,
+                    max_not_ready_retries,
+                    wait_seconds,
+                    page_id,
+                )
+                time.sleep(wait_seconds)
 
 
 
