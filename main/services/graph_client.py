@@ -13,6 +13,12 @@ import logging
 from main.models.models import PagePayload, Segment
 from main.logging.graph_logging import mask_headers, summarize_request_kwargs, truncate_text
 from main.services.segments_body import _inject_first_segments
+from main.services.layout_constants import (
+    LEGACY_CONTENT_WIDTH,
+    LEGACY_CONTENT_WIDTH_PX,
+    MAX_CONTENT_WIDTH,
+    MAX_CONTENT_WIDTH_PX,
+)
 import json
 from typing import List
 
@@ -55,7 +61,32 @@ class GraphClient:
 
 
     def _normalize_onenote_html(self, body_html: str) -> str:
-        return body_html
+        normalized = body_html
+        # Normalize line endings first.
+        normalized = normalized.replace("\r\n", "\n").replace("\r", "\n")
+        # Force shared max width for template/style fragments.
+        legacy_width_escaped = re.escape(LEGACY_CONTENT_WIDTH)
+        legacy_px_escaped = re.escape(str(LEGACY_CONTENT_WIDTH_PX))
+        normalized = re.sub(
+            rf"(?i)max-width\s*:\s*{legacy_width_escaped}",
+            f"max-width:{MAX_CONTENT_WIDTH}",
+            normalized,
+        )
+        normalized = re.sub(
+            rf"(?i)width\s*:\s*{legacy_width_escaped}",
+            f"width:{MAX_CONTENT_WIDTH}",
+            normalized,
+        )
+        normalized = re.sub(
+            rf"(?i)\bwidth\s*=\s*['\"]{legacy_px_escaped}['\"]",
+            f"width='{MAX_CONTENT_WIDTH_PX}'",
+            normalized,
+        )
+        # Collapse duplicated HTML line breaks into a single break.
+        normalized = re.sub(r"(?is)(?:<br\s*/?>\s*){2,}", "<br/>", normalized)
+        # Collapse duplicated blank lines in source HTML.
+        normalized = re.sub(r"\n{2,}", "\n", normalized)
+        return normalized
 
     def _is_onenote_missing_resource_20102(
         self, response: Optional[requests.Response]
@@ -318,7 +349,7 @@ class GraphClient:
 
             # 1) HTML断片（この seg 用に name:part_name を参照するHTMLを作る）
             if bp.kind == "image":
-                style = "max-width:800px; width:100%; height:auto;"
+                style = f"max-width:{MAX_CONTENT_WIDTH}; width:100%; height:auto;"
                 content_html = (
                     "<div style='margin:8px 0;'>"
                     f"<img src='name:{html.escape(part_name, quote=True)}' style='{style}'/>"

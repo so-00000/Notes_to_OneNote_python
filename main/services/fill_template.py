@@ -31,14 +31,15 @@ _PLACEHOLDER_RE = re.compile(r"\{\{\s*([A-Za-z0-9_]+)\s*\}\}")
 
 
 def _escape_value(v: str) -> str:
-    s = html.escape(v, quote=False)
+    s = v.strip()
+    s = html.escape(s, quote=False)
     s = s.replace("\r\n", "\n").replace("\r", "\n")
     s = s.replace("\n", "<br/>")
     return s
 
 
 def _escape_value_or_nbsp(v: str) -> str:
-    if v == "":
+    if v.strip() == "":
         return "&nbsp;"
     return _escape_value(v)
 
@@ -53,7 +54,8 @@ def fill_template(
 
     def repl(m: re.Match) -> str:
         key = m.group(1)
-        v = values.get(key, "") or ""
+        raw = values.get(key, "")
+        v = str(raw).strip() if raw is not None else ""
         if key in raw_fields:
             return v
         return _escape_value_or_nbsp(v)

@@ -1,9 +1,10 @@
 import html as _html
+from main.services.layout_constants import MAX_CONTENT_WIDTH
 
 def _segment_content_html(seg, part_name: str) -> str:
     bp = seg.binary_part
     if bp.kind == "image":
-        style = "max-width:800px; width:100%; height:auto;"
+        style = f"max-width:{MAX_CONTENT_WIDTH}; width:100%; height:auto;"
         return f"<img src='name:{_html.escape(part_name, quote=True)}' style='{style}'/>"
 
     # attachment

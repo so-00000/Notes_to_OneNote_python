@@ -102,7 +102,7 @@ def main() -> None:
         section_id = find_section_id(client, notebook_id, settings.section_name)
 
 
-        delete_flg = False
+        delete_flg = True
 
         # 削除したいとき
         if delete_flg:

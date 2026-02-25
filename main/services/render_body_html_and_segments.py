@@ -13,6 +13,14 @@ from main.data_type_config import get_data_type_settings
 from main.services.extract_attachments import _extract_attachments
 from main.services.fill_template import fill_template, resolve_template_html_path
 from main.services.load_field import resolve_fields_json_path
+from main.services.layout_constants import (
+    FORM_3COL_LABEL_WIDTH,
+    FORM_3COL_LABEL_WIDTH_PX,
+    FORM_3COL_VALUE_WIDTH,
+    FORM_3COL_VALUE_WIDTH_PX,
+    MAX_CONTENT_WIDTH,
+    MAX_CONTENT_WIDTH_PX,
+)
 from main.models.models import Segment, BinaryPart, DocLinkPlaceholder
 from pprint import pprint
 import logging
@@ -335,7 +343,7 @@ def _table_to_html(table_el: ET.Element) -> str:
     # 全体を軽く囲う（見やすさ用）
     return (
         "<div style='margin:10px 0;'>"
-        "<table style='border-collapse:collapse; width:720px; table-layout:fixed;' width='720' border='1' cellspacing='0' cellpadding='0'>"
+        f"<table style='border-collapse:collapse; width:{MAX_CONTENT_WIDTH}; table-layout:fixed;' width='{MAX_CONTENT_WIDTH_PX}' border='1' cellspacing='0' cellpadding='0'>"
         + "".join(rows)
         + "</table>"
         "</div>"
@@ -439,7 +447,12 @@ def richtext_item_to_html_and_segment(
                 link_i=link_i,
                 doclink_placeholders=doclink_placeholders,
             )
-            out.append(f"<p>{par_html or '<br/>'}</p>")
+            normalized_par = (par_html or "").strip()
+            # Avoid generating <p><br/></p> for empty paragraphs; emit a plain <br/> instead.
+            if (not normalized_par) or re.fullmatch(r"(?:<br\s*/?>\s*)+", normalized_par, re.IGNORECASE):
+                out.append("<br/>")
+            else:
+                out.append(f"<p>{normalized_par}</p>")
             continue
 
 
@@ -509,7 +522,7 @@ def render_body_html_and_segments(
             link_i=link_i,
         )
 
-        rich_map[field_name] = field_html or ""
+        rich_map[field_name] = (field_html or "").strip()
         all_segments.extend(seg_list)
         all_doclinks.extend(doclinks)
 
@@ -517,6 +530,12 @@ def render_body_html_and_segments(
     # テンプレ埋め込み用 values を作る（ui_field_map + rich_map）
     values: Dict[str, str] = dict(ui_field_map)
     values.update(rich_map)
+    values["MAX_CONTENT_WIDTH"] = MAX_CONTENT_WIDTH
+    values["MAX_CONTENT_WIDTH_PX"] = str(MAX_CONTENT_WIDTH_PX)
+    values["FORM_3COL_LABEL_WIDTH"] = FORM_3COL_LABEL_WIDTH
+    values["FORM_3COL_LABEL_WIDTH_PX"] = str(FORM_3COL_LABEL_WIDTH_PX)
+    values["FORM_3COL_VALUE_WIDTH"] = FORM_3COL_VALUE_WIDTH
+    values["FORM_3COL_VALUE_WIDTH_PX"] = str(FORM_3COL_VALUE_WIDTH_PX)
     # pprint("🪅🪅🪅:rich_map")
     # pprint(rich_map)
 
