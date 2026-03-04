@@ -47,7 +47,6 @@ _SETTINGS: dict[str, DataTypeSettings] = {
         title_field="Fd_Text_1",
     ),
 
-
     "call2024": DataTypeSettings(
         key="call2024",
         label="CallDB2024",

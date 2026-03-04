@@ -32,9 +32,10 @@ MultipartPart = Tuple[str, bytes, str]  # (filename, content, content_type)
 class GraphRetryPolicy:
     """Graph APIリクエストのリトライ設定"""
 
-    max_retries: int = 5
-    retry_statuses: tuple[int, ...] = (429, 503)
-    default_retry_after: int = 2
+    max_retries: int = 4
+    retry_statuses: tuple[int, ...] = (429, 500, 502, 503, 504)
+    default_retry_after: int = 3
+    max_backoff_seconds: int = 12
 
 
 class GraphClient:
@@ -178,9 +179,17 @@ class GraphClient:
 
             elapsed_ms = int((time.perf_counter() - start) * 1000)
 
-            # リトライ対象（429/503）
+            # リトライ対象（429/5xxの一部）
             if resp.status_code in self._retry.retry_statuses:
-                wait = int(resp.headers.get("Retry-After", self._retry.default_retry_after))
+                retry_after = resp.headers.get("Retry-After")
+                if retry_after is not None and str(retry_after).isdigit():
+                    wait = int(retry_after)
+                else:
+                    # Retry-Afterがない場合は指数バックオフ（上限30秒）
+                    wait = min(
+                        self._retry.max_backoff_seconds,
+                        self._retry.default_retry_after * (2 ** (attempt - 1)),
+                    )
                 self._logger.warning(
                     "Graph retryable response: %s %s status=%s attempt=%s/%s wait=%ss elapsed=%sms",
                     method,
@@ -236,7 +245,7 @@ class GraphClient:
             self._retry.retry_statuses,
             last_exc,
         )
-        raise RuntimeError(f"{method} failed after retries (429/503).")
+        raise RuntimeError(f"{method} failed after retries {self._retry.retry_statuses}.")
 
 
     # ==============================
@@ -324,7 +333,7 @@ class GraphClient:
         page_id: str,
         segments: List[Segment],
         name_prefix: str = "p",
-        max_not_ready_retries: int = 8,
+        max_not_ready_retries: int = 14,
     ) -> None:
         """
         既存ページに対して、アンカー（data-id）をターゲットに
@@ -335,7 +344,9 @@ class GraphClient:
         - p1..pN  : binary parts
         """
 
-        url = f"https://graph.microsoft.com/v1.0/me/onenote/pages/{page_id}/content"
+        # url = f"https://graph.microsoft.com/v1.0/me/onenote/pages/{page_id}/content"
+        url = f"https://graph.microsoft.com/v1.0/sites/nipponham86.sharepoint.com,c366644f-cbe3-4821-8d09-6eed7fb27f7b,743a28d6-6865-40fc-bc93-9e8c825be55a/onenote/pages/{page_id}/content"
+
 
         commands = []
         data_parts = {}
@@ -395,7 +406,7 @@ class GraphClient:
                 if (not is_not_ready) or attempt >= max_not_ready_retries:
                     raise
 
-                wait_seconds = min(5.0, 0.5 * (2 ** (attempt - 1)))
+                wait_seconds = min(8.0, 1.0 * (2 ** (attempt - 1)))
                 self._logger.warning(
                     (
                         "OneNote page is not ready for PATCH yet; retrying "
@@ -417,7 +428,7 @@ class GraphClient:
         section_id: str,
         page_payload: PagePayload,
     ) -> dict:
-        url = f"https://graph.microsoft.com/v1.0/me/onenote/sections/{section_id}/pages"
+        url = f"https://graph.microsoft.com/v1.0/sites/nipponham86.sharepoint.com,c366644f-cbe3-4821-8d09-6eed7fb27f7b,743a28d6-6865-40fc-bc93-9e8c825be55a/onenote/sections/{section_id}/pages"
 
         # Graph制約: Presentation + バイナリ最大5
         # MAX_BIN_PER_REQUEST = 5
