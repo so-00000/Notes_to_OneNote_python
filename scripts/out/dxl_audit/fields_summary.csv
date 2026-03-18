@@ -1,4 +1,4 @@
-﻿field_name,types,doc_occurrences,file_count,total_item_elements,is_multi_value_observed,max_sample_text_len,samples,child_tags,item_attrs_seen,by_form_doc_occurrences_top10
+field_name,types,doc_occurrences,file_count,total_item_elements,is_multi_value_observed,max_sample_text_len,samples,child_tags,item_attrs_seen,by_form_doc_occurrences_top10
 $Anonymous,TEXT,20,20,20,N,0,,text,name=$Anonymous,
 $FILE,OBJECT,7,7,15,Y,0,,object,name=$FILE; seal=true; sign=true; summary=true,
 ADATE_D_2,TEXT,20,20,20,N,0,,text,name=ADATE_D_2,

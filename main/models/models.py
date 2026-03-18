@@ -1,7 +1,36 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import List, Literal
+
+
+# =========================
+#　処理全体の設定
+# =========================
+
+@dataclass(frozen=True)
+class AppSettings:
+    access_token: str   # Graph API 呼び出しに使うアクセストークン
+    notebook_name: str  # 対象の OneNote ノートブック名
+    section_name: str   # 対象の OneNote セクション名
+    view_name: str      # 現在のデータ種別に対応するビュー名
+    dxl_dir: Path       # 読み込み対象 DXL ディレクトリの絶対パス
+    sleep_sec: float    # 連続登校時の待機時間
+
+
+# =========================
+#　対象データ毎の設定
+# =========================
+@dataclass(frozen=True)
+class DataTypeSettings:
+    label: str              # データ種別の表示名
+    section_name: str       # 対象の OneNote セクション名
+    view_name: str          # mapping/doc_mapping で使うビュー名
+    dxl_dir: str            # 元データの DXL ディレクトリへの相対パス
+    template_html_path: str # テンプレート HTML への相対パス
+    fields_json_path: str   # フィールド定義 JSON への相対パス
+    title_field: tuple[str, ...] | str  # ページタイトル生成に使う項目
 
 
 # =========================

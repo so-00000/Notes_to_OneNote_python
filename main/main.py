@@ -1,11 +1,9 @@
 # main.py
 from __future__ import annotations
 import time
-import json
 import re
 import shutil
 from pathlib import Path
-from dataclasses import dataclass, asdict
 from typing import Literal
 
 import requests
@@ -20,6 +18,7 @@ from .ignore_git.connection import GRAPH_ONENOTE_BASE_URL
 from .config import NOTEBOOK_NAME, SLEEP_SEC
 from .data_type_config import get_data_type_settings
 from .find_id import find_notebook_id, find_section_id
+from .models import AppSettings
 from .services.graph_client import GraphClient
 from .logging.logging_config import setup_logging
 from .services.page_payload_builder import build_page_payload
@@ -31,17 +30,6 @@ from .services.migration_master_upsert import (
 )
 
 from scripts.delete_all_pages_in_section import delete_all_pages_in_section
-
-
-@dataclass(frozen=True)
-class AppSettings:
-    access_token: str
-    notebook_name: str
-    section_name: str
-    view_name: str
-    dxl_dir: Path
-    sleep_sec: float
-
 
 class UserCancelledError(Exception):
     """Raised when user requests cancellation via Esc key."""
@@ -70,7 +58,7 @@ class EscCancellationMonitor:
             ch = msvcrt.getwch()
             if ch == "\x1b":
                 raise UserCancelledError("Esc key pressed.")
-            # Special keys can start with \x00/\xe0 and include a second code.
+
             if ch in ("\x00", "\xe0") and msvcrt.kbhit():
                 _ = msvcrt.getwch()
 
@@ -231,8 +219,6 @@ def main() -> None:
     deleted_update_failed = 0
     duplicate_skipped_source_ids: list[str] = []
     duplicate_unknown_source_ids: list[str] = []
-    link_log: dict[str, object] = {"pages": []}
-    link_log_path = Path(__file__).resolve().parents[1] / "logs" / "onenote_link_map.json"
     mapping_path = Path(__file__).resolve().parent / "resources" / "mapping" / settings.view_name / "mapping.json"
     migration_master_csv = Path(__file__).resolve().parent / "doc_mapping" / settings.view_name / "migration_master.csv"
     update_failed_cleanup_targets: list[dict[str, str]] = []
@@ -362,20 +348,6 @@ def main() -> None:
 
                     created += 1
 
-                    doc_key = None
-                    if payload.doc_replicaid and payload.doc_unid:
-                        doc_key = f"{payload.doc_replicaid}:{payload.doc_unid}"
-
-                    link_log["pages"].append(
-                        {
-                            "doc_key": doc_key,
-                            "page_id": page_id,
-                            "web_url": web_url,
-                            "client_url": client_url,
-                            "placeholders": [asdict(p) for p in payload.doclink_placeholders],
-                        }
-                    )
-
                     upsert_migration_master(
                         view_name=settings.view_name,
                         mapping_path=mapping_path,
@@ -430,13 +402,6 @@ def main() -> None:
                     deleted_update_failed += 1
                 except Exception as delete_error:
                     print(f"[WARN:cleanup] page_id={page_id} delete failed: {delete_error}")
-
-            # if link_log["pages"]:
-            #     link_log_path.parent.mkdir(parents=True, exist_ok=True)
-            #     link_log_path.write_text(
-            #         json.dumps(link_log, ensure_ascii=True, indent=2),
-            #         encoding="utf-8",
-            #     )
 
             if duplicate_skipped_source_ids:
                 joined = ", ".join(duplicate_skipped_source_ids)

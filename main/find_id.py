@@ -4,7 +4,7 @@ from urllib.parse import quote
 from main.ignore_git.connection import GRAPH_SITE_RESOURCE
 from main.services.graph_client import GraphClient
 
-
+# ノートブック名から、NotebookIdを取得する
 def find_notebook_id(client: GraphClient, notebook_name: str) -> str:
     safe = notebook_name.replace("'", "''")
     url = (
@@ -19,7 +19,7 @@ def find_notebook_id(client: GraphClient, notebook_name: str) -> str:
         raise RuntimeError(f"Notebook name is ambiguous (multiple found): {notebook_name}")
     return items[0]["id"]
 
-
+# notebookId・セクション名から、NotebookIdを取得する
 def find_section_id(client: GraphClient, notebook_id: str, section_name: str) -> str:
     safe = section_name.replace("'", "''")
     url = (

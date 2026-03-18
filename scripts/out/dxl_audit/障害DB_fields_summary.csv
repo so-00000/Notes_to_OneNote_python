@@ -1,4 +1,4 @@
-﻿field_name,types,doc_occurrences,file_count,total_item_elements,is_multi_value_observed,max_sample_text_len,samples,child_tags,item_attrs_seen,by_form_doc_occurrences_top10
+field_name,types,doc_occurrences,file_count,total_item_elements,is_multi_value_observed,max_sample_text_len,samples,child_tags,item_attrs_seen,by_form_doc_occurrences_top10
 $FILE,OBJECT,1,1,2,Y,0,,object,name=$FILE; seal=true; sign=true; summary=true,
 ActionStatus,TEXT,1,1,1,N,0,,text,name=ActionStatus,
 Adjustment,TEXT,1,1,1,N,0,,text,name=Adjustment,
