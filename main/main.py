@@ -1,10 +1,14 @@
-﻿# main.py
+# main.py
 from __future__ import annotations
 import time
 import json
+import re
 import shutil
 from pathlib import Path
 from dataclasses import dataclass, asdict
+from typing import Literal
+
+import requests
 
 try:
     import msvcrt  # Windows console key polling
@@ -12,14 +16,21 @@ except ImportError:  # pragma: no cover
     msvcrt = None
 
 from .ignore_git import token
+from .ignore_git.connection import GRAPH_ONENOTE_BASE_URL
 from .config import NOTEBOOK_NAME, SLEEP_SEC
 from .data_type_config import get_data_type_settings
 from .find_id import find_notebook_id, find_section_id
 from .services.graph_client import GraphClient
 from .logging.logging_config import setup_logging
 from .services.page_payload_builder import build_page_payload
+from .services.migration_master_upsert import (
+    build_source_id,
+    delete_row_by_source_id,
+    find_row_by_source_id,
+    upsert_migration_master,
+)
 
-from .delete_all_pages_in_section import delete_all_pages_in_section
+from scripts.delete_all_pages_in_section import delete_all_pages_in_section
 
 
 @dataclass(frozen=True)
@@ -27,6 +38,7 @@ class AppSettings:
     access_token: str
     notebook_name: str
     section_name: str
+    view_name: str
     dxl_dir: Path
     sleep_sec: float
 
@@ -99,6 +111,7 @@ def _load_settings() -> AppSettings:
         access_token=access_token,
         notebook_name=NOTEBOOK_NAME,
         section_name=data_type_settings.section_name,
+        view_name=data_type_settings.view_name,
         dxl_dir=dxl_dir,
         sleep_sec=SLEEP_SEC,
     )
@@ -109,6 +122,11 @@ def _load_dxl_files(dxl_dir: Path) -> list[Path]:
     if not dxl_files:
         raise RuntimeError(f"No DXL files found in: {dxl_dir}")
     return dxl_files
+
+
+def _initial_link_resolution_status(payload) -> str:
+    placeholders = payload.doclink_placeholders or []
+    return "HAS_LINK_UNRESOLVED" if placeholders else "NO_LINK"
 
 
 def _build_unique_destination(path: Path) -> Path:
@@ -135,6 +153,72 @@ def _move_file_to_subdir(src: Path, subdir_name: str) -> Path:
     return dest
 
 
+def _extract_first_url(text: str) -> str:
+    m = re.search(r"https?://[^\s'\"<>]+", text or "")
+    return m.group(0) if m else ""
+
+
+def _extract_page_id_from_text(text: str) -> str:
+    patterns = [
+        r"/onenote/pages/([^/\s?]+)/content",
+        r"/onenote/pages/([^/\s?]+)",
+        r"[?&]page-id=([^&#\s]+)",
+        r"[?&]pageid=([^&#\s]+)",
+    ]
+    for p in patterns:
+        m = re.search(p, text or "")
+        if m:
+            page_id = m.group(1).strip("{}")
+            page_id = page_id.replace("%7B", "").replace("%7D", "")
+            return page_id
+    return ""
+
+
+def _resolve_existing_page_id(existing_row: dict[str, str]) -> str:
+    # Graph API for /onenote/pages/{id} expects the Graph page id (e.g. 1-...!...)
+    graph_page_id = (existing_row.get("onenote_page_id", "") or "").strip()
+    if graph_page_id:
+        return graph_page_id
+
+    # Fallback: only parse page id from Graph endpoint-like error URLs.
+    # Do not use client_url page-id (GUID), because it is not valid for this endpoint.
+    for c in (
+        existing_row.get("url_from_error", ""),
+        existing_row.get("onenote_web_url", ""),
+    ):
+        pid = _extract_page_id_from_text(c)
+        if pid and ("!" in pid or pid.startswith("1-")):
+            return pid
+    return ""
+
+
+def _check_existing_page_state(
+    client: GraphClient,
+    existing_row: dict[str, str],
+) -> Literal["exists", "not_found", "unknown"]:
+    page_id = _resolve_existing_page_id(existing_row)
+    if not page_id:
+        return "unknown"
+
+    try:
+        client.get_onenote_page_content(page_id)
+        return "exists"
+    except requests.exceptions.Timeout:
+        return "unknown"
+    except requests.exceptions.HTTPError as e:
+        status = e.response.status_code if e.response is not None else None
+        if status == 404:
+            return "not_found"
+        if status in {500, 502, 503, 504}:
+            return "unknown"
+        return "unknown"
+    except RuntimeError:
+        # GraphClient retries 500系の後に RuntimeError を投げるため Unknown 扱い
+        return "unknown"
+    except Exception:
+        return "unknown"
+
+
 def main() -> None:
     setup_logging(level="DEBUG")
 
@@ -144,8 +228,14 @@ def main() -> None:
     cancel_monitor = EscCancellationMonitor(check_interval_sec=2.0)
 
     created = 0
+    deleted_update_failed = 0
+    duplicate_skipped_source_ids: list[str] = []
+    duplicate_unknown_source_ids: list[str] = []
     link_log: dict[str, object] = {"pages": []}
     link_log_path = Path(__file__).resolve().parents[1] / "logs" / "onenote_link_map.json"
+    mapping_path = Path(__file__).resolve().parent / "resources" / "mapping" / settings.view_name / "mapping.json"
+    migration_master_csv = Path(__file__).resolve().parent / "doc_mapping" / settings.view_name / "migration_master.csv"
+    update_failed_cleanup_targets: list[dict[str, str]] = []
 
     try:
 
@@ -155,16 +245,16 @@ def main() -> None:
 
         # notebook_id = find_notebook_id(client, settings.notebook_name)
 
-        #小石沢さんノート
-        # notebook_id = "1-f4f7d836-51c5-405d-8aff-7e81033a27ed"
+
+        # "本番：2_障害DB"
+        notebook_id = "1-f120b7bd-5aca-447d-a23e-404d907cd6ec"
 
 
+        # # "本番：3_データ強制変更"
+        # notebook_id = "1-1fc57471-edb0-4751-a4ff-e8356669cef5"
 
-        # "本番：データ強制変更"
-        notebook_id = "1-1fc57471-edb0-4751-a4ff-e8356669cef5"
-
-        # # "本番：2_障害DB"
-        # notebook_id = "1-f120b7bd-5aca-447d-a23e-404d907cd6ec"
+        # "本番：5_UserCall"
+        # notebook_id = "1-63307941-46a9-475f-8d12-9e4750b7f1e0"
 
 
 
@@ -173,57 +263,21 @@ def main() -> None:
         #　SectionID
         # 
 
-        section_name = "データ強制変更"
-        section_id = find_section_id(client, notebook_id, section_name)
         # section_id = find_section_id(client, notebook_id, settings.section_name)
 
-
-        #小石沢さんセクション
-        # section_id = "1-113c71a1-51a5-48c0-94db-64d2982dcb5a"
-
-        # "本番：2_障害DB"
-        # section_id = "1-4cf9ae1f-1aef-4113-a50e-be6ecc1895c1"
-        # section_id = "1-967f1cfa-8195-4672-bb4f-407c21e67cd1"
-
-        # 障害DB_2024
-        # section_id = "1-5f4aa77a-607b-4740-8d34-ebf84aed8dbc"
-
-        # # 障害DB_2023
-        # section_id = "1-96e3fc6b-abe5-4901-ba88-f4f60ca9aba3"
-
-        # # 障害DB_2022
-        # section_id = "1-c9cb3445-0f8f-4c60-9cd1-8e24ea5bc42d"
-
-        # # 障害DB_2021
-        # section_id = "1-02d62dcd-ba0d-4926-9b2a-c3f37e265893"
-
-        # 障害DB_2020
-        # section_id = "1-2552d78c-8f74-4551-82ad-ea771cda7ba5"
-
-        # # 障害DB_2019
-        # section_id = "1-3376de02-f2a9-40c3-a2f2-3e80ea2f5fe3"
-
-        # # 障害DB_2018
-        # section_id = "1-66c4b5d7-80c9-40ce-8599-6bb712065b04"
-
-        # # 障害DB_2017
-        # section_id = "1-aabb7743-c438-4704-8140-f879e6af1755"
-
-        # 障害DB_2016
-        # section_id = "1-a4f43d0f-df72-4348-bffd-ecdcbece0fc2"
-
-        # "本番：データ強制変更"
-        # section_id = "1-05c3903a-d2c0-4acf-8140-9ff748e1fc05"
-
+        section_name = "障害DB_2024"
+        section_id = find_section_id(client, notebook_id, section_name)
 
 
         delete_flg = False
+
 
         if delete_flg:
             delete_all_pages_in_section(client, section_id)
         else:
             print("[INFO] Press Esc to request cancellation (stops at next safe check).")
             for i, dxl_path in enumerate(dxl_files, start=1):
+                payload = None
                 try:
                     cancel_monitor.check()
 
@@ -232,17 +286,81 @@ def main() -> None:
                         row_no=i,
                     )
 
-                    page = client.create_onenote_page(
+                    source_id = build_source_id(payload)
+                    existing_row = find_row_by_source_id(migration_master_csv, source_id)
+                    if existing_row:
+                        existing_state = _check_existing_page_state(client, existing_row)
+                        if existing_state == "exists":
+                            if source_id:
+                                duplicate_skipped_source_ids.append(source_id)
+                            moved_path = _move_file_to_subdir(dxl_path, "duplicate")
+                            print(f"[SKIP:duplicate] {dxl_path.name} source_id={source_id} -> {moved_path}")
+                            continue
+                        if existing_state == "unknown":
+                            if source_id:
+                                duplicate_unknown_source_ids.append(source_id)
+                            moved_path = _move_file_to_subdir(dxl_path, "error")
+                            print(
+                                f"[SKIP:unknown] {dxl_path.name} "
+                                f"source_id={source_id} -> {moved_path}"
+                            )
+                            continue
+                        deleted = delete_row_by_source_id(
+                            mapping_path=mapping_path,
+                            csv_path=migration_master_csv,
+                            source_id=source_id,
+                        )
+                        print(f"[INFO:recreate] stale source_id={source_id}, removed_rows={deleted}")
+
+                    # 1) 新規作成
+                    page, rest_segments = client.create_onenote_page_base(
                         section_id=section_id,
                         page_payload=payload,
                     )
-
-                    created += 1
 
                     page_id = page.get("id")
                     links = page.get("links") or {}
                     web_url = (links.get("oneNoteWebUrl") or {}).get("href") or ""
                     client_url = (links.get("oneNoteClientUrl") or {}).get("href") or ""
+
+                    # 2) 作成後更新（残りセグメント）
+                    try:
+                        client.append_onenote_page_remaining_segments(
+                            page_id=page_id,
+                            segments=rest_segments,
+                        )
+                    except Exception as update_error:
+                        update_error_message = str(update_error)
+                        url_from_error = _extract_first_url(update_error_message)
+                        if not url_from_error and page_id:
+                            url_from_error = f"{GRAPH_ONENOTE_BASE_URL}/pages/{page_id}/content"
+
+                        upsert_migration_master(
+                            view_name=settings.view_name,
+                            mapping_path=mapping_path,
+                            csv_path=migration_master_csv,
+                            payload=payload,
+                            page_id=page_id or "",
+                            web_url=web_url,
+                            client_url=client_url,
+                            url_from_error=url_from_error,
+                            status="error:update_failed",
+                            error_message=update_error_message,
+                            link_resolution_status=_initial_link_resolution_status(payload),
+                        )
+
+                        update_failed_cleanup_targets.append(
+                            {
+                                "page_id": page_id or "",
+                                "url_from_error": url_from_error,
+                                "error_message": update_error_message,
+                            }
+                        )
+                        moved_path = _move_file_to_subdir(dxl_path, "error")
+                        print(f"[ERROR:update] {dxl_path.name}: {update_error} -> {moved_path}")
+                        continue
+
+                    created += 1
 
                     doc_key = None
                     if payload.doc_replicaid and payload.doc_unid:
@@ -258,6 +376,18 @@ def main() -> None:
                         }
                     )
 
+                    upsert_migration_master(
+                        view_name=settings.view_name,
+                        mapping_path=mapping_path,
+                        csv_path=migration_master_csv,
+                        payload=payload,
+                        page_id=page_id or "",
+                        web_url=web_url,
+                        client_url=client_url,
+                        status="done",
+                        link_resolution_status=_initial_link_resolution_status(payload),
+                    )
+
                     moved_path = _move_file_to_subdir(dxl_path, "complete")
                     print(f"[OK] {dxl_path.name} -> {moved_path}")
 
@@ -268,8 +398,38 @@ def main() -> None:
                     print(f"[CANCELLED] Stopped by Esc. Created pages: {created}")
                     break
                 except Exception as e:
+                    if payload is not None:
+                        error_message = str(e)
+                        url_from_error = _extract_first_url(error_message)
+                        upsert_migration_master(
+                            view_name=settings.view_name,
+                            mapping_path=mapping_path,
+                            csv_path=migration_master_csv,
+                            payload=payload,
+                            url_from_error=url_from_error,
+                            status="error:create_failed",
+                            error_message=error_message,
+                            link_resolution_status=_initial_link_resolution_status(payload),
+                        )
                     moved_path = _move_file_to_subdir(dxl_path, "error")
                     print(f"[ERROR] {dxl_path.name}: {e} -> {moved_path}")
+
+            # ② update_failed のみ後処理で削除
+            deleted_ids: set[str] = set()
+            for target in update_failed_cleanup_targets:
+                page_id = (target.get("page_id") or "").strip()
+                if not page_id:
+                    page_id = _extract_page_id_from_text(target.get("url_from_error", ""))
+                if not page_id:
+                    page_id = _extract_page_id_from_text(target.get("error_message", ""))
+                if not page_id or page_id in deleted_ids:
+                    continue
+                try:
+                    client.delete_onenote_page(page_id=page_id)
+                    deleted_ids.add(page_id)
+                    deleted_update_failed += 1
+                except Exception as delete_error:
+                    print(f"[WARN:cleanup] page_id={page_id} delete failed: {delete_error}")
 
             # if link_log["pages"]:
             #     link_log_path.parent.mkdir(parents=True, exist_ok=True)
@@ -278,7 +438,19 @@ def main() -> None:
             #         encoding="utf-8",
             #     )
 
-            print(f"🪅Done. Created pages: {created}")
+            if duplicate_skipped_source_ids:
+                joined = ", ".join(duplicate_skipped_source_ids)
+                print(f"[DUPLICATE] skipped source_id: {joined}")
+            if duplicate_unknown_source_ids:
+                joined_unknown = ", ".join(duplicate_unknown_source_ids)
+                print(f"[DUPLICATE] unknown-check source_id (not recreated): {joined_unknown}")
+            print(
+                "✅  Done. \r\n"
+                f"✅  Created pages: {created}, \r\n"
+                f"✅  cleaned update-failed pages: {deleted_update_failed}, \r\n"
+                f"✅  duplicate skipped: {len(duplicate_skipped_source_ids)}, \r\n"
+                f"✅  duplicate unknown: {len(duplicate_unknown_source_ids)}"
+            )
     finally:
         client.close()
 

@@ -92,6 +92,7 @@ def build_page_payload(
         segment_list =  segment_list,
         doc_replicaid = doc_replicaid,
         doc_unid = doc_unid,
+        extracted_fields = dict(ui_field_map),
         doclink_placeholders = doclink_placeholders,
     )
 

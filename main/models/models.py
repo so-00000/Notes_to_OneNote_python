@@ -21,6 +21,7 @@ class PagePayload:
     segment_list: List[Segment] = field(default_factory=list)
     doc_replicaid: str | None = None
     doc_unid: str | None = None
+    extracted_fields: dict[str, str] = field(default_factory=dict)
     doclink_placeholders: List[DocLinkPlaceholder] = field(default_factory=list)
 
 

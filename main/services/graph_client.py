@@ -4,12 +4,13 @@ import html
 import re
 import time
 from dataclasses import dataclass
-from typing import Any, Dict, Iterable, Mapping, Optional, Tuple
+from typing import Any, Dict, Mapping, Optional, Tuple
 from urllib.parse import quote
 
 import requests
 import logging
 
+from main.ignore_git.connection import GRAPH_ONENOTE_BASE_URL
 from main.models.models import PagePayload, Segment
 from main.logging.graph_logging import mask_headers, summarize_request_kwargs, truncate_text
 from main.services.segments_body import _inject_first_segments
@@ -22,15 +23,11 @@ from main.services.layout_constants import (
 import json
 from typing import List
 
-
-
-from pprint import pprint
-
 MultipartPart = Tuple[str, bytes, str]  # (filename, content, content_type)
 
 @dataclass(frozen=True)
 class GraphRetryPolicy:
-    """Graph APIリクエストのリトライ設定"""
+    """Graph API リトライ設定。"""
 
     max_retries: int = 4
     retry_statuses: tuple[int, ...] = (429, 500, 502, 503, 504)
@@ -39,13 +36,7 @@ class GraphRetryPolicy:
 
 
 class GraphClient:
-    """
-    Microsoft Graph APIの呼び出しをシンプルに扱うためのクライアント
-
-    - 401は即座に例外
-    - 429/503はRetry-Afterで待って再試行
-    - 成功時はResponseを返す
-    """
+    """OneNote 操作向けの Graph API クライアント。"""
 
     def __init__(
         self,
@@ -115,30 +106,15 @@ class GraphClient:
 
 
     def close(self) -> None:
-        """必要に応じて内部Sessionを閉じる。"""
+        """Close internal requests session if owned by this client."""
         if self._owns_session:
             self._session.close()
     
     def _merged_headers(self, headers: Optional[dict]) -> dict:
-        # 呼び出し側が Authorization を渡しても上書きされるように固定
+        # Authorization は常に現在のアクセストークンで上書きする。
         merged = dict(headers or {})
         merged["Authorization"] = f"Bearer {self._access_token}"
         return merged
-
-
-    # ==============================
-    # リクエスト送信・リトライ制御（共通）
-    # ==============================
-    #
-    # ■ 役割
-    # - Graph API への実送信と、429/503 リトライ制御を集約。
-    # - multipart / JSON など「送信形式の違い」は呼び出し側で request_kwargs を作る。
-    #
-    #
-    # ■ エラーハンドリング
-    # - 429/503: Retry-After を見て待機→再試行する。
-    # - 401: アクセストークン失効/不正として例外にする。
-    # - その他: raise_for_status() に委ねる（4xx/5xx は例外）。
     def _request_with_retry(
         self,
         method: str,
@@ -148,10 +124,8 @@ class GraphClient:
         **request_kwargs: Any,
     ) -> requests.Response:
 
-        # ヘッダー構築（アクセストークンなど）
         merged_headers = self._merged_headers(headers)
 
-        # 送信前ログ（DEBUG推奨）
         try:
             safe_headers = mask_headers(merged_headers)
             kw_summary = summarize_request_kwargs(dict(request_kwargs))
@@ -179,13 +153,11 @@ class GraphClient:
 
             elapsed_ms = int((time.perf_counter() - start) * 1000)
 
-            # リトライ対象（429/5xxの一部）
             if resp.status_code in self._retry.retry_statuses:
                 retry_after = resp.headers.get("Retry-After")
                 if retry_after is not None and str(retry_after).isdigit():
                     wait = int(retry_after)
                 else:
-                    # Retry-Afterがない場合は指数バックオフ（上限30秒）
                     wait = min(
                         self._retry.max_backoff_seconds,
                         self._retry.default_retry_after * (2 ** (attempt - 1)),
@@ -203,7 +175,6 @@ class GraphClient:
                 time.sleep(wait)
                 continue
 
-            # 401 は即例外
             if resp.status_code == 401:
                 self._logger.error(
                     "Graph unauthorized: %s %s status=401 elapsed=%sms body=%s",
@@ -214,7 +185,6 @@ class GraphClient:
                 )
                 raise RuntimeError("401 Unauthorized. Access token expired/invalid.")
 
-            # その他のエラー（raise_for_status）
             try:
                 resp.raise_for_status()
             except Exception as e:
@@ -229,7 +199,6 @@ class GraphClient:
                 )
                 raise
 
-            # 成功ログ（INFO）
             self._logger.info(
                 "Graph request success: %s %s status=%s elapsed=%sms",
                 method,
@@ -247,22 +216,6 @@ class GraphClient:
         )
         raise RuntimeError(f"{method} failed after retries {self._retry.retry_statuses}.")
 
-
-    # ==============================
-    # Graph API リクエスト（multipart/form-data）
-    # ==============================
-    #
-    # ■ 用途
-    # - HTML(Presentation) と画像/添付(バイナリ)を同じPOSTで送る必要があるケースに使用する。
-    #
-    # ■ data_parts（= multipart の各パート）
-    # - dict のキーが “パート名” になる（例: "Presentation", "image1", "file1"）。
-    # - "Presentation" は必須で、ページ本文の XHTML/HTML を入れる。
-    # - 画像/添付は本文HTML内で `name:パート名` を参照して貼り付ける。
-    #
-    # ■ 実装メモ
-    # - requests の `files=` に data_parts を渡すと multipart/form-data になる。
-    # - 送信とリトライは共通関数 `_request_with_retry()` に委譲する。
     def _request_multipart(
         self,
         method: str,
@@ -278,22 +231,6 @@ class GraphClient:
             files=data_parts,
         )
 
-
-    # ==============================
-    # Graph API リクエスト（JSON / 通常通信）
-    # ==============================
-    #
-    # ■ 用途
-    # - Graph API の大半は JSON（またはボディ無し）で通信するため、この入口を使う。
-    # - GET/DELETE のようにボディが不要なリクエストもここに寄せると迷いにくい。
-    #
-    # ■ 引数の使い分け
-    # - json_body: POST/PATCH などで送る JSON ボディ。
-    # - params: URLクエリ（`?$select=...&$top=...` のような OData パラメータ）。
-    #
-    # ■ 実装メモ
-    # - requests の `json=` を使うと Content-Type: application/json が自動設定される。
-    # - 送信とリトライは共通関数 `_request_with_retry()` に委譲する。
     def _request_json(
         self,
         method: str,
@@ -317,11 +254,17 @@ class GraphClient:
 
 
     def get_json(self, url: str) -> dict:
-        """GETしてJSONを返す。"""
+        """GETしてJSONレスポンスを返す。"""
         return self._request_json("GET", url).json()
 
+    def get_onenote_page_content(self, page_id: str) -> str:
+        """OneNoteページ本文をHTML文字列として取得する。"""
+        url = f"{GRAPH_ONENOTE_BASE_URL}/pages/{quote(page_id)}/content"
+        resp = self._request_json("GET", url, headers={"Accept": "text/html"})
+        return resp.text
+
     def delete(self, url: str) -> None:
-        """DELETEして結果を確認する。"""
+        """DELETEリクエストを送信する。"""
         self._request_json("DELETE", url)
 
 
@@ -335,30 +278,20 @@ class GraphClient:
         name_prefix: str = "p",
         max_not_ready_retries: int = 14,
     ) -> None:
-        """
-        既存ページに対して、アンカー（data-id）をターゲットに
-        画像/添付を append で差し込む。
-
-        multipart:
-        - Commands: patch commands (application/json)
-        - p1..pN  : binary parts
-        """
+        """Append binary segments to an existing OneNote page."""
 
         # url = f"https://graph.microsoft.com/v1.0/me/onenote/pages/{page_id}/content"
-        url = f"https://graph.microsoft.com/v1.0/sites/nipponham86.sharepoint.com,c366644f-cbe3-4821-8d09-6eed7fb27f7b,743a28d6-6865-40fc-bc93-9e8c825be55a/onenote/pages/{page_id}/content"
+        url = f"{GRAPH_ONENOTE_BASE_URL}/pages/{page_id}/content"
 
 
         commands = []
         data_parts = {}
 
-        # Commands パートは必須（バイナリ参照するため） :contentReference[oaicite:5]{index=5}
-        # → ただし data_parts に入れるのは最後にまとめてOK
-
         for i, seg in enumerate(segments, start=1):
             part_name = f"{name_prefix}{i}"
             bp = seg.binary_part
 
-            # 1) HTML断片（この seg 用に name:part_name を参照するHTMLを作る）
+            # multipartのpart名(name:xxx)を参照するHTML断片を作る。
             if bp.kind == "image":
                 style = f"max-width:{MAX_CONTENT_WIDTH}; width:100%; height:auto;"
                 content_html = (
@@ -377,8 +310,6 @@ class GraphClient:
                     "</div>"
                 )
 
-            # 2) patch command：アンカー（data-id）に append
-            # data-id を付けた要素は #<data-id> で target 指定できる :contentReference[oaicite:6]{index=6}
             sid = html.escape(seg.segment_id, quote=True)
             commands.append(
                 {
@@ -388,10 +319,8 @@ class GraphClient:
                 }
             )
 
-            # 3) バイナリパート追加
             data_parts[part_name] = (bp.filename, bp.data, bp.content_type)
 
-        # Commands パートを multipart に入れる
         commands_json = json.dumps(commands, ensure_ascii=False).encode("utf-8")
         data_parts["Commands"] = ("commands.json", commands_json, "application/json")
 
@@ -420,6 +349,24 @@ class GraphClient:
                 time.sleep(wait_seconds)
 
 
+    def update_onenote_page_doclinks(
+        self,
+        *,
+        page_id: str,
+        commands: List[dict[str, str]],
+    ) -> None:
+        """Apply doclink replacement commands to an existing OneNote page."""
+        if not commands:
+            return
+
+        url = f"{GRAPH_ONENOTE_BASE_URL}/pages/{page_id}/content"
+        commands_json = json.dumps(commands, ensure_ascii=False).encode("utf-8")
+        data_parts = {
+            "Commands": ("commands.json", commands_json, "application/json"),
+        }
+        self._request_multipart("PATCH", url, data_parts=data_parts)
+
+
 
 
     def create_onenote_page(
@@ -428,18 +375,29 @@ class GraphClient:
         section_id: str,
         page_payload: PagePayload,
     ) -> dict:
-        url = f"https://graph.microsoft.com/v1.0/sites/nipponham86.sharepoint.com,c366644f-cbe3-4821-8d09-6eed7fb27f7b,743a28d6-6865-40fc-bc93-9e8c825be55a/onenote/sections/{section_id}/pages"
+        page, rest_segments = self.create_onenote_page_base(
+            section_id=section_id,
+            page_payload=page_payload,
+        )
+        self.append_onenote_page_remaining_segments(
+            page_id=page["id"],
+            segments=rest_segments,
+        )
+        return page
 
-        # Graph制約: Presentation + バイナリ最大5
-        # MAX_BIN_PER_REQUEST = 5
-        MAX_BIN_PER_REQUEST = 2
-        
+    def create_onenote_page_base(
+        self,
+        *,
+        section_id: str,
+        page_payload: PagePayload,
+        max_bin_per_request: int = 2,
+    ) -> tuple[dict, List[Segment]]:
+        url = f"{GRAPH_ONENOTE_BASE_URL}/sections/{section_id}/pages"
+
         all_segments = list(page_payload.segment_list or [])
-        firstSeg = all_segments[:MAX_BIN_PER_REQUEST]
-        restSeg = all_segments[MAX_BIN_PER_REQUEST:]
+        firstSeg = all_segments[:max_bin_per_request]
+        restSeg = all_segments[max_bin_per_request:]
 
-
-        # 初回送信分の作成（上限件数までバイナリデータセグメント埋め込みを行ったHTML作成）
         body_html, parts = _inject_first_segments(page_payload.body_html, firstSeg, name_prefix="p")
         body_html = self._normalize_onenote_html(body_html)
 
@@ -478,11 +436,23 @@ class GraphClient:
         res = self._request_multipart("POST", url, data_parts=data_parts)
         res.raise_for_status()
         page = res.json()
-        page_id = page["id"]
+        return page, restSeg
 
-        # 残りがあれば PATCH で 5個ずつ埋めていく
-        for off in range(0, len(restSeg), MAX_BIN_PER_REQUEST):
-            chunk = restSeg[off : off + MAX_BIN_PER_REQUEST]
+    def append_onenote_page_remaining_segments(
+        self,
+        *,
+        page_id: str,
+        segments: List[Segment],
+        max_bin_per_request: int = 2,
+    ) -> None:
+        for off in range(0, len(segments), max_bin_per_request):
+            chunk = segments[off : off + max_bin_per_request]
             self.update_onenote_page_segments(page_id=page_id, segments=chunk)
 
-        return page
+    def delete_onenote_page(
+        self,
+        *,
+        page_id: str,
+    ) -> None:
+        url = f"{GRAPH_ONENOTE_BASE_URL}/pages/{quote(page_id)}"
+        self.delete(url)

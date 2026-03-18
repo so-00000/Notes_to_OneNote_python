@@ -86,6 +86,17 @@ def _escape_text(value: str) -> str:
     return html.escape(value).replace("\n", "<br/>")
 
 
+def _escape_text_preserve_spaces(value: str) -> str:
+    if not value:
+        return ""
+    s = value.replace("\r\n", "\n").replace("\r", "\n")
+    s = html.escape(s)
+    s = s.replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;")
+    # Preserve multi-space runs for OneNote rendering.
+    s = re.sub(r" {2,}", lambda m: " " + ("&nbsp;" * (len(m.group(0)) - 1)), s)
+    return s.replace("\n", "<br/>")
+
+
 def _normalize_notes_server(raw: Optional[str]) -> Optional[str]:
     if not raw:
         return None
@@ -147,10 +158,10 @@ def _doclink_to_anchor(
     label_safe = _escape_text(label)
 
     html_link = (
-        f"<span id='{pid}' data-id='{pid}'>"
+        f"<div id='{pid}' data-id='{pid}' style='display:inline;'>"
         f"<a class='notes-link' data-notes-replicaid='{rep}' data-notes-unid='{uid}' "
         f"href='{href_safe}'>{label_safe}</a>"
-        "</span>"
+        "</div>"
     )
     return html_link, link_i + 1
 
@@ -176,7 +187,7 @@ def _par_to_html(
 ) -> tuple[str, int]:
     parts: list[str] = []
     if par.text:
-        parts.append(_escape_text(par.text))
+        parts.append(_escape_text_preserve_spaces(par.text))
 
     for child in list(par):
         tag = _local_tag(child.tag)
@@ -184,7 +195,7 @@ def _par_to_html(
         if tag == "run":
             txt = _text_content(child)
             if txt:
-                parts.append(_escape_text(txt))
+                parts.append(_escape_text_preserve_spaces(txt))
         elif tag == "doclink":
             link_html, link_i = _doclink_to_anchor(
                 child,
@@ -199,10 +210,10 @@ def _par_to_html(
         else:
             txt = _text_content(child)
             if txt:
-                parts.append(_escape_text(txt))
+                parts.append(_escape_text_preserve_spaces(txt))
 
         if child.tail:
-            parts.append(_escape_text(child.tail))
+            parts.append(_escape_text_preserve_spaces(child.tail))
 
     return "".join(parts).strip(), link_i
 
@@ -452,7 +463,11 @@ def richtext_item_to_html_and_segment(
             if (not normalized_par) or re.fullmatch(r"(?:<br\s*/?>\s*)+", normalized_par, re.IGNORECASE):
                 out.append("<br/>")
             else:
-                out.append(f"<p>{normalized_par}</p>")
+                # If paragraph contains block tags (e.g. doclink anchor wrapper), avoid <p> nesting.
+                if re.search(r"(?i)<(?:div|table)\b", normalized_par):
+                    out.append(f"<div style='white-space:pre-wrap;'>{normalized_par}</div>")
+                else:
+                    out.append(f"<p style='white-space:pre-wrap;'>{normalized_par}</p>")
             continue
 
 

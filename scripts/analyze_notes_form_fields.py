@@ -177,7 +177,7 @@ def analyze_form_dxl(dxl_path: Path) -> List[FieldInfo]:
 
 def write_csv(rows: List[FieldInfo], out_csv: Path) -> None:
     out_csv.parent.mkdir(parents=True, exist_ok=True)
-    with out_csv.open("w", encoding="utf-8-sig", newline="") as f:
+    with out_csv.open("w", encoding="utf-8", newline="") as f:
         w = csv.DictWriter(
             f,
             fieldnames=[
@@ -191,6 +191,7 @@ def write_csv(rows: List[FieldInfo], out_csv: Path) -> None:
                 "hidden_modes",
                 "likely_displayed",
             ],
+            quoting=csv.QUOTE_ALL,
         )
         w.writeheader()
         for r in rows:

@@ -44,6 +44,32 @@ def _escape_value_or_nbsp(v: str) -> str:
     return _escape_value(v)
 
 
+def _rewrite_richtext_field_wrappers(template_html: str, raw_fields: Set[str]) -> str:
+    """
+    richtext(raw_fields) placeholder that is wrapped by span/span is invalid when
+    injected HTML contains block tags (<p>, <div>, <table> ...). Convert only
+    those wrappers to div/div to keep HTML valid.
+    """
+    out = template_html
+    for key in raw_fields:
+        pat = re.compile(
+            rf"(?is)"
+            rf"<span(?P<w_attr>[^>]*\bclass\s*=\s*['\"][^'\"]*\bnotes-field-wrap\b[^'\"]*['\"][^>]*)>"
+            rf"\s*<span(?P<f_attr>[^>]*\bclass\s*=\s*['\"][^'\"]*\bnotes-field\b[^'\"]*['\"][^>]*)>"
+            rf"\s*\{{\{{\s*{re.escape(key)}\s*\}}\}}\s*"
+            rf"</span>\s*</span>"
+        )
+        out = pat.sub(
+            lambda m: (
+                f"<div{m.group('w_attr')}>"
+                f"<div{m.group('f_attr')}>{{{{{key}}}}}</div>"
+                f"</div>"
+            ),
+            out,
+        )
+    return out
+
+
 def fill_template(
     *,
     template_html: str,
@@ -51,6 +77,7 @@ def fill_template(
     raw_fields: Optional[Set[str]] = None,
 ) -> str:
     raw_fields = raw_fields or set()
+    template_html = _rewrite_richtext_field_wrappers(template_html, raw_fields)
 
     def repl(m: re.Match) -> str:
         key = m.group(1)

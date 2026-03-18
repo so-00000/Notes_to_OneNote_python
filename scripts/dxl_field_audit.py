@@ -321,8 +321,8 @@ def write_outputs(field_stats: Dict[str, FieldStat], meta: Dict[str, int], out_d
 
     # CSV（一覧）
     csv_path = out_dir / "fields_summary.csv"
-    with csv_path.open("w", encoding="utf-8-sig", newline="") as f:
-        w = csv.writer(f)
+    with csv_path.open("w", encoding="utf-8", newline="") as f:
+        w = csv.writer(f, quoting=csv.QUOTE_ALL)
         w.writerow(
             [
                 "field_name",

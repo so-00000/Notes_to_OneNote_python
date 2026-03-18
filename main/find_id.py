@@ -1,19 +1,14 @@
 # find_id.py
 from urllib.parse import quote
 
+from main.ignore_git.connection import GRAPH_SITE_RESOURCE
 from main.services.graph_client import GraphClient
 
 
 def find_notebook_id(client: GraphClient, notebook_name: str) -> str:
-
-    # site_id = "v1.0/me"
-    site_id = "v1.0/sites/nipponham86.sharepoint.com,c366644f-cbe3-4821-8d09-6eed7fb27f7b,743a28d6-6865-40fc-bc93-9e8c825be55a"
-
-
-    """表示名からノートブックIDを取得する。"""
     safe = notebook_name.replace("'", "''")
     url = (
-        f"https://graph.microsoft.com/{site_id}/onenote/notebooks"
+        f"https://graph.microsoft.com/{GRAPH_SITE_RESOURCE}/onenote/notebooks"
         f"?$filter=displayName eq '{safe}'&$select=id,displayName"
     )
     data = client.get_json(url)
@@ -26,15 +21,9 @@ def find_notebook_id(client: GraphClient, notebook_name: str) -> str:
 
 
 def find_section_id(client: GraphClient, notebook_id: str, section_name: str) -> str:
-
-    # site_id = "v1.0/me"
-    site_id = "v1.0/sites/nipponham86.sharepoint.com,c366644f-cbe3-4821-8d09-6eed7fb27f7b,743a28d6-6865-40fc-bc93-9e8c825be55a"
-
-
-    """表示名からセクションIDを取得する。"""
     safe = section_name.replace("'", "''")
     url = (
-        f"https://graph.microsoft.com/{site_id}/onenote/notebooks/{quote(notebook_id)}/sections"
+        f"https://graph.microsoft.com/{GRAPH_SITE_RESOURCE}/onenote/notebooks/{quote(notebook_id)}/sections"
         f"?$filter=displayName eq '{safe}'&$select=id,displayName"
     )
     data = client.get_json(url)
