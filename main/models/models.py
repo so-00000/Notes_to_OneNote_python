@@ -25,7 +25,6 @@ class AppSettings:
 @dataclass(frozen=True)
 class DataTypeSettings:
     label: str              # データ種別の表示名
-    section_name: str       # 対象の OneNote セクション名
     view_name: str          # mapping/doc_mapping で使うビュー名
     dxl_dir: str            # 元データの DXL ディレクトリへの相対パス
     template_html_path: str # テンプレート HTML への相対パス

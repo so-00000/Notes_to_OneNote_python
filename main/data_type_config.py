@@ -9,7 +9,6 @@ _SETTINGS: dict[DataType, DataTypeSettings] = {
 
     DataType.SYOGAI: DataTypeSettings(
         label="障害DB",
-        section_name="障害DB",
         view_name="VwSyogai_11ALL",
         dxl_dir="1_target_dxl/Fm_Document_2/",
         template_html_path="resources/templates/synhbe29.nsf/Fm_Document_2/",
@@ -19,7 +18,6 @@ _SETTINGS: dict[DataType, DataTypeSettings] = {
 
     DataType.DATA_PATCH: DataTypeSettings(
         label="データ強制変更DB",
-        section_name="データ強制変更DB",
         view_name="VwData_Patch_1_3ALL",
         dxl_dir="1_target_dxl/Fm_Document_3/",
         template_html_path="resources/templates/synhbe29.nsf/Fm_Document_3/",
@@ -29,7 +27,6 @@ _SETTINGS: dict[DataType, DataTypeSettings] = {
 
     DataType.HOSYU: DataTypeSettings(
         label="保守DB",
-        section_name="保守DB",
         view_name="VwHosyu_1",
         dxl_dir="1_target_dxl/Fm_Document_5/",
         template_html_path="resources/templates/synhbe29.nsf/Fm_Document_5/",
@@ -39,7 +36,6 @@ _SETTINGS: dict[DataType, DataTypeSettings] = {
     
     DataType.CALL2024: DataTypeSettings(
         label="CallDB2024",
-        section_name="CallDB2024",
         view_name="2024_基本担当者別日付別全ｺｰﾙ",
         dxl_dir="1_target_dxl/Call2024/",
         template_html_path="resources/templates/call_gen/Call4/",
