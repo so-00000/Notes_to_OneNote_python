@@ -1,0 +1,128 @@
+/* テンプレート全体の基本文字スタイル */
+.notes-form {
+  /* font-family: Meiryo, MS PGothic, "Segoe UI", Arial, sans-serif; */
+  /* font-size: 11pt;
+  line-height: 1.45; */
+  color: #222;
+}
+
+/* 段落ブロック全体
+   テーブル内・テーブル外どちらの notes-par にも共通 */
+.notes-par {
+  display: block;
+  box-sizing: border-box;
+  margin: 2px 0;
+  font-weight: bold;
+}
+
+/* テーブル外で固定幅にしたい段落ブロック
+   DocumentNo や本文項目見出し＋入力欄の親側を想定 */
+.notes-par-fixed {
+  width: 800px;
+}
+
+/* テーブル外の固定幅段落の中にある入力欄ラッパ */
+.notes-par-fixed .notes-field-wrap {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 値部分 */
+.notes-field {
+  font-weight: normal;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  /* min-height: 1.2em; */
+  /* border: 1px solid #666;
+  background: #fff; */
+  padding: 1px 4px;
+  /* border-radius: 2px; */
+  /* box-sizing: border-box;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere; */
+}
+
+/* テーブル */
+
+/* テーブル全体 */
+.notes-table {
+  border: 1px solid #808080;
+  border-collapse: collapse;
+  width: 800px;
+  table-layout: fixed;
+}
+
+/* テーブル全セル */
+.notes-table-cell {
+  padding: 3px 6px;
+  vertical-align: top;
+}
+
+/* ヘッダー */
+.notes-table-hd-gray,
+.notes-table-hd-blue {
+  font-weight: bold;
+}
+.notes-table-hd-gray {
+  background: #f2f2f2;
+}
+.notes-table-hd-blue {
+  background: #e9f3ff;
+  width: 140px;
+}
+
+/* ボディセル */
+.notes-table .notes-field-wrap {
+  font-weight: normal;
+  display: block;
+  width: 100%;
+  /* box-sizing: border-box; */
+}
+
+/* before_inline templates can opt into these without changing existing defaults */
+.notes-form-default {
+  font-family: MS PGothic, Meiryo, "Segoe UI", Arial, sans-serif;
+  font-size: 11pt;
+  line-height: 1.45;
+}
+
+.notes-field-framed {
+  display: inline-block;
+  min-width: 6em;
+  min-height: 1.2em;
+  border: 1px solid #666;
+  background: #fff;
+  border-radius: 2px;
+}
+
+.notes-table-spaced {
+  margin-top: 1em;
+  width: {{MAX_CONTENT_WIDTH}};
+}
+
+.notes-par-max {
+  width: {{MAX_CONTENT_WIDTH}};
+}
+
+.notes-label {
+  font-weight: bold;
+}
+
+.notes-cell-w120 {
+  width: 120px;
+}
+
+.notes-cell-w300 {
+  width: 300px;
+}
+
+.notes-col-w120 {
+  width: 120px;
+}
+
+.notes-col-w300 {
+  width: 300px;
+}

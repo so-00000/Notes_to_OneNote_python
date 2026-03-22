@@ -1,0 +1,1992 @@
+<?xml version='1.0'?>
+<form name='Fm_Document_5' xmlns='http://www.lotus.com/dxl' version='9.0'
+ maintenanceversion='1.4' replicaid='49258C3000042207' nocompose='true' publicaccess='false'
+ designerversion='8.5.3' comment='保守' inheritdoc='link' inheritdocfield='Fd_Link_1'
+ renderpassthrough='true'>
+<noteinfo noteid='266' unid='AB46EA9E4168BE1B49257B3D000F03E0' sequence='98'>
+<created><datetime>20130329T114400,32+09</datetime></created>
+<modified><datetime>20250213T094516,79+09</datetime></modified>
+<revised><datetime>20210519T135715,47+09</datetime></revised>
+<lastaccessed><datetime>20250213T094516,79+09</datetime></lastaccessed>
+<addedtofile><datetime>20250213T094516,79+09</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=KOICHI MIYAZAKI/O=NMP</name></updatedby>
+<wassignedby><name>CN=KOICHI MIYAZAKI/O=NMP</name></wassignedby>
+<globals><code event='options'><lotusscript>Option Public
+Use "SLCommon"
+</lotusscript></code></globals><code event='windowtitle'><formula>"食肉部門システム管理 - " + Division</formula></code><code
+ event='postopen'><lotusscript>Sub Postopen(Source As Notesuidocument)
+	'*** アクセス制御リストから承認者情報を取得する ***
+	'---  表示状態で開いた場合は、承認者情報を取得しない（Exit Sub） ---
+	If Source.EditMode = False Then
+		Exit Sub
+	End If
+	
+	'---  ステータス=「完了承認済」（＝完了分）は、承認者情報を取得しない（Exit Sub） ---
+	Dim doc As NotesDocument
+	Set doc = Source.Document
+	If doc.Status(0) = "完了承認済" Then
+		Exit Sub
+	End If
+	
+	'--- スクリプトライブラリ「SLCommon」の「RoleCheck」を実行 ---
+	Call RoleCheck
+	
+	'--- 表示を更新する ---
+	Call Source.Refresh
+End Sub
+</lotusscript></code><code event='querysave'><lotusscript>Sub Querysave(Source As Notesuidocument, Continue As Variant)
+	Call Source.Refresh( True )
+	Call Source.RefreshHideFormulas
+	Dim doc As NotesDocument
+	Set doc = source.Document
+	
+	
+	'■■■■■■■■　エラーチェック　■■■■■■■■
+	If doc.Division(0) = "" Then
+		Messagebox "分類が選択されていません.", 16, "食肉部門システム管理"
+		Call Source.GotoField( "Division" )
+		Continue = False
+		Exit Sub
+	End If
+	
+	If doc.System(0) = "" Then
+		Messagebox "システムが選択されていません.", 16, "食肉部門システム管理"
+		Call Source.GotoField( "System" )
+		Continue = False
+		Exit Sub
+	End If
+	
+	
+	
+End Sub</lotusscript></code>
+<actionbar bgcolor='#d4d0c8' bordercolor='black'>
+<actionbuttonstyle bgcolor='#d4d0c8'/><font color='system'/><border style='solid'
+ width='0px 0px 1px'/>
+<action title='編集' icon='5' showinmenu='false' hide='edit previewedit'><code
+ event='click'><formula>@Command([EditDocument];"1")</formula></code></action>
+<action title='発生報告' icon='1' showinmenu='false' hide='preview read'><code
+ event='click'><formula>REM {編集モードに切り替え};
+@Command([EditDocument];"1");
+
+REM {********** 以下、入力チェック **********};
+@If(@Command([FileSave])=@Success;"";@Return(""));
+REM {********** 以上、入力チェック **********};
+
+REM {管理番号を取得};
+@Command([ViewRefreshFields]);
+No := No_Category_x + "-" + No_Num_x;
+@If( DocumentNo = ""; DocumentNo:=@If(Division = "データ強制変更";"";No); "" );
+
+REM {否認時の承認情報をクリア};
+FIELD ApproveTime_1 := "";
+FIELD ApproverDep_1 := "";
+FIELD ApproverNm_1 := "";
+FIELD ApproveStatus_1 := "";
+
+FIELD Status := "発生報告中";
+FIELD ReportTime_1 := @Now;
+FIELD ReporterDep_1 := "(" + c_This_UserDept + ")";
+FIELD ReporterNm_1 := c_This_UserNameJ;
+@Command([FileSave]);
+
+SendTo := ApproverUser;
+Subject := "発生報告（" + Division + "）をお送りします. [" + @DbTitle + "]";
+Body := "発生報告（" + Division + "）をお送りします." + @NewLine +
+           "ご確認の上、承認いただけますようお願いします.";
+
+@MailSend(SendTo;"";"";Subject;Body;"";[IncludeDoclink]);
+@Command([CloseWindow])</formula></code><code event='hidewhen'><formula>Status != "" |
+(@IsNotMember(@UserName;ApplicantUser) &amp; @IsNotMember(@UserName;@UpperCase(ApplicantUser)))</formula></code></action>
+<action title='発生報告\承認' icon='127' showinmenu='false'><code event='click'><formula
+>REM {編集モードに切り替え};
+@Command([EditDocument];"1");
+
+REM {入力チェック};
+@If(@IsValid;"";@Return(""));
+
+FIELD Status := @If(Division = "問合せ";"完了承認済";"発生承認済");
+FIELD ApproveTime_1 := @Now;
+FIELD ApproverDep_1 := "(" + c_This_UserDept + ")";
+FIELD ApproverNm_1 := c_This_UserNameJ;
+FIELD ApproveStatus_1 := "承認";
+@Command([FileSave]);
+
+SendTo := ApplicantUser;
+Subject := "発生報告（" + Division + "）を承認しました. [" + @DbTitle + "]";
+Body := "発生報告（" + Division + "）を承認しました." + @NewLine +
+           "ご確認願います.";
+
+@MailSend(SendTo;"";"";Subject;Body;"";[IncludeDoclink]);
+@Command([CloseWindow])</formula></code><code event='hidewhen'><formula>Status != "発生報告中" |
+(@IsNotMember(@UserName;ApproverUser) &amp; @IsNotMember(@UserName;@UpperCase(ApproverUser)))</formula></code></action>
+<action title='発生報告\否認' icon='11' showinmenu='false'><code event='click'><formula
+>Ans := @Prompt([YesNo];@DbTitle;"否認してもよろしいですか?");
+@If(Ans = @False;@Return("");"");
+
+REM {編集モードに切り替え};
+@Command([EditDocument];"1");
+
+REM {入力チェック};
+@If(@IsValid;"";@Return(""));
+
+FIELD Status := "";
+FIELD ApproveTime_1 := @Now;
+FIELD ApproverDep_1 := "(" + c_This_UserDept + ")";
+FIELD ApproverNm_1 := c_This_UserNameJ;
+FIELD ApproveStatus_1 := "否認";
+@Command([FileSave]);
+
+SendTo := ApplicantUser;
+Subject := "発生報告（" + Division + "）を否認しました. [" + @DbTitle + "]";
+Body := "発生報告（" + Division + "）を否認しました." + @NewLine +
+           "ご確認願います.";
+
+@MailSend(SendTo;"";"";Subject;Body;"";[IncludeDoclink]);
+@Command([CloseWindow])</formula></code><code event='hidewhen'><formula>Status != "発生報告中" |
+(@IsNotMember(@UserName;ApproverUser) &amp; @IsNotMember(@UserName;@UpperCase(ApproverUser)))</formula></code></action>
+<action title='発生報告(代行)\承認' icon='127' showinmenu='false'><code event='click'><formula
+>REM {編集モードに切り替え};
+@Command([EditDocument];"1");
+
+REM {入力チェック};
+@If(@IsValid;"";@Return(""));
+
+FIELD Status := @If(Division = "問合せ";"完了承認済";"発生承認済");
+FIELD ApproveTime_1 := @Now;
+FIELD ApproverDep_1 := "(" + c_This_UserDept + ")";
+FIELD ApproverNm_1 := c_This_UserNameJ;
+FIELD ApproveStatus_1 := "承認(代行)";
+@Command([FileSave]);
+
+SendTo := ApplicantUser;
+Subject := "発生報告（" + Division + "）を承認しました. [" + @DbTitle + "]";
+Body := "発生報告（" + Division + "）を承認しました." + @NewLine +
+           "ご確認願います.";
+
+@MailSend(SendTo;"";"";Subject;Body;"";[IncludeDoclink]);
+@Command([CloseWindow])</formula></code><code event='hidewhen'><formula>Status != "発生報告中" |
+(@IsNotMember(@UserName;AgentUser) &amp; @IsNotMember(@UserName;@UpperCase(AgentUser)))</formula></code></action>
+<action title='発生報告(代行)\否認' icon='11' showinmenu='false'><code event='click'><formula
+>Ans := @Prompt([YesNo];@DbTitle;"否認してもよろしいですか?");
+@If(Ans = @False;@Return("");"");
+
+REM {編集モードに切り替え};
+@Command([EditDocument];"1");
+
+REM {入力チェック};
+@If(@IsValid;"";@Return(""));
+
+FIELD Status := "";
+FIELD ApproveTime_1 := @Now;
+FIELD ApproverDep_1 := "(" + c_This_UserDept + ")";
+FIELD ApproverNm_1 := c_This_UserNameJ;
+FIELD ApproveStatus_1 := "否認(代行)";
+@Command([FileSave]);
+
+SendTo := ApplicantUser;
+Subject := "発生報告（" + Division + "）を否認しました. [" + @DbTitle + "]";
+Body := "発生報告（" + Division + "）を否認しました." + @NewLine +
+           "ご確認願います.";
+
+@MailSend(SendTo;"";"";Subject;Body;"";[IncludeDoclink]);
+@Command([CloseWindow])</formula></code><code event='hidewhen'><formula>Status != "発生報告中" |
+(@IsNotMember(@UserName;AgentUser) &amp; @IsNotMember(@UserName;@UpperCase(AgentUser)))</formula></code></action>
+<action title='完了報告' icon='1' showinmenu='false'><code event='click'><formula
+>REM {編集モードに切り替え};
+@Command([EditDocument];"1");
+
+REM {入力チェックの為、一旦保存};
+@Command([FileSave]);
+
+
+REM {否認時の承認情報をクリア};
+FIELD ApproveTime_2 := "";
+FIELD ApproverDep_2 := "";
+FIELD ApproverNm_2 := "";
+FIELD ApproveStatus_2 := "";
+
+FIELD Status := "完了報告中";
+FIELD ReportTime_2 := @Now;
+FIELD ReporterDep_2 := "(" + c_This_UserDept + ")";
+FIELD ReporterNm_2 := c_This_UserNameJ;
+@Command([FileSave]);
+
+SendTo := ApproverUser;
+Subject := "完了報告（" + Division + "）をお送りします. [" + @DbTitle + "]";
+Body := "完了報告（" + Division + "）をお送りします." + @NewLine +
+           "ご確認の上、承認いただけますようお願いします.";
+
+@MailSend(SendTo;"";"";Subject;Body;"";[IncludeDoclink]);
+@Command([CloseWindow])</formula></code><code event='hidewhen'><formula>Status != "発生承認済" |
+@IsNotMember(ApplicantRole;@UserRoles)</formula></code></action>
+<action title='完了報告' icon='1' showinmenu='false'><code event='click'><formula
+>REM {編集モードに切り替え};
+@Command([EditDocument];"1");
+
+REM {入力チェックの為、一旦保存};
+@Command([FileSave]);
+
+
+REM {否認時の承認情報をクリア};
+FIELD ApproveTime_2 := "";
+FIELD ApproverDep_2 := "";
+FIELD ApproverNm_2 := "";
+FIELD ApproveStatus_2 := "";
+
+FIELD Status := "完了報告中";
+FIELD ReportTime_2 := @Now;
+FIELD ReporterDep_2 := "(" + c_This_UserDept + ")";
+FIELD ReporterNm_2 := c_This_UserNameJ;
+@Command([FileSave]);
+
+SendTo := ApproverUser;
+Subject := "完了報告（" + Division + "）をお送りします. [" + @DbTitle + "]";
+Body := "完了報告（" + Division + "）をお送りします." + @NewLine +
+           "ご確認の上、承認いただけますようお願いします.";
+
+@MailSend(SendTo;"";"";Subject;Body;"";[IncludeDoclink]);
+@Command([CloseWindow])</formula></code><code event='hidewhen' enabled='false'><formula
+>NewRoles := "[Group" + @Right(ApplicantRole;2);
+Status != "発生承認済" |
+@Contains(ApplicantRole;"Leader") = @False |
+@IsNotMember(NewRoles;@UserRoles)</formula></code></action>
+<action title='完了報告\承認' icon='127' showinmenu='false'><code event='click'><formula
+>REM {編集モードに切り替え};
+@Command([EditDocument];"1");
+
+REM {入力チェック};
+@If(@IsValid;"";@Return(""));
+
+FIELD Status := "完了承認済";
+FIELD ApproveTime_2 := @Now;
+FIELD ApproverDep_2 := "(" + c_This_UserDept + ")";
+FIELD ApproverNm_2 := c_This_UserNameJ;
+FIELD ApproveStatus_2 := "承認";
+@Command([FileSave]);
+
+SendTo := ApplicantUser;
+Subject := "完了報告（" + Division + "）を承認しました. [" + @DbTitle + "]";
+Body := "完了報告（" + Division + "）を承認しました." + @NewLine +
+           "ご確認願います.";
+
+@MailSend(SendTo;"";"";Subject;Body;"";[IncludeDoclink]);
+@Command([CloseWindow])</formula></code><code event='hidewhen'><formula>Status != "完了報告中" |
+(@IsNotMember(@UserName;ApproverUser) &amp; @IsNotMember(@UserName;@UpperCase(ApproverUser)))</formula></code></action>
+<action title='完了報告\否認' icon='11' showinmenu='false'><code event='click'><formula
+>Ans := @Prompt([YesNo];@DbTitle;"否認してもよろしいですか?");
+@If(Ans = @False;@Return("");"");
+
+REM {編集モードに切り替え};
+@Command([EditDocument];"1");
+
+REM {入力チェック};
+@If(@IsValid;"";@Return(""));
+
+FIELD Status := "発生承認済";
+FIELD ApproveTime_2 := @Now;
+FIELD ApproverDep_2 := "(" + c_This_UserDept + ")";
+FIELD ApproverNm_2 := c_This_UserNameJ;
+FIELD ApproveStatus_2 := "否認";
+@Command([FileSave]);
+
+SendTo := ApplicantUser;
+Subject := "完了報告（" + Division + "）を否認しました. [" + @DbTitle + "]";
+Body := "完了報告（" + Division + "）を否認しました." + @NewLine +
+           "ご確認願います.";
+
+@MailSend(SendTo;"";"";Subject;Body;"";[IncludeDoclink]);
+@Command([CloseWindow])</formula></code><code event='hidewhen'><formula>Status != "完了報告中" |
+(@IsNotMember(@UserName;ApproverUser) &amp; @IsNotMember(@UserName;@UpperCase(ApproverUser)))</formula></code></action>
+<action title='完了報告(代行)\承認' icon='127' showinmenu='false'><code event='click'><formula
+>REM {編集モードに切り替え};
+@Command([EditDocument];"1");
+
+REM {入力チェック};
+@If(@IsValid;"";@Return(""));
+
+FIELD Status := "完了承認済";
+FIELD ApproveTime_2 := @Now;
+FIELD ApproverDep_2 := "(" + c_This_UserDept + ")";
+FIELD ApproverNm_2 := c_This_UserNameJ;
+FIELD ApproveStatus_2 := "承認(代行)";
+@Command([FileSave]);
+
+SendTo := ApplicantUser;
+Subject := "完了報告（" + Division + "）を承認しました. [" + @DbTitle + "]";
+Body := "完了報告（" + Division + "）を承認しました." + @NewLine +
+           "ご確認願います.";
+
+@MailSend(SendTo;"";"";Subject;Body;"";[IncludeDoclink]);
+@Command([CloseWindow])</formula></code><code event='hidewhen'><formula>Status != "完了報告中" |
+(@IsNotMember(@UserName;AgentUser) &amp; @IsNotMember(@UserName;@UpperCase(AgentUser)))</formula></code></action>
+<action title='完了報告(代行)\否認' icon='11' showinmenu='false'><code event='click'><formula
+>Ans := @Prompt([YesNo];@DbTitle;"否認してもよろしいですか?");
+@If(Ans = @False;@Return("");"");
+
+REM {編集モードに切り替え};
+@Command([EditDocument];"1");
+
+REM {入力チェック};
+@If(@IsValid;"";@Return(""));
+
+FIELD Status := "発生承認済";
+FIELD ApproveTime_2 := @Now;
+FIELD ApproverDep_2 := "(" + c_This_UserDept + ")";
+FIELD ApproverNm_2 := c_This_UserNameJ;
+FIELD ApproveStatus_2 := "否認(代行)";
+@Command([FileSave]);
+
+SendTo := ApplicantUser;
+Subject := "完了報告（" + Division + "）を否認しました. [" + @DbTitle + "]";
+Body := "完了報告（" + Division + "）を否認しました." + @NewLine +
+           "ご確認願います.";
+
+@MailSend(SendTo;"";"";Subject;Body;"";[IncludeDoclink]);
+@Command([CloseWindow])</formula></code><code event='hidewhen'><formula>Status != "完了報告中" |
+(@IsNotMember(@UserName;AgentUser) &amp; @IsNotMember(@UserName;@UpperCase(AgentUser)))</formula></code></action>
+<action title='経路更新' icon='145' showinmenu='false' hide='preview read'><code
+ event='action'>
+<simpleaction action='runagent' agent='(AGRoleCheck)'/></code><code event='hidewhen'
+ enabled='false'><formula>@IsNewDoc |
+Status = "完了承認済"|
+@IsNotMember("[管理者]";@UserRoles)</formula></code></action>
+<action title='保存終了' icon='117' showinmenu='false' hide='preview read'><code
+ event='click'><lotusscript>Sub Click(Source As Button)
+	Dim ws As New NotesUIWorkspace
+	Dim uidoc As NotesUIDocument
+	Dim doc As NotesDocument
+	
+	Set uidoc = ws.CurrentDocument
+	Set doc = uidoc.Document
+	
+	doc.SaveFlag = "1"
+	
+	Call uidoc.Save
+	Call uidoc.Close(True)
+	
+End Sub</lotusscript></code></action>
+<action title='メール転送' icon='7' showinmenu='false'><code event='click'><formula
+>@Command([EditMakeDocLink]);
+@Command([MailComposeMemo]);
+@Command([EditGotoField];"Subject");
+No := @If(@IsNotMember(Division;"障害":"問合せ":"データ強制変更":"保守");"";
+             "(管理番号:" + DpcumentNo + ")");
+
+@Command([EditInsertText];"Fw: 食肉部門システム管理 - " + Division + No);
+@Command([EditGotoField];"Body");
+@Command([EditInsertText];@Repeat(@NewLine;8));
+@Command([EditUp]);
+@Command([EditUp]);
+@Command([EditPaste])</formula></code><code event='hidewhen'><formula>@IsNewDoc</formula></code></action></actionbar>
+<background allowoverride='false'/>
+<body><richtext>
+<pardef id='1' leftmargin='0.7500in' hide='read edit print notes web'/><subformref
+ name='SubUserInfo'/>
+<pardef id='2' leftmargin='0.7500in' hide='read edit copy preview previewedit notes web embedded'/>
+<section><sectiontitle pardef='2' color='teal'><font size='9pt' color='red'
+ name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/><text>＜非表示セクション＞</text></sectiontitle>
+<pardef id='3' leftmargin='1in' hide='edit notes web'/>
+<par def='3'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par>
+<pardef id='4' hide='read edit copy preview previewedit notes web embedded'/>
+<par def='4'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/>[ロールのユーザーリスト]</run></par>
+<table widthtype='fixedleft' refwidth='5.2986in'><tablecolumn width='1.1653in'/><tablecolumn
+ width='4.1333in'/>
+<tablerow>
+<tablecell bgcolor='#ffe1b0'>
+<pardef id='6' hide='read edit copy preview previewedit notes web embedded'
+ keepwithnext='true' keeptogether='true'/>
+<par def='6'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> [Leader1]</run></par>
+<par def='6'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> (Group1承認者)</run></par></tablecell>
+<tablecell>
+<pardef id='7' hide='read edit copy preview previewedit notes web embedded'
+ keepwithnext='true' keeptogether='true'/>
+<par def='7'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> </run><run><font size='9pt' color='red' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/><field type='names' allowmultivalues='true'
+ kind='computed' name='Leaders_1' listinputseparators='comma semicolon' listdisplayseparator='comma'><code
+ event='defaultvalue'><formula>@GetField(@ThisName)</formula></code></field></run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'
+ color='red'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell bgcolor='#ffe1b0'>
+<par def='6'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> [Leader2]</run></par>
+<par def='6'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> (Group2承認者)</run></par></tablecell>
+<tablecell>
+<par def='7'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> </run><run><font size='9pt' color='red' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/><field type='names' allowmultivalues='true'
+ kind='computed' name='Leaders_2' listinputseparators='comma semicolon' listdisplayseparator='comma'><code
+ event='defaultvalue'><formula>@GetField(@ThisName)</formula></code></field></run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'
+ color='red'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell bgcolor='#ffe1b0'>
+<par def='6'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> [Leader3]</run></par>
+<par def='6'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> (Group3承認者)</run></par></tablecell>
+<tablecell>
+<par def='7'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> </run><run><font size='9pt' color='red' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/><field type='names' allowmultivalues='true'
+ kind='computed' name='Leaders_3' listinputseparators='comma semicolon' listdisplayseparator='comma'><code
+ event='defaultvalue'><formula>@GetField(@ThisName)</formula></code></field></run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'
+ color='red'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell bgcolor='#ffe1b0'>
+<par def='6'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> [Leader4]</run></par>
+<par def='6'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> (Group4承認者)</run></par></tablecell>
+<tablecell>
+<par def='7'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> </run><run><font size='9pt' color='red' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/><field type='names' allowmultivalues='true'
+ kind='computed' name='Leaders_4' listinputseparators='comma semicolon' listdisplayseparator='comma'><code
+ event='defaultvalue'><formula>@GetField(@ThisName)</formula></code></field></run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'
+ color='red'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell bgcolor='#ffe1b0'>
+<par def='6'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> [Leader5]</run></par>
+<par def='6'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> (Group1承認者)</run></par></tablecell>
+<tablecell>
+<par def='7'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> </run><run><font size='9pt' color='red' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/><field type='names' allowmultivalues='true'
+ kind='computed' name='Leaders_5' listinputseparators='comma semicolon' listdisplayseparator='comma'><code
+ event='defaultvalue'><formula>@GetField(@ThisName)</formula></code></field></run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'
+ color='red'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell bgcolor='#ffe1b0'>
+<par def='6'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> [Director1]</run></par>
+<par def='6'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> (Leader1承認者)</run></par></tablecell>
+<tablecell>
+<par def='7'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> </run><run><font size='9pt' color='red' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/><field type='names' allowmultivalues='true'
+ kind='computed' name='Directors_1' listinputseparators='comma semicolon'
+ listdisplayseparator='comma'><code event='defaultvalue'><formula>@GetField(@ThisName)</formula></code></field></run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'
+ color='red'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell bgcolor='#ffe1b0'>
+<par def='6'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> [Director2]</run></par>
+<par def='6'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> (Leader2承認者)</run></par></tablecell>
+<tablecell>
+<par def='7'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> </run><run><font size='9pt' color='red' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/><field type='names' allowmultivalues='true'
+ kind='computed' name='Directors_2' listinputseparators='comma semicolon'
+ listdisplayseparator='comma'><code event='defaultvalue'><formula>@GetField(@ThisName)</formula></code></field></run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'
+ color='red'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell bgcolor='#ffe1b0'>
+<par def='6'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> [Director3]</run></par>
+<par def='6'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> (Leader3承認者)</run></par></tablecell>
+<tablecell>
+<par def='7'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> </run><run><font size='9pt' color='red' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/><field type='names' allowmultivalues='true'
+ kind='computed' name='Directors_3' listinputseparators='comma semicolon'
+ listdisplayseparator='comma'><code event='defaultvalue'><formula>@GetField(@ThisName)</formula></code></field></run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'
+ color='red'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell bgcolor='#ffe1b0'>
+<par def='6'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> [Director4]</run></par>
+<par def='6'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> (Leader4承認者)</run></par></tablecell>
+<tablecell>
+<par def='7'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> </run><run><font size='9pt' color='red' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/><field type='names' allowmultivalues='true'
+ kind='computed' name='Directors_4' listinputseparators='comma semicolon'
+ listdisplayseparator='comma'><code event='defaultvalue'><formula>@GetField(@ThisName)</formula></code></field></run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'
+ color='red'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell bgcolor='#ffe1b0'>
+<par def='6'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> [Director5]</run></par>
+<par def='6'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> (Leader5承認者)</run></par></tablecell>
+<tablecell>
+<par def='7'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> </run><run><font size='9pt' color='red' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/><field type='names' allowmultivalues='true'
+ kind='computed' name='Directors_5' listinputseparators='comma semicolon'
+ listdisplayseparator='comma'><code event='defaultvalue'><formula>@GetField(@ThisName)</formula></code></field></run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'
+ color='red'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell bgcolor='#ffe1b0'>
+<par def='6'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> [Agent1]</run></par>
+<par def='6'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> (代行承認者1)</run></par></tablecell>
+<tablecell>
+<par def='7'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> </run><run><font size='9pt' color='red' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/><field type='names' allowmultivalues='true'
+ kind='computed' name='Agents_1' listinputseparators='comma semicolon' listdisplayseparator='comma'><code
+ event='defaultvalue'><formula>@GetField(@ThisName)</formula></code></field></run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'
+ color='red'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell bgcolor='#ffe1b0'>
+<par def='6'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> [Agent2]</run></par>
+<par def='6'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> (代行承認者2)</run></par></tablecell>
+<tablecell>
+<par def='7'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> </run><run><font size='9pt' color='red' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/><field type='names' allowmultivalues='true'
+ kind='computed' name='Agents_2' listinputseparators='comma semicolon' listdisplayseparator='comma'><code
+ event='defaultvalue'><formula>@GetField(@ThisName)</formula></code></field></run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'
+ color='red'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell bgcolor='#ffe1b0'>
+<par def='6'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> [Agent3]</run></par>
+<par def='6'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> (代行承認者3)</run></par></tablecell>
+<tablecell>
+<par def='7'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> </run><run><font size='9pt' color='red' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/><field type='names' allowmultivalues='true'
+ kind='computed' name='Agents_3' listinputseparators='comma semicolon' listdisplayseparator='comma'><code
+ event='defaultvalue'><formula>@GetField(@ThisName)</formula></code></field></run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'
+ color='red'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell bgcolor='#ffe1b0'>
+<par def='6'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> [Agent4]</run></par>
+<par def='6'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> (代行承認者4)</run></par></tablecell>
+<tablecell>
+<par def='7'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> </run><run><font size='9pt' color='red' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/><field type='names' allowmultivalues='true'
+ kind='computed' name='Agents_4' listinputseparators='comma semicolon' listdisplayseparator='comma'><code
+ event='defaultvalue'><formula>@GetField(@ThisName)</formula></code></field></run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'
+ color='red'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell bgcolor='#ffe1b0'>
+<par def='6'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> [Agent5]</run></par>
+<par def='6'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> (代行承認者5)</run></par></tablecell>
+<tablecell>
+<par def='7'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> </run><run><font size='9pt' color='red' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/><field type='names' allowmultivalues='true'
+ kind='computed' name='Agents_5' listinputseparators='comma semicolon' listdisplayseparator='comma'><code
+ event='defaultvalue'><formula>@GetField(@ThisName)</formula></code></field></run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'
+ color='red'/></run></par></tablecell></tablerow></table>
+<pardef id='8' leftmargin='1in' hide='read edit copy preview previewedit notes web embedded'/>
+<par def='8'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par>
+<pardef id='9' leftmargin='1in' hide='read edit print notes web'/>
+<par def='9'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par>
+<table widthtype='fixedleft' refwidth='5.2986in'><tablecolumn width='1.1653in'/><tablecolumn
+ width='4.1333in'/>
+<tablerow>
+<tablecell bgcolor='#ffe1b0'>
+<pardef id='10' hide='read edit print notes web' keepwithnext='true' keeptogether='true'/>
+<par def='10'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> 作成者</run></par></tablecell>
+<tablecell>
+<pardef id='11' hide='read edit print notes web' keepwithnext='true' keeptogether='true'/>
+<par def='11'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> </run><run><font size='9pt' color='red' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/><field type='authors' kind='computedwhencomposed'
+ name='Author'><code event='defaultvalue'><formula>@UserName</formula></code></field></run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'
+ color='red'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell bgcolor='#ffe1b0'>
+<par def='10'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> 削除フラグ</run></par></tablecell>
+<tablecell><compositedata type='65532' prevtype='131' nexttype='221' afterparcount='2'
+ containertype='65453' afterbegincount='515'>
+/P86AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAQAAAAAAAAAAAAAAAAAA
+AA==
+</compositedata>
+<par def='11'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> </run><run><font size='9pt' color='red' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/><field borderstyle='none' lookupeachchar='false'
+ lookupaddressonrefresh='false' type='keyword' allowmultivalues='true' kind='editable'
+ name='DelFlg' listinputseparators='comma' listdisplayseparator='comma'><keywords
+ helperbutton='false' columns='1' ui='checkbox'><textlist><text>削除|1</text></textlist></keywords><code
+ event='defaultvalue'><formula>""</formula></code></field></run><run><font
+ size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30' color='red'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell bgcolor='#ffe1b0'>
+<par def='10'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> ステータス</run></par></tablecell>
+<tablecell>
+<par def='11'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> </run></par></tablecell></tablerow>
+<tablerow>
+<tablecell bgcolor='#ffe1b0'>
+<par def='10'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> 申請者</run></par></tablecell>
+<tablecell>
+<par def='11'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> ロール:</run><run><font size='9pt' color='red' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/><field type='text' kind='computedwhencomposed'
+ name='ApplicantRole'><code event='defaultvalue'><formula>List := "[Leader1]":"[Leader2]":"[Leader3]":"[Leader4]":"[Leader5]":"[Group1]":"[Group2]":"[Group3]":"[Group4]":"[Group5]":"[Director1]":"[Director2]":"[Director3]":"[Director4]":"[Director5]";
+Cnt := @Elements(List);
+@For(i := 1;i &lt;= Cnt;i := i + 1;
+        @If(@IsMember(List[i];@UserRoles);@Return(List[i]);""));
+
+""</formula></code></field></run><compositedata type='98' prevtype='65418'
+ nexttype='222' afterparcount='9' containertype='65418' aftercontainercount='1'
+ afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/></run></par>
+<par def='11'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> </run><run><font size='9pt' color='red' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/><field type='names' allowmultivalues='true'
+ kind='computed' name='ApplicantUser' listinputseparators='comma semicolon'
+ listdisplayseparator='comma'><code event='defaultvalue'><formula>Author</formula></code></field></run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'
+ color='red'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell bgcolor='#ffe1b0'>
+<par def='10'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> 承認者</run></par></tablecell>
+<tablecell>
+<par def='11'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> ロール:</run><run><font size='9pt' color='red' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/><field type='text' kind='computed'
+ name='ApproverRole'><code event='defaultvalue'><formula>No := @Left(@Right(ApplicantRole;2);1);
+
+@If(ApplicantRole="";"";
+     @Contains(ApplicantRole;"Director");"[Director" + No + "]";
+     @Contains(ApplicantRole;"Leader");"[Director" + No + "]";
+     @Contains(ApplicantRole;"Group");"[Leader" + No + "]";
+     "")</formula></code></field></run><compositedata type='98' prevtype='65418'
+ nexttype='222' afterparcount='9' containertype='65418' aftercontainercount='1'
+ afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/></run></par>
+<par def='11'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> </run><run><font size='9pt' color='red' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/><field type='names' allowmultivalues='true'
+ kind='computed' name='ApproverUser' listinputseparators='comma semicolon'
+ listdisplayseparator='comma'><code event='defaultvalue'><formula>@If(ApproverRole = "[Leader1]";Leaders_1;
+     ApproverRole = "[Leader2]";Leaders_2;
+     ApproverRole = "[Leader3]";Leaders_3;
+     ApproverRole = "[Leader4]";Leaders_4;
+     ApproverRole = "[Leader5]";Leaders_5;
+     ApproverRole = "[Director1]";Directors_1;
+     ApproverRole = "[Director2]";Directors_2;
+     ApproverRole = "[Director3]";Directors_3;
+     ApproverRole = "[Director4]";Directors_4;
+     ApproverRole = "[Director5]";Directors_5;
+     "")</formula></code></field></run><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30' color='red'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell bgcolor='#ffe1b0'>
+<par def='10'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> 代行承認対象者</run></par></tablecell>
+<tablecell>
+<par def='11'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> ロール:</run><run><font size='9pt' color='red' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/><field type='text' kind='computed'
+ name='AgentRole'><code event='defaultvalue'><formula>No := @Left(@Right(ApplicantRole;2);1);
+
+@If(ApplicantRole="";"";"[Agent" + No + "]")</formula></code></field></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='9' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/></run></par>
+<par def='11'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> </run><run><font size='9pt' color='red' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/><field type='names' allowmultivalues='true'
+ kind='computed' name='AgentUser' listinputseparators='comma semicolon' listdisplayseparator='comma'><code
+ event='defaultvalue'><formula>List := @If(AgentRole = "[Agent1]";Agents_1;
+               AgentRole = "[Agent2]";Agents_2;
+               AgentRole = "[Agent3]";Agents_3;
+               AgentRole = "[Agent4]";Agents_4;
+               AgentRole = "[Agent5]";Agents_5;
+               "");
+
+@Trim(@Replace(List;ApproverUser;""))</formula></code></field></run><run><font
+ size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30' color='red'/></run></par></tablecell></tablerow></table>
+<par def='9'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par></section>
+<pardef id='12' leftmargin='1in' hide='notes web mobile' keeptogether='true'/>
+<par def='12'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/>◆2015/3/27 藤井　･･･発生報告と承認の日付/時刻がブランクになる現象の対応</run></par>
+<par def='12'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/>　ReportTime_1とApproveTime_1を"表示用の計算結果"⇒"編集可能"に変更。入力後、"計算結果"に再変更する。</run></par>
+<pardef id='13' leftmargin='1in' spaceafter='1.5' keeptogether='true'/>
+<par def='13'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par>
+<pardef id='14' leftmargin='1in' spaceafter='1.5'><parstyle name='Basic' incyclekey='true'><font
+ size='10pt' color='black' name='sans-serif'/></parstyle></pardef>
+<table widthtype='fitmargins' refwidth='5.9271in'><border style='solid' width='5px'
+ color='#ff2259'/><tablecolumn width='100%'/>
+<tablerow>
+<tablecell borderwidth='0px' bgcolor='#ff2259'>
+<pardef id='15' align='center' keepwithnext='true' keeptogether='true'/>
+<par def='15'><run><font size='9pt' style='bold' name='ＭＳ ゴシック' pitch='fixed'
+ truetype='true' familyid='30' color='white'/>システム管理</run></par>
+<pardef id='16' align='center' keepwithnext='true' keeptogether='true'><code
+ event='hidewhen'><formula>Division != "データ強制変更"</formula></code></pardef>
+<par def='16'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='white'/>＝データ強制変更＝</run><doclink document='49C39B264BD966D6492577C900163706'
+ view='A372E44223A8E626492577A500286BF6' database='492576C1002F769D' description='Database &apos;食肉部門 システム管理&apos;, View &apos;ヘルプ&apos;, Document &apos;申請書の貼り付け&apos;'
+ server='CN=Notes03/O=NMP'/><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed'
+ truetype='true' familyid='30' color='white'/>　</run></par></tablecell></tablerow></table>
+<pardef id='17'/>
+<par def='17'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par>
+<table widthtype='fitmargins' cellbordercolor='purple' refwidth='6.0313in'><tablecolumn
+ width='1.5590in'/><tablecolumn width='100%'/>
+<tablerow>
+<tablecell borderwidth='1px 0px' bgcolor='#8242ff'>
+<pardef id='18' leftmargin='0' keepwithnext='true' keeptogether='true'/>
+<par def='18'><border outsidewidth='5px 5px 0px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30' color='white'/> 承認経路</run></par>
+<par def='18'><border outsidewidth='0px 5px 5px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30' color='white'/> </run><run><font
+ size='9pt' color='white' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/><field
+ type='text' kind='computedfordisplay' name='Root'><code event='defaultvalue'><formula
+>ApplicantRole</formula></code></field></run><compositedata type='98' prevtype='65418'
+ nexttype='222' afterparcount='10' containertype='65418' aftercontainercount='1'
+ afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='white'/></run></par></tablecell>
+<tablecell borderwidth='1px 0px' bgcolor='#e0e0ff'>
+<pardef id='19' leftmargin='0.0986in' keepwithnext='true' keeptogether='true'/>
+<par def='19'><border outsidewidth='5px 5px 0px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30' color='navy'/></run><run><font
+ size='9pt' color='navy' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/><field
+ type='text' allowmultivalues='true' kind='computedfordisplay' name='Step1'
+ listinputseparators='comma semicolon' listdisplayseparator='semicolon'><code
+ event='defaultvalue'><formula>fld := ApplicantUser;
+
+@If(fld = "";"":@Return("");"");
+
+View1 := c_NabViewName;
+Key1 := @Name([Abbreviate];fld);
+@Name([CN];@DbLookup("":"Cache"; c_DblookupID; View1; Key1; 3;[FailSilent]))</formula></code></field></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='11' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='navy'/> → </run><run><font size='9pt' color='navy' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/><field type='text' allowmultivalues='true'
+ kind='computedfordisplay' name='Step2' listinputseparators='comma semicolon'
+ listdisplayseparator='semicolon'><code event='defaultvalue'><formula>fld := ApproverUser;
+
+@If(fld = "";"":@Return("申請できません!!");"");
+
+View1 := c_NabViewName;
+Key1 := @Name([Abbreviate];fld);
+@Name([CN];@DbLookup("":"Cache"; c_DblookupID; View1; Key1; 3;[FailSilent]))</formula></code></field></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='20' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='navy'/></run></par>
+<par def='19'><border outsidewidth='0px 5px 5px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30' color='navy'/>※代行承認許可者：</run><run
+><font size='9pt' color='navy' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/><field type='text' allowmultivalues='true' kind='computedfordisplay'
+ name='Step2x' listinputseparators='comma semicolon' listdisplayseparator='comma'><code
+ event='defaultvalue'><formula>fld := AgentUser;
+
+@If(fld = "";"":@Return("-");"");
+
+View1 := c_NabViewName;
+Key1 := @Name([Abbreviate];fld);
+@Name([CN];@DbLookup("":"Cache"; c_DblookupID; View1; Key1; 3;[FailSilent]))</formula></code></field></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='10' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par>
+<par def='19'><border outsidewidth='0px 5px 5px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/></run><run><font size='9pt'
+ name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/><field type='keyword'
+ kind='editable' name='Status'><keywords ui='dialoglist'><textlist><text>発生報告中</text><text
+>発生承認済</text><text>完了報告中</text><text>完了承認済</text></textlist></keywords><code
+ event='defaultvalue'><formula>""</formula></code></field></run><run><font
+ size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/></run></par></tablecell></tablerow></table>
+<pardef id='20' hide='read print copy preview embedded'/>
+<par def='20'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='#ff2259'/>※承認経路は、起票時点で確定されます。</run></par>
+<par def='17'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par>
+<table widthtype='fitmargins' cellbordercolor='purple' refwidth='6.0417in'><tablecolumn
+ width='24.3438%'/><tablecolumn width='25.5625%'/><tablecolumn width='24.3438%'/><tablecolumn
+ width='25.7465%'/>
+<tablerow>
+<tablecell borderwidth='1px 1px 1px 0px' bgcolor='#8242ff'>
+<pardef id='21' leftmargin='0' keepwithnext='true' keeptogether='true'><code
+ event='hidewhen'><formula>Division = "正常終了確認"</formula></code></pardef>
+<par def='21'><border outsidewidth='3px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30' color='white'/> 発生報告：</run></par></tablecell>
+<tablecell borderwidth='1px 0px 1px 1px' bgcolor='#8242ff'>
+<pardef id='22' keepwithnext='true' keeptogether='true'><code event='hidewhen'><formula
+>Division = "正常終了確認"</formula></code></pardef>
+<par def='22'><border outsidewidth='3px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30' color='white'/> 承認：</run></par></tablecell>
+<tablecell borderwidth='1px 0px 1px 1px' bgcolor='#8242ff'>
+<pardef id='23' keepwithnext='true' keeptogether='true'><code event='hidewhen'><formula
+>Division = "問合せ"</formula></code></pardef>
+<par def='23'><border outsidewidth='3px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30' color='white'/> 完了報告：</run></par></tablecell>
+<tablecell borderwidth='1px 0px 1px 1px' bgcolor='#8242ff'>
+<pardef id='24' keepwithnext='true' keeptogether='true'><code event='hidewhen'><formula
+>Division = "問合せ"</formula></code></pardef>
+<par def='24'><border outsidewidth='3px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30' color='white'/> 承認：</run></par></tablecell></tablerow>
+<tablerow>
+<tablecell borderwidth='1px 1px 1px 0px' bgcolor='white'>
+<pardef id='25' leftmargin='0.0986in' keepwithnext='true' keeptogether='true'><code
+ event='hidewhen'><formula>Division = "正常終了確認"</formula></code></pardef>
+<par def='25'><border outsidewidth='3px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30' color='#6000a1'/></run><run><font
+ size='9pt' color='#6000a1' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/><field
+ type='text' kind='computed' name='ReporterNm_1'><code event='defaultvalue'><formula
+>@GetField(@ThisName)</formula></code></field></run><compositedata type='98'
+ prevtype='65418' nexttype='222' afterparcount='12' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='#6000a1'/></run></par>
+<par def='25'><border outsidewidth='3px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30' color='#6000a1'/></run><run><font
+ size='9pt' color='#6000a1' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/><field
+ type='text' kind='editable' name='ReporterDep_1'><code event='defaultvalue'><formula
+>@GetField(@ThisName)</formula></code></field></run><compositedata type='98'
+ prevtype='65418' nexttype='222' afterparcount='11' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='#6000a1'/></run></par>
+<par def='25'><border outsidewidth='3px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30' color='#6000a1'/></run><run><font
+ size='9pt' color='#6000a1' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/><field
+ type='datetime' kind='editable' name='ReportTime_1'><datetimeformat show='datetime'
+ date='yearmonthday' fourdigityearfor21stcentury='true' time='hourminutesecond'
+ zone='never' dateformat='yearmonthdayweekday' dayformat='twodigitday' monthformat='twodigitmonth'
+ yearformat='fourdigityear' weekdayformat='shortname' dateseparator1='/' dateseparator2='/'
+ dateseparator3=' ' timeseparator=':' timeformat24='true' preference='usersetting'/><code
+ event='defaultvalue'><formula>@GetField(@ThisName)</formula></code></field></run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'
+ color='#6000a1'/></run></par></tablecell>
+<tablecell borderwidth='1px 0px 1px 1px' bgcolor='white'>
+<pardef id='26' leftmargin='0.0986in' keepwithnext='true' keeptogether='true'><code
+ event='hidewhen' enabled='false'><formula>Division = "正常終了確認"</formula></code></pardef>
+<par def='26'><border outsidewidth='3px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30' color='#6000a1'/></run><run><font
+ size='9pt' color='#6000a1' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/><field
+ type='text' kind='editable' name='ApproverNm_1'><code event='defaultvalue'><formula
+>@GetField(@ThisName)</formula></code></field></run><compositedata type='98'
+ prevtype='65418' nexttype='222' afterparcount='12' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='white'/></run><run><font size='9pt' color='#ff2259'
+ name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/><field type='text'
+ kind='computed' name='ApproveStatus_1'><code event='defaultvalue'><formula
+>@GetField(@ThisName)</formula></code></field></run><compositedata type='98'
+ prevtype='65418' nexttype='222' afterparcount='21' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par>
+<pardef id='27' leftmargin='0.0986in' keepwithnext='true' keeptogether='true'><code
+ event='hidewhen'><formula>Division = "正常終了確認"</formula></code></pardef>
+<par def='27'><border outsidewidth='3px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30' color='#6000a1'/></run><run><font
+ size='9pt' color='#6000a1' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/><field
+ type='text' kind='editable' name='ApproverDep_1'><code event='defaultvalue'><formula
+>@GetField(@ThisName)</formula></code></field></run><compositedata type='98'
+ prevtype='65418' nexttype='222' afterparcount='12' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='#6000a1'/></run></par>
+<par def='27'><border outsidewidth='3px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30' color='#6000a1'/></run><run><font
+ size='9pt' color='#6000a1' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/><field
+ type='datetime' kind='editable' name='ApproveTime_1'><datetimeformat show='datetime'
+ date='yearmonthday' fourdigityearfor21stcentury='true' time='hourminutesecond'
+ zone='never' dateformat='yearmonthdayweekday' dayformat='twodigitday' monthformat='twodigitmonth'
+ yearformat='fourdigityear' weekdayformat='shortname' dateseparator1='/' dateseparator2='/'
+ dateseparator3=' ' timeseparator=':' timeformat24='true' preference='usersetting'/><code
+ event='defaultvalue'><formula>@GetField(@ThisName)</formula></code></field></run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'
+ color='#6000a1'/></run></par></tablecell>
+<tablecell borderwidth='1px 0px 1px 1px' bgcolor='white'>
+<pardef id='28' leftmargin='0.0986in' keepwithnext='true' keeptogether='true'><code
+ event='hidewhen'><formula>Division = "問合せ"</formula></code></pardef>
+<par def='28'><border outsidewidth='3px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30' color='#6000a1'/></run><run><font
+ size='9pt' color='#6000a1' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/><field
+ type='text' kind='editable' name='ReporterNm_2'><code event='defaultvalue'><formula
+>@GetField(@ThisName)</formula></code></field></run><compositedata type='98'
+ prevtype='65418' nexttype='222' afterparcount='12' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='#6000a1'/></run></par>
+<par def='28'><border outsidewidth='3px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30' color='#6000a1'/></run><run><font
+ size='9pt' color='#6000a1' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/><field
+ type='text' kind='editable' name='ReporterDep_2'><code event='defaultvalue'><formula
+>@GetField(@ThisName)</formula></code></field></run><compositedata type='98'
+ prevtype='65418' nexttype='222' afterparcount='11' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='#6000a1'/></run></par>
+<par def='28'><border outsidewidth='3px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30' color='#6000a1'/></run><run><font
+ size='9pt' color='#6000a1' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/><field
+ type='datetime' kind='editable' name='ReportTime_2'><datetimeformat show='datetime'
+ date='yearmonthday' fourdigityearfor21stcentury='true' time='hourminutesecond'
+ zone='never' dateformat='yearmonthdayweekday' dayformat='twodigitday' monthformat='twodigitmonth'
+ yearformat='fourdigityear' weekdayformat='shortname' dateseparator1='/' dateseparator2='/'
+ dateseparator3=' ' timeseparator=':' timeformat24='true' preference='usersetting'/><code
+ event='defaultvalue'><formula>@GetField(@ThisName)</formula></code></field></run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'
+ color='#6000a1'/></run></par></tablecell>
+<tablecell borderwidth='1px 0px 1px 1px' bgcolor='white'>
+<pardef id='29' leftmargin='0.0986in' keepwithnext='true' keeptogether='true'><code
+ event='hidewhen'><formula>Division = "問合せ"</formula></code></pardef>
+<par def='29'><border outsidewidth='3px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30' color='#6000a1'/></run><run><font
+ size='9pt' color='#6000a1' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/><field
+ type='text' kind='editable' name='ApproverNm_2'><code event='defaultvalue'><formula
+>@GetField(@ThisName)</formula></code></field></run><compositedata type='98'
+ prevtype='65418' nexttype='222' afterparcount='12' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='white'/> </run><run><font size='9pt' color='#ff2259'
+ name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/><field type='text'
+ kind='computed' name='ApproveStatus_2'><code event='defaultvalue'><formula
+>@GetField(@ThisName)</formula></code></field></run><compositedata type='98'
+ prevtype='65418' nexttype='222' afterparcount='21' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par>
+<par def='29'><border outsidewidth='3px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30' color='#6000a1'/></run><run><font
+ size='9pt' color='#6000a1' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/><field
+ type='text' kind='editable' name='ApproverDep_2'><code event='defaultvalue'><formula
+>@GetField(@ThisName)</formula></code></field></run><compositedata type='98'
+ prevtype='65418' nexttype='222' afterparcount='11' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='#6000a1'/></run></par>
+<par def='29'><border outsidewidth='3px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30' color='#6000a1'/></run><run><font
+ size='9pt' color='#6000a1' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/><field
+ type='datetime' kind='editable' name='ApproveTime_2'><datetimeformat show='datetime'
+ date='yearmonthday' fourdigityearfor21stcentury='true' time='hourminutesecond'
+ zone='never' dateformat='yearmonthdayweekday' dayformat='twodigitday' monthformat='twodigitmonth'
+ yearformat='fourdigityear' weekdayformat='shortname' dateseparator1='/' dateseparator2='/'
+ dateseparator3=' ' timeseparator=':' timeformat24='true' preference='usersetting'/><code
+ event='defaultvalue'><formula>@GetField(@ThisName)</formula></code></field></run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'
+ color='#6000a1'/></run></par></tablecell></tablerow></table>
+<pardef id='30' align='right' leftmargin='1in'><code event='hidewhen' enabled='false'><formula
+>@IsNotMember(Division;"障害":"問合せ":"保守") |
+Status = ""</formula></code></pardef>
+<par def='30'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='maroon'/></run></par>
+<par def='30'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='maroon'/>管理番号：</run><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/><field type='text' kind='editable'
+ name='DocumentNo'/></run><compositedata type='98' prevtype='65418' nexttype='222'
+ afterparcount='9' containertype='65418' aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata></par>
+<pardef id='31' align='right' leftmargin='1in' hide='read edit print copy preview previewedit notes embedded'><code
+ event='hidewhen'><formula>@IsNotMember(Division;"障害":"問合せ":"保守") |
+Status = ""</formula></code></pardef>
+<par def='31'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/><field type='text' kind='editable' name='DocumentNo_1'><code
+ event='inputenabled'><formula>@If(DocmentNo = ""; @Failure("管理番号が入力されていません。");@True )</formula></code><code
+ event='defaultvalue'><formula>DocumentNo</formula></code><code event='inputtranslation'><formula
+>@ReplaceSubstring(@Narrow(@ThisValue);"ｰ":"_";"-")</formula></code></field></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='8' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata></par>
+<table widthtype='fitmargins' minrowheight='0.3938in' cellbordercolor='maroon'
+ refwidth='6.0313in'><tablecolumn width='1.5750in'/><tablecolumn width='50.0069%'/><tablecolumn
+ width='49.9931%'/>
+<tablerow>
+<tablecell borderwidth='0px 0px 1px' bgcolor='#ffe1b0'>
+<pardef id='32' leftmargin='0.0986in' keepwithnext='true' keeptogether='true'/>
+<par def='32'><border outsidewidth='5px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30' color='maroon'/>入力者：</run></par></tablecell>
+<tablecell columnspan='2' borderwidth='0px 0px 1px' bgcolor='white'>
+<par def='32'><border outsidewidth='5px'/></par>
+<pardef id='34' leftmargin='0.0986in' keepwithnext='true' keeptogether='true'/>
+<par def='34'><border outsidewidth='5px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/></run><run><font size='9pt'
+ name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/><field type='text'
+ kind='computedwhencomposed' name='EntryUser'><code event='defaultvalue'><formula
+>c_This_UserNameJ</formula></code></field></run><compositedata type='98' prevtype='65418'
+ nexttype='222' afterparcount='8' containertype='65418' aftercontainercount='1'
+ afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/> </run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed'
+ truetype='true' familyid='30'/><computedtext><code event='value'><formula
+>@If(c_This_UserDept = "";"";"(")</formula></code></computedtext></run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/> </run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/><field
+ type='text' kind='computedwhencomposed' name='EntryDept'><code event='defaultvalue'><formula
+>c_This_UserDept</formula></code></field></run><compositedata type='98' prevtype='65418'
+ nexttype='222' afterparcount='20' containertype='65418' aftercontainercount='1'
+ afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/> </run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed'
+ truetype='true' familyid='30'/><computedtext><code event='value'><formula
+>@If(c_This_UserDept = "";"";")")</formula></code></computedtext></run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'
+ color='maroon'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell borderwidth='1px 0px' bgcolor='#ffe1b0'>
+<pardef id='35' leftmargin='0.0986in' keepwithnext='true' keeptogether='true'><code
+ event='hidewhen'><formula>@IsNotMember(Division;"問合せ":"データ強制変更":"保守")</formula></code></pardef>
+<par def='35'><border outsidewidth='5px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30' color='maroon'/>部所名：</run></par>
+<pardef id='36' align='right' leftmargin='0.0986in' keepwithnext='true' keeptogether='true'><code
+ event='hidewhen'><formula>@IsNotMember(Division;"問合せ":"データ強制変更":"保守")</formula></code></pardef>
+<par def='36'><border outsidewidth='5px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/></run><button width='2in' widthtype='maximum'
+ maxlines='1' wraptext='true' edge='rounded' bgcolor='red' default='true'><code
+ event='click'><formula>allitemw:=@PickList( [Custom] ;DbLookupServer_1 :CustomDBname_1 ; "N.HELPJCD" ; "事業所(事業所コード)の選択" ; "事業所コードを入力することによりクイック検索ができます。" ; 4 ) ;
+allitem:=@Explode(allitemw;";");
+no:=@Subset(allitem;1);
+namew:=@Subset(allitem;2);
+name:=@Subset(namew;-1);
+kanaw:=@Subset(allitem;3);
+kana:=@Subset(kanaw;-1);
+sec1w:=@Subset(allitem;4);
+sec1:=@Subset(sec1w;-1);
+sec2w:=@Subset(allitem;5);
+sec2:=@Subset(sec2w;-1);
+sec3w:=@Subset(allitem;6);
+sec3:=@Subset(sec3w;-1);
+telw:=@Subset(allitem;7);
+tel:=@Subset(telw;-1);
+address1w:=@Subset(allitem;8);
+address1:=@Subset(address1w;-1);
+address2w:=@Subset(allitem;9);
+address2:=@Subset(address2w;-1);
+address3w:=@Subset(allitem;10);
+address3:=@Subset(address3w;-1);
+BUMONw:=@Subset(allitem;11);
+BUMON:=@Subset(BUMONw;-1);
+KAISHAw:=@Subset(allitem;12);
+KAISHA:=@Subset(KAISHAw;-1);
+@SetField("kana";kana);
+@SetField("Ask";name)</formula></code><font size='9pt' name='ＭＳ ゴシック' pitch='fixed'
+ truetype='true' familyid='30' color='white'/>事業所CD</button><run><font size='9pt'
+ name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/></run><button
+ width='2in' widthtype='maximum' maxlines='1' wraptext='true' edge='rounded'
+ bgcolor='red'><code event='click'><formula>allitemw:=@PickList( [Custom] ;DbLookupServer_1 :CustomDBname_1 ; "N.HELP事名" ; "事業所(事業所名)の選択" ; "先頭数文字を入力することによりクイック検索ができます。" ; 3 );
+allitem:=@Explode(allitemw;";");
+no:=@Subset(allitem;1);
+namew:=@Subset(allitem;2);
+name:=@Subset(namew;-1);
+kanaw:=@Subset(allitem;3);
+kana:=@Subset(kanaw;-1);
+sec1w:=@Subset(allitem;4);
+sec1:=@Subset(sec1w;-1);
+sec2w:=@Subset(allitem;5);
+sec2:=@Subset(sec2w;-1);
+sec3w:=@Subset(allitem;6);
+sec3:=@Subset(sec3w;-1);
+telw:=@Subset(allitem;7);
+tel:=@Subset(telw;-1);
+address1w:=@Subset(allitem;8);
+address1:=@Subset(address1w;-1);
+address2w:=@Subset(allitem;9);
+address2:=@Subset(address2w;-1);
+address3w:=@Subset(allitem;10);
+address3:=@Subset(address3w;-1);
+BUMONw:=@Subset(allitem;11);
+BUMON:=@Subset(BUMONw;-1);
+KAISHAw:=@Subset(allitem;12);
+KAISHA:=@Subset(KAISHAw;-1);
+@SetField("kana";kana);
+@SetField("Ask";name)</formula></code><font size='9pt' name='ＭＳ ゴシック' pitch='fixed'
+ truetype='true' familyid='30' color='white'/>事業所名</button><run><font size='9pt'
+ name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30' color='maroon'/></run></par></tablecell>
+<tablecell columnspan='2' borderwidth='1px 0px' bgcolor='white'>
+<par def='36'><border outsidewidth='5px'/></par>
+<pardef id='38' leftmargin='0.0986in' keepwithnext='true' keeptogether='true'><code
+ event='hidewhen'><formula>@IsNotMember(Division;"問合せ":"データ強制変更":"保守")</formula></code></pardef>
+<par def='38'><border outsidewidth='5px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/></run><run><font size='9pt'
+ name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/><field defaultfocus='true'
+ type='text' kind='editable' name='Ask'><code event='defaultvalue'><formula
+>Ask</formula></code></field></run><compositedata type='98' prevtype='65418'
+ nexttype='222' afterparcount='10' containertype='65418' aftercontainercount='1'
+ afterbegincount='4'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par>
+<par def='38'><border outsidewidth='5px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/>　　ご担当：　</run><run><font size='9pt'
+ name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/><field type='text'
+ kind='editable' name='AskUser'><code event='defaultvalue'><formula>AskUser</formula></code></field></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='8' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/> 様</run></par></tablecell></tablerow>
+<tablerow>
+<tablecell borderwidth='1px 0px' bgcolor='#ffe1b0'>
+<pardef id='39' leftmargin='0.0986in' keepwithnext='true' keeptogether='true'/>
+<par def='39'><border outsidewidth='5px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30' color='maroon'/>分類：</run></par></tablecell>
+<tablecell columnspan='2' borderwidth='1px 0px' bgcolor='white'>
+<par def='39'><border outsidewidth='10px 5px 5px'/></par>
+<pardef id='41' leftmargin='0.0986in' keepwithnext='true' keeptogether='true'/>
+<par def='41'><border outsidewidth='10px 5px 5px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/></run><run><font size='9pt'
+ style='bold' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/><field
+ borderstyle='none' type='text' kind='computed' name='Division'><keywords
+ helperbutton='false' recalconchange='true' columns='5' ui='radiobutton'/><code
+ event='defaultvalue'><formula>"保守"</formula></code></field></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='9' containertype='65418'
+ aftercontainercount='1' afterbegincount='4'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell borderwidth='1px 0px' bgcolor='#ffe1b0'>
+<par def='39'><border outsidewidth='5px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30' color='maroon'/>システム：</run></par></tablecell>
+<tablecell columnspan='2' borderwidth='1px 0px' bgcolor='white'>
+<par def='39'><border outsidewidth='10px 5px 5px'/></par>
+<pardef id='43' leftmargin='0.0986in' keepwithnext='true' keeptogether='true'/>
+<par def='43'><border outsidewidth='10px 5px 5px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/></run><run><font size='9pt'
+ name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/><field borderstyle='none'
+ lookupeachchar='false' lookupaddressonrefresh='false' type='keyword' kind='editable'
+ name='System'><keywords helperbutton='false' recalconchange='true' recalcchoices='true'
+ columns='8' ui='radiobutton'><formula>@Unique(@DbColumn("":"NoCache";"";"Vw_Document_12";2))</formula></keywords><code
+ event='defaultvalue'><formula>System</formula></code></field></run><run><font
+ size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/>　</run></par>
+<pardef id='44' leftmargin='0.0986in' hide='read edit print copy preview previewedit'
+ keepwithnext='true' keeptogether='true'/>
+<par def='44'><border outsidewidth='10px 5px 5px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/>ＲＣＭ対象区分：</run><run><font size='9pt'
+ name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/><field borderstyle='none'
+ lookupeachchar='false' lookupaddressonrefresh='false' type='keyword' kind='editable'
+ name='rcm'><keywords helperbutton='false' columns='8' ui='radiobutton'><textlist
+><text>対象</text><text>非対象</text></textlist></keywords></field></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell borderwidth='1px 0px' bgcolor='#ffe1b0'>
+<par def='39'><border outsidewidth='5px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30' color='maroon'/>サブシステム：</run></par></tablecell>
+<tablecell columnspan='2' borderwidth='1px 0px' bgcolor='white'>
+<par def='39'><border outsidewidth='10px 5px 5px'/></par>
+<par def='43'><border outsidewidth='10px 5px 5px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/></run><run><font size='9pt'
+ name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/><field lookupeachchar='false'
+ lookupaddressonrefresh='false' type='keyword' kind='editable' name='SubSystem'><keywords
+ recalconchange='true' recalcchoices='true' columns='8' ui='dialoglist'><formula
+>@DbLookup("":"NoCache";"";"Vw_Document_13"; System; 2)</formula></keywords><code
+ event='defaultvalue'><formula>SubSystem</formula></code></field></run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell borderwidth='1px 0px' bgcolor='#ffe1b0'>
+<pardef id='45' leftmargin='0.0986in' keepwithnext='true' keeptogether='true'><code
+ event='hidewhen'><formula>@IsNotMember(Division;"障害":"問合せ")</formula></code></pardef>
+<par def='45'><border outsidewidth='5px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30' color='maroon'/>処理名：</run></par></tablecell>
+<tablecell columnspan='2' borderwidth='1px 0px' bgcolor='white'>
+<par def='45'><border outsidewidth='5px'/></par>
+<pardef id='47' leftmargin='0.0986in' keepwithnext='true' keeptogether='true'><code
+ event='hidewhen'><formula>@IsNotMember(Division;"障害":"問合せ")</formula></code></pardef>
+<par def='47'><border outsidewidth='5px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/></run><run><font size='9pt'
+ name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/><field lookupeachchar='false'
+ lookupaddressonrefresh='false' type='keyword' kind='editable' name='Task'><keywords
+ recalconchange='true' recalcchoices='true' columns='1' ui='dialoglist'><formula
+>@DbLookup("":"NoCache";"";"Vw_Document_14"; SubSystem; 2)</formula></keywords></field></run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell borderwidth='1px 0px' bgcolor='#ffe1b0'>
+<pardef id='48' leftmargin='0.0986in' keepwithnext='true' keeptogether='true'><code
+ event='hidewhen'><formula>Division != "保守"</formula></code></pardef>
+<par def='48'><border outsidewidth='5px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30' color='maroon'/>状態：</run></par></tablecell>
+<tablecell columnspan='2' borderwidth='1px 0px' bgcolor='white'>
+<par def='48'><border outsidewidth='5px'/></par>
+<pardef id='50' leftmargin='0.0986in' linespacing='1.5' keepwithnext='true'
+ keeptogether='true'><code event='hidewhen'><formula>Division != "保守"</formula></code></pardef>
+<par def='50'><border outsidewidth='5px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/></run><run><font size='9pt'
+ name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/><field lookupeachchar='false'
+ lookupaddressonrefresh='false' type='keyword' kind='editable' name='ActionStatus'><keywords
+ recalcchoices='true' columns='1' ui='dialoglist' allownew='true'><formula
+>View := "(VW_GetActionStatus)";
+@If(@IsError(@DbColumn("":"NoCache";"";View;1));"";@Unique(@DbColumn("":"NoCache";"";View;1):"対応不要"))</formula></keywords><code
+ event='defaultvalue'><formula>"対応検討中"</formula></code></field></run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell borderwidth='1px 0px' bgcolor='#ffe1b0'>
+<par def='39'><border outsidewidth='5px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30' color='maroon'/>開始日時：</run></par>
+<pardef id='51' align='right' leftmargin='0.0986in' keepwithnext='true' keeptogether='true'><code
+ event='hidewhen' enabled='false'><formula>@IsNotMember(Division;"問合せ":"データ強制変更":"保守")</formula></code></pardef>
+<par def='51'><border outsidewidth='5px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/></run><button width='2in' widthtype='maximum'
+ maxlines='1' wraptext='true' edge='rounded' bgcolor='blue'><code event='click'><formula
+>@SetField("DocumentDate"; @Today);
+@SetField("DocumentTime"; @Now)</formula></code><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30' color='white'/>Now</button><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'
+ color='maroon'/></run></par></tablecell>
+<tablecell columnspan='2' borderwidth='1px 0px' bgcolor='white'>
+<par def='51'><border outsidewidth='5px'/></par>
+<par def='41'><border outsidewidth='5px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/></run><run><font size='9pt'
+ name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/><field usenotesstyle='false'
+ height='0.1965in' width='1.5750in' multiline='true' borderstyle='single'
+ type='datetime' kind='editable' name='DocumentDate'><datetimeformat show='date'
+ date='weekdaymonthdayyear' fourdigityearfor21stcentury='true' zone='never'
+ dateformat='yearmonthdayweekday' dayformat='twodigitday' monthformat='twodigitmonth'
+ yearformat='fourdigityear' weekdayformat='shortname' dateseparator1='/' dateseparator2='/'
+ dateseparator3=' ' timeseparator=':' timeformat24='true' preference='usersetting'/><code
+ event='defaultvalue'><formula>@Today</formula></code></field></run><run><font
+ size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/>  </run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/><field
+ usenotesstyle='false' height='0.1965in' width='0.7875in' multiline='true'
+ borderstyle='single' type='datetime' kind='editable' name='DocumentTime'><datetimeformat
+ show='time' date='yearmonthday' fourdigityearfor21stcentury='true' time='hourminute'
+ zone='never' dateformat='yearmonthdayweekday' dayformat='twodigitday' monthformat='twodigitmonth'
+ yearformat='fourdigityear' weekdayformat='shortname' dateseparator1='/' dateseparator2='/'
+ dateseparator3=' ' timeseparator=':' timeformat24='true' preference='usersetting'/><code
+ event='defaultvalue'><formula>@Time(@Now)</formula></code></field></run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell borderwidth='1px 0px' bgcolor='#ffe1b0'>
+<pardef id='52' leftmargin='0.0986in' keepwithnext='true' keeptogether='true'><code
+ event='hidewhen' enabled='false'><formula>Division != "問合せ"</formula></code></pardef>
+<par def='52'><border outsidewidth='5px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30' color='maroon'/>完了日時：</run></par>
+<pardef id='53' align='right' leftmargin='0.0986in' keepwithnext='true' keeptogether='true'><code
+ event='hidewhen' enabled='false'><formula>@IsNotMember(Division;"問合せ":"データ強制変更":"障害")</formula></code></pardef>
+<par def='53'><border outsidewidth='5px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/></run><button width='2in' widthtype='maximum'
+ maxlines='1' wraptext='true' edge='rounded' bgcolor='blue'><code event='click'><formula
+>@SetField("ReplyDate"; @Today);
+@SetField("ReplyTime"; @Now)</formula></code><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30' color='white'/>Now</button><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'
+ color='maroon'/></run></par></tablecell>
+<tablecell columnspan='2' borderwidth='1px 0px' bgcolor='white'>
+<par def='53'><border outsidewidth='5px'/></par>
+<pardef id='55' leftmargin='0.0986in' keepwithnext='true' keeptogether='true'><code
+ event='hidewhen' enabled='false'><formula>@IsNotMember(Division;"問合せ":"データ強制変更":"障害")</formula></code></pardef>
+<par def='55'><border outsidewidth='5px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/></run><run><font size='9pt'
+ name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/><field usenotesstyle='false'
+ height='0.1965in' width='1.5750in' multiline='true' borderstyle='single'
+ type='datetime' kind='editable' name='ReplyDate'><datetimeformat show='date'
+ date='weekdaymonthdayyear' fourdigityearfor21stcentury='true' zone='never'
+ dateformat='yearmonthdayweekday' dayformat='twodigitday' monthformat='twodigitmonth'
+ yearformat='fourdigityear' weekdayformat='shortname' dateseparator1='/' dateseparator2='/'
+ dateseparator3=' ' timeseparator=':' timeformat24='true' preference='usersetting'/></field></run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/>　</run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/><field
+ usenotesstyle='false' height='0.1965in' width='0.7875in' multiline='true'
+ borderstyle='single' type='datetime' kind='editable' name='ReplyTime'><datetimeformat
+ show='time' date='yearmonthday' fourdigityearfor21stcentury='true' time='hourminute'
+ zone='never' dateformat='yearmonthdayweekday' dayformat='twodigitday' monthformat='twodigitmonth'
+ yearformat='fourdigityear' weekdayformat='shortname' dateseparator1='/' dateseparator2='/'
+ dateseparator3=' ' timeseparator=':' timeformat24='true' preference='custom'/></field></run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/>  </run></par>
+<par def='55'><border outsidewidth='5px'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30' color='green'/>※対応完了日時を登録してください。</run></par></tablecell></tablerow></table>
+<pardef id='56' leftmargin='1in'><code event='hidewhen'><formula>@IsNotMember(Division;"障害":"問合せ":"保守") |
+Status = ""</formula></code></pardef>
+<par def='56'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par>
+<pardef id='57' leftmargin='1in' hide='notes web mobile'/>
+<par def='57'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/>（非表示）管理番号区分：</run><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/><field type='text' kind='computed'
+ name='No_Category'><code event='defaultvalue'><formula>@Left(DocumentNo;"-")</formula></code></field></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='10' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> 管理番号№：</run><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/><field type='text' kind='computed'
+ name='No_Num'><code event='defaultvalue'><formula>@RightBack(DocumentNo;"-")</formula></code></field></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='19' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/></run></par>
+<par def='57'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/>（非表示）管理番号区分候補：</run><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/><field type='text' kind='computedfordisplay'
+ name='No_Category_x'><code event='defaultvalue'><formula>@If(Division = "" | Division = "データ強制変更";@Return("");"");
+
+@If(Division = "障害";"障";
+     Division = "問合せ";"問";
+     (Division = "保守" &amp; system = "ＮＦＰ");"NFP";
+     Division = "保守";"変";
+     "")</formula></code></field></run><compositedata type='98' prevtype='65418'
+ nexttype='222' afterparcount='9' containertype='65418' aftercontainercount='1'
+ afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/> 管理番号№候補：</run><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/><field type='text' kind='computedfordisplay'
+ name='No_Num_x'><code event='defaultvalue'><formula>@If(Division = "" | Division = "データ強制変更";@Return("");"");
+
+View := "(VW_GetDocumentNo)";
+Key := No_Category_x;
+Val := @DbLookup("":"NoCache";"";View;Key;2;[FailSilent]);
+@If(Val = "";"00001";@Right("00000" + @Text(@ToNumber(Val[1]) + 1);5))</formula></code></field></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='18' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/></run></par>
+<par def='57'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/></run></par>
+<pardef id='58' leftmargin='1in' hide='read edit copy preview previewedit'/>
+<par def='58'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/><field type='text' kind='computedwhencomposed' name='事業所マスタID'><code
+ event='defaultvalue'><formula>"492563BA:0019FB8A"</formula></code></field></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='7' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/>FLG:0=ﾍﾙﾌﾟ 1=ｱﾌﾟﾘ </run><run><font size='9pt'
+ name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/> </run></par>
+<par def='58'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/><field type='text' kind='computedfordisplay' name='DbLookupServer'><code
+ event='defaultvalue'><formula>@Subset(@DbName;1)</formula></code></field></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='6' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='blue'/> </run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed'
+ truetype='true' familyid='30'/><field type='text' kind='computedfordisplay'
+ name='DbLookupServer_1'><code event='defaultvalue'><formula>"CN=NOTES03/O=NMP"</formula></code></field></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='15' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='blue'/> </run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed'
+ truetype='true' familyid='30'/><field type='text' kind='computedfordisplay'
+ name='CustomDBName_1'><code event='defaultvalue'><formula>"data17\\JONET90.nsf"</formula></code></field></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='24' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par>
+<pardef id='59' firstlineleftmargin='1in'/>
+<par def='59'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par>
+<pardef id='60' leftmargin='1in'><code event='hidewhen'><formula>Division = ""</formula></code></pardef>
+<par def='60'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par>
+<pardef id='61' leftmargin='1in'><code event='hidewhen'><formula>Division = ""</formula></code></pardef>
+<par def='61'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run><horizrule height='0.0729in' width='100%' use3dshading='false'
+ color='blue' gradientcolor='yellow'/><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/></run></par>
+<par def='61'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/>件名：</run></par>
+<pardef id='62' leftmargin='1.2500in'><code event='hidewhen'><formula>Division = ""</formula></code></pardef>
+<par def='62'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/><field type='text' kind='editable' name='Fd_Text_1'><code
+ event='defaultvalue'><formula>Fd_Text_1</formula></code><code event='inputtranslation'><formula
+>@Narrow(Fd_Text_1)</formula></code></field></run><compositedata type='98'
+ prevtype='65418' nexttype='222' afterparcount='8' containertype='65418' aftercontainercount='1'
+ afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par>
+<par def='61'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par>
+<pardef id='63' leftmargin='1in'><code event='hidewhen' enabled='false'><formula
+>@IsNotMember(Division;"障害")</formula></code></pardef>
+<par def='63'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/>親文書：</run></par>
+<pardef id='64' leftmargin='1.2500in'><code event='hidewhen' enabled='false'><formula
+>Division = ""</formula></code></pardef>
+<par def='64'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/><field type='richtext' kind='editable' name='Fd_Link_1'/></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='8' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAEAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par>
+<par def='62'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par>
+<table widthtype='fitmargins' refwidth='6.0208in'><tablecolumn width='50.0104%'/><tablecolumn
+ width='49.9896%'/>
+<tablerow>
+<tablecell colorstyle='hgradient' bgcolor='red' altbgcolor='white'>
+<pardef id='65' leftmargin='0.0986in' keepwithnext='true' keeptogether='true'><code
+ event='hidewhen'><formula>Division = ""</formula></code></pardef>
+<par def='65'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='white'/>依頼内容</run></par></tablecell>
+<tablecell colorstyle='hgradient' bgcolor='red' altbgcolor='white'>
+<pardef id='66' leftmargin='0.0986in' keepwithnext='true' keeptogether='true'/>
+<par def='66'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='white'/>対応詳細</run></par></tablecell></tablerow>
+<tablerow>
+<tablecell>
+<pardef id='67' leftmargin='0.0986in' spacebefore='1.5' spaceafter='1.5' keepwithnext='true'
+ keeptogether='true'/>
+<par def='67'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/><field type='richtext' kind='editable' name='Detail' description='何が起きているか？具体的に記載すること'
+ fieldhint='何が起きているか？具体的に記載すること'><keywords recalconchange='true' recalcchoices='true'
+ columns='1' ui='dialoglist' allownew='true'/><code event='defaultvalue'><formula
+>Detail</formula></code></field></run><compositedata type='98' prevtype='65513'
+ nexttype='222' afterparcount='9' containertype='65418' aftercontainercount='2'
+ afterbegincount='5'>
+Yg4BAIQAAAAAAAEAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par>
+<pardef id='68' leftmargin='0.0986in' spacebefore='1.5' spaceafter='1.5' hide='read edit print copy preview previewedit notes web mobile embedded'
+ keepwithnext='true' keeptogether='true'/>
+<par def='68'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/>（非表示）</run><run><font size='9pt' color='red' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/><field type='text' kind='computed'
+ name='DetailSubject'><code event='defaultvalue'><formula>@Narrow(@Abstract([TextOnly];1000;"";Detail))</formula></code></field></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='10' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/></run></par></tablecell>
+<tablecell>
+<pardef id='69' leftmargin='0.0986in' spacebefore='1.5' spaceafter='1.5' keepwithnext='true'
+ keeptogether='true'/>
+<par def='69'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/><field type='richtext' kind='editable' name='Maintenance'/></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='7' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAEAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par>
+<pardef id='70' leftmargin='0.0986in' spacebefore='1.5' spaceafter='1.5' hide='read edit print copy preview previewedit notes web mobile embedded'
+ keepwithnext='true' keeptogether='true'/>
+<par def='70'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='red'/>（非表示）</run><run><font size='9pt' color='red' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/><field type='text' kind='computed'
+ name='MaintenanceSubject'><code event='defaultvalue'><formula>@Narrow(@Abstract([TextOnly];1000;"";Maintenance))</formula></code></field></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='10' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' style='bold' name='ＭＳ ゴシック' pitch='fixed'
+ truetype='true' familyid='30' color='red'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell>
+<par def='67'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/>優先順位　：</run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed'
+ truetype='true' familyid='30'/><field borderstyle='none' lookupeachchar='false'
+ lookupaddressonrefresh='false' type='keyword' kind='editable' name='Priority'><keywords
+ helperbutton='false' columns='8' ui='radiobutton'><textlist><text>A+</text><text
+>A</text><text>B</text><text>C</text><text>D</text></textlist></keywords><code
+ event='defaultvalue'><formula>"B"</formula></code></field></run><run><font
+ size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/></run></par>
+<par def='67'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/>状況詳細　：</run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed'
+ truetype='true' familyid='30'/><field lookupeachchar='false' lookupaddressonrefresh='false'
+ type='keyword' kind='editable' name='SubStatus'><keywords columns='1' ui='dialoglist'><textlist
+><text>1.業連回答待ち</text><text>2.着手指示待ち</text><text>3.製品納品待ち</text><text>4.当社試験待ち</text><text
+>5.導入作業待ち</text><text>6.導入完了</text></textlist></keywords><code event='defaultvalue'><formula
+>"1.業連回答待ち"</formula></code></field></run><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/></run></par>
+<par def='67'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/>費用請求　：</run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed'
+ truetype='true' familyid='30'/><field borderstyle='none' lookupeachchar='false'
+ lookupaddressonrefresh='false' type='keyword' kind='editable' name='Contract'><keywords
+ helperbutton='false' recalconchange='true' recalcchoices='true' columns='8'
+ ui='radiobutton'><textlist><text>有償</text><text>無償</text></textlist></keywords><code
+ event='defaultvalue'><formula>"無償"</formula></code></field></run><run><font
+ size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30' color='red'/></run></par>
+<par def='67'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/>依頼先　　：</run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed'
+ truetype='true' familyid='30'/><field lookupeachchar='false' lookupaddressonrefresh='false'
+ type='keyword' kind='editable' name='Commission'><keywords columns='8' ui='dialoglist'><textlist
+><text>ＳＣＣ</text><text>キヤノン</text><text>ＳＣＳＫ</text><text>ＮＨＢＥ</text><text
+>ＮＨＳＳ</text><text>トランスコスモス</text><text>ＤＤＳ</text><text>ＳＤＤ</text><text>ＳＬＹ</text><text
+>西日本イシダ</text></textlist></keywords></field></run><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/></run></par>
+<par def='67'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/>新規・保守：</run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed'
+ truetype='true' familyid='30'/><field borderstyle='none' lookupeachchar='false'
+ lookupaddressonrefresh='false' type='keyword' kind='editable' name='MaintenanceFlag'><keywords
+ helperbutton='false' columns='8' ui='radiobutton'><textlist><text>新規</text><text
+>保守（障害）</text><text>保守（改善）</text><text>保守（ほか）</text></textlist></keywords><code
+ event='defaultvalue'><formula>"保守（障害）"</formula></code></field></run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/></run></par>
+<par def='67'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/>作業工数　：</run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed'
+ truetype='true' familyid='30'/><field type='number' kind='editable' name='Fd_Man_Hour'><numberformat
+ format='general' digits='2' punctuated='false' parens='false' percent='false'
+ bytes='false'/></field></run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed'
+ truetype='true' familyid='30'/>日／人</run></par>
+<par def='67'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/>開発工数　：</run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed'
+ truetype='true' familyid='30'/><field type='number' kind='editable' name='Fd_Kaihatsu_Hour'><numberformat
+ format='general' digits='2' punctuated='false' parens='false' percent='false'
+ bytes='false'/></field></run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed'
+ truetype='true' familyid='30'/>日／人</run></par>
+<par def='67'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/>受入工数　：</run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed'
+ truetype='true' familyid='30'/><field type='number' kind='editable' name='Fd_Ukeire_Hour'><numberformat
+ format='general' digits='2' punctuated='false' parens='false' percent='false'
+ bytes='false'/></field></run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed'
+ truetype='true' familyid='30'/>日／人</run></par></tablecell>
+<tablecell>
+<par def='69'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/>他システム調整　：</run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed'
+ truetype='true' familyid='30'/><field borderstyle='none' lookupeachchar='false'
+ lookupaddressonrefresh='false' type='keyword' kind='editable' name='OtherSystem'><keywords
+ helperbutton='false' columns='8' ui='radiobutton'><textlist><text>要</text><text
+>不要</text></textlist></keywords></field></run><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/></run></par>
+<par def='69'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/>調整結果　　　　：</run></par>
+<pardef id='71' leftmargin='0.3486in' spacebefore='1.5' spaceafter='1.5' keepwithnext='true'
+ keeptogether='true'/>
+<par def='71'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/><field type='text' kind='editable' name='Adjustment'/></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='7' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell colorstyle='hgradient' bgcolor='maroon' altbgcolor='white'>
+<pardef id='72' leftmargin='0.0986in' keepwithnext='true' keeptogether='true'/>
+<par def='72'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='white'/>テスト計画</run></par></tablecell>
+<tablecell colorstyle='hgradient' bgcolor='maroon' altbgcolor='white'>
+<par def='66'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='white'/>テスト結果報告</run></par></tablecell></tablerow>
+<tablerow>
+<tablecell>
+<par def='67'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/><field type='richtext' kind='editable' name='TestSchedule'
+ fieldhint='テスト計画書を添付しましょう。'/></run><compositedata type='98' prevtype='65513'
+ nexttype='222' afterparcount='7' containertype='65418' aftercontainercount='2'
+ afterbegincount='4'>
+Yg4BAIQAAAAAAAEAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par></tablecell>
+<tablecell>
+<par def='69'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/><field type='richtext' kind='editable' name='Reseption' fieldhint='テスト結果を添付しましょう。エビデンスは下！'/></run><compositedata
+ type='98' prevtype='65513' nexttype='222' afterparcount='7' containertype='65418'
+ aftercontainercount='2' afterbegincount='4'>
+Yg4BAIQAAAAAAAEAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell colorstyle='hgradient' bgcolor='black' altbgcolor='white'>
+<par def='72'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='white'/>リリース情報</run></par></tablecell>
+<tablecell colorstyle='hgradient' bgcolor='black' altbgcolor='white'>
+<par def='66'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30' color='white'/>お客様への通達</run></par></tablecell></tablerow>
+<tablerow>
+<tablecell>
+<par def='67'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/>Ｎｏ　　：</run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed'
+ truetype='true' familyid='30'/><field type='text' kind='editable' name='Release_No'/></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='6' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par>
+<par def='67'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/>予定日　：</run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed'
+ truetype='true' familyid='30'/><field usenotesstyle='false' height='0.1590in'
+ width='1.5750in' heighttype='proportional' multiline='true' borderstyle='single'
+ type='datetime' kind='editable' name='Release_Plan'><datetimeformat show='date'
+ date='yearmonthday' fourdigityearfor21stcentury='true' zone='never' dateformat='yearmonthdayweekday'
+ dayformat='twodigitday' monthformat='twodigitmonth' yearformat='fourdigityear'
+ weekdayformat='shortname' dateseparator1='/' dateseparator2='/' dateseparator3=' '
+ timeseparator=':' timeformat24='true' preference='usersetting'/></field></run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/></run></par>
+<par def='67'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/>完了日　：</run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed'
+ truetype='true' familyid='30'/><field usenotesstyle='false' height='0.1590in'
+ width='1.5750in' heighttype='proportional' multiline='true' borderstyle='single'
+ type='datetime' kind='editable' name='Release_Comp'><datetimeformat show='date'
+ date='yearmonthday' fourdigityearfor21stcentury='true' zone='never' dateformat='yearmonthdayweekday'
+ dayformat='twodigitday' monthformat='twodigitmonth' yearformat='fourdigityear'
+ weekdayformat='shortname' dateseparator1='/' dateseparator2='/' dateseparator3=' '
+ timeseparator=':' timeformat24='true' preference='usersetting'/></field></run><run
+><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true' familyid='30'/></run></par></tablecell>
+<tablecell>
+<par def='69'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/>連絡要否：</run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed'
+ truetype='true' familyid='30'/><field borderstyle='none' lookupeachchar='false'
+ lookupaddressonrefresh='false' type='keyword' kind='editable' name='Announce'><keywords
+ helperbutton='false' columns='8' ui='radiobutton'><textlist><text>要</text><text
+>不要</text></textlist></keywords></field></run><run><font size='9pt' name='ＭＳ ゴシック'
+ pitch='fixed' truetype='true' familyid='30'/></run></par>
+<par def='69'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/>連絡内容：</run></par>
+<par def='71'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/><field type='richtext' kind='editable' name='AnnounceDoc'/></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='6' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAEAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par></tablecell></tablerow></table>
+<pardef id='73' leftmargin='1.2500in'><code event='hidewhen'><formula>@IsNotMember(Division;"問合せ":"データ強制変更":"保守")</formula></code></pardef>
+<par def='73'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par>
+<par def='73'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/>備考１：</run></par>
+<pardef id='74' leftmargin='1.5000in'><code event='hidewhen'><formula>@IsNotMember(Division;"問合せ":"データ強制変更":"保守")</formula></code></pardef>
+<par def='74'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/><field type='richtext' kind='editable' name='Fd_Text_2' fieldhint='業務連絡票を添付しましょう。'/></run><compositedata
+ type='98' prevtype='65513' nexttype='222' afterparcount='9' containertype='65418'
+ aftercontainercount='2' afterbegincount='4'>
+Yg4BAIQAAAAAAAEAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par>
+<par def='73'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/>備考２：</run></par>
+<par def='74'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/><field type='richtext' kind='editable' name='Fd_Text_3' fieldhint='エビデンスを添付しましょう。'/></run><compositedata
+ type='98' prevtype='65513' nexttype='222' afterparcount='8' containertype='65418'
+ aftercontainercount='2' afterbegincount='4'>
+Yg4BAIQAAAAAAAEAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par>
+<par def='73'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/>備考３：</run></par>
+<par def='74'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/><field type='richtext' kind='editable' name='Fd_Text_4' fieldhint='システム導入許可書を添付しましょう。'/></run><compositedata
+ type='98' prevtype='65513' nexttype='222' afterparcount='8' containertype='65418'
+ aftercontainercount='2' afterbegincount='4'>
+Yg4BAIQAAAAAAAEAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par>
+<par def='73'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/>備考４：</run></par>
+<par def='74'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/><field type='richtext' kind='editable' name='Fd_Text_5' fieldhint='リリース依頼書を添付しましょう。'/></run><compositedata
+ type='98' prevtype='65513' nexttype='222' afterparcount='8' containertype='65418'
+ aftercontainercount='2' afterbegincount='4'>
+Yg4BAIQAAAAAAAEAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par>
+<par def='73'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/>備考５：</run></par>
+<par def='74'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/><field type='richtext' kind='editable' name='Fd_Text_6'/></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='7' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAEAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par>
+<par def='73'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/>備考６：</run></par>
+<par def='74'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/><field type='richtext' kind='editable' name='Fd_Text_7'/></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='7' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAEAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par>
+<par def='73'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/>備考７：</run></par>
+<par def='74'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/><field type='richtext' kind='editable' name='Fd_Text_8'/></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='7' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAEAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par>
+<par def='73'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/>備考８：</run></par>
+<par def='74'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/><field type='richtext' kind='editable' name='Fd_Text_9'/></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='7' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAEAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par>
+<par def='73'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/>備考９：</run></par>
+<par def='74'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/><field type='richtext' kind='editable' name='Fd_Text_10'/></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='7' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAEAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par>
+<par def='73'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/>備考１０：</run></par>
+<par def='74'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/><field type='richtext' kind='editable' name='Fd_Text_11'/></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='7' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAEAAAA=
+</compositedata><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par>
+<par def='73'><run><font size='9pt' name='ＭＳ ゴシック' pitch='fixed' truetype='true'
+ familyid='30'/></run></par></richtext></body>
+<item name='TemporaryPran' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='ParmanentPran' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='ParmanentComp' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Tm' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='ApprovweTime_1' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Tm_1' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Tm_2' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Tm_3' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Tm_4' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Tm_5' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Tm_6' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Tm_7' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Tm_8' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Tm_9' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Tm_10' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Tm_11' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Tm_12' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Tm_13' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Tm_14' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Tm_15' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Tm_16' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Tm_17' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Tm_18' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Tm_19' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Tm_20' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Tm_21' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Tm_22' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Tm_23' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Tm_24' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Tm_25' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Tm_26' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Tm_27' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Tm_28' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Tm_29' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Tm_30' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Tm_31' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='DocumentTime_v' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='CompreteTime' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Temporary_Plan' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Temporary_Comp' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Parmanent_Plan' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='Parmanent_Comp' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='CompreteDate' summary='false'>
+<rawitemdata type='400'>
+AAAAAAAAAAA=
+</rawitemdata></item>
+<item name='WorkTime' summary='false'><number>0</number></item>
+<item name='Fd_Many_1' summary='false'><number>0</number></item>
+<item name='Fd_Many_2' summary='false'><number>0</number></item>
+<item name='OriginalModTime'><datetime>20150902T135112,22+09</datetime></item>
+<item name='$SubForm_RepIDs' sign='true'><text>0000000000000000</text></item>
+<item name='$HFFlags'><text>1</text></item>
+<item name='$$ScriptName' summary='false' sign='true'><text>Fm_Document_5</text></item>
+<item name='Fd_Man_Hour' summary='false'><number>0</number></item>
+<item name='Fd_Kaihatsu_Hour' summary='false'><number>0</number></item>
+<item name='Fd_Ukeire_Hour' summary='false'><number>0</number></item></form>
+

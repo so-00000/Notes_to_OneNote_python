@@ -28,6 +28,7 @@ import re
 import html
 
 logger = logging.getLogger(__name__)
+EMPTY_TABLE_CELL_HTML = "<p>&nbsp;</p>"
 
 
 def _resolve_path(value: str | Path) -> Path:
@@ -332,24 +333,41 @@ def _table_to_html(table_el: ET.Element) -> str:
     - 余計な装飾は最低限
     """
     rows: list[str] = []
+    expanded_rows: list[list[str]] = []
+    max_columns = 0
 
     # DXL: <table> -> <tablerow> -> <tablecell>
     tablerows = table_el.findall("dxl:tablerow", DXL_NS)
     for row_index, tr in enumerate(tablerows):
-        cells_html: list[str] = []
         cells = tr.findall("dxl:tablecell", DXL_NS)
+        expanded_cells: list[str] = []
 
         for td in cells:
-            # セル内テキスト（子孫含めて全部）を取得
-            txt = "".join(td.itertext()).strip()
+            txt = _text_content(td).strip()
             txt = re.sub(r"\s+\n", "\n", txt)
-            safe = html.escape(txt).replace("\n", "<br/>") if txt else "&#8203;"
+            safe = html.escape(txt).replace("\n", "<br/>") if txt else EMPTY_TABLE_CELL_HTML
+
             style = "border:1px solid #808080; padding:3px 6px; vertical-align:top;"
             if row_index == 0:
                 style += " background:#f6efe6; font-weight:bold;"
-            cells_html.append(f"<td style='{style}'>{safe}</td>")
 
-        rows.append("<tr>" + "".join(cells_html) + "</tr>")
+            expanded_cells.append(f"<td style='{style}'>{safe}</td>")
+
+            colspan = td.attrib.get("columnspan") or td.attrib.get("colspan")
+            span_count = int(colspan) - 1 if colspan and colspan.isdigit() and int(colspan) > 1 else 0
+            for _ in range(span_count):
+                expanded_cells.append(f"<td style='{style}'>{EMPTY_TABLE_CELL_HTML}</td>")
+
+        max_columns = max(max_columns, len(expanded_cells))
+        expanded_rows.append(expanded_cells)
+
+    for row_index, expanded_cells in enumerate(expanded_rows):
+        style = "border:1px solid #808080; padding:3px 6px; vertical-align:top;"
+        if row_index == 0:
+            style += " background:#f6efe6; font-weight:bold;"
+        while len(expanded_cells) < max_columns:
+            expanded_cells.append(f"<td style='{style}'>{EMPTY_TABLE_CELL_HTML}</td>")
+        rows.append("<tr>" + "".join(expanded_cells) + "</tr>")
 
     # 全体を軽く囲う（見やすさ用）
     return (

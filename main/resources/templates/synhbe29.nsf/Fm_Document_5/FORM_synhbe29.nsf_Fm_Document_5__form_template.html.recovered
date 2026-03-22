@@ -1,0 +1,360 @@
+<!-- source_dxl: C:\Users\SLY\Documents\Python螳滄ｨ貼Python - OneNote\Git\Notes_to_OneNote_python\scripts\target_form\FORM_synhbe29.nsf_Fm_Document_5.dxl -->
+
+<style>
+.notes-form{font-family:MS PGothic,Meiryo,'Segoe UI',Arial,sans-serif;font-size:11pt;line-height:1.45;color:#222;}
+.notes-form table{border-collapse:collapse; width:800px; table-layout:fixed;}
+.notes-form td,.notes-form th{border:1px solid #808080; padding:3px 6px; vertical-align:top;}
+.notes-form th{background:#efefef;font-weight:normal;}
+.notes-form .notes-par{margin:2px 0;font-weight:bold;display:block;width:100%;box-sizing:border-box;}
+.notes-form .notes-field-wrap{display:block;width:100%;box-sizing:border-box;}
+.notes-form .notes-field{display:block;width:100%;min-width:0;min-height:1.2em;border:1px solid #666;background:#fff;padding:1px 4px;border-radius:2px;box-sizing:border-box;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;}
+.notes-form .notes-field[data-kind='computed'],
+.notes-form .notes-field[data-kind='computedfordisplay'],
+.notes-form .notes-field[data-kind='computedwhencomposed']{background:#f7f7f7;color:#555;}
+.notes-form .notes-link{color:#0645ad;text-decoration:underline;}
+.notes-form .notes-subform{border:1px dashed #aaa;padding:6px;margin:6px 0;background:#fafafa;}
+.notes-form .notes-subform-title{font-weight:bold;margin-bottom:4px;}
+.notes-form .notes-section{border:1px solid #a0a0a0;margin:6px 0;}
+.notes-form .notes-section-title{background:#d9d9d9;padding:2px 6px;font-weight:bold;}
+.notes-form .notes-section-body{padding:4px 6px;}
+.notes-form .notes-textlist{display:block;margin-left:1em;}
+
+</style>
+<div class='notes-form' data-design='Fm_Document_5'>
+	<div class='notes-subform'>
+		<div class='notes-subform-title'>SUBFORM: SubUserInfo (missing DXL)
+		</div>
+	</div><br/>
+	<div class='notes-section'>
+		<div class='notes-section-body'>
+			<div class='notes-section-title' style='margin-top:1em;'>ｼ憺撼陦ｨ遉ｺ繧ｻ繧ｯ繧ｷ繝ｧ繝ｳｼ
+			</div>
+		</div>
+	</div><br/>
+	<table style='margin-top:1em; border-collapse:collapse; width:800px; table-layout:fixed;' width='800' border='1' cellspacing='0' cellpadding='0' data-hidewhen='Division != &quot;繝繝ｼ繧ｿ蠑ｷ蛻ｶ螟画峩&quot;'>
+		<tr data-hidewhen='Division != &quot;繝繝ｼ繧ｿ蠑ｷ蛻ｶ螟画峩&quot;'>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#f2f2f2; font-weight:bold;' data-hidewhen='Division != &quot;繝繝ｼ繧ｿ蠑ｷ蛻ｶ螟画峩&quot;'>
+				<div class='notes-par'><span style='font-weight:bold;'>繧ｷ繧ｹ繝繝邂｡逅</span>
+				</div>
+				<div class='notes-par'><span style='font-weight:bold;'>ｼ昴ョ繝ｼ繧ｿ蠑ｷ蛻ｶ螟画峩ｼ</span>
+				</div>
+			</td>
+		</tr>
+	</table><br/>
+	<table style='margin-top:1em; border-collapse:collapse; width:800px; table-layout:fixed;' width='800' border='1' cellspacing='0' cellpadding='0'>
+		<tr>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+				<div class='notes-par'><span style='font-weight:bold;'> 謇ｿ隱咲ｵ瑚ｷｯ</span>
+				</div>
+				<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Root' data-type='text' data-kind='computedfordisplay'>{{Root}}</span></span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+				<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Step1' data-type='text' data-kind='computedfordisplay' data-allowmultivalues='true'>{{Step1}}</span></span><span style='font-weight:bold;'> 竊抵ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='Step2' data-type='text' data-kind='computedfordisplay' data-allowmultivalues='true'>{{Step2}}</span></span>
+				</div>
+				<div class='notes-par'><span style='font-weight:bold;'>窶ｻ莉｣陦梧価隱崎ｨｱ蜿ｯ閠ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='Step2x' data-type='text' data-kind='computedfordisplay' data-allowmultivalues='true'>{{Step2x}}</span></span>
+				</div>
+				<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Status' data-type='keyword' data-kind='editable'>{{Status}}</span></span>
+				</div>
+			</td>
+		</tr>
+	</table><br/>
+	<table style='margin-top:1em; border-collapse:collapse; width:800px; table-layout:fixed;' width='800' border='1' cellspacing='0' cellpadding='0' data-hidewhen='Division = &quot;豁｣蟶ｸ邨ゆｺ遒ｺ隱&quot;'>
+		<tr data-hidewhen='Division = &quot;豁｣蟶ｸ邨ゆｺ遒ｺ隱&quot;'>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#f2f2f2; font-weight:bold;' data-hidewhen='Division = &quot;豁｣蟶ｸ邨ゆｺ遒ｺ隱&quot;'>
+				<div class='notes-par'><span style='font-weight:bold;'> 逋ｺ逕溷ｱ蜻</span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#f2f2f2; font-weight:bold;' data-hidewhen='Division = &quot;豁｣蟶ｸ邨ゆｺ遒ｺ隱&quot;'>
+				<div class='notes-par'><span style='font-weight:bold;'> 謇ｿ隱</span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#f2f2f2; font-weight:bold;' data-hidewhen='Division = &quot;蝠丞粋縺&quot;'>
+				<div class='notes-par'><span style='font-weight:bold;'> 螳御ｺ蝣ｱ蜻</span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#f2f2f2; font-weight:bold;' data-hidewhen='Division = &quot;蝠丞粋縺&quot;'>
+				<div class='notes-par'><span style='font-weight:bold;'> 謇ｿ隱</span>
+				</div>
+			</td>
+		</tr>
+		<tr data-hidewhen='Division = &quot;豁｣蟶ｸ邨ゆｺ遒ｺ隱&quot;'>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' data-hidewhen='Division = &quot;豁｣蟶ｸ邨ゆｺ遒ｺ隱&quot;'>
+				<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='ReporterNm_1' data-type='text' data-kind='computed'>{{ReporterNm_1}}</span></span>
+				</div>
+				<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='ReporterDep_1' data-type='text' data-kind='editable'>{{ReporterDep_1}}</span></span>
+				</div>
+				<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='ReportTime_1' data-type='datetime' data-kind='editable'>{{ReportTime_1}}</span></span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' data-hidewhen='Division = &quot;豁｣蟶ｸ邨ゆｺ遒ｺ隱&quot;'>
+				<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='ApproverNm_1' data-type='text' data-kind='editable'>{{ApproverNm_1}}</span></span>&nbsp;<span class='notes-field-wrap'><span class='notes-field' data-field='ApproveStatus_1' data-type='text' data-kind='computed'>{{ApproveStatus_1}}</span></span>
+				</div>
+				<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='ApproverDep_1' data-type='text' data-kind='editable'>{{ApproverDep_1}}</span></span>
+				</div>
+				<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='ApproveTime_1' data-type='datetime' data-kind='editable'>{{ApproveTime_1}}</span></span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' data-hidewhen='Division = &quot;蝠丞粋縺&quot;'>
+				<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='ReporterNm_2' data-type='text' data-kind='editable'>{{ReporterNm_2}}</span></span>
+				</div>
+				<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='ReporterDep_2' data-type='text' data-kind='editable'>{{ReporterDep_2}}</span></span>
+				</div>
+				<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='ReportTime_2' data-type='datetime' data-kind='editable'>{{ReportTime_2}}</span></span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' data-hidewhen='Division = &quot;蝠丞粋縺&quot;'>
+				<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='ApproverNm_2' data-type='text' data-kind='editable'>{{ApproverNm_2}}</span></span>&nbsp;<span class='notes-field-wrap'><span class='notes-field' data-field='ApproveStatus_2' data-type='text' data-kind='computed'>{{ApproveStatus_2}}</span></span>
+				</div>
+				<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='ApproverDep_2' data-type='text' data-kind='editable'>{{ApproverDep_2}}</span></span>
+				</div>
+				<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='ApproveTime_2' data-type='datetime' data-kind='editable'>{{ApproveTime_2}}</span></span>
+				</div>
+			</td>
+		</tr>
+	</table><br/>
+	<div class='notes-par'><span style='font-weight:bold;'>邂｡逅逡ｪ蜿ｷｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='DocumentNo' data-type='text' data-kind='editable'>{{DocumentNo}}</span></span>
+	</div>
+	<table style='margin-top:1em; border-collapse:collapse; width:800px; table-layout:fixed;' width='800' border='1' cellspacing='0' cellpadding='0' data-hidewhen='@IsNotMember(Division;&quot;蝠丞粋縺&quot;:&quot;繝繝ｼ繧ｿ蠑ｷ蛻ｶ螟画峩&quot;:&quot;菫晏ｮ&quot;)'>
+		<tr>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+				<div class='notes-par'><span style='font-weight:bold;'>蜈･蜉幄</span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' colspan='2'>
+				<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='EntryUser' data-type='text' data-kind='computedwhencomposed'>{{EntryUser}}</span></span>&nbsp;<span class='notes-field-wrap'><span class='notes-field' data-field='EntryDept' data-type='text' data-kind='computedwhencomposed'>{{EntryDept}}</span></span>
+				</div>
+			</td>
+		</tr>
+		<tr data-hidewhen='@IsNotMember(Division;&quot;蝠丞粋縺&quot;:&quot;繝繝ｼ繧ｿ蠑ｷ蛻ｶ螟画峩&quot;:&quot;菫晏ｮ&quot;)'>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;' data-hidewhen='@IsNotMember(Division;&quot;蝠丞粋縺&quot;:&quot;繝繝ｼ繧ｿ蠑ｷ蛻ｶ螟画峩&quot;:&quot;菫晏ｮ&quot;)'>
+				<div class='notes-par'><span style='font-weight:bold;'>驛ｨ謇蜷</span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' colspan='2' data-hidewhen='@IsNotMember(Division;&quot;蝠丞粋縺&quot;:&quot;繝繝ｼ繧ｿ蠑ｷ蛻ｶ螟画峩&quot;:&quot;菫晏ｮ&quot;)'>
+				<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Ask' data-type='text' data-kind='editable'>{{Ask}}</span></span>
+				</div>
+				<div class='notes-par'><span style='font-weight:bold;'>縲縲縺疲球蠖難ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='AskUser' data-type='text' data-kind='editable'>{{AskUser}}</span></span><span style='font-weight:bold;'> 讒</span>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+				<div class='notes-par'><span style='font-weight:bold;'>蛻鬘</span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' colspan='2'>
+				<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Division' data-type='text' data-kind='computed'>{{Division}}</span></span>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+				<div class='notes-par'><span style='font-weight:bold;'>繧ｷ繧ｹ繝繝</span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' colspan='2'>
+				<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='System' data-type='keyword' data-kind='editable'>{{System}}</span></span>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+				<div class='notes-par'><span style='font-weight:bold;'>繧ｵ繝悶す繧ｹ繝繝</span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' colspan='2'>
+				<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='SubSystem' data-type='keyword' data-kind='editable'>{{SubSystem}}</span></span>
+				</div>
+			</td>
+		</tr>
+		<tr data-hidewhen='@IsNotMember(Division;&quot;髫懷ｮｳ&quot;:&quot;蝠丞粋縺&quot;)'>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;' data-hidewhen='@IsNotMember(Division;&quot;髫懷ｮｳ&quot;:&quot;蝠丞粋縺&quot;)'>
+				<div class='notes-par'><span style='font-weight:bold;'>蜃ｦ逅蜷</span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' colspan='2' data-hidewhen='@IsNotMember(Division;&quot;髫懷ｮｳ&quot;:&quot;蝠丞粋縺&quot;)'>
+				<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Task' data-type='keyword' data-kind='editable'>{{Task}}</span></span>
+				</div>
+			</td>
+		</tr>
+		<tr data-hidewhen='Division != &quot;菫晏ｮ&quot;'>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;' data-hidewhen='Division != &quot;菫晏ｮ&quot;'>
+				<div class='notes-par'><span style='font-weight:bold;'>迥ｶ諷</span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' colspan='2' data-hidewhen='Division != &quot;菫晏ｮ&quot;'>
+				<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='ActionStatus' data-type='keyword' data-kind='editable'>{{ActionStatus}}</span></span>
+				</div>
+			</td>
+		</tr>
+		<tr data-hidewhen='@IsNotMember(Division;&quot;蝠丞粋縺&quot;:&quot;繝繝ｼ繧ｿ蠑ｷ蛻ｶ螟画峩&quot;:&quot;菫晏ｮ&quot;)'>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;' data-hidewhen='@IsNotMember(Division;&quot;蝠丞粋縺&quot;:&quot;繝繝ｼ繧ｿ蠑ｷ蛻ｶ螟画峩&quot;:&quot;菫晏ｮ&quot;)'>
+				<div class='notes-par'><span style='font-weight:bold;'>髢句ｧ区律譎</span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' colspan='2'>
+				<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='DocumentDate' data-type='datetime' data-kind='editable'>{{DocumentDate}}</span></span>&nbsp;<span class='notes-field-wrap'><span class='notes-field' data-field='DocumentTime' data-type='datetime' data-kind='editable'>{{DocumentTime}}</span></span>
+				</div>
+			</td>
+		</tr>
+		<tr data-hidewhen='Division != &quot;蝠丞粋縺&quot;'>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;' data-hidewhen='Division != &quot;蝠丞粋縺&quot;'>
+				<div class='notes-par'><span style='font-weight:bold;'>螳御ｺ譌･譎</span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' colspan='2' data-hidewhen='@IsNotMember(Division;&quot;蝠丞粋縺&quot;:&quot;繝繝ｼ繧ｿ蠑ｷ蛻ｶ螟画峩&quot;:&quot;髫懷ｮｳ&quot;)'>
+				<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='ReplyDate' data-type='datetime' data-kind='editable'>{{ReplyDate}}</span></span>&nbsp;<span class='notes-field-wrap'><span class='notes-field' data-field='ReplyTime' data-type='datetime' data-kind='editable'>{{ReplyTime}}</span></span>
+				</div>
+				<div class='notes-par'><span style='font-weight:bold;'>窶ｻ蟇ｾ蠢懷ｮ御ｺ譌･譎ゅｒ逋ｻ骭ｲ縺励※縺上□縺輔＞縲</span>
+				</div>
+			</td>
+		</tr>
+	</table><br/>
+	<div class='notes-par'><span style='font-weight:bold;'>莉ｶ蜷</span>
+	</div><br/>
+	<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Fd_Text_1' data-type='text' data-kind='editable'>{{Fd_Text_1}}</span></span>
+	</div><br/>
+	<div class='notes-par'><span style='font-weight:bold;'>隕ｪ譁譖ｸ</span>
+	</div><br/>
+	<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Fd_Link_1' data-type='richtext' data-kind='editable'>{{Fd_Link_1}}</span></span>
+	</div>
+	<table style='margin-top:1em; border-collapse:collapse; width:800px; table-layout:fixed;' width='800' border='1' cellspacing='0' cellpadding='0' data-hidewhen='Division = &quot;&quot;'>
+		<tr data-hidewhen='Division = &quot;&quot;'>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#f2f2f2; font-weight:bold;' data-hidewhen='Division = &quot;&quot;'>
+				<div class='notes-par'><span style='font-weight:bold;'>萓晞ｼ蜀螳ｹ</span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#f2f2f2; font-weight:bold;'>
+				<div class='notes-par'><span style='font-weight:bold;'>蟇ｾ蠢懆ｩｳ邏ｰ</span>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+				<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Detail' data-type='richtext' data-kind='editable'>{{Detail}}</span></span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+				<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Maintenance' data-type='richtext' data-kind='editable'>{{Maintenance}}</span></span>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+				<div class='notes-par'><span style='font-weight:bold;'>蜆ｪ蜈磯菴搾ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='Priority' data-type='keyword' data-kind='editable'>{{Priority}}</span></span>
+				</div>
+				<div class='notes-par'><span style='font-weight:bold;'>迥ｶ豕∬ｩｳ邏ｰｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='SubStatus' data-type='keyword' data-kind='editable'>{{SubStatus}}</span></span>
+				</div>
+				<div class='notes-par'><span style='font-weight:bold;'>雋ｻ逕ｨ隲区ｱゑｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='Contract' data-type='keyword' data-kind='editable'>{{Contract}}</span></span>
+				</div>
+				<div class='notes-par'><span style='font-weight:bold;'>萓晞ｼ蜈茨ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='Commission' data-type='keyword' data-kind='editable'>{{Commission}}</span></span>
+				</div>
+				<div class='notes-par'><span style='font-weight:bold;'>譁ｰ隕上ｻ菫晏ｮ茨ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='MaintenanceFlag' data-type='keyword' data-kind='editable'>{{MaintenanceFlag}}</span></span>
+				</div>
+				<div class='notes-par'><span style='font-weight:bold;'>菴懈･ｭ蟾･謨ｰｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='Fd_Man_Hour' data-type='number' data-kind='editable'>{{Fd_Man_Hour}}</span></span><span style='font-weight:bold;'>譌･ｼ丈ｺｺ</span>
+				</div>
+				<div class='notes-par'><span style='font-weight:bold;'>髢狗匱蟾･謨ｰｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='Fd_Kaihatsu_Hour' data-type='number' data-kind='editable'>{{Fd_Kaihatsu_Hour}}</span></span><span style='font-weight:bold;'>譌･ｼ丈ｺｺ</span>
+				</div>
+				<div class='notes-par'><span style='font-weight:bold;'>蜿怜･蟾･謨ｰｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='Fd_Ukeire_Hour' data-type='number' data-kind='editable'>{{Fd_Ukeire_Hour}}</span></span><span style='font-weight:bold;'>譌･ｼ丈ｺｺ</span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+				<div class='notes-par'><span style='font-weight:bold;'>莉悶す繧ｹ繝繝隱ｿ謨ｴｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='OtherSystem' data-type='keyword' data-kind='editable'>{{OtherSystem}}</span></span>
+				</div>
+				<div class='notes-par'><span style='font-weight:bold;'>隱ｿ謨ｴ邨先棡</span>
+				</div>
+				<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Adjustment' data-type='text' data-kind='editable'>{{Adjustment}}</span></span>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#f2f2f2; font-weight:bold;'>
+				<div class='notes-par'><span style='font-weight:bold;'>繝繧ｹ繝郁ｨ育判</span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#f2f2f2; font-weight:bold;'>
+				<div class='notes-par'><span style='font-weight:bold;'>繝繧ｹ繝育ｵ先棡蝣ｱ蜻</span>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+				<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='TestSchedule' data-type='richtext' data-kind='editable'>{{TestSchedule}}</span></span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+				<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Reseption' data-type='richtext' data-kind='editable'>{{Reseption}}</span></span>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#f2f2f2; font-weight:bold;'>
+				<div class='notes-par'><span style='font-weight:bold;'>繝ｪ繝ｪ繝ｼ繧ｹ諠蝣ｱ</span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#f2f2f2; font-weight:bold;'>
+				<div class='notes-par'><span style='font-weight:bold;'>縺雁ｮ｢讒倥∈縺ｮ騾夐＃</span>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+				<div class='notes-par'><span style='font-weight:bold;'>ｼｮｽ擾ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='Release_No' data-type='text' data-kind='editable'>{{Release_No}}</span></span>
+				</div>
+				<div class='notes-par'><span style='font-weight:bold;'>莠亥ｮ壽律ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='Release_Plan' data-type='datetime' data-kind='editable'>{{Release_Plan}}</span></span>
+				</div>
+				<div class='notes-par'><span style='font-weight:bold;'>螳御ｺ譌･ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='Release_Comp' data-type='datetime' data-kind='editable'>{{Release_Comp}}</span></span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+				<div class='notes-par'><span style='font-weight:bold;'>騾｣邨｡隕∝凄ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='Announce' data-type='keyword' data-kind='editable'>{{Announce}}</span></span>
+				</div>
+				<div class='notes-par'><span style='font-weight:bold;'>騾｣邨｡蜀螳ｹ</span>
+				</div>
+				<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='AnnounceDoc' data-type='richtext' data-kind='editable'>{{AnnounceDoc}}</span></span>
+				</div>
+			</td>
+		</tr>
+	</table><br/>
+	<div class='notes-par'><span style='font-weight:bold;'>蛯呵ｼ</span>
+	</div><br/>
+	<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Fd_Text_2' data-type='richtext' data-kind='editable'>{{Fd_Text_2}}</span></span>
+	</div><br/>
+	<div class='notes-par'><span style='font-weight:bold;'>蛯呵ｼ</span>
+	</div><br/>
+	<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Fd_Text_3' data-type='richtext' data-kind='editable'>{{Fd_Text_3}}</span></span>
+	</div><br/>
+	<div class='notes-par'><span style='font-weight:bold;'>蛯呵ｼ</span>
+	</div><br/>
+	<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Fd_Text_4' data-type='richtext' data-kind='editable'>{{Fd_Text_4}}</span></span>
+	</div><br/>
+	<div class='notes-par'><span style='font-weight:bold;'>蛯呵ｼ</span>
+	</div><br/>
+	<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Fd_Text_5' data-type='richtext' data-kind='editable'>{{Fd_Text_5}}</span></span>
+	</div><br/>
+	<div class='notes-par'><span style='font-weight:bold;'>蛯呵ｼ</span>
+	</div><br/>
+	<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Fd_Text_6' data-type='richtext' data-kind='editable'>{{Fd_Text_6}}</span></span>
+	</div><br/>
+	<div class='notes-par'><span style='font-weight:bold;'>蛯呵ｼ</span>
+	</div><br/>
+	<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Fd_Text_7' data-type='richtext' data-kind='editable'>{{Fd_Text_7}}</span></span>
+	</div><br/>
+	<div class='notes-par'><span style='font-weight:bold;'>蛯呵ｼ</span>
+	</div><br/>
+	<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Fd_Text_8' data-type='richtext' data-kind='editable'>{{Fd_Text_8}}</span></span>
+	</div><br/>
+	<div class='notes-par'><span style='font-weight:bold;'>蛯呵ｼ</span>
+	</div><br/>
+	<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Fd_Text_9' data-type='richtext' data-kind='editable'>{{Fd_Text_9}}</span></span>
+	</div><br/>
+	<div class='notes-par'><span style='font-weight:bold;'>蛯呵ｼ</span>
+	</div><br/>
+	<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Fd_Text_10' data-type='richtext' data-kind='editable'>{{Fd_Text_10}}</span></span>
+	</div><br/>
+	<div class='notes-par'><span style='font-weight:bold;'>蛯呵ｼ托ｼ</span>
+	</div><br/>
+	<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Fd_Text_11' data-type='richtext' data-kind='editable'>{{Fd_Text_11}}</span></span>
+	</div>
+</div>

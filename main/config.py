@@ -12,8 +12,9 @@ NOTEBOOK_NAME = "データ強制変更"
 
 # 対象の OneNote セクション名
 # SECTION_NAME = "障害DB_2024"
-SECTION_NAME = "データ強制変更_2017"
+SECTION_NAME = "データ強制変更_2020"
 # SECTION_NAME = "UserCall_2024"
 
 # DXL_DIRはDATA_TYPEに応じてdata_type_config.pyで切り替え
-SLEEP_SEC = 0.2  # 連続POSTの間隔（429回避用、必要なら増やす）
+SLEEP_SEC = 1.0  # 連続POSTの間隔（429回避用、必要なら増やす）
+MAX_REQUESTS_PER_RUN = 390

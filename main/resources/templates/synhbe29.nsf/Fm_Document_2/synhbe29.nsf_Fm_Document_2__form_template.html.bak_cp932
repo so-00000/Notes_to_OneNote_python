@@ -1,0 +1,500 @@
+<!-- source_dxl: C:\Users\SLY\Documents\Python実験\Python - OneNote\Git\Notes_to_OneNote_python\scripts\target_form\synhbe29.nsf_Fm_Document_2.dxl -->
+
+<style>
+.notes-form{font-family:MS PGothic,Meiryo,'Segoe UI',Arial,sans-serif;font-size:11pt;line-height:1.45;color:#222;}
+.notes-form table{border-collapse:collapse; width:{{MAX_CONTENT_WIDTH}}; table-layout:fixed;}
+.notes-form td,.notes-form th{border:1px solid #808080; padding:3px 6px; vertical-align:top;}
+.notes-form th{background:#efefef;font-weight:normal;}
+.notes-form .notes-par{margin:2px 0;font-weight:bold;}
+.notes-form .notes-field{display:inline-block;min-width:6em;min-height:1.2em;border:1px solid #666;background:#fff;padding:1px 4px;border-radius:2px;}
+.notes-form .notes-link{color:#0645ad;text-decoration:underline;}
+.notes-form .notes-subform{border:1px dashed #aaa;padding:6px;margin:6px 0;background:#fafafa;}
+.notes-form .notes-subform-title{font-weight:bold;margin-bottom:4px;}
+.notes-form .notes-section{border:1px solid #a0a0a0;margin:6px 0;}
+.notes-form .notes-section-title{background:#d9d9d9;padding:2px 6px;font-weight:bold;}
+.notes-form .notes-section-body{padding:4px 6px;}
+.notes-form .notes-textlist{display:block;margin-left:1em;}
+</style>
+
+<div class='notes-form' data-design='Fm_Document_2'>
+
+	<table style='margin-top:1em; border-collapse:collapse; width:{{MAX_CONTENT_WIDTH}}; table-layout:fixed;' width='{{MAX_CONTENT_WIDTH_PX}}' border='1' cellspacing='0' cellpadding='0'>
+		<tr>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+				<div class='notes-par'>
+					<span style='font-weight:bold;'> 承認経路</span>
+				</div>
+				<div class='notes-par'>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='Root' data-type='text'>{{Root}}</span>
+					</span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+				<div class='notes-par'>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='Step1' data-type='text' data-allowmultivalues='true'>{{Step1}}</span>
+					</span>
+					<span style='font-weight:bold;'> ↁE/span>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='Step2' data-type='text' data-allowmultivalues='true'>{{Step2}}</span>
+					</span>
+				</div>
+				<div class='notes-par'>
+					<span style='font-weight:bold;'> ※代行承認許可老E/span>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='Step2x' data-type='text' data-allowmultivalues='true'>{{Step2x}}</span>
+					</span>
+				</div>
+			</td>
+		</tr>
+	</table>
+	<br/>
+	<table style='margin-top:1em; border-collapse:collapse; width:{{MAX_CONTENT_WIDTH}}; table-layout:fixed;' width='{{MAX_CONTENT_WIDTH_PX}}' border='1' cellspacing='0' cellpadding='0'>
+		<tr>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#f2f2f2; font-weight:bold;'>
+				<div class='notes-par'>
+					<span style='font-weight:bold;'> 発生報呁E/span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#f2f2f2; font-weight:bold;'>
+				<div class='notes-par'>
+					<span style='font-weight:bold;'> 承誁E/span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#f2f2f2; font-weight:bold;'>
+				<div class='notes-par'>
+					<span style='font-weight:bold;'> 完亁E��呁E/span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#f2f2f2; font-weight:bold;'>
+				<div class='notes-par'>
+					<span style='font-weight:bold;'> 承誁E/span>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+				<div class='notes-par'>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='ReporterNm_1' data-type='text'>{{ReporterNm_1}}</span>
+					</span>
+				</div>
+				<div class='notes-par'>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='ReporterDep_1' data-type='text'>{{ReporterDep_1}}</span>
+					</span>
+				</div>
+				<div class='notes-par'>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='ReportTime_1' data-type='datetime'>{{ReportTime_1}}</span>
+					</span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+				<div class='notes-par'>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='ApproverNm_1' data-type='text'>{{ApproverNm_1}}</span>
+					</span>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='ApproveStatus_1' data-type='text'>{{ApproveStatus_1}}</span>
+					</span>
+				</div>
+				<div class='notes-par'>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='ApproverDep_1' data-type='text'>{{ApproverDep_1}}</span>
+					</span>
+				</div>
+				<div class='notes-par'>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='ApproveTime_1' data-type='datetime'>{{ApproveTime_1}}</span>
+					</span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+				<div class='notes-par'>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='ReporterNm_2' data-type='text'>{{ReporterNm_2}}</span>
+					</span>
+				</div>
+				<div class='notes-par'>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='ReporterDep_2' data-type='text'>{{ReporterDep_2}}</span>
+					</span>
+				</div>
+				<div class='notes-par'>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='ReportTime_2' data-type='datetime'>{{ReportTime_2}}</span>
+					</span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+				<div class='notes-par'>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='ApproverNm_2' data-type='text'>{{ApproverNm_2}}</span>
+					</span>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='ApproveStatus_2' data-type='text'>{{ApproveStatus_2}}</span>
+					</span>
+				</div>
+				<div class='notes-par'>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='ApproverDep_2' data-type='text'>{{ApproverDep_2}}</span>
+					</span>
+				</div>
+				<div class='notes-par'>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='ApproveTime_2' data-type='datetime'>{{ApproveTime_2}}</span>
+					</span>
+				</div>
+			</td>
+		</tr>
+	</table>
+
+	<p>　</p>
+	<div class='notes-par'>
+		<span style='font-weight:bold;'>管琁E��号�E�E/span>
+		<span class='notes-field-wrap'>
+			<span class='notes-field' data-field='DocumentNo' data-type='number'>{{DocumentNo}}</span>
+		</span>
+	</div>
+	<p>　</p>
+
+	<table style='margin-top:1em; border-collapse:collapse; border-spacing:0; width:{{MAX_CONTENT_WIDTH}}; table-layout:fixed;' width='{{MAX_CONTENT_WIDTH_PX}}' border='1' cellspacing='0' cellpadding='0'>
+		<colgroup>
+			<col style='width:120px;' />
+			<col style='width:300px;' />
+			<col style='width:300px;' />
+		</colgroup>
+		<tr>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+				<div class='notes-par'>
+					<span style='font-weight:bold;'>入力老E/span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; width:300px;'>
+				<div class='notes-par'>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='EntryUser' data-type='text'>{{EntryUser}}</span>
+					</span>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='EntryDept' data-type='text'>{{EntryDept}}</span>
+					</span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; width:300px;'>&nbsp;</td>
+		</tr>
+<tr>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+				<div class='notes-par'>
+					<span style='font-weight:bold;'>部所吁E/span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; width:300px;'>
+				<div class='notes-par'>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='Ask' data-type='text'>{{Ask}}</span>
+					</span>
+				</div>
+				<div class='notes-par'>
+					<span style='font-weight:bold;'>　　ご担彁E/span>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='AskUser' data-type='text'>{{AskUser}}</span>
+					</span>
+					<span style='font-weight:bold;'> 槁E/span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; width:300px;'>&nbsp;</td>
+		</tr>
+<tr>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+				<div class='notes-par'>
+					<span style='font-weight:bold;'>刁E��E/span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; width:300px;'>
+				<div class='notes-par'>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='Division' data-type='text'>{{Division}}</span>
+					</span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; width:300px;'>
+				<div class='notes-par'>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='Syogai_ck' data-type='keyword'>{{Syogai_ck}}</span>
+					</span>
+				</div>
+			</td>
+		</tr>
+<tr>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+				<div class='notes-par'>
+					<span style='font-weight:bold;'>シスチE��</span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; width:300px;'>
+				<div class='notes-par'>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='System' data-type='keyword'>{{System}}</span>
+					</span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; width:300px;'>&nbsp;</td>
+		</tr>
+<tr>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+				<div class='notes-par'>
+					<span style='font-weight:bold;'>サブシスチE��</span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; width:300px;'>
+				<div class='notes-par'>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='SubSystem' data-type='keyword'>{{SubSystem}}</span>
+					</span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; width:300px;'>&nbsp;</td>
+		</tr>
+<tr>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+				<div class='notes-par'>
+					<span style='font-weight:bold;'>処琁E��</span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; width:300px;'>
+				<div class='notes-par'>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='Task' data-type='keyword'>{{Task}}</span>
+					</span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; width:300px;'>&nbsp;</td>
+		</tr>
+<tr>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+				<div class='notes-par'>
+					<span style='font-weight:bold;'>状慁E/span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; width:300px;'>
+				<div class='notes-par'>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='ActionStatus' data-type='keyword'>{{ActionStatus}}</span>
+					</span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; width:300px;'>&nbsp;</td>
+		</tr>
+<tr>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+				<div class='notes-par'>
+					<span style='font-weight:bold;'>開始日晁E/span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; width:300px;'>
+				<div class='notes-par'>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='DocumentDate' data-type='datetime'>{{DocumentDate}}</span>
+					</span>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='DocumentTime' data-type='datetime'>{{DocumentTime}}</span>
+					</span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; width:300px;'>&nbsp;</td>
+		</tr>
+<tr>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+				<div class='notes-par'>
+					<span style='font-weight:bold;'>完亁E��晁E/span>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; width:300px;'>
+				<div class='notes-par'>
+					<div class='notes-field-wrap'>
+						<span class='notes-field' data-field='ReplyDate' data-type='datetime'>{{ReplyDate}}</span>
+					</div>
+					<div class='notes-field-wrap'>
+						<span class='notes-field' data-field='ReplyTime' data-type='datetime'>{{ReplyTime}}</span>
+					</div>
+				</div>
+			</td>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; width:300px;'>
+				<div class='notes-par'>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='WorkTime' data-type='number'>{{WorkTime}}</span>
+					</span>
+					<span style='font-weight:bold;'>　刁E/span>
+				</div>
+			</td>
+		</tr>
+	</table><div class='notes-par'>
+		<span class='notes-field-wrap'>
+			<span class='notes-field' data-field='Fd_Address_1' data-type='text' data-allowmultivalues='true'>{{Fd_Address_1}}</span>
+		</span>
+	</div>
+	<br/>
+	<div class='notes-par'>
+		<span style='font-weight:bold;'>件吁E/span>
+	</div>
+	<p>　</p>
+	<div class='notes-par'>
+		<span class='notes-field-wrap'>
+			<span class='notes-field' data-field='Fd_Text_1' data-type='keyword'>{{Fd_Text_1}}</span>
+		</span>
+	</div>
+	<br/>
+	<div class='notes-par'>
+		<span style='font-weight:bold;'>冁E��</span>
+	</div>
+	<p>　</p>
+	<div class='notes-par'>
+		<span class='notes-field-wrap'>
+			<span class='notes-field' data-field='Detail' data-type='richtext'>{{Detail}}</span>
+		</span>
+	</div>
+	<br/>
+	<div class='notes-par'>
+		<span style='font-weight:bold;'>琁E��・原因</span>
+	</div>
+	<p>　</p>
+	<div class='notes-par'>
+		<span class='notes-field-wrap'>
+			<span class='notes-field' data-field='Reason' data-type='richtext'>{{Reason}}</span>
+		</span>
+	</div>
+	<br/>
+	<div class='notes-par'>
+		<span style='font-weight:bold;'>画面・証跡</span>
+	</div>
+	<p>　</p>
+	<div class='notes-par'>
+		<span class='notes-field-wrap'>
+			<span class='notes-field' data-field='Detail_1' data-type='richtext'>{{Detail_1}}</span>
+		</span>
+	</div>
+	<br/>
+	<div class='notes-par'>
+		<span style='font-weight:bold;'>親斁E��</span>
+	</div>
+	<p>　</p>
+	<div class='notes-par'>
+		<span class='notes-field-wrap'>
+			<span class='notes-field' data-field='Fd_Link_1' data-type='richtext'>{{Fd_Link_1}}</span>
+		</span>
+	</div>
+	<table style='margin-top:1em; border-collapse:collapse; width:{{MAX_CONTENT_WIDTH}}; table-layout:fixed;' width='{{MAX_CONTENT_WIDTH_PX}}' border='1' cellspacing='0' cellpadding='0'>
+		<tr>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#f2f2f2; font-weight:bold;' colspan='2'>
+				<div class='notes-par'>
+					<span style='font-weight:bold;'>刁E��</span>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' colspan='2'>
+				<p>　</p>
+				<div class='notes-par'>
+					<span style='font-weight:bold;'>影響篁E���E�E/span>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='Fd_Id_1' data-type='keyword' data-allowmultivalues='true'>{{Fd_Id_1}}</span>
+					</span>
+				</div>
+				<div class='notes-par'>
+					<span style='font-weight:bold;'>対応区刁E��E/span>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='Measure' data-type='keyword' data-allowmultivalues='true'>{{Measure}}</span>
+					</span>
+				</div>
+				<p>　</p>
+			</td>
+		</tr>
+		<tr>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#f2f2f2; font-weight:bold;'>
+				<div class='notes-par'>
+					<span style='font-weight:bold;'>暫宁E/span>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+				<br/>
+				<div class='notes-par'>
+					<span style='font-weight:bold;'>暫定筁E/span>
+				</div>
+				<br/>
+				<div class='notes-par'>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='Temporary' data-type='richtext'>{{Temporary}}</span>
+					</span>
+				</div>
+				<p>　</p>
+				<div class='notes-par'>
+					<span style='font-weight:bold;'>予定日付！E/span>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='Temporary_Plan' data-type='datetime'>{{Temporary_Plan}}</span>
+					</span>
+				</div>
+				<div class='notes-par'>
+					<span style='font-weight:bold;'>完亁E��付！E/span>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='Temporary_Comp' data-type='datetime'>{{Temporary_Comp}}</span>
+					</span>
+				</div>
+				<p>　</p>
+			</td>
+		</tr>
+		<tr>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#f2f2f2; font-weight:bold;'>
+				<div class='notes-par'>
+					<span style='font-weight:bold;'>恒乁E/span>
+				</div>
+			</td>
+		</tr>
+		<tr>
+
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+				<br/>
+				<div class='notes-par'>
+					<span style='font-weight:bold;'>恒乁E��E/span>
+				</div>
+				<p>　</p>
+				<div class='notes-par'>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='Parmanent' data-type='richtext'>{{Parmanent}}</span>
+					</span>
+				</div>
+				<p>　</p>
+				<div class='notes-par'>
+					<span style='font-weight:bold;'>予定日付！E/span>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='Parmanet_Plan' data-type='datetime'>{{Parmanet_Plan}}</span>
+					</span>
+				</div>
+				<div class='notes-par'>
+					<span style='font-weight:bold;'>完亁E��付！E/span>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='Parmanet_Comp' data-type='datetime'>{{Parmanet_Comp}}</span>
+					</span>
+				</div>
+				<br/>
+				<div class='notes-par'>
+					<span style='font-weight:bold;'>詳細</span>
+				</div>
+				<p>　</p>
+				<div class='notes-par'>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='Agenda_Text' data-type='text'>{{Agenda_Text}}</span>
+					</span>
+				</div>
+				<div class='notes-par'>
+					<span class='notes-field-wrap'>
+						<span class='notes-field' data-field='Agenda' data-type='richtext'>{{Agenda}}</span>
+					</span>
+				</div>
+			</td>
+		</tr>
+	</table>
+</div>

@@ -1,11 +1,14 @@
 from __future__ import annotations
 
+import csv
 import html
 import re
 import time
+from datetime import datetime
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any, Dict, Mapping, Optional, Tuple
-from urllib.parse import quote
+from urllib.parse import quote, urlsplit
 
 import requests
 import logging
@@ -25,13 +28,49 @@ from typing import List
 
 MultipartPart = Tuple[str, bytes, str]  # (filename, content, content_type)
 
+
+class RateLimitExceededError(RuntimeError):
+    """Raised when Graph returns 429 and processing should stop."""
+
+    def __init__(
+        self,
+        *,
+        method: str,
+        url: str,
+        status: int,
+        retry_after: str,
+        request_id: str,
+        client_request_id: str,
+        body: str,
+    ) -> None:
+        super().__init__(f"{method} rate-limited after retries (status={status}).")
+        self.method = method
+        self.url = url
+        self.status = status
+        self.retry_after = retry_after
+        self.request_id = request_id
+        self.client_request_id = client_request_id
+        self.body = body
+
+
+class RequestBudgetExceededError(RuntimeError):
+    """Raised before sending a request that would exceed the per-run budget."""
+
+    def __init__(self, *, request_count: int, max_requests_per_run: int) -> None:
+        super().__init__(
+            f"request budget exceeded ({request_count}/{max_requests_per_run})."
+        )
+        self.request_count = request_count
+        self.max_requests_per_run = max_requests_per_run
+
+
 @dataclass(frozen=True)
 class GraphRetryPolicy:
     """Graph API リトライ設定。"""
 
-    max_retries: int = 4
+    max_retries: int = 2
     retry_statuses: tuple[int, ...] = (429, 500, 502, 503, 504)
-    default_retry_after: int = 3
+    default_retry_after: int = 2
     max_backoff_seconds: int = 12
 
 
@@ -44,12 +83,18 @@ class GraphClient:
         *,
         session: Optional[requests.Session] = None,
         retry_policy: Optional[GraphRetryPolicy] = None,
+        max_requests_per_run: Optional[int] = None,
     ) -> None:
         self._access_token = access_token
         self._session = session or requests.Session()
         self._owns_session = session is None
         self._retry = retry_policy or GraphRetryPolicy()
         self._logger = logging.getLogger(__name__)
+        self._request_count_log_path = (
+            Path(__file__).resolve().parent.parent / "request_count_log.csv"
+        )
+        self._max_requests_per_run = max_requests_per_run
+        self._request_count = 0
 
 
     def _normalize_onenote_html(self, body_html: str) -> str:
@@ -79,6 +124,44 @@ class GraphClient:
         # Collapse duplicated blank lines in source HTML.
         normalized = re.sub(r"\n{2,}", "\n", normalized)
         return normalized
+
+    def _append_request_count_log(
+        self,
+        *,
+        method: str,
+        url: str,
+        status: int,
+        elapsed_ms: int,
+    ) -> None:
+        try:
+            path = self._request_count_log_path
+            path.parent.mkdir(parents=True, exist_ok=True)
+            needs_header = not path.exists()
+            parts = urlsplit(url)
+            url_path = parts.path
+            if parts.query:
+                url_path = f"{url_path}?{parts.query}"
+            with path.open("a", encoding="utf-8", newline="") as f:
+                writer = csv.writer(f)
+                if needs_header:
+                    writer.writerow(
+                        ["timestamp", "method", "status", "elapsed_ms", "url_path"]
+                    )
+                writer.writerow(
+                    [
+                        datetime.now().isoformat(timespec="seconds"),
+                        method,
+                        status,
+                        elapsed_ms,
+                        url_path,
+                    ]
+                )
+        except Exception as e:
+            self._logger.warning("request_count_log append failed: %s", e)
+
+    @property
+    def request_count(self) -> int:
+        return self._request_count
 
     def _is_onenote_missing_resource_20102(
         self, response: Optional[requests.Response]
@@ -140,8 +223,18 @@ class GraphClient:
             self._logger.debug("Graph request log failed: %s", e)
 
         last_exc: Optional[Exception] = None
+        last_retryable_resp: Optional[requests.Response] = None
 
         for attempt in range(1, self._retry.max_retries + 1):
+            if (
+                method != "DELETE"
+                and self._max_requests_per_run is not None
+                and self._request_count >= self._max_requests_per_run
+            ):
+                raise RequestBudgetExceededError(
+                    request_count=self._request_count,
+                    max_requests_per_run=self._max_requests_per_run,
+                )
             start = time.perf_counter()
 
             resp = self._session.request(
@@ -150,10 +243,54 @@ class GraphClient:
                 headers=merged_headers,
                 **request_kwargs,
             )
+            self._request_count += 1
 
             elapsed_ms = int((time.perf_counter() - start) * 1000)
+            self._append_request_count_log(
+                method=method,
+                url=url,
+                status=resp.status_code,
+                elapsed_ms=elapsed_ms,
+            )
+
+            if resp.status_code == 429:
+                last_retryable_resp = resp
+                retry_debug = {
+                    "status": resp.status_code,
+                    "retry_after": resp.headers.get("Retry-After", ""),
+                    "request_id": resp.headers.get("request-id", ""),
+                    "client_request_id": resp.headers.get("client-request-id", ""),
+                }
+                body_preview = truncate_text(resp.text, limit=1000)
+                self._logger.error(
+                    "Graph rate-limited: %s %s status=%s elapsed=%sms response=%s body=%s",
+                    method,
+                    url,
+                    resp.status_code,
+                    elapsed_ms,
+                    retry_debug,
+                    body_preview,
+                )
+                print(
+                    "[GRAPH FINAL ERROR] "
+                    f"{method} {url} status={retry_debug['status']} "
+                    f"retry_after={retry_debug['retry_after']} "
+                    f"request_id={retry_debug['request_id']} "
+                    f"client_request_id={retry_debug['client_request_id']} "
+                    f"body={body_preview}"
+                )
+                raise RateLimitExceededError(
+                    method=method,
+                    url=url,
+                    status=resp.status_code,
+                    retry_after=retry_debug["retry_after"],
+                    request_id=retry_debug["request_id"],
+                    client_request_id=retry_debug["client_request_id"],
+                    body=body_preview,
+                )
 
             if resp.status_code in self._retry.retry_statuses:
+                last_retryable_resp = resp
                 retry_after = resp.headers.get("Retry-After")
                 if retry_after is not None and str(retry_after).isdigit():
                     wait = int(retry_after)
@@ -208,12 +345,37 @@ class GraphClient:
             )
             return resp
 
-        self._logger.error(
-            "%s failed after retries (%s). last_exc=%s",
-            method,
-            self._retry.retry_statuses,
-            last_exc,
-        )
+        if last_retryable_resp is not None:
+            retry_debug = {
+                "status": last_retryable_resp.status_code,
+                "retry_after": last_retryable_resp.headers.get("Retry-After", ""),
+                "request_id": last_retryable_resp.headers.get("request-id", ""),
+                "client_request_id": last_retryable_resp.headers.get("client-request-id", ""),
+            }
+            body_preview = truncate_text(last_retryable_resp.text, limit=1000)
+            self._logger.error(
+                "%s failed after retries (%s). last_exc=%s last_response=%s body=%s",
+                method,
+                self._retry.retry_statuses,
+                last_exc,
+                retry_debug,
+                body_preview,
+            )
+            print(
+                "[GRAPH FINAL ERROR] "
+                f"{method} {url} status={retry_debug['status']} "
+                f"retry_after={retry_debug['retry_after']} "
+                f"request_id={retry_debug['request_id']} "
+                f"client_request_id={retry_debug['client_request_id']} "
+                f"body={body_preview}"
+            )
+        else:
+            self._logger.error(
+                "%s failed after retries (%s). last_exc=%s",
+                method,
+                self._retry.retry_statuses,
+                last_exc,
+            )
         raise RuntimeError(f"{method} failed after retries {self._retry.retry_statuses}.")
 
     def _request_multipart(

@@ -1,0 +1,76 @@
+{
+  "version": 1,
+  "generated_at": "2026-03-05T19:37:02",
+  "common_columns": [
+    {
+      "key": "source_id",
+      "meaning": "unique key: replica_id + '_' + unid",
+      "source": "computed"
+    },
+    {
+      "key": "replica_id",
+      "meaning": "Notes DB identifier",
+      "source": "Notes/DXL/config"
+    },
+    {
+      "key": "unid",
+      "meaning": "Notes document UNID",
+      "source": "Notes/DXL"
+    },
+    {
+      "key": "form",
+      "meaning": "form name",
+      "source": "Notes item Form"
+    },
+    {
+      "key": "title",
+      "meaning": "page title",
+      "source": "Notes item or rule"
+    },
+    {
+      "key": "doc_date",
+      "meaning": "sort base date",
+      "source": "Notes item or rule"
+    },
+    {
+      "key": "onenote_page_id",
+      "meaning": "OneNote page id",
+      "source": "Graph response"
+    },
+    {
+      "key": "onenote_web_url",
+      "meaning": "web url",
+      "source": "Graph links.oneNoteWebUrl.href"
+    },
+    {
+      "key": "onenote_client_url",
+      "meaning": "client url",
+      "source": "Graph links.oneNoteClientUrl.href"
+    },
+    {
+      "key": "url_from_error",
+      "meaning": "url extracted from error",
+      "source": "error parsing"
+    },
+    {
+      "key": "migration_status",
+      "meaning": "migration result status",
+      "source": "migration process"
+    },
+    {
+      "key": "error_message",
+      "meaning": "error message",
+      "source": "exception/response"
+    },
+    {
+      "key": "processed_at",
+      "meaning": "processed timestamp",
+      "source": "migration process"
+    },
+    {
+      "key": "link_resolution_status",
+      "meaning": "link resolution status",
+      "source": "link resolver"
+    }
+  ]
+}

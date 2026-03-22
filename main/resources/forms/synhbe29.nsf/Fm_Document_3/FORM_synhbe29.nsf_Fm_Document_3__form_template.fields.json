@@ -1,0 +1,318 @@
+{
+  "design_name": "Fm_Document_3",
+  "generated_at": "2026-02-16T16:27:08.186112+00:00",
+  "fields": [
+    {
+      "name": "ActionStatus",
+      "type": "keyword",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "ApproveStatus_1",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "ApproveStatus_2",
+      "type": "text",
+      "kind": "computed",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "ApproveTime_1",
+      "type": "datetime",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "ApproveTime_2",
+      "type": "datetime",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "ApproverDep_1",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "ApproverDep_2",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "ApproverNm_1",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "ApproverNm_2",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "Ask",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "AskUser",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "Data_ck",
+      "type": "keyword",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "Detail",
+      "type": "richtext",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "Detail_1",
+      "type": "richtext",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "Division",
+      "type": "text",
+      "kind": "computed",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "DocumentDate",
+      "type": "datetime",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "DocumentNo",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "DocumentTime",
+      "type": "datetime",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "EntryDept",
+      "type": "text",
+      "kind": "computedwhencomposed",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "EntryUser",
+      "type": "text",
+      "kind": "computedwhencomposed",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "Fd_Link_1",
+      "type": "richtext",
+      "kind": "computed",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "Fd_Text_1",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "Fd_Text_2",
+      "type": "richtext",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "KUBUN",
+      "type": "keyword",
+      "kind": "editable",
+      "allow_multivalues": "true",
+      "shared": false
+    },
+    {
+      "name": "Reason",
+      "type": "richtext",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "Repair_After",
+      "type": "richtext",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "Repair_Before",
+      "type": "richtext",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "ReplyDate",
+      "type": "datetime",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "ReplyTime",
+      "type": "datetime",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "ReportTime_1",
+      "type": "datetime",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "ReportTime_2",
+      "type": "datetime",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "ReporterDep_1",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "ReporterDep_2",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "ReporterNm_1",
+      "type": "text",
+      "kind": "computed",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "ReporterNm_2",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "Root",
+      "type": "text",
+      "kind": "computedfordisplay",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "Step1",
+      "type": "text",
+      "kind": "computedfordisplay",
+      "allow_multivalues": "true",
+      "shared": false
+    },
+    {
+      "name": "Step2",
+      "type": "text",
+      "kind": "computed",
+      "allow_multivalues": "true",
+      "shared": false
+    },
+    {
+      "name": "Step2x",
+      "type": "text",
+      "kind": "computedfordisplay",
+      "allow_multivalues": "true",
+      "shared": false
+    },
+    {
+      "name": "SubSystem",
+      "type": "keyword",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "Syogai_ck",
+      "type": "keyword",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "System",
+      "type": "keyword",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "Task",
+      "type": "keyword",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "WorkTime",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    }
+  ],
+  "missing_subforms": [
+    "SubUserInfo"
+  ],
+  "field_count": 44
+}

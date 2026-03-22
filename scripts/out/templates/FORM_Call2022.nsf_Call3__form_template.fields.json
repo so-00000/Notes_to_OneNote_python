@@ -1,0 +1,1158 @@
+{
+  "design_name": "コール受付(改3) (Call3)",
+  "generated_at": "2026-02-16T18:17:29.597720+00:00",
+  "fields": [
+    {
+      "name": "ADATE_D_2",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "ADATE_M_2",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "ADATE_Y_2",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "ADDRESS1",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "ADDRESS2",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "ADDRESS3",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "ATIME_H_2",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "ATIME_M_2",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "BIKOU",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "BUMON",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "CDATE_D_2",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "CDATE_M_2",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "CDATE_Y_2",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "CTIME_H_2",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "CTIME_M_2",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "EDATE_D",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "EDATE_D_2",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "EDATE_M",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "EDATE_M_2",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "EDATE_Y",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "EDATE_Y_2",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "ESDATE_D_1",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "ESDATE_M_1",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "ESDATE_Y_1",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "ESTIME_H_1",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "ESTIME_M_1",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "ETIME_H",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "ETIME_H_2",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "ETIME_M",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "ETIME_M_2",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "Escalation_0_1",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "Escalation_1",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "Escalation_Approve_1",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "HDATE1",
+      "type": "datetime",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "HDATE2",
+      "type": "datetime",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "HDATE3",
+      "type": "datetime",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "HW",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "H_Category1",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "H_Category2",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "H_Outline",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "JDATE_D",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "JDATE_M",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "JDATE_Y",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "JIKAN",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "JIKAN2",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "JIKAN_2_1",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "JIKAN_2_2",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "JIKAN_3",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "JIKAN_4",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "JIKAN_5",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "JTIME_H",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "JTIME_M",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "KAISHA",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "KANJIKAN1",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "KANJIKAN2",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "KANJIKAN3",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "KANKEI1",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "KANKEI2",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "KANKEI3",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "KOSHO",
+      "type": "keyword",
+      "kind": "editable",
+      "allow_multivalues": "true",
+      "shared": false
+    },
+    {
+      "name": "MEKER_K",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "Memo",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "PCADDRESS",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "PCDH",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "PCDY",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "PCFAX",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "PCJIGYOU",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "PCKAISHA",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "PCMH",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "PCMY",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "PCNAME",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "PCSN",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "PCTEL",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "PCUMU",
+      "type": "keyword",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "PCYH",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "PCYY",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "Processing_number",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "SCC_1",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "SDATE_D",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "SDATE_D_2",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "SDATE_M",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "SDATE_M_2",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "SDATE_Y",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "SDATE_Y_2",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "SEC1",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "SEC2",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "SEC3",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "SEIHIN",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "SSendTo_1",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "STIME_H",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "STIME_H_2",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "STIME_M",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "STIME_M_2",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "S_Category1",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "S_Category2",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "S_Category3",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "S_Outline",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "SecondLineName",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "Second_category1",
+      "type": "keyword",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "Second_category2",
+      "type": "text",
+      "kind": "computed",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "Second_category3",
+      "type": "text",
+      "kind": "computed",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "Second_category4",
+      "type": "text",
+      "kind": "computed",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "TOOL",
+      "type": "keyword",
+      "kind": "editable",
+      "allow_multivalues": "true",
+      "shared": false
+    },
+    {
+      "name": "TRBIKOU",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "TRFAX",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "TRJIKI",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "TRKBUSYO",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "TRKISYU",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "TRMAKER",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "TRNO",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "TROS",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "TRSN",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "TRTANTO",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "TRTEL",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "TRUMU",
+      "type": "keyword",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "TRWORK",
+      "type": "text",
+      "kind": "computed",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "TRYADDRESS",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "TRYBIKOU",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "TRYJIGYOU",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "TRYKAISHA",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "TRYNAIYO",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "TRYNAME",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "TRYTEL",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "Third_Contact",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "Third_Dept",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "Third_Person",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "Third_Type",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "Third_answer",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "Third_comment",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "Third_half",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "Title",
+      "type": "text",
+      "kind": "computedwhencomposed",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "Trouble_2",
+      "type": "keyword",
+      "kind": "editable",
+      "allow_multivalues": "true",
+      "shared": false
+    },
+    {
+      "name": "Trouble_Approve_2",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "acc_main",
+      "type": "keyword",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "acc_name",
+      "type": "text",
+      "kind": "computed",
+      "allow_multivalues": "true",
+      "shared": false
+    },
+    {
+      "name": "answer",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "body",
+      "type": "richtext",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "body_1",
+      "type": "richtext",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "category1",
+      "type": "keyword",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "category3",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "category4",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "category5",
+      "type": "keyword",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "category6",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "create_name",
+      "type": "text",
+      "kind": "computedwhencomposed",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "customercompanycd",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "customername",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": "true",
+      "shared": false
+    },
+    {
+      "name": "customername_1",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": "true",
+      "shared": false
+    },
+    {
+      "name": "customername_2",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": "true",
+      "shared": false
+    },
+    {
+      "name": "customerno",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "dispach",
+      "type": "text",
+      "kind": "computed",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "dispach_1",
+      "type": "text",
+      "kind": "computed",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "fax",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "history",
+      "type": "text",
+      "kind": "computed",
+      "allow_multivalues": "true",
+      "shared": false
+    },
+    {
+      "name": "kana",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "keitaitel",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "outline",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "pass",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "pass_1",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "pass_2",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "plathome",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": "true",
+      "shared": false
+    },
+    {
+      "name": "saitan",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "status",
+      "type": "keyword",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
+      "name": "statusTYPE",
+      "type": "keyword",
+      "kind": "editable",
+      "allow_multivalues": "true",
+      "shared": false
+    },
+    {
+      "name": "tel",
+      "type": "text",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    }
+  ],
+  "missing_subforms": [
+    "SubUserInfo"
+  ],
+  "field_count": 164
+}

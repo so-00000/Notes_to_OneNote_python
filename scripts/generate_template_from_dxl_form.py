@@ -26,6 +26,7 @@ CELL_STYLE = "border:1px solid #808080; padding:3px 6px; vertical-align:top;"
 HEADER_BG_STYLE = "background:#f2f2f2; font-weight:bold;"
 LABEL_BG_STYLE = "background:#e9f3ff; font-weight:bold;"
 FIRST_COL_STYLE = "width:120px;"
+EMPTY_TABLE_CELL_HTML = "<p>&nbsp;</p>"
 
 
 _TAG_RE = re.compile(r"<[^>]+>")
@@ -539,14 +540,14 @@ class FormToHtml:
             if rowspan and rowspan.isdigit() and int(rowspan) > 1:
                 extra += f" rowspan='{rowspan}'"
             inner = self._render_children(el)
-            if not inner.strip():
-                inner = "&nbsp;"
+            if _is_blank_html(inner):
+                inner = EMPTY_TABLE_CELL_HTML
             return f"<td style='{CELL_STYLE}'{extra}{attrs}>{inner}</td>"
         if tag == "tablecellheader":
             attrs = self._data_attrs_common(el)
             inner = self._render_children(el)
-            if not inner.strip():
-                inner = "&nbsp;"
+            if _is_blank_html(inner):
+                inner = EMPTY_TABLE_CELL_HTML
             return f"<th style='{CELL_STYLE} {HEADER_BG_STYLE}'{attrs}>{inner}</th>"
 
         if tag == "section":

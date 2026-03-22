@@ -4,11 +4,6 @@ import argparse
 import sys
 from pathlib import Path
 from urllib.parse import quote
-
-REPO_ROOT = Path(__file__).resolve().parents[1]
-if str(REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(REPO_ROOT))
-
 from main.ignore_git.connection import GRAPH_ONENOTE_BASE_URL
 from main.services.app_context import (
     build_graph_client,
@@ -16,6 +11,11 @@ from main.services.app_context import (
     resolve_target_notebook_id,
     resolve_target_section_id,
 )
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
 
 
 def _list_pages_in_section(client, section_id: str) -> list[dict[str, str]]:

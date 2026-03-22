@@ -22,7 +22,11 @@ from .services.app_context import (
     resolve_target_notebook_id,
     resolve_target_section_id,
 )
-from .services.graph_client import GraphClient
+from .services.graph_client import (
+    GraphClient,
+    RateLimitExceededError,
+    RequestBudgetExceededError,
+)
 from .services.migration_master_upsert import (
     build_source_id,
     delete_row_by_source_id,
@@ -34,6 +38,10 @@ from .services.page_payload_builder import build_page_payload
 
 class UserCancelledError(Exception):
     """Raised when user requests cancellation via Esc key."""
+
+
+class FatalCsvPersistenceError(RuntimeError):
+    """Raised when migration master persistence fails and processing must stop."""
 
 
 class EscCancellationMonitor:
@@ -161,6 +169,37 @@ def _check_existing_page_state(
         return "unknown"
 
 
+def _persist_migration_master_or_abort(
+    *,
+    client: GraphClient,
+    dxl_path: Path,
+    rollback_page_id: str,
+    rollback_label: str,
+    **upsert_kwargs,
+) -> None:
+    try:
+        upsert_migration_master(**upsert_kwargs)
+    except OSError as persist_error:
+        print(
+            f"[FATAL:csv] {dxl_path.name}: migration_master.csv save failed: {persist_error}"
+        )
+        if rollback_page_id:
+            try:
+                client.delete_onenote_page(page_id=rollback_page_id)
+                print(
+                    f"[ROLLBACK:{rollback_label}] {dxl_path.name}: deleted OneNote page "
+                    f"page_id={rollback_page_id}"
+                )
+            except Exception as delete_error:
+                print(
+                    f"[ROLLBACK:{rollback_label}:FAILED] {dxl_path.name}: "
+                    f"page_id={rollback_page_id} delete failed: {delete_error}"
+                )
+        raise FatalCsvPersistenceError(
+            f"migration_master.csv save failed for {dxl_path.name}"
+        ) from persist_error
+
+
 def main() -> None:
     setup_logging(level="DEBUG")
 
@@ -176,14 +215,32 @@ def main() -> None:
     mapping_path = Path(__file__).resolve().parent / "resources" / "mapping" / settings.view_name / "mapping.json"
     migration_master_csv = Path(__file__).resolve().parent / "doc_mapping" / settings.view_name / "migration_master.csv"
     update_failed_cleanup_targets: list[dict[str, str]] = []
+    fatal_csv_error: FatalCsvPersistenceError | None = None
+    rate_limit_error: RateLimitExceededError | None = None
+    request_budget_error: RequestBudgetExceededError | None = None
 
     try:
-        notebook_id = resolve_target_notebook_id(client, settings)
-        section_id = resolve_target_section_id(client, settings, notebook_id)
+        try:
+            notebook_id = resolve_target_notebook_id(client, settings)
+            section_id = resolve_target_section_id(client, settings, notebook_id)
+        except RequestBudgetExceededError as e:
+            print(
+                "[STOP:request-budget] "
+                f"requests={e.request_count}/{e.max_requests_per_run}"
+            )
+            return
+        except RateLimitExceededError as e:
+            print(
+                "[STOP:429] "
+                f"{e.method} {e.url} request_id={e.request_id} "
+                f"client_request_id={e.client_request_id}"
+            )
+            return
 
         print("[INFO] Press Esc to request cancellation (stops at next safe check).")
         for i, dxl_path in enumerate(dxl_files, start=1):
             payload = None
+            page_id = ""
             try:
                 cancel_monitor.check()
 
@@ -223,23 +280,31 @@ def main() -> None:
                     page_payload=payload,
                 )
 
-                page_id = page.get("id")
+                page_id = page.get("id") or ""
                 links = page.get("links") or {}
                 web_url = (links.get("oneNoteWebUrl") or {}).get("href") or ""
                 client_url = (links.get("oneNoteClientUrl") or {}).get("href") or ""
+
+                time.sleep(4.0)
 
                 try:
                     client.append_onenote_page_remaining_segments(
                         page_id=page_id,
                         segments=rest_segments,
                     )
+                except RateLimitExceededError:
+                    raise
                 except Exception as update_error:
                     update_error_message = str(update_error)
                     url_from_error = _extract_first_url(update_error_message)
                     if not url_from_error and page_id:
                         url_from_error = f"{GRAPH_ONENOTE_BASE_URL}/pages/{page_id}/content"
 
-                    upsert_migration_master(
+                    _persist_migration_master_or_abort(
+                        client=client,
+                        dxl_path=dxl_path,
+                        rollback_page_id=page_id or "",
+                        rollback_label="update",
                         view_name=settings.view_name,
                         mapping_path=mapping_path,
                         csv_path=migration_master_csv,
@@ -266,7 +331,11 @@ def main() -> None:
 
                 created += 1
 
-                upsert_migration_master(
+                _persist_migration_master_or_abort(
+                    client=client,
+                    dxl_path=dxl_path,
+                    rollback_page_id=page_id or "",
+                    rollback_label="create",
                     view_name=settings.view_name,
                     mapping_path=mapping_path,
                     csv_path=migration_master_csv,
@@ -287,20 +356,45 @@ def main() -> None:
             except UserCancelledError:
                 print(f"[CANCELLED] Stopped by Esc. Created pages: {created}")
                 break
-            except Exception as e:
-                if payload is not None:
-                    error_message = str(e)
-                    url_from_error = _extract_first_url(error_message)
-                    upsert_migration_master(
-                        view_name=settings.view_name,
-                        mapping_path=mapping_path,
-                        csv_path=migration_master_csv,
-                        payload=payload,
-                        url_from_error=url_from_error,
-                        status="error:create_failed",
-                        error_message=error_message,
-                        link_resolution_status=_initial_link_resolution_status(payload),
+            except RequestBudgetExceededError as e:
+                if page_id:
+                    try:
+                        client.delete_onenote_page(page_id=page_id)
+                        print(
+                            f"[ROLLBACK:request-budget] {dxl_path.name}: "
+                            f"deleted OneNote page page_id={page_id}"
+                        )
+                    except Exception as delete_error:
+                        print(
+                            f"[ROLLBACK:request-budget:FAILED] {dxl_path.name}: "
+                            f"page_id={page_id} delete failed: {delete_error}"
+                        )
+                print(
+                    "[STOP:request-budget] "
+                    f"{dxl_path.name}: requests={e.request_count}/{e.max_requests_per_run}"
+                )
+                request_budget_error = e
+                break
+            except RateLimitExceededError as e:
+                if page_id:
+                    update_failed_cleanup_targets.append(
+                        {
+                            "page_id": page_id,
+                            "url_from_error": e.url,
+                            "error_message": str(e),
+                        }
                     )
+                moved_path = _move_file_to_subdir(dxl_path, "error")
+                print(
+                    f"[STOP:429] {dxl_path.name}: {e.method} {e.url} "
+                    f"request_id={e.request_id} -> {moved_path}"
+                )
+                rate_limit_error = e
+                break
+            except FatalCsvPersistenceError as e:
+                fatal_csv_error = e
+                break
+            except Exception as e:
                 moved_path = _move_file_to_subdir(dxl_path, "error")
                 print(f"[ERROR] {dxl_path.name}: {e} -> {moved_path}")
 
@@ -326,6 +420,12 @@ def main() -> None:
         if duplicate_unknown_source_ids:
             joined_unknown = ", ".join(duplicate_unknown_source_ids)
             print(f"[DUPLICATE] unknown-check source_id (not recreated): {joined_unknown}")
+        if fatal_csv_error is not None:
+            raise fatal_csv_error
+        if request_budget_error is not None:
+            return
+        if rate_limit_error is not None:
+            return
         print(
             "✅ Done. \r\n"
             f"✅ Created pages: {created}, \r\n"
