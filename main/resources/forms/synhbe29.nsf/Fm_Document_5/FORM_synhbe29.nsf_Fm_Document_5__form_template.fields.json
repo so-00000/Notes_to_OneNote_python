@@ -332,6 +332,13 @@
       "shared": false
     },
     {
+      "name": "WorkTime",
+      "type": "number",
+      "kind": "editable",
+      "allow_multivalues": null,
+      "shared": false
+    },
+    {
       "name": "ReportTime_1",
       "type": "datetime",
       "kind": "editable",

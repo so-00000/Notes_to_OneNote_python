@@ -120,7 +120,7 @@ class _DocLinkHtmlParser(HTMLParser):
 def _read_csv_rows(path: Path) -> tuple[list[str], list[dict[str, str]]]:
     if not path.exists():
         return [], []
-    for enc in ("cp932", "utf-8"):
+    for enc in ("utf-8", "utf-8-sig", "cp932"):
         try:
             with path.open("r", encoding=enc, newline="") as f:
                 # CSV読み込み。1行目：ヘッダー、2行目以降：データ（辞書形式）
@@ -133,7 +133,7 @@ def _read_csv_rows(path: Path) -> tuple[list[str], list[dict[str, str]]]:
 
 def _write_csv_rows(path: Path, headers: list[str], rows: list[dict[str, str]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="cp932", newline="") as f:
+    with path.open("w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=headers, quoting=csv.QUOTE_ALL)
         writer.writeheader()
         writer.writerows([{h: r.get(h, "") for h in headers} for r in rows])

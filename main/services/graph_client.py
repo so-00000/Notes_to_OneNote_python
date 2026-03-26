@@ -27,6 +27,9 @@ import json
 from typing import List
 
 MultipartPart = Tuple[str, bytes, str]  # (filename, content, content_type)
+MAX_MULTIPART_BINARY_PARTS = 5
+MAX_GRAPH_MULTIPART_REQUEST_BYTES = 3_500_000
+MAX_GRAPH_MULTIPART_PART_BYTES = 25 * 1024 * 1024
 
 
 class RateLimitExceededError(RuntimeError):
@@ -95,6 +98,50 @@ class GraphClient:
         )
         self._max_requests_per_run = max_requests_per_run
         self._request_count = 0
+
+    def _segment_payload_size(self, seg: Segment) -> int:
+        return len(seg.binary_part.data)
+
+    def _chunk_segments_for_multipart(
+        self,
+        segments: List[Segment],
+        *,
+        max_bin_per_request: int = MAX_MULTIPART_BINARY_PARTS,
+        max_request_bytes: int = MAX_GRAPH_MULTIPART_REQUEST_BYTES,
+        request_overhead_bytes: int,
+    ) -> list[List[Segment]]:
+        chunks: list[list[Segment]] = []
+        current: list[Segment] = []
+        current_bytes = request_overhead_bytes
+
+        for seg in segments:
+            seg_bytes = self._segment_payload_size(seg)
+            if seg_bytes > MAX_GRAPH_MULTIPART_PART_BYTES:
+                raise ValueError(
+                    "Binary part exceeds Microsoft Graph OneNote multipart part limit "
+                    f"({seg.binary_part.filename}: {seg_bytes} bytes > {MAX_GRAPH_MULTIPART_PART_BYTES} bytes)."
+                )
+
+            if seg_bytes + request_overhead_bytes > max_request_bytes:
+                raise ValueError(
+                    "Binary part exceeds safe Microsoft Graph OneNote multipart request size "
+                    f"({seg.binary_part.filename}: {seg_bytes} bytes)."
+                )
+
+            would_exceed_part_count = len(current) >= max_bin_per_request
+            would_exceed_request_size = current_bytes + seg_bytes > max_request_bytes
+            if current and (would_exceed_part_count or would_exceed_request_size):
+                chunks.append(current)
+                current = []
+                current_bytes = request_overhead_bytes
+
+            current.append(seg)
+            current_bytes += seg_bytes
+
+        if current:
+            chunks.append(current)
+
+        return chunks
 
 
     def _normalize_onenote_html(self, body_html: str) -> str:
@@ -552,13 +599,18 @@ class GraphClient:
         *,
         section_id: str,
         page_payload: PagePayload,
-        max_bin_per_request: int = 2,
+        max_bin_per_request: int = MAX_MULTIPART_BINARY_PARTS,
     ) -> tuple[dict, List[Segment]]:
         url = f"{GRAPH_ONENOTE_BASE_URL}/sections/{section_id}/pages"
 
         all_segments = list(page_payload.segment_list or [])
-        firstSeg = all_segments[:max_bin_per_request]
-        restSeg = all_segments[max_bin_per_request:]
+        first_chunk = self._chunk_segments_for_multipart(
+            all_segments,
+            max_bin_per_request=max_bin_per_request,
+            request_overhead_bytes=250_000,
+        )
+        firstSeg = first_chunk[0] if first_chunk else []
+        restSeg = all_segments[len(firstSeg):]
 
         body_html, parts = _inject_first_segments(page_payload.body_html, firstSeg, name_prefix="p")
         body_html = self._normalize_onenote_html(body_html)
@@ -605,10 +657,13 @@ class GraphClient:
         *,
         page_id: str,
         segments: List[Segment],
-        max_bin_per_request: int = 2,
+        max_bin_per_request: int = MAX_MULTIPART_BINARY_PARTS,
     ) -> None:
-        for off in range(0, len(segments), max_bin_per_request):
-            chunk = segments[off : off + max_bin_per_request]
+        for chunk in self._chunk_segments_for_multipart(
+            segments,
+            max_bin_per_request=max_bin_per_request,
+            request_overhead_bytes=32_000,
+        ):
             self.update_onenote_page_segments(page_id=page_id, segments=chunk)
 
     def delete_onenote_page(

@@ -50,6 +50,7 @@ class PagePayload:
     doc_replicaid: str | None = None
     doc_unid: str | None = None
     extracted_fields: dict[str, str] = field(default_factory=dict)
+    migration_master_map: dict[str, str] = field(default_factory=dict)
     doclink_placeholders: List[DocLinkPlaceholder] = field(default_factory=list)
 
 

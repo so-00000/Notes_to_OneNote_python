@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import json
+import re
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List
@@ -9,10 +10,13 @@ from typing import Dict, List
 from main.models.models import PagePayload
 
 
+_CSV_LINEBREAK_RE = re.compile(r"[\r\n]+")
+
+
 def _read_csv_rows(path: Path) -> List[Dict[str, str]]:
     if not path.exists():
         return []
-    for enc in ("cp932", "utf-8"):
+    for enc in ("utf-8", "utf-8-sig", "cp932"):
         try:
             with path.open("r", encoding=enc, newline="") as f:
                 return list(csv.DictReader(f))
@@ -32,6 +36,11 @@ def _read_common_mapping(mapping_path: Path) -> Dict[str, object]:
         return {"common_columns": []}
     with common_path.open("r", encoding="utf-8") as f:
         return json.load(f)
+
+
+def _normalize_csv_cell(value: object) -> str:
+    text = "" if value is None else str(value)
+    return _CSV_LINEBREAK_RE.sub(" ", text).strip()
 
 
 def build_source_id(payload: PagePayload) -> str:
@@ -63,10 +72,15 @@ def delete_row_by_source_id(*, mapping_path: Path, csv_path: Path, source_id: st
         return 0
 
     csv_path.parent.mkdir(parents=True, exist_ok=True)
-    with csv_path.open("w", encoding="cp932", newline="") as f:
+    with csv_path.open("w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=headers, quoting=csv.QUOTE_ALL)
         writer.writeheader()
-        writer.writerows([{h: r.get(h, "") for h in headers} for r in kept])
+        writer.writerows(
+            [
+                {h: _normalize_csv_cell(r.get(h, "")) for h in headers}
+                for r in kept
+            ]
+        )
     return deleted
 
 
@@ -116,14 +130,17 @@ def upsert_migration_master(
     source_id = build_source_id(payload)
 
     row = {h: "" for h in headers}
+    migration_master_map = payload.migration_master_map or {}
     row["view_name"] = view_name
     row["source_id"] = source_id
     row["replica_id"] = replica_id
     row["unid"] = unid
-    row["form"] = payload.extracted_fields.get("Form", "")
+    row["form"] = migration_master_map.get("Form") or payload.extracted_fields.get("Form", "")
     row["title"] = payload.page_title or ""
     row["doc_date"] = (
-        payload.extracted_fields.get("DocumentDate")
+        migration_master_map.get("DocumentDate")
+        or payload.extracted_fields.get("DocumentDate")
+        or migration_master_map.get("doc_date")
         or payload.extracted_fields.get("doc_date")
         or ""
     )
@@ -140,7 +157,10 @@ def upsert_migration_master(
         output_key = col.get("output_key")
         item_name = col.get("item_name", "")
         if output_key and output_key in row:
-            row[output_key] = payload.extracted_fields.get(item_name, "")
+            row[output_key] = migration_master_map.get(
+                item_name,
+                payload.extracted_fields.get(item_name, ""),
+            )
 
     rows = _read_csv_rows(csv_path)
     updated = False
@@ -154,7 +174,12 @@ def upsert_migration_master(
         rows.append({h: row.get(h, "") for h in headers})
 
     csv_path.parent.mkdir(parents=True, exist_ok=True)
-    with csv_path.open("w", encoding="cp932", newline="") as f:
+    with csv_path.open("w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=headers, quoting=csv.QUOTE_ALL)
         writer.writeheader()
-        writer.writerows([{h: r.get(h, "") for h in headers} for r in rows])
+        writer.writerows(
+            [
+                {h: _normalize_csv_cell(r.get(h, "")) for h in headers}
+                for r in rows
+            ]
+        )

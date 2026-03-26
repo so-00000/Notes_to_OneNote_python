@@ -1,4 +1,3 @@
-# dxl_to_ui_field_map.py
 from __future__ import annotations
 
 import re
@@ -10,9 +9,6 @@ from main.renderers.common.util_render import _normalize_notes_dt
 DXL_NS = {"dxl": "http://www.lotus.com/dxl"}
 
 
-# ------------------------------------------------------------
-# DXL item から “テキスト値” を抽出（richtextはここでは扱わない）
-# ------------------------------------------------------------
 def _join_clean(values: List[str]) -> str:
     vals = [v.strip() for v in values if (v or "").strip()]
     vals = [re.sub(r"[ \t]+", " ", v) for v in vals]
@@ -20,14 +16,7 @@ def _join_clean(values: List[str]) -> str:
 
 
 def _extract_item_as_text(item: ET.Element) -> Optional[str]:
-    """
-    DXLの <item> 要素から “テキストとしての値” を抽出する。
-
-    - richtext はここでは対象外（安全のため、見つかったら None を返す）
-    - text / number / datetime の順に探す
-    - 最後に fallback で itertxt を使う（ただし richtext が無い場合のみ）
-    """
-    # 念のため：richtextはここでは扱わない（別処理に任せる）
+    # RichText itself is rendered separately, so this text extractor skips it.
     if item.find("./dxl:richtext", DXL_NS) is not None:
         return None
 
@@ -66,44 +55,24 @@ def _extract_item_as_text(item: ET.Element) -> Optional[str]:
     return fallback or None
 
 
-# ------------------------------------------------------------
-# 画面表示フィールドだけを {name: value} にして返す
-# ------------------------------------------------------------
-def dxl_to_ui_field_map(
+def dxl_to_field_map(
     root: ET.Element,
     *,
-    visible_field_names: Set[str],
-    richtext_field_names: Set[str],
+    target_field_names: Set[str],
+    richtext_field_names: Set[str] | None = None,
 ) -> Dict[str, str]:
-    """
-    文書DXL 1件（root）→ 画面表示フィールドだけの {name: value} を返す。
-    同名itemが複数ある場合は改行結合。
-
-    - 画面表示フィールドのみ変換（visible_field_names）
-    - 添付ファイル（$FILE）は除外
-    - richtextフィールドは除外（richtext_field_names）
-      ※richtextは別処理でHTML化して template などに埋め込む想定
-    """
     out: Dict[str, str] = {}
+    skip_richtext_field_names = richtext_field_names or set()
 
     for item in root.findall(".//dxl:item", DXL_NS):
         name = item.get("name")
-        if not name:
+        if not name or name == "$FILE":
+            continue
+        if name not in target_field_names:
+            continue
+        if name in skip_richtext_field_names:
             continue
 
-        # 添付ファイル除外
-        if name == "$FILE":
-            continue
-
-        # 画面に表示しないフィールド除外
-        if name not in visible_field_names:
-            continue
-
-        # richtextフィールド除外
-        if name in richtext_field_names:
-            continue
-
-        # フィールド値を取得（テキストとして）
         v = _extract_item_as_text(item)
         if v is None:
             continue
@@ -114,3 +83,16 @@ def dxl_to_ui_field_map(
             out[name] = v
 
     return out
+
+
+def dxl_to_ui_field_map(
+    root: ET.Element,
+    *,
+    visible_field_names: Set[str],
+    richtext_field_names: Set[str],
+) -> Dict[str, str]:
+    return dxl_to_field_map(
+        root,
+        target_field_names=visible_field_names,
+        richtext_field_names=richtext_field_names,
+    )

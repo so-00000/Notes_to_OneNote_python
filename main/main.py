@@ -4,6 +4,7 @@ from __future__ import annotations
 import re
 import shutil
 import time
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Literal
 
@@ -44,6 +45,12 @@ class FatalCsvPersistenceError(RuntimeError):
     """Raised when migration master persistence fails and processing must stop."""
 
 
+@dataclass(frozen=True)
+class DxlWorkItem:
+    section_name: str
+    dxl_path: Path
+
+
 class EscCancellationMonitor:
     """
     Lightweight Esc-key monitor.
@@ -71,11 +78,28 @@ class EscCancellationMonitor:
                 _ = msvcrt.getwch()
 
 
-def _load_dxl_files(dxl_dir: Path) -> list[Path]:
-    dxl_files = sorted(dxl_dir.glob("*.dxl"))
-    if not dxl_files:
-        raise RuntimeError(f"No DXL files found in: {dxl_dir}")
-    return dxl_files
+def _iter_section_dirs(dxl_root_dir: Path) -> list[Path]:
+    return sorted(
+        path
+        for path in dxl_root_dir.iterdir()
+        if path.is_dir() and not path.name.startswith("result")
+    )
+
+
+def _load_dxl_work_items(dxl_root_dir: Path) -> list[DxlWorkItem]:
+    work_items: list[DxlWorkItem] = []
+    for section_dir in _iter_section_dirs(dxl_root_dir):
+        dxl_files = sorted(section_dir.glob("*.dxl"))
+        for dxl_path in dxl_files:
+            work_items.append(
+                DxlWorkItem(
+                    section_name=section_dir.name,
+                    dxl_path=dxl_path,
+                )
+            )
+    if not work_items:
+        raise RuntimeError(f"No DXL files found under section directories in: {dxl_root_dir}")
+    return work_items
 
 
 def _initial_link_resolution_status(payload) -> str:
@@ -98,9 +122,17 @@ def _build_unique_destination(path: Path) -> Path:
         i += 1
 
 
-def _move_file_to_subdir(src: Path, subdir_name: str) -> Path:
-    """Move one source file into src.parent/subdir_name."""
-    target_dir = src.parent / subdir_name
+def _move_file_to_result_subdir(
+    src: Path,
+    *,
+    result_subdir_name: str,
+    section_name: str | None = None,
+) -> Path:
+    """Move one source file into the form's result subdirectory."""
+    form_dir = src.parent.parent
+    target_dir = form_dir / "result" / result_subdir_name
+    if result_subdir_name == "error" and section_name:
+        target_dir = target_dir / section_name
     target_dir.mkdir(parents=True, exist_ok=True)
     dest = _build_unique_destination(target_dir / src.name)
     shutil.move(str(src), str(dest))
@@ -204,7 +236,7 @@ def main() -> None:
     setup_logging(level="DEBUG")
 
     settings = load_app_settings()
-    dxl_files = _load_dxl_files(settings.dxl_dir)
+    work_items = _load_dxl_work_items(settings.dxl_dir)
     client = build_graph_client(settings)
     cancel_monitor = EscCancellationMonitor(check_interval_sec=2.0)
 
@@ -222,7 +254,6 @@ def main() -> None:
     try:
         try:
             notebook_id = resolve_target_notebook_id(client, settings)
-            section_id = resolve_target_section_id(client, settings, notebook_id)
         except RequestBudgetExceededError as e:
             print(
                 "[STOP:request-budget] "
@@ -238,11 +269,24 @@ def main() -> None:
             return
 
         print("[INFO] Press Esc to request cancellation (stops at next safe check).")
-        for i, dxl_path in enumerate(dxl_files, start=1):
+        section_ids_by_name: dict[str, str] = {}
+        for i, work_item in enumerate(work_items, start=1):
+            dxl_path = work_item.dxl_path
+            section_name = work_item.section_name
             payload = None
             page_id = ""
             try:
                 cancel_monitor.check()
+
+                section_id = section_ids_by_name.get(section_name)
+                if not section_id:
+                    section_id = resolve_target_section_id(
+                        client,
+                        settings,
+                        notebook_id,
+                        section_name=section_name,
+                    )
+                    section_ids_by_name[section_name] = section_id
 
                 payload = build_page_payload(
                     dxl_path,
@@ -256,13 +300,20 @@ def main() -> None:
                     if existing_state == "exists":
                         if source_id:
                             duplicate_skipped_source_ids.append(source_id)
-                        moved_path = _move_file_to_subdir(dxl_path, "duplicate")
+                        moved_path = _move_file_to_result_subdir(
+                            dxl_path,
+                            result_subdir_name="duplicate",
+                        )
                         print(f"[SKIP:duplicate] {dxl_path.name} source_id={source_id} -> {moved_path}")
                         continue
                     if existing_state == "unknown":
                         if source_id:
                             duplicate_unknown_source_ids.append(source_id)
-                        moved_path = _move_file_to_subdir(dxl_path, "error")
+                        moved_path = _move_file_to_result_subdir(
+                            dxl_path,
+                            result_subdir_name="error",
+                            section_name=section_name,
+                        )
                         print(
                             f"[SKIP:unknown] {dxl_path.name} "
                             f"source_id={source_id} -> {moved_path}"
@@ -325,7 +376,11 @@ def main() -> None:
                             "error_message": update_error_message,
                         }
                     )
-                    moved_path = _move_file_to_subdir(dxl_path, "error")
+                    moved_path = _move_file_to_result_subdir(
+                        dxl_path,
+                        result_subdir_name="error",
+                        section_name=section_name,
+                    )
                     print(f"[ERROR:update] {dxl_path.name}: {update_error} -> {moved_path}")
                     continue
 
@@ -347,7 +402,10 @@ def main() -> None:
                     link_resolution_status=_initial_link_resolution_status(payload),
                 )
 
-                moved_path = _move_file_to_subdir(dxl_path, "complete")
+                moved_path = _move_file_to_result_subdir(
+                    dxl_path,
+                    result_subdir_name=f"complete_{section_name}",
+                )
                 print(f"[OK] {dxl_path.name} -> {moved_path}")
 
                 if settings.sleep_sec:
@@ -384,7 +442,11 @@ def main() -> None:
                             "error_message": str(e),
                         }
                     )
-                moved_path = _move_file_to_subdir(dxl_path, "error")
+                moved_path = _move_file_to_result_subdir(
+                    dxl_path,
+                    result_subdir_name="error",
+                    section_name=section_name,
+                )
                 print(
                     f"[STOP:429] {dxl_path.name}: {e.method} {e.url} "
                     f"request_id={e.request_id} -> {moved_path}"
@@ -395,7 +457,11 @@ def main() -> None:
                 fatal_csv_error = e
                 break
             except Exception as e:
-                moved_path = _move_file_to_subdir(dxl_path, "error")
+                moved_path = _move_file_to_result_subdir(
+                    dxl_path,
+                    result_subdir_name="error",
+                    section_name=section_name,
+                )
                 print(f"[ERROR] {dxl_path.name}: {e} -> {moved_path}")
 
         deleted_ids: set[str] = set()

@@ -8,183 +8,123 @@
       "view_columns": [
         {
           "column_index": 1,
-          "column_title": "",
           "item_name": "DocumentDate",
-          "formula": "DocumentDate",
-          "is_category": true,
-          "is_hidden": false,
-          "output_key": "documentdate"
+          "output_key": "documentdate",
+          "logical_name": "日付"
         },
         {
           "column_index": 2,
-          "column_title": "No.",
           "item_name": "DocumentNo",
-          "formula": "DocumentNo",
-          "is_category": false,
-          "is_hidden": false,
-          "output_key": "documentno"
+          "output_key": "documentno",
+          "logical_name": "No."
         },
         {
           "column_index": 3,
-          "column_title": "入力者",
           "item_name": "EntryUser",
-          "formula": "EntryUser",
-          "is_category": false,
-          "is_hidden": false,
-          "output_key": "entryuser"
+          "output_key": "entryuser",
+          "logical_name": "入力者"
         },
         {
           "column_index": 4,
-          "column_title": "分類２",
           "item_name": "System",
-          "formula": "System",
-          "is_category": false,
-          "is_hidden": false,
-          "output_key": "system"
+          "output_key": "system",
+          "logical_name": "分類２"
         },
         {
           "column_index": 5,
-          "column_title": "分類３",
           "item_name": "SubSystem",
-          "formula": "SubSystem",
-          "is_category": false,
-          "is_hidden": false,
-          "output_key": "subsystem"
+          "output_key": "subsystem",
+          "logical_name": "分類３"
         },
         {
           "column_index": 6,
-          "column_title": "分類４",
           "item_name": "Syogai_ck",
-          "formula": "Syogai_ck",
-          "is_category": false,
-          "is_hidden": false,
-          "output_key": "syogai_ck"
+          "output_key": "syogai_ck",
+          "logical_name": "分類４"
         },
         {
           "column_index": 7,
-          "column_title": "件名",
           "item_name": "Fd_Text_1",
-          "formula": "Fd_Text_1",
-          "is_category": false,
-          "is_hidden": false,
-          "output_key": "fd_text_1"
+          "output_key": "fd_text_1",
+          "logical_name": "件名"
         },
         {
           "column_index": 8,
-          "column_title": "分数",
           "item_name": "WorkTime",
-          "formula": "WorkTime",
-          "is_category": false,
-          "is_hidden": false,
-          "output_key": "worktime"
+          "output_key": "worktime",
+          "logical_name": "分数"
         },
         {
           "column_index": 9,
-          "column_title": "状態",
           "item_name": "Status",
-          "formula": "",
-          "is_category": false,
-          "is_hidden": false,
-          "output_key": "status"
+          "output_key": "status",
+          "logical_name": "状態"
         },
         {
           "column_index": 10,
-          "column_title": "発生日",
           "item_name": "DocumentDate",
-          "formula": "DocumentDate",
-          "is_category": false,
-          "is_hidden": false,
-          "output_key": "documentdate_2"
+          "output_key": "documentdate_2",
+          "logical_name": "発生日"
         },
         {
           "column_index": 11,
-          "column_title": "完了日",
           "item_name": "ReplyDate",
-          "formula": "ReplyDate",
-          "is_category": false,
-          "is_hidden": false,
-          "output_key": "replydate"
+          "output_key": "replydate",
+          "logical_name": "完了日"
         },
         {
           "column_index": 12,
-          "column_title": "暫定発生日",
           "item_name": "Temporary_Comp",
-          "formula": "",
-          "is_category": false,
-          "is_hidden": false,
-          "output_key": "temporary_comp"
+          "output_key": "temporary_comp",
+          "logical_name": "暫定発生日"
         },
         {
           "column_index": 13,
-          "column_title": "暫定完了日",
           "item_name": "Temporary_Plan",
-          "formula": "",
-          "is_category": false,
-          "is_hidden": false,
-          "output_key": "temporary_plan"
+          "output_key": "temporary_plan",
+          "logical_name": "暫定完了日"
         },
         {
           "column_index": 14,
-          "column_title": "恒久予定日",
           "item_name": "Parmanet_Plan",
-          "formula": "Parmanet_Plan",
-          "is_category": false,
-          "is_hidden": false,
-          "output_key": "parmanet_plan"
+          "output_key": "parmanet_plan",
+          "logical_name": "恒久予定日"
         },
         {
           "column_index": 15,
-          "column_title": "恒久完了日",
           "item_name": "Parmanet_Comp",
-          "formula": "Parmanet_Comp",
-          "is_category": false,
-          "is_hidden": false,
-          "output_key": "parmanet_comp"
+          "output_key": "parmanet_comp",
+          "logical_name": "恒久完了日"
         },
         {
           "column_index": 16,
-          "column_title": "依頼部署",
           "item_name": "Ask",
-          "formula": "Ask",
-          "is_category": false,
-          "is_hidden": false,
-          "output_key": "ask"
+          "output_key": "ask",
+          "logical_name": "依頼部署"
         },
         {
           "column_index": 17,
-          "column_title": "処理名",
           "item_name": "Task",
-          "formula": "",
-          "is_category": false,
-          "is_hidden": false,
-          "output_key": "task"
+          "output_key": "task",
+          "logical_name": "処理名"
         },
         {
           "column_index": 18,
-          "column_title": "対応区分",
           "item_name": "Measure",
-          "formula": "Measure",
-          "is_category": false,
-          "is_hidden": false,
-          "output_key": "measure"
+          "output_key": "measure",
+          "logical_name": "対応区分"
         },
         {
           "column_index": 19,
-          "column_title": "影響範囲",
           "item_name": "Fd_Id_1",
-          "formula": "Fd_Id_1",
-          "is_category": false,
-          "is_hidden": false,
-          "output_key": "fd_id_1"
+          "output_key": "fd_id_1",
+          "logical_name": "影響範囲"
         },
         {
           "column_index": 20,
-          "column_title": "",
           "item_name": "Measure",
-          "formula": "Measure",
-          "is_category": false,
-          "is_hidden": false,
-          "output_key": "measure_2"
+          "output_key": "measure_2",
+          "logical_name": ""
         }
       ]
     }

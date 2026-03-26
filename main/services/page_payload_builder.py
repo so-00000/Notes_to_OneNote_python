@@ -1,9 +1,10 @@
 # page_payload_builder.py
 from __future__ import annotations
+import json
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from main.data_type_config import get_data_type_settings
-from main.services.dxl_to_ui_field_map import dxl_to_ui_field_map
+from main.services.dxl_to_ui_field_map import dxl_to_field_map, dxl_to_ui_field_map
 from main.services.render_body_html_and_segments import render_body_html_and_segments
 from main.models.models import PagePayload
 from main.services.load_field import load_visible_field_names, load_richtext_field_names
@@ -20,6 +21,19 @@ def _resolve_path(value: str | Path) -> Path:
         return p
     base_dir = Path(__file__).resolve().parents[1]
     return (base_dir / p).resolve()
+
+
+def _load_migration_master_field_names(view_name: str) -> set[str]:
+    mapping_path = _resolve_path(Path("resources") / "mapping" / view_name / "mapping.json")
+    data = json.loads(mapping_path.read_text(encoding="utf-8"))
+
+    field_names: set[str] = set()
+    for view in data.get("views", {}).values():
+        for col in view.get("view_columns", []):
+            item_name = str(col.get("item_name") or "").strip()
+            if item_name:
+                field_names.add(item_name)
+    return field_names
 
 
 def build_page_payload(
@@ -57,6 +71,11 @@ def build_page_payload(
         visible_field_names = visible_field_names,
         richtext_field_names = richtext_field_names,
         )
+    migration_master_field_names = _load_migration_master_field_names(data_type.view_name)
+    migration_master_map = dxl_to_field_map(
+        root=root,
+        target_field_names=migration_master_field_names,
+    )
 
     # pprint("🪅🪅🪅：ui_field_map")
     # pprint(ui_field_map)
@@ -93,6 +112,7 @@ def build_page_payload(
         doc_replicaid = doc_replicaid,
         doc_unid = doc_unid,
         extracted_fields = dict(ui_field_map),
+        migration_master_map = migration_master_map,
         doclink_placeholders = doclink_placeholders,
     )
 

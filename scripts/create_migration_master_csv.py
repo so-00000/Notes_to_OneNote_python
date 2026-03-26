@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -13,6 +14,7 @@ if str(REPO_ROOT) not in sys.path:
 MAPPING_ROOT = REPO_ROOT / "main" / "resources" / "mapping"
 DOC_MAPPING_ROOT = REPO_ROOT / "main" / "doc_mapping"
 COMMON_MAPPING_PATH = MAPPING_ROOT / "cmn_mapping.json"
+_CSV_LINEBREAK_RE = re.compile(r"[\r\n]+")
 
 
 def _load_json(path: Path) -> dict:
@@ -43,7 +45,7 @@ def _read_rows_if_exists(csv_path: Path) -> list[dict[str, str]]:
     if not csv_path.exists():
         return []
 
-    for enc in ("cp932", "utf-8"):
+    for enc in ("utf-8", "utf-8-sig", "cp932"):
         try:
             with csv_path.open("r", encoding=enc, newline="") as f:
                 return list(csv.DictReader(f))
@@ -52,12 +54,22 @@ def _read_rows_if_exists(csv_path: Path) -> list[dict[str, str]]:
     return []
 
 
+def _normalize_csv_cell(value: object) -> str:
+    text = "" if value is None else str(value)
+    return _CSV_LINEBREAK_RE.sub(" ", text).strip()
+
+
 def _write_csv(csv_path: Path, headers: list[str], rows: list[dict[str, str]]) -> None:
     csv_path.parent.mkdir(parents=True, exist_ok=True)
-    with csv_path.open("w", encoding="cp932", newline="") as f:
+    with csv_path.open("w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=headers, quoting=csv.QUOTE_ALL)
         writer.writeheader()
-        writer.writerows([{h: row.get(h, "") for h in headers} for row in rows])
+        writer.writerows(
+            [
+                {h: _normalize_csv_cell(row.get(h, "")) for h in headers}
+                for row in rows
+            ]
+        )
 
 
 def _list_view_names() -> list[str]:

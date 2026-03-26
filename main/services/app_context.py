@@ -37,8 +37,6 @@ def load_app_settings() -> AppSettings:
     section_name = _config_str("SECTION_NAME")
     if not notebook_name:
         raise RuntimeError("NOTEBOOK_NAME is empty. Set it in config.py")
-    if not section_name:
-        raise RuntimeError("SECTION_NAME is empty. Set it in config.py")
 
     dxl_dir = resolve_dxl_dir(data_type_settings.dxl_dir)
     if not dxl_dir.exists():
@@ -77,6 +75,9 @@ def resolve_target_section_id(
     client: GraphClient,
     settings: AppSettings,
     notebook_id: str,
+    section_name: str | None = None,
 ) -> str:
-    section_name = resolve_target_section_name(settings)
-    return find_section_id(client, notebook_id, section_name)
+    resolved_section_name = (section_name or "").strip() or resolve_target_section_name(settings)
+    if not resolved_section_name:
+        raise RuntimeError("SECTION_NAME is empty. Set it in config.py or pass section_name.")
+    return find_section_id(client, notebook_id, resolved_section_name)
