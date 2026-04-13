@@ -183,10 +183,14 @@ def _urllink_to_anchor(urllink: ET.Element) -> str:
 def _par_to_html(
     par: ET.Element,
     *,
+    field_name: str,
+    attachment_by_name: dict[str, Any],
+    seg_i: int,
     link_i: int,
     doclink_placeholders: list[DocLinkPlaceholder],
-) -> tuple[str, int]:
+) -> tuple[str, list[Segment], int, int]:
     parts: list[str] = []
+    segment_list: list[Segment] = []
     if par.text:
         parts.append(_escape_text_preserve_spaces(par.text))
 
@@ -197,6 +201,31 @@ def _par_to_html(
             txt = _text_content(child)
             if txt:
                 parts.append(_escape_text_preserve_spaces(txt))
+        elif tag == "attachmentref":
+            fn = (child.get("displayname") or child.get("name") or "").strip()
+            if fn:
+                seg_id = f"seg-{seg_i:03d}"
+                parts.append(make_anchor(seg_id))
+                seg = _attref_to_segment(
+                    filename=fn,
+                    field_name=field_name,
+                    segment_id=seg_id,
+                    attachment_by_name=attachment_by_name,
+                )
+                if seg:
+                    segment_list.append(seg)
+                seg_i += 1
+        elif tag == "picture":
+            seg_id = f"seg-{seg_i:03d}"
+            parts.append(make_anchor(seg_id))
+            seg = _picture_to_segment(
+                child,
+                field_name=field_name,
+                seg_id=seg_id,
+            )
+            if seg:
+                segment_list.append(seg)
+            seg_i += 1
         elif tag == "doclink":
             link_html, link_i = _doclink_to_anchor(
                 child,
@@ -216,7 +245,7 @@ def _par_to_html(
         if child.tail:
             parts.append(_escape_text_preserve_spaces(child.tail))
 
-    return "".join(parts).strip(), link_i
+    return "".join(parts).strip(), segment_list, seg_i, link_i
 
 
 
@@ -326,13 +355,81 @@ def _picture_to_segment(
 
 
 
-def _table_to_html(table_el: ET.Element) -> str:
+def _render_table_cell_html(
+    cell_el: ET.Element,
+    *,
+    field_name: str,
+    attachment_by_name: dict[str, Any],
+    seg_i: int,
+    link_i: int,
+    doclink_placeholders: list[DocLinkPlaceholder],
+) -> tuple[str, list[Segment], int, int]:
+    parts: list[str] = []
+    segment_list: list[Segment] = []
+
+    if cell_el.text and cell_el.text.strip():
+        parts.append(_escape_text_preserve_spaces(cell_el.text))
+
+    for child in list(cell_el):
+        tag = _local_tag(child.tag)
+        if tag == "par":
+            par_html, par_segments, seg_i, link_i = _par_to_html(
+                child,
+                field_name=field_name,
+                attachment_by_name=attachment_by_name,
+                seg_i=seg_i,
+                link_i=link_i,
+                doclink_placeholders=doclink_placeholders,
+            )
+            segment_list.extend(par_segments)
+            normalized_par = (par_html or "").strip()
+            if (not normalized_par) or re.fullmatch(r"(?:<br\s*/?>\s*)+", normalized_par, re.IGNORECASE):
+                parts.append("<br/>")
+            elif re.search(r"(?i)<(?:div|table)\b", normalized_par):
+                parts.append(f"<div style='white-space:pre-wrap;'>{normalized_par}</div>")
+            else:
+                parts.append(f"<p style='white-space:pre-wrap; margin:0;'>{normalized_par}</p>")
+        elif tag == "table":
+            table_html, table_segments, seg_i, link_i = _table_to_html(
+                child,
+                field_name=field_name,
+                attachment_by_name=attachment_by_name,
+                seg_i=seg_i,
+                link_i=link_i,
+                doclink_placeholders=doclink_placeholders,
+            )
+            parts.append(table_html)
+            segment_list.extend(table_segments)
+        else:
+            txt = _text_content(child).strip()
+            if txt:
+                parts.append(_escape_text_preserve_spaces(txt))
+
+        if child.tail and child.tail.strip():
+            parts.append(_escape_text_preserve_spaces(child.tail))
+
+    cell_html = "".join(parts).strip()
+    if not cell_html:
+        cell_html = EMPTY_TABLE_CELL_HTML
+    return cell_html, segment_list, seg_i, link_i
+
+
+def _table_to_html(
+    table_el: ET.Element,
+    *,
+    field_name: str,
+    attachment_by_name: dict[str, Any],
+    seg_i: int,
+    link_i: int,
+    doclink_placeholders: list[DocLinkPlaceholder],
+) -> tuple[str, list[Segment], int, int]:
     """
     richtext 内の <table> をシンプルに HTML table に変換する（テキストのみ）。
     - セル内の画像/添付(ref)は想定しない（あっても無視）
     - 余計な装飾は最低限
     """
     rows: list[str] = []
+    segment_list: list[Segment] = []
     expanded_rows: list[list[str]] = []
     max_columns = 0
 
@@ -343,15 +440,21 @@ def _table_to_html(table_el: ET.Element) -> str:
         expanded_cells: list[str] = []
 
         for td in cells:
-            txt = _text_content(td).strip()
-            txt = re.sub(r"\s+\n", "\n", txt)
-            safe = html.escape(txt).replace("\n", "<br/>") if txt else EMPTY_TABLE_CELL_HTML
+            cell_html, cell_segments, seg_i, link_i = _render_table_cell_html(
+                td,
+                field_name=field_name,
+                attachment_by_name=attachment_by_name,
+                seg_i=seg_i,
+                link_i=link_i,
+                doclink_placeholders=doclink_placeholders,
+            )
+            segment_list.extend(cell_segments)
 
             style = "border:1px solid #808080; padding:3px 6px; vertical-align:top;"
             if row_index == 0:
                 style += " background:#f6efe6; font-weight:bold;"
 
-            expanded_cells.append(f"<td style='{style}'>{safe}</td>")
+            expanded_cells.append(f"<td style='{style}'>{cell_html}</td>")
 
             colspan = td.attrib.get("columnspan") or td.attrib.get("colspan")
             span_count = int(colspan) - 1 if colspan and colspan.isdigit() and int(colspan) > 1 else 0
@@ -375,7 +478,10 @@ def _table_to_html(table_el: ET.Element) -> str:
         f"<table style='border-collapse:collapse; width:{MAX_CONTENT_WIDTH}; table-layout:fixed;' width='{MAX_CONTENT_WIDTH_PX}' border='1' cellspacing='0' cellpadding='0'>"
         + "".join(rows)
         + "</table>"
-        "</div>"
+        "</div>",
+        segment_list,
+        seg_i,
+        link_i,
     )
 
 
@@ -415,8 +521,9 @@ def richtext_item_to_html_and_segment(
 
             # 添付ファイル
             attrefs = par.findall(".//dxl:attachmentref", DXL_NS)
+            has_attrefs = bool(attrefs)
 
-            if attrefs:
+            if has_attrefs:
                 for a in attrefs:
                     fn = (a.get("displayname") or a.get("name") or "").strip()
                     if not fn:
@@ -441,14 +548,13 @@ def richtext_item_to_html_and_segment(
 
                     seg_i += 1
 
-                continue
 
 
 
             # 画像データ（キャプチャ）の走査
             pic = par.find(".//dxl:picture", DXL_NS)
 
-            if pic is not None:
+            if (not has_attrefs) and pic is not None:
 
                 # セグメントIDの作成
                 seg_id = f"seg-{seg_i:03d}"
@@ -468,7 +574,6 @@ def richtext_item_to_html_and_segment(
 
                 seg_i += 1
 
-                continue
 
             # テキストの走査
             par_html, link_i = _par_to_html(
@@ -496,6 +601,61 @@ def richtext_item_to_html_and_segment(
 
     return "\n".join(out), segment_list, seg_i, doclink_placeholders, link_i
 
+
+
+def richtext_item_to_html_and_segment(
+    item_el: ET.Element,
+    attachment_by_name: dict[str, Any],
+    *,
+    seg_i: int,
+    link_i: int,
+) -> tuple[str, list[Segment], int, list[DocLinkPlaceholder], int]:
+    field_name = (item_el.get("name") or "unknown").strip()
+
+    rt = item_el.find("dxl:richtext", DXL_NS)
+    if rt is None:
+        logger.warning("richtext not found. skip field=%s", field_name)
+        return "", [], seg_i, [], link_i
+
+    out: list[str] = []
+    segment_list: list[Segment] = []
+    doclink_placeholders: list[DocLinkPlaceholder] = []
+
+    for child in list(rt):
+        tag = _local_tag(child.tag)
+
+        if tag == "par":
+            par_html, par_segments, seg_i, link_i = _par_to_html(
+                child,
+                field_name=field_name,
+                attachment_by_name=attachment_by_name,
+                seg_i=seg_i,
+                link_i=link_i,
+                doclink_placeholders=doclink_placeholders,
+            )
+            segment_list.extend(par_segments)
+            normalized_par = (par_html or "").strip()
+            if (not normalized_par) or re.fullmatch(r"(?:<br\s*/?>\s*)+", normalized_par, re.IGNORECASE):
+                out.append("<br/>")
+            elif re.search(r"(?i)<(?:div|table)\b", normalized_par):
+                out.append(f"<div style='white-space:pre-wrap;'>{normalized_par}</div>")
+            else:
+                out.append(f"<p style='white-space:pre-wrap;'>{normalized_par}</p>")
+            continue
+
+        if tag == "table":
+            table_html, table_segments, seg_i, link_i = _table_to_html(
+                child,
+                field_name=field_name,
+                attachment_by_name=attachment_by_name,
+                seg_i=seg_i,
+                link_i=link_i,
+                doclink_placeholders=doclink_placeholders,
+            )
+            out.append(table_html)
+            segment_list.extend(table_segments)
+
+    return "\n".join(out), segment_list, seg_i, doclink_placeholders, link_i
 
 
 def render_body_html_and_segments(
@@ -599,5 +759,76 @@ def render_body_html_and_segments(
     # pprint("🪅🪅🪅:body_html")
     # pprint(body_html)
 
+
+    return body_html, all_segments, all_doclinks
+
+
+def render_body_html_and_segments(
+    *,
+    root: ET.Element,
+    ui_field_map: Dict[str, str],
+    data_type: Any,
+    rich_field_names: str
+) -> Tuple[str, List[Segment], List[DocLinkPlaceholder]]:
+    attachment_objs_all = _extract_attachments(root) or []
+    attachment_map = {obj.filename: obj for obj in attachment_objs_all if getattr(obj, "filename", None)}
+
+    logger.debug("attachments: %s", len(attachment_map))
+    logger.debug("attachment_names: %s", list(attachment_map.keys()))
+
+    seg_i = 1
+    link_i = 1
+    all_segments: List[Segment] = []
+    all_doclinks: List[DocLinkPlaceholder] = []
+    rich_map: Dict[str, str] = {}
+
+    for field_name in rich_field_names:
+        items = root.findall(f".//dxl:item[@name='{field_name}']", DXL_NS)
+        if not items:
+            continue
+
+        field_html_parts: list[str] = []
+        for item in items:
+            if item.find("dxl:richtext", DXL_NS) is None:
+                continue
+
+            field_html, seg_list, seg_i, doclinks, link_i = richtext_item_to_html_and_segment(
+                item,
+                attachment_map,
+                seg_i=seg_i,
+                link_i=link_i,
+            )
+            if field_html:
+                field_html_parts.append(field_html.strip())
+            all_segments.extend(seg_list)
+            all_doclinks.extend(doclinks)
+
+        if field_html_parts:
+            rich_map[field_name] = "\n".join(field_html_parts)
+
+    values: Dict[str, str] = dict(ui_field_map)
+    values.update(rich_map)
+    values["MAX_CONTENT_WIDTH"] = MAX_CONTENT_WIDTH
+    values["MAX_CONTENT_WIDTH_PX"] = str(MAX_CONTENT_WIDTH_PX)
+    values["FORM_3COL_LABEL_WIDTH"] = FORM_3COL_LABEL_WIDTH
+    values["FORM_3COL_LABEL_WIDTH_PX"] = str(FORM_3COL_LABEL_WIDTH_PX)
+    values["FORM_3COL_VALUE_WIDTH"] = FORM_3COL_VALUE_WIDTH
+    values["FORM_3COL_VALUE_WIDTH_PX"] = str(FORM_3COL_VALUE_WIDTH_PX)
+
+    template_html_path = resolve_template_html_path(_resolve_path(data_type.template_html_path))
+    template_html = template_html_path.read_text(encoding="utf-8")
+    logger.debug("TEMPLATE_HTML_PATH: %s", template_html_path)
+    logger.debug("TEMPLATE_HTML_BEGIN\n%s\nTEMPLATE_HTML_END", template_html)
+
+    fields_json_path = resolve_fields_json_path(_resolve_path(data_type.fields_json_path))
+    fields_json = fields_json_path.read_text(encoding="utf-8")
+    logger.debug("FIELDS_JSON_PATH: %s", fields_json_path)
+    logger.debug("FIELDS_JSON_BEGIN\n%s\nFIELDS_JSON_END", fields_json)
+
+    body_html = fill_template(
+        template_html=template_html,
+        values=values,
+        raw_fields=rich_field_names,
+    )
 
     return body_html, all_segments, all_doclinks

@@ -1,0 +1,1128 @@
+<!-- source_dxl: C:\Users\SLY\Documents\Python螳滄ｨ貼Python - OneNote\Git\Notes_to_OneNote_python\scripts\target_form\FORM_Call2024.nsf_Call4.dxl -->
+
+<style>
+.notes-form{font-family:MS PGothic,Meiryo,'Segoe UI',Arial,sans-serif;font-size:11pt;line-height:1.45;color:#222;}
+.notes-form table{border-collapse:collapse; width:800px; table-layout:fixed;}
+.notes-form td,.notes-form th{border:1px solid #808080; padding:3px 6px; vertical-align:top;}
+.notes-form th{background:#efefef;font-weight:normal;}
+.notes-form .notes-par{margin:2px 0;font-weight:bold;display:block;width:100%;box-sizing:border-box;}
+.notes-form .notes-field-wrap{display:block;width:100%;box-sizing:border-box;}
+.notes-form .notes-field{display:block;width:100%;min-width:0;min-height:1.2em;border:1px solid #666;background:#fff;padding:1px 4px;border-radius:2px;box-sizing:border-box;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;}
+.notes-form .notes-field[data-kind='computed'],
+.notes-form .notes-field[data-kind='computedfordisplay'],
+.notes-form .notes-field[data-kind='computedwhencomposed']{background:#f7f7f7;color:#555;}
+.notes-form .notes-link{color:#0645ad;text-decoration:underline;}
+.notes-form .notes-subform{border:1px dashed #aaa;padding:6px;margin:6px 0;background:#fafafa;}
+.notes-form .notes-subform-title{font-weight:bold;margin-bottom:4px;}
+.notes-form .notes-section{border:1px solid #a0a0a0;margin:6px 0;}
+.notes-form .notes-section-title{background:#d9d9d9;padding:2px 6px;font-weight:bold;}
+.notes-form .notes-section-body{padding:4px 6px;}
+.notes-form .notes-textlist{display:block;margin-left:1em;}
+
+</style>
+<div class='notes-form' data-design='繧ｳ繝ｼ繝ｫ蜿嶺ｻ(謾ｹ4) (Call4)'>
+	<div class='notes-subform'>
+		<div class='notes-subform-title'>SUBFORM: SubUserInfo (missing DXL)
+		</div>
+	</div><br/>
+	<div class='notes-section' data-hidewhen='@IsNewDoc'>
+		<div class='notes-section-body'>
+			<div class='notes-section-title' style='margin-top:1em;'>荳谺｡蟇ｾ蠢
+			</div><br/>
+			<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Title' data-type='text' data-kind='computedwhencomposed'>{{Title}}</span></span><span style='font-weight:bold;'>ｼ2024蟷ｴ蠎ｦｼ</span>
+			</div><br/>
+			<div class='notes-par'><span style='font-weight:bold;'>繝ｦ繝ｼ繧ｶ繝ｼ逡ｪ蜿ｷｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='customerno' data-type='text' data-kind='editable'>{{customerno}}</span></span><span style='font-weight:bold;'>莨夂､ｾCDｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='customercompanycd' data-type='text' data-kind='editable'>{{customercompanycd}}</span></span>
+			</div>
+			<table style='margin-top:1em; border-collapse:collapse; width:800px; table-layout:fixed;' width='800' border='1' cellspacing='0' cellpadding='0'>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>蝠丞粋縺帷匱逕滓凾髢</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' colspan='3'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='SDATE_Y' data-type='number' data-kind='editable'>{{SDATE_Y}}</span></span><span style='font-weight:bold;'> 蟷ｴｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='SDATE_M' data-type='number' data-kind='editable'>{{SDATE_M}}</span></span><span style='font-weight:bold;'> 譛茨ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='SDATE_D' data-type='number' data-kind='editable'>{{SDATE_D}}</span></span><span style='font-weight:bold;'> 譌･ｼ茨ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='STIME_H' data-type='text' data-kind='editable'>{{STIME_H}}</span></span><span style='font-weight:bold;'> 譎ゑｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='STIME_M' data-type='text' data-kind='editable'>{{STIME_M}}</span></span><span style='font-weight:bold;'> 蛻ｼ</span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>蟇ｾ蠢憺幕蟋区凾髢</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' colspan='3'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='TDATE_Y' data-type='number' data-kind='editable'>{{TDATE_Y}}</span></span><span style='font-weight:bold;'> 蟷ｴｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='TDATE_M' data-type='number' data-kind='editable'>{{TDATE_M}}</span></span><span style='font-weight:bold;'> 譛茨ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='TDATE_D' data-type='number' data-kind='editable'>{{TDATE_D}}</span></span><span style='font-weight:bold;'> 譌･ｼ茨ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='TTIME_H' data-type='text' data-kind='editable'>{{TTIME_H}}</span></span><span style='font-weight:bold;'> 譎ゑｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='TTIME_M' data-type='text' data-kind='editable'>{{TTIME_M}}</span></span><span style='font-weight:bold;'> 蛻ｼ</span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>莠区･ｭ謇蜷</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='customername' data-type='text' data-kind='editable' data-allowmultivalues='true'>{{customername}}</span></span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold;'>
+						<div class='notes-par'><span style='font-weight:bold;'>莠区･ｭ謇蜷搾ｼ医き繝奇ｼ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='kana' data-type='text' data-kind='editable'>{{kana}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>謇螻</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='SEC1' data-type='text' data-kind='editable'>{{SEC1}}</span></span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='SEC2' data-type='text' data-kind='editable'>{{SEC2}}</span></span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='SEC3' data-type='text' data-kind='editable'>{{SEC3}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>菴乗園</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='ADDRESS1' data-type='text' data-kind='editable'>{{ADDRESS1}}</span></span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='ADDRESS2' data-type='text' data-kind='editable'>{{ADDRESS2}}</span></span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='ADDRESS3' data-type='text' data-kind='editable'>{{ADDRESS3}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>髮ｻ隧ｱ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='tel' data-type='text' data-kind='editable'>{{tel}}</span></span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold;'>
+						<div class='notes-par'><span style='font-weight:bold;'>驛ｨ髢蜷</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='BUMON' data-type='text' data-kind='editable'>{{BUMON}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>ｼｦｼ｡ｼｸ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='fax' data-type='text' data-kind='editable'>{{fax}}</span></span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold;'>
+						<div class='notes-par'><span style='font-weight:bold;'>莨夂､ｾ蛹ｺ蛻</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='KAISHA' data-type='text' data-kind='editable'>{{KAISHA}}</span></span>
+						</div>
+					</td>
+				</tr>
+			</table><br/>
+			<table style='margin-top:1em; border-collapse:collapse; width:800px; table-layout:fixed;' width='800' border='1' cellspacing='0' cellpadding='0' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>蝠丞粋縺幄豌丞錐ｼ域ｼ｢蟄暦ｼ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='customername_1' data-type='text' data-kind='editable' data-allowmultivalues='true'>{{customername_1}}</span></span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold;'>
+						<div class='notes-par'><span style='font-weight:bold;'>蝠丞粋縺幄豌丞錐ｼ医き繝奇ｼ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='customername_2' data-type='text' data-kind='editable' data-allowmultivalues='true'>{{customername_2}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>蝠丞粋縺幄繝ｦ繝ｼ繧ｶ繝ｼID</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='customerID' data-type='text' data-kind='editable'>{{customerID}}</span></span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold;'>
+						<div class='notes-par'><span style='font-weight:bold;'>騾｣邨｡蜈茨ｼ域声蟶ｯ髮ｻ隧ｱ/蜀邱夂分蜿ｷｼ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='customerkeitai' data-type='text' data-kind='editable' data-allowmultivalues='true'>{{customerkeitai}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#f2f2f2; font-weight:bold;' colspan='2'>&nbsp;
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#f2f2f2; font-weight:bold;' colspan='2'>
+						<div class='notes-par'><span style='font-weight:bold;'> 窶ｻ縲碁｣邨｡蜈茨ｼ域声蟶ｯ髮ｻ隧ｱ/蜀邱夂分蜿ｷｼ峨阪↓險倩ｼ峨ｮ逡ｪ蜿ｷ縺ｸ縺秘｣邨｡繧偵♀鬘倥＞縺励∪縺吶</span>
+						</div>
+						<div class='notes-par'><span style='font-weight:bold;'>縲  險倩ｼ峨↑縺励ｮ蝣ｴ蜷医ｯ荳願ｨ倥ｮ縲碁崕隧ｱ縲阪ｮ逡ｪ蜿ｷ縺ｸ縺秘｣邨｡繧偵♀鬘倥＞縺励∪縺吶</span>
+						</div>
+					</td>
+				</tr>
+			</table><br/>
+			<div class='notes-par'><span style='font-weight:bold;'>荳谺｡縲蝠上＞蜷医ｏ縺帛螳ｹ</span>
+			</div>
+			<table style='margin-top:1em; border-collapse:collapse; width:800px; table-layout:fixed;' width='800' border='1' cellspacing='0' cellpadding='0' data-hidewhen='!(@Contains(@UserRoles;&quot;[HELP]&quot;) | @Contains(@UserRoles;&quot;[莠梧ｬ｡]&quot;) | @Contains(@UserRoles;&quot;[髢｢騾｣]&quot;) | @Contains(@UserRoles;&quot;[謳ｺ蟶ｯ莉望&quot;))'>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>雉ｪ蝠乗ｦりｦ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='outline' data-type='text' data-kind='editable'>{{outline}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>蝠丞粋縺帛螳ｹ</span>
+						</div>
+						<div class='notes-par'><span style='font-weight:bold;'>ｼ郁ｩｳ邏ｰｼ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='inquiry' data-type='text' data-kind='editable'>{{inquiry}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr data-hidewhen='!(@Contains(@UserRoles;&quot;[HELP]&quot;) | @Contains(@UserRoles;&quot;[莠梧ｬ｡]&quot;) | @Contains(@UserRoles;&quot;[髢｢騾｣]&quot;) | @Contains(@UserRoles;&quot;[謳ｺ蟶ｯ莉望&quot;))'>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>蟇ｾ蠢懷螳ｹ</span>
+						</div>
+						<div class='notes-par'><span style='font-weight:bold;'>譛邨ょ屓遲</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' data-hidewhen='!(@Contains(@UserRoles;&quot;[HELP]&quot;) | @Contains(@UserRoles;&quot;[莠梧ｬ｡]&quot;) | @Contains(@UserRoles;&quot;[髢｢騾｣]&quot;) | @Contains(@UserRoles;&quot;[謳ｺ蟶ｯ莉望&quot;))'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='answer' data-type='text' data-kind='editable'>{{answer}}</span></span>
+						</div>
+						<div class='notes-par'><span style='font-weight:bold;'>蜃ｦ逅莉ｶ謨ｰｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='Processing_number' data-type='text' data-kind='editable'>{{Processing_number}}</span></span>
+						</div>
+						<div class='notes-par'><span style='font-weight:bold;'>ｾ奇ｾ滂ｽｽｾ懶ｽｰｾｾ</span><span style='font-weight:bold;'>ｾ会ｽｰｾゑｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='pass' data-type='text' data-kind='editable'>{{pass}}</span></span><span style='font-weight:bold;'>ADｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='pass_1' data-type='text' data-kind='editable'>{{pass_1}}</span></span><span style='font-weight:bold;'>縺昴ｮ莉厄ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='pass_2' data-type='text' data-kind='editable'>{{pass_2}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>蟇ｾ蠢懈凾髢</span>
+						</div>
+						<div class='notes-par'><span style='font-weight:bold;'>隱ｿ譟ｻ譎る俣</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='JIKAN' data-type='number' data-kind='editable'>{{JIKAN}}</span></span><span style='font-weight:bold;'>蛻縲縲舌Ο繧ｰ騾∽ｿ｡譌･譎</span><span style='font-weight:bold;'>縲托ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='JDATE_Y' data-type='text' data-kind='editable'>{{JDATE_Y}}</span></span><span style='font-weight:bold;'>蟷ｴｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='JDATE_M' data-type='text' data-kind='editable'>{{JDATE_M}}</span></span><span style='font-weight:bold;'> 譛茨ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='JDATE_D' data-type='text' data-kind='editable'>{{JDATE_D}}</span></span><span style='font-weight:bold;'>譌･ｼ茨ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='JTIME_H' data-type='text' data-kind='editable'>{{JTIME_H}}</span></span><span style='font-weight:bold;'>譎ゑｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='JTIME_M' data-type='text' data-kind='editable'>{{JTIME_M}}</span></span><span style='font-weight:bold;'>蛻ｼ</span>
+						</div>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='JIKAN2' data-type='number' data-kind='editable'>{{JIKAN2}}</span></span><span style='font-weight:bold;'>蛻</span>
+						</div>
+						<div class='notes-par'><span style='font-weight:bold;'>霑ｽ蜉蟇ｾ蠢懆</span><span style='font-weight:bold;'>蟇ｾ蠢懈凾髢難ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='JIKAN_3' data-type='number' data-kind='editable'>{{JIKAN_3}}</span></span><span style='font-weight:bold;'>蛻</span><span style='font-weight:bold;'>隱ｿ譟ｻ譎る俣ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='JIKAN_4' data-type='number' data-kind='editable'>{{JIKAN_4}}</span></span><span style='font-weight:bold;'>蛻縲縲繝ｭ繧ｰ繝√ぉ繝繧ｯｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='JIKAN_5' data-type='number' data-kind='editable'>{{JIKAN_5}}</span></span><span style='font-weight:bold;'> 蛻</span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>蟇ｾ蠢懷ｮ御ｺ譌･譎</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='EDATE_Y' data-type='number' data-kind='editable'>{{EDATE_Y}}</span></span><span style='font-weight:bold;'> 蟷ｴｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='EDATE_M' data-type='number' data-kind='editable'>{{EDATE_M}}</span></span><span style='font-weight:bold;'> 譛茨ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='EDATE_D' data-type='number' data-kind='editable'>{{EDATE_D}}</span></span><span style='font-weight:bold;'> 譌･ｼ茨ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='ETIME_H' data-type='text' data-kind='editable'>{{ETIME_H}}</span></span><span style='font-weight:bold;'> 譎ゑｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='ETIME_M' data-type='text' data-kind='editable'>{{ETIME_M}}</span></span><span style='font-weight:bold;'> 蛻ｼ</span>
+						</div>
+					</td>
+				</tr>
+			</table><br/>
+			<div class='notes-par'><span style='font-weight:bold;'>ｼ懷ｯｾ雎｡閠諠蝣ｱｼ</span>
+			</div>
+			<table style='margin-top:1em; border-collapse:collapse; width:800px; table-layout:fixed;' width='800' border='1' cellspacing='0' cellpadding='0' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+				<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+						<div class='notes-par'><span style='font-weight:bold;'>蟇ｾ雎｡閠豌丞錐</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='name' data-type='text' data-kind='editable'>{{name}}</span></span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold;' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+						<div class='notes-par'><span style='font-weight:bold;'>AD繝ｦ繝ｼ繧ｶ繝ｼID</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='ADID' data-type='text' data-kind='editable'>{{ADID}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>繧ｳ繝ｳ繝斐Η繝ｼ繧ｿ繝ｼ蜷</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='pc_name' data-type='text' data-kind='editable'>{{pc_name}}</span></span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold;'>
+						<div class='notes-par'><span style='font-weight:bold;'>繝｡繝ｼ繝ｫ繧｢繝峨Ξ繧ｹ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='MailAddress' data-type='text' data-kind='editable'>{{MailAddress}}</span></span>
+						</div>
+					</td>
+				</tr>
+			</table><br/>
+			<div class='notes-par'><span style='font-weight:bold;'>ｼ廾ffice365諠蝣ｱｼ</span>
+			</div>
+			<table style='margin-top:1em; border-collapse:collapse; width:800px; table-layout:fixed;' width='800' border='1' cellspacing='0' cellpadding='0' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>Offife365繝ｩ繧､繧ｻ繝ｳ繧ｹ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='O365License' data-type='keyword' data-kind='editable'>{{O365License}}</span></span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold;'>
+						<div class='notes-par'><span style='font-weight:bold;'>Outlook菴ｿ逕ｨ繧｢繝励Μ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='OutlookApri' data-type='keyword' data-kind='editable'>{{OutlookApri}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>蛻ｩ逕ｨ迺ｰ蠅ダ遶ｯ譛ｫ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='plathome' data-type='keyword' data-kind='editable'>{{plathome}}</span></span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold;'>
+						<div class='notes-par'><span style='font-weight:bold;'>繧ｹ繝槭ｼ繝医ョ繝舌う繧ｹ蝗樒ｷ夂分蜿ｷ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='mobile_tel_no' data-type='text' data-kind='editable'>{{mobile_tel_no}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+						<div class='notes-par'><span style='font-weight:bold;'>蛻ｩ逕ｨ迺ｰ蠅ダ遞ｮ鬘</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' colspan='3' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='O365SYURUI' data-type='keyword' data-kind='editable' data-allowmultivalues='true'>{{O365SYURUI}}</span></span><span style='font-weight:bold;'>縲(ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='BROWSER' data-type='keyword' data-kind='editable' data-allowmultivalues='true'>{{BROWSER}}</span></span><span style='font-weight:bold;'>)</span>
+						</div>
+					</td>
+				</tr>
+				<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>螳滓命菴懈･ｭ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' colspan='3' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='SAGYO' data-type='keyword' data-kind='editable' data-allowmultivalues='true'>{{SAGYO}}</span></span>
+						</div>
+					</td>
+				</tr>
+			</table><br/>
+			<table style='margin-top:1em; border-collapse:collapse; width:800px; table-layout:fixed;' width='800' border='1' cellspacing='0' cellpadding='0' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>蝠丞粋縺帷ｨｮ蛻･</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='category1' data-type='keyword' data-kind='editable'>{{category1}}</span></span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold;'>
+						<div class='notes-par'><span style='font-weight:bold;'>蝠丞粋縺帙メ繝｣繝阪Ν</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='category5' data-type='keyword' data-kind='editable'>{{category5}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>蝠丞粋縺帛螳ｹ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='category3' data-type='text' data-kind='editable'>{{category3}}</span></span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' colspan='2'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='category4' data-type='text' data-kind='editable'>{{category4}}</span></span>
+						</div>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='category6' data-type='text' data-kind='editable'>{{category6}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+						<div class='notes-par'><span style='font-weight:bold;'>繧ｵ繝昴ｼ繝医ョ繧ｹ繧ｯｼ､ｼ｢</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' colspan='3' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+						<div class='notes-par'><span style='font-weight:bold;'>繧ｫ繝繧ｴ繝ｪｼ托ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='S_Category1' data-type='text' data-kind='editable'>{{S_Category1}}</span></span>
+						</div>
+						<div class='notes-par'><span style='font-weight:bold;'>繧ｫ繝繧ｴ繝ｪｼ抵ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='S_Category2' data-type='text' data-kind='editable'>{{S_Category2}}</span></span>
+						</div>
+						<div class='notes-par'><span style='font-weight:bold;'>繧ｫ繝繧ｴ繝ｪｼ難ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='S_Category3' data-type='text' data-kind='editable'>{{S_Category3}}</span></span>
+						</div>
+						<div class='notes-par'><span style='font-weight:bold;'>莉ｶ蜷搾ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='S_Outline' data-type='text' data-kind='editable'>{{S_Outline}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>繝倥Ν繝励槭ル繝･繧｢繝ｫ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' colspan='3'>
+						<div class='notes-par'><span style='font-weight:bold;'>繧ｫ繝繧ｴ繝ｪｼ托ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='H_Category1' data-type='text' data-kind='editable'>{{H_Category1}}</span></span>
+						</div>
+						<div class='notes-par'><span style='font-weight:bold;'>繧ｫ繝繧ｴ繝ｪｼ抵ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='H_Category2' data-type='text' data-kind='editable'>{{H_Category2}}</span></span>
+						</div>
+						<div class='notes-par'><span style='font-weight:bold;'>莉ｶ蜷搾ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='H_Outline' data-type='text' data-kind='editable'>{{H_Outline}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+						<div class='notes-par'><span style='font-weight:bold;'>髢｢騾｣驛ｨ髢縺ｮ</span>
+						</div>
+						<div class='notes-par'><span style='font-weight:bold;'>ｽｴｽｽｽｶｾ夲ｽｰｽｼｽｮｾ晏</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' colspan='3' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Escalation_1' data-type='text' data-kind='editable'>{{Escalation_1}}</span></span><span style='font-weight:bold;'>窶ｻ繧ｷ繧ｹ繝繝蜷</span>
+						</div>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='SSendTo_1' data-type='text' data-kind='editable'>{{SSendTo_1}}</span></span><span style='font-weight:bold;'>窶ｻ騾∽ｿ｡蜈医ｮ螳帛</span>
+						</div>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='SCC_1' data-type='text' data-kind='editable'>{{SCC_1}}</span></span><span style='font-weight:bold;'>窶ｻ騾∽ｿ｡蜈医ｮCC</span>
+						</div>
+					</td>
+				</tr>
+				<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+						<div class='notes-par'><span style='font-weight:bold;'>蟇ｾ蠢應ｾ晞ｼ蜈</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' colspan='3'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Escalation_0_1' data-type='text' data-kind='editable'>{{Escalation_0_1}}</span></span>
+						</div>
+					</td>
+				</tr>
+			</table><br/>
+			<table style='margin-top:1em; border-collapse:collapse; width:800px; table-layout:fixed;' width='800' border='1' cellspacing='0' cellpadding='0' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+				<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#f2f2f2; font-weight:bold;' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+						<div class='notes-par'><span style='font-weight:bold;'>Hardware</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#f2f2f2; font-weight:bold;' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>&nbsp;
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#f2f2f2; font-weight:bold;' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>&nbsp;
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#f2f2f2; font-weight:bold;' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>&nbsp;
+					</td>
+				</tr>
+				<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+						<div class='notes-par'><span style='font-weight:bold;'>繝｡繝ｼ繧ｫ繝ｼ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='HW' data-type='text' data-kind='editable'>{{HW}}</span></span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold;'>&nbsp;
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold;'>&nbsp;
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>陬ｽ蜩∝錐</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='SEIHIN' data-type='text' data-kind='editable'>{{SEIHIN}}</span></span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold;'>&nbsp;
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold;'>&nbsp;
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>陬ｽ騾逡ｪ蜿ｷ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='PCSN' data-type='text' data-kind='editable'>{{PCSN}}</span></span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold;'>&nbsp;
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold;'>&nbsp;
+					</td>
+				</tr>
+			</table><br/>
+			<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='TRWORK' data-type='text' data-kind='computed'>{{TRWORK}}</span></span>
+			</div>
+			<table style='margin-top:1em; border-collapse:collapse; width:800px; table-layout:fixed;' width='800' border='1' cellspacing='0' cellpadding='0' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+				<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+						<div class='notes-par'><span style='font-weight:bold;'>蜀搾ｽｲｾ晢ｽｽｾｽｰｾ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+						<div class='notes-par'><span style='font-weight:bold;'>騾∽ｻ伜芦逹遒ｺ隱肴律ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='PCYY' data-type='number' data-kind='editable'>{{PCYY}}</span></span><span style='font-weight:bold;'>蟷ｴｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='PCMY' data-type='number' data-kind='editable'>{{PCMY}}</span></span><span style='font-weight:bold;'>譛茨ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='PCDY' data-type='number' data-kind='editable'>{{PCDY}}</span></span><span style='font-weight:bold;'>譌･縲菴懈･ｭ閠ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='saitan' data-type='text' data-kind='editable'>{{saitan}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>螳御ｺｾｽｲｾ鯉ｾ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='statusTYPE' data-type='keyword' data-kind='editable' data-allowmultivalues='true'>{{statusTYPE}}</span></span>
+						</div>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='MEKER_K' data-type='text' data-kind='editable'>{{MEKER_K}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr data-hidewhen='status!=&quot;蠑慕ｶ吶℃萓晞ｼ荳ｭ&quot;'>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>蟇ｾ蠢懃憾豕</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' data-hidewhen='status!=&quot;蠑慕ｶ吶℃萓晞ｼ荳ｭ&quot;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='status' data-type='keyword' data-kind='editable'>{{status}}</span></span>
+						</div>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='dispach' data-type='text' data-kind='computed'>{{dispach}}</span></span>
+						</div>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='dispach_1' data-type='text' data-kind='computed'>{{dispach_1}}</span></span>
+						</div>
+						<div class='notes-par'><span style='font-weight:bold;'>萓晞ｼ蜈域球蠖楢ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='SecondLineName' data-type='text' data-kind='editable'>{{SecondLineName}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>諡 蠖 閠</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='acc_main' data-type='keyword' data-kind='editable'>{{acc_main}}</span></span><span style='font-weight:bold;'>縲縲縲縲縲縲蜿嶺ｻ假ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='create_name' data-type='text' data-kind='computedwhencomposed'>{{create_name}}</span></span><span style='font-weight:bold;'>蜑榊屓蟇ｾ蠢懶ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='acc_name' data-type='text' data-kind='computed' data-allowmultivalues='true'>{{acc_name}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+						<div class='notes-par'><span style='font-weight:bold;'>謇ｿ隱崎</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Escalation_Approve_1' data-type='text' data-kind='editable'>{{Escalation_Approve_1}}</span></span>&nbsp;<span class='notes-field-wrap'><span class='notes-field' data-field='ESDATE_Y_1' data-type='number' data-kind='editable'>{{ESDATE_Y_1}}</span></span><span style='font-weight:bold;'> 蟷ｴｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='ESDATE_M_1' data-type='number' data-kind='editable'>{{ESDATE_M_1}}</span></span><span style='font-weight:bold;'> 譛茨ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='ESDATE_D_1' data-type='number' data-kind='editable'>{{ESDATE_D_1}}</span></span><span style='font-weight:bold;'> 譌･ｼ茨ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='ESTIME_H_1' data-type='text' data-kind='editable'>{{ESTIME_H_1}}</span></span><span style='font-weight:bold;'>譎ゑｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='ESTIME_M_1' data-type='text' data-kind='editable'>{{ESTIME_M_1}}</span></span><span style='font-weight:bold;'> 蛻ｼ</span>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div><br/>
+	<div class='notes-section' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+		<div class='notes-section-body'>
+			<div class='notes-section-title' style='margin-top:1em;'>髢｢騾｣驛ｨ髢
+			</div><br/>
+			<div class='notes-par'><span style='font-weight:bold;'>蛹ｺ蛻ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='Third_Type' data-type='text' data-kind='editable'>{{Third_Type}}</span></span>
+			</div><br/>
+			<div class='notes-par'><span style='font-weight:bold;'>髢｢騾｣驛ｨ髢縲蝠上＞蜷医ｏ縺帛螳ｹ</span>
+			</div>
+			<table style='margin-top:1em; border-collapse:collapse; width:800px; table-layout:fixed;' width='800' border='1' cellspacing='0' cellpadding='0' data-hidewhen='Third_Type=&quot;荳崎ｦ&quot;'>
+				<tr data-hidewhen='Third_Type=&quot;荳崎ｦ&quot;'>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;' data-hidewhen='Third_Type=&quot;荳崎ｦ&quot;'>
+						<div class='notes-par'><span style='font-weight:bold;'>諡 蠖 閠</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' colspan='2' data-hidewhen='Third_Type=&quot;荳崎ｦ&quot;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Third_Person' data-type='text' data-kind='editable'>{{Third_Person}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr data-hidewhen='Third_Type=&quot;荳崎ｦ&quot;'>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>謇螻樣Κ鄂ｲ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' colspan='2' data-hidewhen='Third_Type=&quot;荳崎ｦ&quot;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Third_Dept' data-type='text' data-kind='editable'>{{Third_Dept}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr data-hidewhen='Third_Type=&quot;荳崎ｦ&quot;'>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;' data-hidewhen='Third_Type=&quot;荳崎ｦ&quot;'>
+						<div class='notes-par'><span style='font-weight:bold;'>騾｣邨｡蜈</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' colspan='2' data-hidewhen='Third_Type=&quot;荳崎ｦ&quot;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Third_Contact' data-type='text' data-kind='editable'>{{Third_Contact}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr data-hidewhen='Third_Type=&quot;荳崎ｦ&quot;'>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>蜿嶺ｻ俶律譎</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' colspan='2' data-hidewhen='Third_Type=&quot;荳崎ｦ&quot;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='SDATE_Y_2' data-type='number' data-kind='editable'>{{SDATE_Y_2}}</span></span><span style='font-weight:bold;'> 蟷ｴｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='SDATE_M_2' data-type='number' data-kind='editable'>{{SDATE_M_2}}</span></span><span style='font-weight:bold;'> 譛茨ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='SDATE_D_2' data-type='number' data-kind='editable'>{{SDATE_D_2}}</span></span><span style='font-weight:bold;'> 譌･ｼ茨ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='STIME_H_2' data-type='text' data-kind='editable'>{{STIME_H_2}}</span></span><span style='font-weight:bold;'> 譎ゑｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='STIME_M_2' data-type='text' data-kind='editable'>{{STIME_M_2}}</span></span><span style='font-weight:bold;'> 蛻ｼ</span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>荳ｭ髢灘屓遲疲律譎</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' colspan='2'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='CDATE_Y_2' data-type='number' data-kind='editable'>{{CDATE_Y_2}}</span></span><span style='font-weight:bold;'> 蟷ｴｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='CDATE_M_2' data-type='number' data-kind='editable'>{{CDATE_M_2}}</span></span><span style='font-weight:bold;'> 譛茨ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='CDATE_D_2' data-type='number' data-kind='editable'>{{CDATE_D_2}}</span></span><span style='font-weight:bold;'> 譌･ｼ茨ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='CTIME_H_2' data-type='text' data-kind='editable'>{{CTIME_H_2}}</span></span><span style='font-weight:bold;'> 譎ゑｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='CTIME_M_2' data-type='text' data-kind='editable'>{{CTIME_M_2}}</span></span><span style='font-weight:bold;'> 蛻ｼ</span>
+						</div>
+					</td>
+				</tr>
+				<tr data-hidewhen='Third_Type=&quot;荳崎ｦ&quot;'>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;' data-hidewhen='Third_Type=&quot;荳崎ｦ&quot;'>
+						<div class='notes-par'><span style='font-weight:bold;'>騾比ｸｭ邨碁℃蜀螳ｹ</span>
+						</div>
+						<div class='notes-par'><span style='font-weight:bold;'>ｼ井ｽ懈･ｭ蜀螳ｹｼ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' colspan='2'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Third_half' data-type='text' data-kind='editable'>{{Third_half}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>譛邨ょ屓遲疲律譎</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' colspan='2'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='EDATE_Y_2' data-type='number' data-kind='editable'>{{EDATE_Y_2}}</span></span><span style='font-weight:bold;'> 蟷ｴｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='EDATE_M_2' data-type='number' data-kind='editable'>{{EDATE_M_2}}</span></span><span style='font-weight:bold;'> 譛茨ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='EDATE_D_2' data-type='number' data-kind='editable'>{{EDATE_D_2}}</span></span><span style='font-weight:bold;'> 譌･ｼ茨ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='ETIME_H_2' data-type='text' data-kind='editable'>{{ETIME_H_2}}</span></span><span style='font-weight:bold;'> 譎ゑｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='ETIME_M_2' data-type='text' data-kind='editable'>{{ETIME_M_2}}</span></span><span style='font-weight:bold;'> 蛻ｼ</span>
+						</div>
+					</td>
+				</tr>
+				<tr data-hidewhen='Third_Type=&quot;荳崎ｦ&quot; | (Third_Type=&quot;蠢隕&quot; &amp; !(Escalation_1=&quot;UserID蜀堺ｽ懈&quot; | Escalation_1=&quot;ｽｾｽｷｽｭｽｱID PWｾ假ｽｾｽｯｾ萓晞ｼ&quot; | Escalation_1=&quot;ｾ抵ｽｰｾ呻ｾ假ｽｽｾｽｱ萓晞ｼ&quot;))'>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>蝗樒ｭ泌螳ｹ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' colspan='2' data-hidewhen='Third_Type=&quot;荳崎ｦ&quot; | (Third_Type=&quot;蠢隕&quot; &amp; !(Escalation_1=&quot;UserID蜀堺ｽ懈&quot; | Escalation_1=&quot;ｽｾｽｷｽｭｽｱID PWｾ假ｽｾｽｯｾ萓晞ｼ&quot; | Escalation_1=&quot;ｾ抵ｽｰｾ呻ｾ假ｽｽｾｽｱ萓晞ｼ&quot;))'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Third_answer' data-type='text' data-kind='editable'>{{Third_answer}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>蝠丞粋縺帷ｨｮ蛻･</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' colspan='2'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Second_category1' data-type='keyword' data-kind='editable'>{{Second_category1}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr data-hidewhen='Third_Type=&quot;荳崎ｦ&quot;'>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;' data-hidewhen='Third_Type=&quot;荳崎ｦ&quot;'>
+						<div class='notes-par'><span style='font-weight:bold;'>蝠丞粋縺帛螳ｹ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' data-hidewhen='Third_Type=&quot;荳崎ｦ&quot;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Second_category2' data-type='text' data-kind='computed'>{{Second_category2}}</span></span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' data-hidewhen='Third_Type=&quot;荳崎ｦ&quot;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Second_category3' data-type='text' data-kind='computed'>{{Second_category3}}</span></span>
+						</div>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Second_category4' data-type='text' data-kind='computed'>{{Second_category4}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>蟇ｾ蠢懈凾髢</span>
+						</div>
+						<div class='notes-par'><span style='font-weight:bold;'>隱ｿ譟ｻ譎る俣</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' colspan='2'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='JIKAN_2_1' data-type='number' data-kind='editable'>{{JIKAN_2_1}}</span></span><span style='font-weight:bold;'>蛻</span>
+						</div>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='JIKAN_2_2' data-type='number' data-kind='editable'>{{JIKAN_2_2}}</span></span><span style='font-weight:bold;'>蛻</span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>髫懷ｮｳ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' colspan='2'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Trouble_2' data-type='keyword' data-kind='editable' data-allowmultivalues='true'>{{Trouble_2}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>荳企聞繧ｳ繝｡繝ｳ繝</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' colspan='2'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Third_comment' data-type='text' data-kind='editable'>{{Third_comment}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>荳企聞謇ｿ隱</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' colspan='2'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Trouble_Approve_2' data-type='text' data-kind='editable'>{{Trouble_Approve_2}}</span></span>&nbsp;<span class='notes-field-wrap'><span class='notes-field' data-field='ADATE_Y_2' data-type='number' data-kind='editable'>{{ADATE_Y_2}}</span></span><span style='font-weight:bold;'> 蟷ｴｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='ADATE_M_2' data-type='number' data-kind='editable'>{{ADATE_M_2}}</span></span><span style='font-weight:bold;'> 譛茨ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='ADATE_D_2' data-type='number' data-kind='editable'>{{ADATE_D_2}}</span></span><span style='font-weight:bold;'> 譌･ｼ茨ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='ATIME_H_2' data-type='text' data-kind='editable'>{{ATIME_H_2}}</span></span><span style='font-weight:bold;'> 譎ゑｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='ATIME_M_2' data-type='text' data-kind='editable'>{{ATIME_M_2}}</span></span><span style='font-weight:bold;'> 蛻ｼ</span>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div><br/>
+	<div class='notes-par'><span style='font-weight:bold;'>繝医Λ繝悶Ν繝√こ繝繝</span><span style='font-weight:bold;'>(譛臥┌ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='TRUMU' data-type='keyword' data-kind='editable'>{{TRUMU}}</span></span><span style='font-weight:bold;'>ｼ</span>
+	</div>
+	<table style='margin-top:1em; border-collapse:collapse; width:800px; table-layout:fixed;' width='800' border='1' cellspacing='0' cellpadding='0' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+		<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+			<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+				<div class='notes-par'><span style='font-weight:bold;'>髫懷ｮｳ蛟区園ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='KOSHO' data-type='keyword' data-kind='editable' data-allowmultivalues='true'>{{KOSHO}}</span></span>
+				</div>
+			</td>
+		</tr>
+	</table><br/>
+	<div class='notes-section' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+		<div class='notes-section-body'>
+			<div class='notes-par'><span style='font-weight:bold;'>ｼ井ｿ晏ｮ亥ｯｾ蠢應ｾ晞ｼｼ</span>
+			</div>
+			<table style='margin-top:1em; border-collapse:collapse; width:800px; table-layout:fixed;' width='800' border='1' cellspacing='0' cellpadding='0' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+				<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+						<div class='notes-par'><span style='font-weight:bold;'>莨夂､ｾ蜷</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='TRMAKER' data-type='text' data-kind='editable'>{{TRMAKER}}</span></span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold;' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>&nbsp;
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold;' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>&nbsp;
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>驛ｨ鄂ｲ蜷</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='TRKBUSYO' data-type='text' data-kind='editable'>{{TRKBUSYO}}</span></span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold;'>&nbsp;
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold;'>&nbsp;
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>諡蠖楢蜷</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='TRTANTO' data-type='text' data-kind='editable'>{{TRTANTO}}</span></span><span style='font-weight:bold;'>縲讒</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold;'>&nbsp;
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold;'>&nbsp;
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>ｼｦｼ｡ｼｸ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='TRFAX' data-type='text' data-kind='editable'>{{TRFAX}}</span></span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold;'>&nbsp;
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold;'>&nbsp;
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>ｼｴｼ･ｼｬ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='TRTEL' data-type='text' data-kind='editable'>{{TRTEL}}</span></span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold;'>&nbsp;
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold;'>&nbsp;
+					</td>
+				</tr>
+			</table><br/>
+			<table style='margin-top:1em; border-collapse:collapse; width:800px; table-layout:fixed;' width='800' border='1' cellspacing='0' cellpadding='0' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+				<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>繝√こ繝繝遺</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='TRNO' data-type='text' data-kind='editable'>{{TRNO}}</span></span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold;' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+						<div class='notes-par'><span style='font-weight:bold;'>ｼｯｼｳ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='TROS' data-type='text' data-kind='editable'>{{TROS}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>蟇ｾ雎｡讖溽ｨｮ蜷</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='TRKISYU' data-type='text' data-kind='editable'>{{TRKISYU}}</span></span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold;'>
+						<div class='notes-par'><span style='font-weight:bold;'>蜩∫分(S/N)</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='TRSN' data-type='text' data-kind='editable'>{{TRSN}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>蟆主･譎よ悄</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='TRJIKI' data-type='text' data-kind='editable'>{{TRJIKI}}</span></span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold;'>
+						<div class='notes-par'><span style='font-weight:bold;'>蛯呵</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='TRBIKOU' data-type='text' data-kind='editable'>{{TRBIKOU}}</span></span>
+						</div>
+					</td>
+				</tr>
+			</table><br/>
+			<div class='notes-par'><span style='font-weight:bold;'>ｼ医Θ繝ｼ繧ｶ繝ｼ諠蝣ｱｼ</span>
+			</div>
+			<table style='margin-top:1em; border-collapse:collapse; width:800px; table-layout:fixed;' width='800' border='1' cellspacing='0' cellpadding='0' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+				<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+						<div class='notes-par'><span style='font-weight:bold;'>豌丞錐</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='TRYNAME' data-type='text' data-kind='editable'>{{TRYNAME}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>ｼｴｼ･ｼｬ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='TRYTEL' data-type='text' data-kind='editable'>{{TRYTEL}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>莨夂､ｾ蜷</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='TRYKAISHA' data-type='text' data-kind='editable'>{{TRYKAISHA}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>莠区･ｭ謇蜷</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='TRYJIGYOU' data-type='text' data-kind='editable'>{{TRYJIGYOU}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>菴乗園</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='TRYADDRESS' data-type='text' data-kind='editable'>{{TRYADDRESS}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>髫懷ｮｳ蜀螳ｹ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='TRYNAIYO' data-type='text' data-kind='editable'>{{TRYNAIYO}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>蛯呵</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='TRYBIKOU' data-type='text' data-kind='editable'>{{TRYBIKOU}}</span></span>
+						</div>
+					</td>
+				</tr>
+			</table><br/>
+			<div class='notes-par'><span style='font-weight:bold;'>螳御ｺ</span>
+			</div>
+		</div>
+	</div><br/>
+	<div class='notes-par'><span style='font-weight:bold;'>ｼｰｼ｣蜀阪そ繝繝医い繝繝</span><span style='font-weight:bold;'>(</span><span style='font-weight:bold;'>譛臥┌ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='PCUMU' data-type='keyword' data-kind='editable'>{{PCUMU}}</span></span><span style='font-weight:bold;'>ｼ</span>
+	</div>
+	<div class='notes-section' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+		<div class='notes-section-body'>
+			<div class='notes-par'><span style='font-weight:bold;'>ｼ茨ｼｰｼ｣繝ｦ繝ｼ繧ｶ繝ｼｼ</span>
+			</div>
+			<table style='margin-top:1em; border-collapse:collapse; width:800px; table-layout:fixed;' width='800' border='1' cellspacing='0' cellpadding='0'>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>豌丞錐</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='PCNAME' data-type='text' data-kind='editable'>{{PCNAME}}</span></span><span style='font-weight:bold;'>讒</span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>莨夂､ｾ蜷</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='PCKAISHA' data-type='text' data-kind='editable'>{{PCKAISHA}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>莠区･ｭ謇蜷</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='PCJIGYOU' data-type='text' data-kind='editable'>{{PCJIGYOU}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>菴乗園</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='PCADDRESS' data-type='text' data-kind='editable'>{{PCADDRESS}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>ｼｴｼ･ｼｬ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='PCTEL' data-type='text' data-kind='editable'>{{PCTEL}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>ｼｦｼ｡ｼｸ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='PCFAX' data-type='text' data-kind='editable'>{{PCFAX}}</span></span>
+						</div>
+					</td>
+				</tr>
+			</table><br/>
+			<div class='notes-par'><span style='font-weight:bold;'>ｼ井ｽｿ逕ｨ繝繝ｼ繝ｫｼ</span>
+			</div>
+			<table style='margin-top:1em; border-collapse:collapse; width:800px; table-layout:fixed;' width='800' border='1' cellspacing='0' cellpadding='0' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+				<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='TOOL' data-type='keyword' data-kind='editable' data-allowmultivalues='true'>{{TOOL}}</span></span>
+						</div>
+					</td>
+				</tr>
+			</table><br/>
+			<div class='notes-par'><span style='font-weight:bold;'>蛯呵ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='BIKOU' data-type='text' data-kind='editable'>{{BIKOU}}</span></span>
+			</div>
+			<table style='margin-top:1em; border-collapse:collapse; width:800px; table-layout:fixed;' width='800' border='1' cellspacing='0' cellpadding='0' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+				<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+						<div class='notes-par'><span style='font-weight:bold;'>繝代た繧ｳ繝ｳ霑秘∵律</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='PCYH' data-type='number' data-kind='editable'>{{PCYH}}</span></span><span style='font-weight:bold;'>蟷ｴｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='PCMH' data-type='number' data-kind='editable'>{{PCMH}}</span></span><span style='font-weight:bold;'>譛茨ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='PCDH' data-type='number' data-kind='editable'>{{PCDH}}</span></span><span style='font-weight:bold;'>譌･</span>
+						</div>
+					</td>
+				</tr>
+			</table><br/>
+			<div class='notes-par'><span style='font-weight:bold;'>ｼ亥阪そ繝繝医い繝繝鈴未菫り)</span>
+			</div>
+			<table style='margin-top:1em; border-collapse:collapse; width:800px; table-layout:fixed;' width='800' border='1' cellspacing='0' cellpadding='0' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+				<tr data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+						<div class='notes-par'><span style='font-weight:bold;'>ｼ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='KANKEI1' data-type='text' data-kind='editable'>{{KANKEI1}}</span></span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='KANJIKAN1' data-type='text' data-kind='editable'>{{KANJIKAN1}}</span></span><span style='font-weight:bold;'>蛻ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='HDATE1' data-type='datetime' data-kind='editable'>{{HDATE1}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>ｼ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='KANKEI2' data-type='text' data-kind='editable'>{{KANKEI2}}</span></span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='KANJIKAN2' data-type='text' data-kind='editable'>{{KANJIKAN2}}</span></span><span style='font-weight:bold;'>蛻ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='HDATE2' data-type='datetime' data-kind='editable'>{{HDATE2}}</span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top; background:#e9f3ff; font-weight:bold; width:120px;'>
+						<div class='notes-par'><span style='font-weight:bold;'>ｼ</span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='KANKEI3' data-type='text' data-kind='editable'>{{KANKEI3}}</span></span>
+						</div>
+					</td>
+					<td style='border:1px solid #808080; padding:3px 6px; vertical-align:top;'>
+						<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='KANJIKAN3' data-type='text' data-kind='editable'>{{KANJIKAN3}}</span></span><span style='font-weight:bold;'>蛻ｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='HDATE3' data-type='datetime' data-kind='editable'>{{HDATE3}}</span></span>
+						</div>
+					</td>
+				</tr>
+			</table><br/>
+			<div class='notes-par'><span style='font-weight:bold;'>螳御ｺ</span>
+			</div>
+		</div>
+	</div><br/>
+	<div class='notes-section'>
+		<div class='notes-section-body'>
+			<div class='notes-section-title' style='margin-top:1em;'>蟇ｾ蠢懶ｾ抵ｾ
+			</div><br/>
+			<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='Memo' data-type='text' data-kind='editable'>{{Memo}}</span></span>
+			</div>
+		</div>
+	</div><br/>
+	<div class='notes-section' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+		<div class='notes-section-body'>
+			<div class='notes-section-title' style='margin-top:1em;'>豺ｻ莉倩ｳ譁
+			</div><br/>
+			<div class='notes-par'><span style='font-weight:bold;'>PC菫ｮ逅 繝ｻ繝ｻ繝ｻ繝ｻｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='body_1' data-type='richtext' data-kind='editable'>{{body_1}}</span></span>
+			</div><br/>
+			<div class='notes-par'><span style='font-weight:bold;'>髢｢騾｣ｽｺｽｰｾ</span><span style='font-weight:bold;'>繝ｻ繝ｻ繝ｻ繝ｻｼ</span><span class='notes-field-wrap'><span class='notes-field' data-field='body' data-type='richtext' data-kind='editable'>{{body}}</span></span>
+			</div>
+		</div>
+	</div><br/>
+	<div class='notes-section' data-hidewhen='@Contains(@UserRoles;&quot;[JSOX]&quot;)'>
+		<div class='notes-section-body'>
+			<div class='notes-section-title' style='margin-top:1em;'>螻･豁ｴ諠蝣ｱ
+			</div><br/>
+			<div class='notes-par'><span class='notes-field-wrap'><span class='notes-field' data-field='history' data-type='text' data-kind='computed' data-allowmultivalues='true'>{{history}}</span></span>
+			</div>
+		</div>
+	</div>
+</div>

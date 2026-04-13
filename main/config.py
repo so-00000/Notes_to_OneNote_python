@@ -1,22 +1,25 @@
 from main.enums import DataType
 
 # 対象データ
-# DATA_TYPE = DataType.SYOGAI
-# DATA_TYPE = DataType.CALL2024
-# DATA_TYPE = DataType.DATA_PATCH
-DATA_TYPE = DataType.HOSYU
-
 # 対象の OneNote ノートブック名
+
+
+# # 障害
+# DATA_TYPE = DataType.SYOGAI
 # NOTEBOOK_NAME = "障害DB"
-NOTEBOOK_NAME = "保守DB"
+
+# # 保守
+# DATA_TYPE = DataType.HOSYU
+# NOTEBOOK_NAME = "保守DB"
+
+# # データ強制変更
+# DATA_TYPE = DataType.DATA_PATCH
 # NOTEBOOK_NAME = "データ強制変更"
-# NOTEBOOK_NAME = "UserCall"
 
-# 対象の OneNote セクション名
-# SECTION_NAME = "障害DB_2024"
-# SECTION_NAME = "データ強制変更_2020"
-# SECTION_NAME = "UserCall_2024"
+# UserCall2024
+DATA_TYPE = DataType.CALL2024
+NOTEBOOK_NAME = "UserCall2024"
 
-# DXL_DIRはDATA_TYPEに応じてdata_type_config.pyで切り替え
-SLEEP_SEC = 1.0  # 連続POSTの間隔（429回避用、必要なら増やす）
+
+SLEEP_SEC = 1.0
 MAX_REQUESTS_PER_RUN = 390

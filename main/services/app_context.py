@@ -5,8 +5,8 @@ from pathlib import Path
 from main import config
 from main.data_type_config import get_data_type_settings
 from main.find_id import find_notebook_id, find_section_id
-from main.ignore_git import token
 from main.models import AppSettings
+from main.services.graph_auth import build_access_token_provider
 from main.services.graph_client import GraphClient
 
 
@@ -28,10 +28,6 @@ def resolve_dxl_dir(config_value: str) -> Path:
 
 
 def load_app_settings() -> AppSettings:
-    access_token = token.ACCESS_TOKEN
-    if not access_token or not access_token.strip():
-        raise RuntimeError("ACCESS_TOKEN is empty.")
-
     data_type_settings = get_data_type_settings()
     notebook_name = _config_str("NOTEBOOK_NAME")
     section_name = _config_str("SECTION_NAME")
@@ -45,7 +41,6 @@ def load_app_settings() -> AppSettings:
         raise RuntimeError(f"DXL_DIR is not a directory: {dxl_dir}")
 
     return AppSettings(
-        access_token=access_token,
         notebook_name=notebook_name,
         section_name=section_name,
         view_name=data_type_settings.view_name,
@@ -58,7 +53,7 @@ def build_graph_client(settings: AppSettings) -> GraphClient:
     max_requests_per_run = getattr(config, "MAX_REQUESTS_PER_RUN", None)
     max_requests = int(max_requests_per_run) if max_requests_per_run else None
     return GraphClient(
-        settings.access_token,
+        build_access_token_provider(),
         max_requests_per_run=max_requests,
     )
 

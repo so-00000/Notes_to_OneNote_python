@@ -1,0 +1,1622 @@
+<!-- source_dxl: C:\Users\SLY\Documents\Python実験\Python - OneNote\Git\Notes_to_OneNote_python\scripts\target_form\FORM_Call2024.nsf_Call4.dxl -->
+
+<link rel="stylesheet" href="../../../FORM_gen_form_template.css" />
+<div class="notes-form" data-design="コール受付(改4) (Call4)">
+  <div class="notes-section">
+
+    <div class="notes-section-body">
+      <div class="notes-par">
+        <span class="notes-field-wrap">
+          <span class="notes-field">{{Title}}</span>
+        </span>
+      </div>
+
+      <p>　</p>
+
+      <div class="notes-par">
+        <span class="notes-field-wrap">
+          ユーザー番号：
+          <span class="notes-field">{{customerno}}</span>
+        </span>
+      </div>
+
+      <div class="notes-par">
+        <span class="notes-field-wrap">
+          会社CD：
+          <span class="notes-field">{{customercompanycd}}</span>
+        </span>
+      </div>
+
+      <p>　</p>
+
+      <table class="notes-table">
+
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              問合せ発生時間
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap">
+                <span class="notes-field">{{SDATE_Y}}</span>/<span class="notes-field">{{SDATE_M}}</span>/<span class="notes-field">{{SDATE_D}}</span>
+                 
+                <span class="notes-field">{{STIME_H}}</span>:<span class="notes-field">{{STIME_M}}</span>
+              </span>
+            </div>
+          </td>
+          <!-- 空セル -->
+          <td class="notes-table-cell">
+            <p>&nbsp;</p>
+          </td>
+          <!-- 空セル -->
+          <td class="notes-table-cell">
+            <p>&nbsp;</p>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              対応開始時間
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap">
+                <span class="notes-field">{{TDATE_Y}}</span>/<span class="notes-field">{{TDATE_M}}</span>/<span class="notes-field">{{TDATE_D}}</span>
+                 
+                <span class="notes-field">{{TTIME_H}}</span>:<span class="notes-field">{{TTIME_M}}</span>
+              </span>
+            </div>
+          </td>
+          <!-- 空セル -->
+          <td class="notes-table-cell">
+            <p>&nbsp;</p>
+          </td>
+          <!-- 空セル -->
+          <td class="notes-table-cell">
+            <p>&nbsp;</p>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              事業所名
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{customername}}</span></span>
+            </div>
+          </td>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              事業所名（カナ）
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{kana}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              所属
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{sec1}}</span></span>
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{SEC2}}</span></span>
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{SEC3}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              住所
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{ADDRESS1}}</span></span>
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{ADDRESS2}}</span></span>
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{ADDRESS3}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              電話
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{tel}}</span></span>
+            </div>
+          </td>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              部門名
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{BUMON}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              ＦＡＸ
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{fax}}</span></span>
+            </div>
+          </td>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              会社区分
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{KAISHA}}</span></span>
+            </div>
+          </td>
+        </tr>
+      </table>
+
+      <p>　</p>
+
+      <table class="notes-table">
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              問合せ者氏名
+              <br/>
+              （漢字）
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{customername_1}}</span></span>
+            </div>
+          </td>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              問合せ者氏名
+              <br/>
+              （カナ）
+            </div>
+          </td>
+
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{customername_2}}</span></span>
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              問合せ者ユーザーID
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{customerID}}</span></span>
+            </div>
+          </td>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              連絡先
+              <br/>
+              （携帯電話/内線）
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{customerkeitai}}</span></span>
+            </div>
+          </td>
+        </tr>
+      </table>
+
+      <div>
+        <br/>  
+      </div>
+      <br/>
+      
+      <table style="border-collapse: collapse; width: 800px;">
+        <tr>
+          <td style="background: #f3e7c9; padding: 6px 8px; font-weight: bold; font-size: 16pt;">
+            一次対応
+          </td>
+        </tr>
+      </table>
+
+      <br/>
+
+      <div class="notes-par">
+        一次　問合せ内容
+      </div>
+
+      <table class="notes-table">
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              質問概要
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{outline}}</span></span>
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              問合せ内容
+              <br/>
+              （詳細）
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{inquiry}}</span></span>
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              対応内容/最終回答
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{answer}}</span></span>
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              対応時間
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{JIKAN}}</span><span>分</span></span>
+            </div>
+            <span>【ログ送信日時】</span>
+
+            <span class="notes-par">
+              <span class="notes-field-wrap">
+                <span class="notes-field">{{JDATE_Y}}</span>/<span class="notes-field">{{JDATE_M}}</span>/<span class="notes-field">{{JDATE_D}}</span>
+                 
+                <span class="notes-field">{{JTIME_H}}</span>:<span class="notes-field">{{JTIME_M}}</span>
+              </span>
+            </span>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              調査時間
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap">
+                <span class="notes-field">{{JIKAN_2}}</span><span>分</span>
+              </span>
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              追加対応者
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span>対応時間：</span><span class="notes-field-wrap"><span class="notes-field">{{JIKAN_3}}</span><span>分</span></span>
+              <span>　調査時間：</span><span class="notes-field-wrap"><span class="notes-field">{{JIKAN_4}}</span><span>分</span></span>
+              <span>　ログチェック：</span><span class="notes-field-wrap"><span class="notes-field">{{JIKAN_5}}</span><span>分</span></span>              
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              対応完了日時
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap">
+                <span class="notes-field">{{EDATE_Y}}</span>/<span class="notes-field">{{EDATE_M}}</span>/<span class="notes-field">{{EDATE_D}}</span>
+                 
+                <span class="notes-field">{{ETIME_H}}</span>:<span class="notes-field">{{ETIME_M}}</span>
+              </span>
+            </div>
+          </td>
+        </tr>
+      </table>
+      
+      <br/>
+
+      <div class="notes-par">
+        ＜対象者情報＞
+      </div>
+      <table class="notes-table">
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              対象者氏名
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{name}}</span></span>
+            </div>
+          </td>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              ADユーザーID
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{ADID}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              コンピューター名
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{pc_name}}</span></span>
+            </div>
+          </td>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              メールアドレス
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{MailAddress}}</span></span>
+            </div>
+          </td>
+        </tr>
+      </table>
+      
+      <br/>
+      
+      <div class="notes-par">
+        ＜Office365情報＞
+      </div>
+      <table class="notes-table">
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              Offife365ライセンス
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{O365License}}</span></span>
+            </div>
+          </td>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              Outlook使用アプリ
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{OutlookApri}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              利用環境_端末
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{plathome}}</span></span>
+            </div>
+          </td>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              スマートデバイス回線番号
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{mobile_tel_no}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              利用環境_種類
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap">
+                <span class="notes-field">
+                  {{O365SYURUI}}
+                </span>
+              </span>
+              (
+              <span class="notes-field-wrap">
+                <span class="notes-field">{{BROWSER}}</span>
+              </span>
+              )
+            </div>
+          </td>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              実施作業
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{SAGYO}}</span></span>
+            </div>
+          </td>
+        </tr>
+      </table>
+
+      <br/>
+
+      <table class="notes-table">
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              問合せ種別
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{category1}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              問合せチャネル
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{category5}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              問合せ内容
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap">
+                <div class="notes-field">{{category3}}</div>
+                <div class="notes-field">{{category4}}</div>
+                <div class="notes-field">{{category6}}</div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              サポートデスク
+              <br/>
+              ＤＢ
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              カテゴリ１： <span class="notes-field-wrap"><span class="notes-field">{{S_Category1}}</span></span>
+            </div>
+            <div class="notes-par">
+              カテゴリ２： <span class="notes-field-wrap"><span class="notes-field">{{S_Category2}}</span></span>
+            </div>
+            <div class="notes-par">
+              カテゴリ３： <span class="notes-field-wrap"><span class="notes-field">{{S_Category3}}</span></span>
+            </div>
+            <div class="notes-par">
+              件名： <span class="notes-field-wrap"><span class="notes-field">{{S_Outline}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              ヘルプマニュアル
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              カテゴリ１： <span class="notes-field-wrap"><span class="notes-field">{{H_Category1}}</span></span>
+            </div>
+            <div class="notes-par">
+              カテゴリ２： <span class="notes-field-wrap"><span class="notes-field">{{H_Category2}}</span></span>
+            </div>
+            <div class="notes-par">
+              件名： <span class="notes-field-wrap"><span class="notes-field">{{H_Outline}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              関連部門の
+            </div>
+            <div class="notes-par">
+              ｴｽｶﾚｰｼｮﾝ先
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              システム名： <span class="notes-field-wrap"><span class="notes-field">{{Escalation_1}}</span></span>
+            </div>
+
+            <div class="notes-par">
+              送信先の宛先： <span class="notes-field-wrap"><span class="notes-field">{{SSendTo_1}}</span></span>
+            </div>
+
+            <div class="notes-par">
+              送信先のCC： <span class="notes-field-wrap"><span class="notes-field">{{SCC_1}}</span></span>
+            </div>
+
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              対応依頼先
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{Escalation_0_1}}</span></span>
+            </div>
+          </td>
+        </tr>
+      </table>
+
+      <br/>
+
+      <table class="notes-table">
+        <tr>
+          <td class="notes-table-cell notes-table-hd-gray">
+            <div class="notes-par">
+              Hardware
+            </div>
+          </td>
+          <td class="notes-table-cell notes-table-hd-gray">
+            &nbsp;
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              メーカー
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{HW}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              製品名
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{SEIHIN}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              製造番号
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{PCSN}}</span></span>
+            </div>
+          </td>
+        </tr>
+      </table>
+
+      <p>　</p>
+      
+      <div class="notes-par">
+        <span class="notes-field-wrap"><span class="notes-field">{{TRWORK}}</span></span>
+      </div>
+
+      <p>　</p>
+
+      <table class="notes-table">
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              再ｲﾝｽﾄｰﾙ
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              送付到着確認日：
+              <span class="notes-field-wrap">
+                <span class="notes-field">{{PCYY}}</span>/<span class="notes-field">{{PCMY}}</span>/<span class="notes-field">{{PCDY}}</span>
+              </span>
+            </div>
+            <div class="notes-par">
+              作業者：<span class="notes-field-wrap"><span class="notes-field">{{saitan}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              完了ﾀｲﾌﾟ
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{statusTYPE}}</span></span>
+            </div>
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{MEKER_K}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              対応状況
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{status}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              担当者
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap">
+                <span class="notes-field">{{acc_main}}</span>
+              </span>
+            </div>
+            <div class="notes-par">
+              受付：
+              <span class="notes-field-wrap">
+                <span class="notes-field">{{create_name}}</span>
+              </span>
+            </div>
+            <div class="notes-par">
+              前回対応：
+              <span class="notes-field-wrap">
+                <span class="notes-field">{{acc_name}}</span>
+              </span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              承認者
+            </div>
+          </td>
+          <td class="notes-table-cell">
+
+            <div class="notes-par">
+              <span class="notes-field-wrap">
+                <span class="notes-field">{{Escalation_Approve_1}}</span>
+              </span>
+            </div>
+            <div class="notes-par">
+              <span class="notes-field-wrap">
+                <span class="notes-field">{{ESDATE_Y_1}}</span>/<span class="notes-field">{{ESDATE_M_1}}</span>/<span class="notes-field">{{ESDATE_D_1}}</span>
+                 
+                <span class="notes-field">{{ESTIME_H_1}}</span>:<span class="notes-field">{{ESTIME_M_1}}</span>
+              </span>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div>
+    <br/>  
+  </div>
+  <br/>
+
+  <div class="notes-section">
+    <div class="notes-section-body">      
+      <table style="border-collapse: collapse; width: 800px;">
+        <tr>
+          <td style="background: #f3e7c9; padding: 6px 8px; font-weight: bold; font-size: 16pt;">
+            関連部門
+          </td>
+        </tr>
+      </table>
+
+      <br/>
+
+      <div class="notes-par">
+        区分： <span class="notes-field-wrap"><span class="notes-field">{{Third_Type}}</span></span>
+      </div>
+
+      <br/>
+
+      <div class="notes-par">
+        関連部門　問い合わせ内容
+      </div>      
+      <table class="notes-table">
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              担当者
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{Third_Person}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              所属部署
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{Third_Dept}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              連絡先
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{Third_Contact}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              受付日時
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap">
+                <span class="notes-field">{{SDATE_Y_2}}</span>/<span class="notes-field">{{SDATE_M_2}}</span>/<span class="notes-field">{{SDATE_D_2}}</span>
+                 
+                <span class="notes-field">{{STIME_H_2}}</span>:<span class="notes-field">{{STIME_M_2}}</span>
+              </span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              中間回答日時
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap">
+                <span class="notes-field">{{CDATE_Y_2}}</span>/<span class="notes-field">{{CDATE_M_2}}</span>/<span class="notes-field">{{CDATE_D_2}}</span>
+                 
+                <span class="notes-field">{{CTIME_H_2}}</span>:<span class="notes-field">{{CTIME_M_2}}</span>
+              </span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              途中経過内容
+            </div>
+            <div class="notes-par">
+              （作業内容）
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{Third_half}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              最終回答日時
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap">
+                <span class="notes-field">{{EDATE_Y_2}}</span>/<span class="notes-field">{{EDATE_M_2}}</span>/<span class="notes-field">{{EDATE_D_2}}</span>
+                 
+                <span class="notes-field">{{ETIME_H_2}}</span>:<span class="notes-field">{{ETIME_M_2}}</span>
+              </span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              回答内容
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{Third_answer}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              問合せ種別
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{Second_category1}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              問合せ内容
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{Second_category2}}</span></span>
+            </div>
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{Second_category3}}</span></span>
+            </div>
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{Second_category4}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              対応時間
+            </div>
+            <div class="notes-par">
+              調査時間
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"
+                ><span
+                  class="notes-field"
+                  >{{JIKAN_2_1}}</span
+                ></span
+              分
+            </div>
+            <div class="notes-par">
+              <span class="notes-field-wrap"
+                ><span
+                  class="notes-field"
+                  >{{JIKAN_2_2}}</span
+                ></span
+              分
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              障害
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{Trouble_2}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              上長コメント
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{Third_comment}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              上長承認
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap">
+                <span class="notes-field">{{Trouble_Approve_2}}</span>
+              </span>
+            </div>
+            <div class="notes-par">
+              <span class="notes-field-wrap">
+                <span class="notes-field">{{ADATE_Y_2}}</span>/<span class="notes-field">{{ADATE_M_2}}</span>/<span class="notes-field">{{ADATE_D_2}}</span>
+                
+                <span class="notes-field">{{ATIME_H_2}}</span>:<span class="notes-field">{{ATIME_M_2}}</span>
+              </span>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div>
+    <br/>  
+  </div>
+  <br/>
+      
+  <table style="border-collapse: collapse; width: 800px;">
+    <tr>
+      <td style="background: #f3e7c9; padding: 6px 8px; font-weight: bold; font-size: 16pt;">
+        トラブルチケット
+      </td>
+    </tr>
+  </table>
+
+  <br/>
+
+  <div class="notes-par">
+    トラブルチケット（有無：
+    <span class="notes-field-wrap"><span class="notes-field">{{TRUMU}}</span>
+    </span>
+    ）
+  </div>
+
+  <br/>
+
+  <table class="notes-table">
+    <tr>
+      <td class="notes-table-cell notes-table-hd-blue">
+        <div class="notes-par">
+          障害個所
+        </div>
+      </td>
+      <td class="notes-table-cell">
+        <div class="notes-par">
+          <span class="notes-field-wrap"><span class="notes-field">{{KOSHO}}</span></span>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+  <br/>
+
+  <div class="notes-section">
+    <div class="notes-section-body">
+      <div class="notes-par">
+        （保守対応依頼）
+      </div>
+      <table class="notes-table">
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              会社名
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{TRMAKER}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              部署名
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{TRKBUSYO}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              担当者名
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{TRTANTO}}</span></span>
+              様
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              ＦＡＸ
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{TRFAX}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              ＴＥＬ
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{TRTEL}}</span></span>
+            </div>
+          </td>
+        </tr>
+      </table>
+      
+      <br/>
+
+      <table class="notes-table">
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              チケット№
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{TRNO}}</span></span>
+            </div>
+          </td>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              ＯＳ
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{TROS}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              対象機種名
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{TRKISYU}}</span></span>
+            </div>
+          </td>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              品番(S/N)
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{TRSN}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              導入時期
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{TRJIKI}}</span></span>
+            </div>
+          </td>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              備考
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{TRBIKOU}}</span></span>
+            </div>
+          </td>
+        </tr>
+      </table>
+
+      <br/>
+
+      <div class="notes-par">
+        （ユーザー情報）
+      </div>
+
+      <table class="notes-table">
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              氏名
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{TRYNAME}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              ＴＥＬ
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{TRYTEL}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              会社名
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{TRYKAISHA}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              事業所名
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{TRYJIGYOU}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              住所
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{TRYADDRESS}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              障害内容
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{TRYNAIYO}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              備考
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{TRYBIKOU}}</span></span>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div>
+    <br/>  
+  </div>
+  <br/>
+      
+  <table style="border-collapse: collapse; width: 800px;">
+    <tr>
+      <td style="background: #f3e7c9; padding: 6px 8px; font-weight: bold; font-size: 16pt;">
+        ＰＣ再セットアップ
+      </td>
+    </tr>
+  </table>
+
+  <br/>
+
+  <div class="notes-par">
+    ＰＣ再セットアップ（有無：
+    <span class="notes-field-wrap">
+      <span class="notes-field">{{PCUMU}}</span>
+    </span>
+    ）
+  </div>
+  
+  <br/>
+
+  <div class="notes-section">
+    <div class="notes-section-body">
+      <div class="notes-par">
+        （ＰＣユーザー）
+      </div>
+      <table class="notes-table">
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              氏名
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"
+                ><span
+                  class="notes-field"
+                  >{{PCNAME}}</span
+                ></span
+              様
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              会社名
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{PCKAISHA}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              事業所名
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{PCJIGYOU}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              住所
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{PCADDRESS}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              ＴＥＬ
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{PCTEL}}</span></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              ＦＡＸ
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{PCFAX}}</span></span>
+            </div>
+          </td>
+        </tr>
+      </table>
+      
+      <br/>
+
+      <table class="notes-table">
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              使用ツール
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap">
+                <span class="notes-field">{{TOOL}}</span>
+              </span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              備考
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap">
+                <span class="notes-field">{{BIKOU}}</span>
+              </span>
+            </div>
+          </td>
+        </tr>
+      </table>
+
+      <br/>
+
+      <table class="notes-table">
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              パソコン返送日
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap">
+                <span class="notes-field">{{PCYH}}</span>
+              </span>
+              <span class="notes-field-wrap">
+                <span class="notes-field">{{PCMH}}</span>
+              </span>
+              <span class="notes-field-wrap">
+                <span class="notes-field">{{PCDH}}</span>
+              </span>
+            </div>
+          </td>
+        </tr>
+      </table>
+
+      <br/>
+
+      <div class="notes-par">
+        （再セットアップ関係者）
+      </div>
+      <table class="notes-table">
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              １
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{KANKEI1}}</span></span>
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap">
+                <span class="notes-field">{{KANJIKAN1}}</span>
+              </span>
+              <span class="notes-field-wrap">
+                <span class="notes-field">{{HDATE1}}</span>
+              </span>
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              ２
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{KANKEI2}}</span></span>
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap">
+                <span class="notes-field">{{KANJIKAN2}}</span>
+              </span>
+              <span class="notes-field-wrap">
+                <span class="notes-field">{{HDATE2}}</span>
+              </span>
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="notes-table-cell notes-table-hd-blue">
+            <div class="notes-par">
+              ３
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap"><span class="notes-field">{{KANKEI3}}</span></span>
+            </div>
+          </td>
+          <td class="notes-table-cell">
+            <div class="notes-par">
+              <span class="notes-field-wrap">
+                <span class="notes-field">{{KANJIKAN3}}</span>
+              </span>
+              <span class="notes-field-wrap">
+                <span class="notes-field">{{HDATE3}}</span>
+              </span>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div>
+    <br/>  
+  </div>
+  <br/>
+  
+  <table style="border-collapse: collapse; width: 800px;">
+    <tr>
+      <td style="background: #f3e7c9; padding: 6px 8px; font-weight: bold; font-size: 16pt;">
+
+      </td>
+    </tr>
+  </table>
+
+  <br/>
+  
+  <div class="notes-section">
+    <div class="notes-section-body">
+      <div class="notes-section-title">対応メモ</div>
+      <br/>
+      <div class="notes-par">
+        <span class="notes-field-wrap"><span class="notes-field">{{Memo}}</span></span>
+      </div>
+    </div>
+  </div>
+
+  <br/>
+
+  <div class="notes-section">
+    <div class="notes-section-body">
+      <div class="notes-section-title">添付資料</div>
+
+      <p>　</p>
+
+      <div class="notes-par">
+        PC修理<span class="notes-field-wrap"><span class="notes-field">{{body_1}}</span></span>
+      </div>
+
+      <p>　</p>
+
+      <div class="notes-par">
+        関連ｺｰﾙ<span class="notes-field-wrap"><span class="notes-field">{{body}}</span></span>
+      </div>
+    </div>
+  </div>
+
+  <br/>
+
+  <div class="notes-section">
+    <div class="notes-section-body">
+      <div class="notes-section-title">履歴情報</div>
+      
+      <p>　</p>
+
+      <div class="notes-par">
+        <span class="notes-field-wrap"><span class="notes-field">{{history}}</span></span>
+      </div>
+    </div>
+  </div>
+</div>

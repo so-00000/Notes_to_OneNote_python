@@ -1,4 +1,5 @@
 main/ignore_git/token.py
+main/ignore_git/msal_token_cache.json
 main/1_target_dxl/
 __pycache__/
 target_dxl/

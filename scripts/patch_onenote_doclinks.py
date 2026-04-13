@@ -8,8 +8,8 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from main.ignore_git import token
 from main.models.models import DocLinkPlaceholder
+from main.services.graph_auth import build_access_token_provider
 from main.services.graph_client import GraphClient
 
 
@@ -49,11 +49,7 @@ def main() -> int:
     log = _load_log(log_path)
     doc_index = _build_doc_index(log)
 
-    access_token = token.ACCESS_TOKEN
-    if not access_token or not access_token.strip():
-        raise RuntimeError("ACCESS_TOKEN is empty.")
-
-    client = GraphClient(access_token)
+    client = GraphClient(build_access_token_provider())
     patched = 0
 
     try:

@@ -1,0 +1,132 @@
+{
+  "version": 1,
+  "generated_at": "2026-03-05T19:37:02",
+  "view_folder": "VwSyogai_11ALL",
+  "views": {
+    "Vw_Syogai_11ALL": {
+      "source_csv": "VwSyogai_11ALL.csv",
+      "view_columns": [
+        {
+          "column_index": 1,
+          "item_name": "DocumentDate",
+          "output_key": "documentdate",
+          "logical_name": "日付"
+        },
+        {
+          "column_index": 2,
+          "item_name": "DocumentNo",
+          "output_key": "documentno",
+          "logical_name": "No."
+        },
+        {
+          "column_index": 3,
+          "item_name": "EntryUser",
+          "output_key": "entryuser",
+          "logical_name": "入力者"
+        },
+        {
+          "column_index": 4,
+          "item_name": "System",
+          "output_key": "system",
+          "logical_name": "分類２"
+        },
+        {
+          "column_index": 5,
+          "item_name": "SubSystem",
+          "output_key": "subsystem",
+          "logical_name": "分類３"
+        },
+        {
+          "column_index": 6,
+          "item_name": "Syogai_ck",
+          "output_key": "syogai_ck",
+          "logical_name": "分類４"
+        },
+        {
+          "column_index": 7,
+          "item_name": "Fd_Text_1",
+          "output_key": "fd_text_1",
+          "logical_name": "件名"
+        },
+        {
+          "column_index": 8,
+          "item_name": "WorkTime",
+          "output_key": "worktime",
+          "logical_name": "分数"
+        },
+        {
+          "column_index": 9,
+          "item_name": "Status",
+          "output_key": "status",
+          "logical_name": "状態"
+        },
+        {
+          "column_index": 10,
+          "item_name": "DocumentDate",
+          "output_key": "documentdate_2",
+          "logical_name": "発生日"
+        },
+        {
+          "column_index": 11,
+          "item_name": "ReplyDate",
+          "output_key": "replydate",
+          "logical_name": "完了日"
+        },
+        {
+          "column_index": 12,
+          "item_name": "Temporary_Comp",
+          "output_key": "temporary_comp",
+          "logical_name": "暫定発生日"
+        },
+        {
+          "column_index": 13,
+          "item_name": "Temporary_Plan",
+          "output_key": "temporary_plan",
+          "logical_name": "暫定完了日"
+        },
+        {
+          "column_index": 14,
+          "item_name": "Parmanet_Plan",
+          "output_key": "parmanet_plan",
+          "logical_name": "恒久予定日"
+        },
+        {
+          "column_index": 15,
+          "item_name": "Parmanet_Comp",
+          "output_key": "parmanet_comp",
+          "logical_name": "恒久完了日"
+        },
+        {
+          "column_index": 16,
+          "item_name": "Ask",
+          "output_key": "ask",
+          "logical_name": "依頼部署"
+        },
+        {
+          "column_index": 17,
+          "item_name": "Task",
+          "output_key": "task",
+          "logical_name": "処理名"
+        },
+        {
+          "column_index": 18,
+          "item_name": "Measure",
+          "output_key": "measure",
+          "logical_name": "対応区分"
+        },
+        {
+          "column_index": 19,
+          "item_name": "Fd_Id_1",
+          "output_key": "fd_id_1",
+          "logical_name": "影響範囲"
+        },
+        {
+          "column_index": 20,
+          "item_name": "Measure",
+          "output_key": "measure_2",
+          "logical_name": ""
+        }
+      ]
+    }
+  }
+}

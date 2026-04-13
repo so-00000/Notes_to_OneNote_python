@@ -35,9 +35,9 @@ _SETTINGS: dict[DataType, DataTypeSettings] = {
     ),
     
     DataType.CALL2024: DataTypeSettings(
-        label="CallDB2024",
+        label="UserCall2024",
         view_name="2024_基本担当者別日付別全ｺｰﾙ",
-        dxl_dir="1_target_dxl/Call2024/",
+        dxl_dir="1_target_dxl/UserCall2024/",
         template_html_path="resources/templates/call_gen/Call4/",
         fields_json_path="resources/forms/call_gen/Call4/",
         title_field="outline",

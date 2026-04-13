@@ -14,8 +14,9 @@ import requests
 import logging
 
 from main.ignore_git.connection import GRAPH_ONENOTE_BASE_URL
-from main.models.models import PagePayload, Segment
 from main.logging.graph_logging import mask_headers, summarize_request_kwargs, truncate_text
+from main.models.models import PagePayload, Segment
+from main.services.graph_auth import AccessTokenProvider, StaticAccessTokenProvider
 from main.services.segments_body import _inject_first_segments
 from main.services.layout_constants import (
     LEGACY_CONTENT_WIDTH,
@@ -23,13 +24,12 @@ from main.services.layout_constants import (
     MAX_CONTENT_WIDTH,
     MAX_CONTENT_WIDTH_PX,
 )
+from main.services.onenote_limits import MAX_GRAPH_MULTIPART_PART_BYTES
 import json
 from typing import List
 
 MultipartPart = Tuple[str, bytes, str]  # (filename, content, content_type)
 MAX_MULTIPART_BINARY_PARTS = 5
-MAX_GRAPH_MULTIPART_REQUEST_BYTES = 3_500_000
-MAX_GRAPH_MULTIPART_PART_BYTES = 25 * 1024 * 1024
 
 
 class RateLimitExceededError(RuntimeError):
@@ -82,13 +82,16 @@ class GraphClient:
 
     def __init__(
         self,
-        access_token: str,
+        access_token: str | AccessTokenProvider,
         *,
         session: Optional[requests.Session] = None,
         retry_policy: Optional[GraphRetryPolicy] = None,
         max_requests_per_run: Optional[int] = None,
     ) -> None:
-        self._access_token = access_token
+        if isinstance(access_token, str):
+            self._token_provider: AccessTokenProvider = StaticAccessTokenProvider(access_token)
+        else:
+            self._token_provider = access_token
         self._session = session or requests.Session()
         self._owns_session = session is None
         self._retry = retry_policy or GraphRetryPolicy()
@@ -107,12 +110,10 @@ class GraphClient:
         segments: List[Segment],
         *,
         max_bin_per_request: int = MAX_MULTIPART_BINARY_PARTS,
-        max_request_bytes: int = MAX_GRAPH_MULTIPART_REQUEST_BYTES,
         request_overhead_bytes: int,
     ) -> list[List[Segment]]:
         chunks: list[list[Segment]] = []
         current: list[Segment] = []
-        current_bytes = request_overhead_bytes
 
         for seg in segments:
             seg_bytes = self._segment_payload_size(seg)
@@ -122,21 +123,12 @@ class GraphClient:
                     f"({seg.binary_part.filename}: {seg_bytes} bytes > {MAX_GRAPH_MULTIPART_PART_BYTES} bytes)."
                 )
 
-            if seg_bytes + request_overhead_bytes > max_request_bytes:
-                raise ValueError(
-                    "Binary part exceeds safe Microsoft Graph OneNote multipart request size "
-                    f"({seg.binary_part.filename}: {seg_bytes} bytes)."
-                )
-
             would_exceed_part_count = len(current) >= max_bin_per_request
-            would_exceed_request_size = current_bytes + seg_bytes > max_request_bytes
-            if current and (would_exceed_part_count or would_exceed_request_size):
+            if current and would_exceed_part_count:
                 chunks.append(current)
                 current = []
-                current_bytes = request_overhead_bytes
 
             current.append(seg)
-            current_bytes += seg_bytes
 
         if current:
             chunks.append(current)
@@ -243,7 +235,7 @@ class GraphClient:
     def _merged_headers(self, headers: Optional[dict]) -> dict:
         # Authorization は常に現在のアクセストークンで上書きする。
         merged = dict(headers or {})
-        merged["Authorization"] = f"Bearer {self._access_token}"
+        merged["Authorization"] = f"Bearer {self._token_provider.get_access_token()}"
         return merged
     def _request_with_retry(
         self,
@@ -367,6 +359,46 @@ class GraphClient:
                     elapsed_ms,
                     truncate_text(resp.text, limit=500),
                 )
+                refreshed_headers = dict(headers or {})
+                refreshed_headers["Authorization"] = (
+                    f"Bearer {self._token_provider.get_access_token(force_refresh=True)}"
+                )
+                refresh_start = time.perf_counter()
+                refresh_resp = self._session.request(
+                    method,
+                    url,
+                    headers=refreshed_headers,
+                    **request_kwargs,
+                )
+                self._request_count += 1
+                refresh_elapsed_ms = int((time.perf_counter() - refresh_start) * 1000)
+                self._append_request_count_log(
+                    method=method,
+                    url=url,
+                    status=refresh_resp.status_code,
+                    elapsed_ms=refresh_elapsed_ms,
+                )
+                if refresh_resp.status_code != 401:
+                    try:
+                        refresh_resp.raise_for_status()
+                    except Exception:
+                        self._logger.error(
+                            "Graph request failed after token refresh: %s %s status=%s elapsed=%sms body=%s",
+                            method,
+                            url,
+                            refresh_resp.status_code,
+                            refresh_elapsed_ms,
+                            truncate_text(refresh_resp.text, limit=1000),
+                        )
+                        raise
+                    self._logger.info(
+                        "Graph request success after token refresh: %s %s status=%s elapsed=%sms",
+                        method,
+                        url,
+                        refresh_resp.status_code,
+                        refresh_elapsed_ms,
+                    )
+                    return refresh_resp
                 raise RuntimeError("401 Unauthorized. Access token expired/invalid.")
 
             try:
@@ -466,6 +498,23 @@ class GraphClient:
         """GETしてJSONレスポンスを返す。"""
         return self._request_json("GET", url).json()
 
+    def post_json(
+        self,
+        url: str,
+        *,
+        json_body: Optional[Any] = None,
+        headers: Optional[dict] = None,
+        params: Optional[Mapping[str, Any]] = None,
+    ) -> dict:
+        """POSTしてJSONレスポンスを返す。"""
+        return self._request_json(
+            "POST",
+            url,
+            json_body=json_body,
+            headers=headers,
+            params=params,
+        ).json()
+
     def get_onenote_page_content(self, page_id: str) -> str:
         """OneNoteページ本文をHTML文字列として取得する。"""
         url = f"{GRAPH_ONENOTE_BASE_URL}/pages/{quote(page_id)}/content"
@@ -475,6 +524,18 @@ class GraphClient:
     def delete(self, url: str) -> None:
         """DELETEリクエストを送信する。"""
         self._request_json("DELETE", url)
+
+    def create_onenote_section(
+        self,
+        *,
+        notebook_id: str,
+        section_name: str,
+    ) -> dict:
+        url = f"{GRAPH_ONENOTE_BASE_URL}/notebooks/{quote(notebook_id)}/sections"
+        return self.post_json(
+            url,
+            json_body={"displayName": section_name},
+        )
 
 
 

@@ -11,7 +11,6 @@ from typing import List, Literal
 
 @dataclass(frozen=True)
 class AppSettings:
-    access_token: str   # Graph API 呼び出しに使うアクセストークン
     notebook_name: str  # 対象の OneNote ノートブック名
     section_name: str   # 対象の OneNote セクション名
     view_name: str      # 現在のデータ種別に対応するビュー名

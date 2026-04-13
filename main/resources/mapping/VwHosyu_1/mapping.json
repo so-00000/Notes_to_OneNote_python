@@ -50,24 +50,36 @@
         },
         {
           "column_index": 9,
+          "item_name": "DetailSubject",
+          "output_key": "detailsubject",
+          "logical_name": "依頼内容（概要）"
+        },
+        {
+          "column_index": 10,
+          "item_name": "MaintenanceSubject",
+          "output_key": "maintenancesubject",
+          "logical_name": "対応詳細（概要）"
+        },
+        {
+          "column_index": 11,
           "item_name": "DocumentDate",
           "output_key": "documentdate_2",
           "logical_name": "発生日"
         },
         {
-          "column_index": 10,
+          "column_index": 12,
           "item_name": "Release_Plan",
           "output_key": "release_plan",
           "logical_name": "完了予定日"
         },
         {
-          "column_index": 11,
+          "column_index": 13,
           "item_name": "Release_Comp",
           "output_key": "release_comp",
           "logical_name": "完了実績日"
         },
         {
-          "column_index": 12,
+          "column_index": 14,
           "item_name": "Ask",
           "output_key": "ask",
           "logical_name": "依頼部署"

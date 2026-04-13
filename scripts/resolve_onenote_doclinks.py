@@ -9,9 +9,9 @@ import time
 from dataclasses import dataclass
 from html.parser import HTMLParser
 from pathlib import Path
+from pprint import pprint
 from typing import Optional
 from urllib.parse import urlparse
-from pprint import pprint
 
 import requests
 
@@ -20,7 +20,7 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from main.data_type_config import get_data_type_settings
-from main.ignore_git import token
+from main.services.graph_auth import build_access_token_provider
 from main.services.graph_client import GraphClient
 
 NO_LINK = "NO_LINK"
@@ -51,7 +51,6 @@ class _DocLinkHtmlParser(HTMLParser):
             parsed = urlparse(href)
             if parsed.scheme.lower() != "notes":
                 return "", ""
-            # path starts with '/replica/view/unid'
             segs = [s for s in parsed.path.split("/") if s]
             if len(segs) < 3:
                 return "", ""
@@ -123,7 +122,6 @@ def _read_csv_rows(path: Path) -> tuple[list[str], list[dict[str, str]]]:
     for enc in ("utf-8", "utf-8-sig", "cp932"):
         try:
             with path.open("r", encoding=enc, newline="") as f:
-                # CSV読み込み。1行目：ヘッダー、2行目以降：データ（辞書形式）
                 reader = csv.DictReader(f)
                 return list(reader.fieldnames or []), list(reader)
         except UnicodeDecodeError:
@@ -163,6 +161,18 @@ def _load_mapping_headers(mapping_path: Path) -> list[str]:
                 headers.append(key)
                 seen.add(key)
     return headers
+
+
+def _build_source_to_web_url(doc_mapping_root: Path) -> dict[str, str]:
+    source_to_web_url: dict[str, str] = {}
+    for csv_path in sorted(doc_mapping_root.glob("*/migration_master.csv")):
+        _, rows = _read_csv_rows(csv_path)
+        for row in rows:
+            source_id = (row.get("source_id") or "").strip()
+            web_url = (row.get("onenote_web_url") or "").strip()
+            if source_id and web_url and source_id not in source_to_web_url:
+                source_to_web_url[source_id] = web_url
+    return source_to_web_url
 
 
 def _build_anchor_content(link: LinkRef, web_url: str) -> str:
@@ -217,34 +227,32 @@ def _get_page_content_with_retry(
 
 
 def main() -> int:
-
-    # 引数の処理
     parser = argparse.ArgumentParser()
-    parser.add_argument("--view-name", help="処理対象のViewフォルダ名。（デフォルト：DATA_TYPE settingで指定されているもの）")
-    parser.add_argument("--dry-run", action="store_true", help="処理対象となるページやリンク確認用。OneNoteやCSVの更新なし")
+    parser.add_argument(
+        "--view-name",
+        help="対象 View フォルダ名。未指定時は DATA_TYPE setting の view_name を使う。",
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="OneNote や CSV の更新は行わず、解決可否の確認だけ行う。",
+    )
     args = parser.parse_args()
 
-    # 処理対象のViewフォルダ名を取得
-    # （デフォルト：DATA_TYPE settingで指定されているもの）
     view_name = args.view_name or get_data_type_settings().view_name
 
-    # マッピングファイルのパス取得
     mapping_path = REPO_ROOT / "main" / "resources" / "mapping" / view_name / "mapping.json"
     if not mapping_path.exists():
         raise FileNotFoundError(f"mapping not found: {mapping_path}")
 
-    # CSVファイルのパス取得
     csv_path = REPO_ROOT / "main" / "doc_mapping" / view_name / "migration_master.csv"
     if not csv_path.exists():
         raise FileNotFoundError(f"migration_master not found: {csv_path}")
 
-
     headers, rows = _read_csv_rows(csv_path)
-    # ヘッダーが空（＝CSVが空）の場合はエラー
     if not headers:
         raise RuntimeError(f"CSV is empty: {csv_path}")
 
-    # マッピングファイルのヘッダー取得
     required_headers = _load_mapping_headers(mapping_path)
     for h in required_headers:
         if h not in headers:
@@ -252,16 +260,11 @@ def main() -> int:
     if "link_resolution_status" not in headers:
         headers.append("link_resolution_status")
 
-    # CSVから source_id → URL(Web) の対応表を作成（全行が対象）
-    source_to_web_url: dict[str, str] = {}
-    for row in rows:
-        source_id = (row.get("source_id") or "").strip()
-        web_url = (row.get("onenote_web_url") or "").strip()
-        if source_id and web_url:
-            source_to_web_url[source_id] = web_url
+    # リンク先参照は main/doc_mapping 配下の migration_master.csv を横断して解決する
+    doc_mapping_root = REPO_ROOT / "main" / "doc_mapping"
+    source_to_web_url = _build_source_to_web_url(doc_mapping_root)
     pprint(source_to_web_url)
 
-    # リンク未解決の行のみ抽出
     unresolved_rows = [
         row
         for row in rows
@@ -270,16 +273,12 @@ def main() -> int:
     print(f"[INFO] view={view_name} unresolved_pages={len(unresolved_rows)} total_rows={len(rows)}")
     pprint(unresolved_rows)
 
-
-    # アクセストークンの取得
-    access_token = token.ACCESS_TOKEN
-
     patched_pages = 0
     patched_links = 0
     unresolved_links = 0
     no_placeholder_links = 0
 
-    client = GraphClient(access_token)
+    client = GraphClient(build_access_token_provider())
     try:
         for row in unresolved_rows:
             source_id = (row.get("source_id") or "").strip()
@@ -331,7 +330,8 @@ def main() -> int:
                     HAS_LINK_RESOLVED if (missing == 0 and no_placeholder == 0) else HAS_LINK_UNRESOLVED
                 )
                 print(
-                    f"[PAGE] source_id={source_id} commands={len(commands)} replaced={replaced_refs} missing={missing} no_placeholder={no_placeholder} "
+                    f"[PAGE] source_id={source_id} commands={len(commands)} replaced={replaced_refs} "
+                    f"missing={missing} no_placeholder={no_placeholder} "
                     f"state={row['link_resolution_status']}"
                 )
             except Exception as exc:

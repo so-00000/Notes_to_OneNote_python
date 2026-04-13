@@ -45,6 +45,45 @@
   overflow-wrap: anywhere; */
 }
 
+
+.notes-inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25em;
+}
+
+.notes-inline .notes-field-wrap {
+  display: inline-block;
+  width: auto;
+}
+
+.notes-inline .notes-field {
+  display: inline-block;
+  width: auto;
+}
+
+.notes-par.notes-inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25em;
+}
+
+.notes-par.notes-inline .notes-field-wrap {
+  display: inline-block;
+  width: auto;
+  /* flex: 0 0 auto; */
+}
+
+.notes-par.notes-inline .notes-field {
+  display: inline-block;
+  width: auto;
+  min-width: 0;
+}
+
+
+
 /* テーブル */
 
 /* テーブル全体 */
@@ -125,4 +164,18 @@
 
 .notes-col-w300 {
   width: 300px;
+}
+
+/* .notes-section-title {
+  font-size: 16pt;
+  font-weight: bold;
+  background: #f3e7c9;
+  padding: 4px 8px;
+} */
+
+.notes-section-title {
+  font-size: 16pt;
+  font-weight: bold;
+  border-left: 6px solid #6fa3d6;
+  padding-left: 8px;
 }

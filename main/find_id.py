@@ -19,7 +19,7 @@ def find_notebook_id(client: GraphClient, notebook_name: str) -> str:
         raise RuntimeError(f"Notebook name is ambiguous (multiple found): {notebook_name}")
     return items[0]["id"]
 
-# notebookId・セクション名から、NotebookIdを取得する
+# notebookId・セクション名から、SectionIdを取得する
 def find_section_id(client: GraphClient, notebook_id: str, section_name: str) -> str:
     safe = section_name.replace("'", "''")
     url = (
@@ -29,7 +29,14 @@ def find_section_id(client: GraphClient, notebook_id: str, section_name: str) ->
     data = client.get_json(url)
     items = data.get("value", [])
     if not items:
-        raise RuntimeError(f"Section not found in notebook: {section_name}")
+        created = client.create_onenote_section(
+            notebook_id=notebook_id,
+            section_name=section_name,
+        )
+        section_id = str(created.get("id") or "").strip()
+        if not section_id:
+            raise RuntimeError(f"Section created but id missing: {section_name}")
+        return section_id
     if len(items) > 1:
         raise RuntimeError(f"Section name is ambiguous (multiple found): {section_name}")
     return items[0]["id"]

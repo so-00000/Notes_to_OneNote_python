@@ -50,81 +50,87 @@
         },
         {
           "column_index": 8,
+          "item_name": "DetailSubject",
+          "output_key": "detailsubject",
+          "logical_name": "内容（概要）"
+        },
+        {
+          "column_index": 9,
+          "item_name": "ReasonSubject",
+          "output_key": "reasonsubject",
+          "logical_name": "理由・原因（概要）"
+        },
+        {
+          "column_index": 10,
           "item_name": "WorkTime",
           "output_key": "worktime",
           "logical_name": "分数"
         },
         {
-          "column_index": 9,
+          "column_index": 11,
           "item_name": "Status",
           "output_key": "status",
           "logical_name": "状態"
         },
         {
-          "column_index": 10,
+          "column_index": 12,
           "item_name": "DocumentDate",
           "output_key": "documentdate_2",
           "logical_name": "発生日"
         },
         {
-          "column_index": 11,
+          "column_index": 13,
           "item_name": "ReplyDate",
           "output_key": "replydate",
           "logical_name": "完了日"
         },
         {
-          "column_index": 12,
+          "column_index": 14,
           "item_name": "Temporary_Comp",
           "output_key": "temporary_comp",
           "logical_name": "暫定発生日"
         },
         {
-          "column_index": 13,
+          "column_index": 15,
           "item_name": "Temporary_Plan",
           "output_key": "temporary_plan",
           "logical_name": "暫定完了日"
         },
         {
-          "column_index": 14,
+          "column_index": 16,
           "item_name": "Parmanet_Plan",
           "output_key": "parmanet_plan",
           "logical_name": "恒久予定日"
         },
         {
-          "column_index": 15,
+          "column_index": 17,
           "item_name": "Parmanet_Comp",
           "output_key": "parmanet_comp",
           "logical_name": "恒久完了日"
         },
         {
-          "column_index": 16,
+          "column_index": 18,
           "item_name": "Ask",
           "output_key": "ask",
           "logical_name": "依頼部署"
         },
         {
-          "column_index": 17,
+          "column_index": 19,
           "item_name": "Task",
           "output_key": "task",
           "logical_name": "処理名"
         },
         {
-          "column_index": 18,
+          "column_index": 20,
           "item_name": "Measure",
           "output_key": "measure",
           "logical_name": "対応区分"
         },
         {
-          "column_index": 19,
+          "column_index": 21,
           "item_name": "Fd_Id_1",
           "output_key": "fd_id_1",
           "logical_name": "影響範囲"
-        },
-        {
-          "column_index": 20,
-          "item_name": "Measure",
-          "output_key": "measure_2",
-          "logical_name": ""
         }
       ]
     }

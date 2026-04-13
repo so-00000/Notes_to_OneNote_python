@@ -591,7 +591,7 @@
       "shared": false
     },
     {
-      "name": "SEC1",
+      "name": "sec1",
       "type": "text",
       "kind": "editable",
       "allow_multivalues": null,
@@ -1151,8 +1151,6 @@
       "shared": false
     }
   ],
-  "missing_subforms": [
-    "SubUserInfo"
-  ],
+  "missing_subforms": ["SubUserInfo"],
   "field_count": 164
 }
