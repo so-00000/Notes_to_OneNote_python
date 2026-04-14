@@ -233,7 +233,9 @@ def _persist_migration_master_or_abort(
 
 
 def main() -> None:
-    setup_logging(level="DEBUG")
+
+    # # app.logへのログ出力
+    # setup_logging(level="DEBUG")
 
     settings = load_app_settings()
     work_items = _load_dxl_work_items(settings.dxl_dir)
