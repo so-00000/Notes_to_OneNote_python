@@ -5,11 +5,14 @@ import json
 from dataclasses import dataclass, asdict
 from datetime import datetime, timezone
 from pathlib import Path
+import sys
 import xml.etree.ElementTree as ET
 from typing import Dict, List, Optional, Set
 import re
 
 DXL_NS = {"dxl": "http://www.lotus.com/dxl"}
+SCRIPT_DIR = Path(__file__).resolve().parent
+DEFAULT_FORM_DXL_PATH = SCRIPT_DIR / "target_form" / "FORM_Call2024.nsf_Call4.dxl"
 NON_RENDER_TAGS = {
     "code",
     "formula",
@@ -694,18 +697,10 @@ class FormToHtml:
 
 
 def main() -> None:
-    # ==== Settings ====
-    form_dxl_path = Path(
-        # "C:/Users/SLY/Documents/Python実験/Python - OneNote/Git/Notes_to_OneNote_python/scripts/target_form/Call2024.nsf__FORM__Call4__20260119_173539.dxl"
-        # "C:/Users/SLY/Documents/Python実験/Python - OneNote/Git/Notes_to_OneNote_python/scripts/target_form/FORM_synhbe29.nsf_Fm_Document_2.dxl"
-        # "C:/Users/SLY/Documents/Python実験/Python - OneNote/Git/Notes_to_OneNote_python/scripts/target_form/FORM_synhbe29.nsf_Fm_Document_5.dxl"
-        # "C:/Users/SLY/Documents/Python実験/Python - OneNote/Git/Notes_to_OneNote_python/scripts/target_form/FORM_synhbe29.nsf_Fm_Document_3.dxl"
-
-        # "C:/Users/SLY/Documents/Python実験/Python - OneNote/Git/Notes_to_OneNote_python/scripts/target_form/FORM_Call2022.nsf_Call3.dxl"
-        # "C:/Users/SLY/Documents/Python実験/Python - OneNote/Git/Notes_to_OneNote_python/scripts/target_form/FORM_Call2021.nsf_Call3.dxl"
-
-        # "C:/Users/SLY/Documents/Python実験/Python - OneNote/Git/Notes_to_OneNote_python/scripts/target_form/FORM_Call2022.nsf_Call4.dxl"
-        "C:/Users/SLY/Documents/Python実験/Python - OneNote/Git/Notes_to_OneNote_python/scripts/target_form/FORM_Call2024.nsf_Call4.dxl"
+    form_dxl_path = (
+        Path(sys.argv[1]).expanduser().resolve()
+        if len(sys.argv) > 1
+        else DEFAULT_FORM_DXL_PATH
     )
     search_dir = form_dxl_path.parent
 
@@ -713,7 +708,7 @@ def main() -> None:
     conv = FormToHtml(root=root, search_dir=search_dir)
 
     body_html = conv.render_body()
-    source_comment = f"<!-- source_dxl: {form_dxl_path.resolve()} -->\n"
+    source_comment = f"<!-- source_dxl: {form_dxl_path.as_posix()} -->\n"
     body_html = source_comment + body_html
     body_html = _pretty_html(body_html)
 

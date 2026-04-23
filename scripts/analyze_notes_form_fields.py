@@ -4,11 +4,14 @@ from __future__ import annotations
 import csv
 from dataclasses import dataclass, asdict
 from pathlib import Path
+import sys
 import xml.etree.ElementTree as ET
 from typing import Dict, List, Optional, Set, Tuple
 
 
 DXL_NS = {"dxl": "http://www.lotus.com/dxl"}
+SCRIPT_DIR = Path(__file__).resolve().parent
+DEFAULT_DXL_PATH = SCRIPT_DIR / "target_form" / "FORM_Call2024.nsf_Call4.dxl"
 
 
 @dataclass
@@ -199,8 +202,11 @@ def write_csv(rows: List[FieldInfo], out_csv: Path) -> None:
 
 
 def main() -> None:
-    # ★ここを差し替えれば別フォームにも使える
-    dxl_path = Path(r"C:\Users\SLY\Documents\Python実験\Python - OneNote\Git\Notes_to_OneNote_python\scripts\target_form\Call2024.nsf__FORM__Call4__20260119_173539.dxl")
+    dxl_path = (
+        Path(sys.argv[1]).expanduser().resolve()
+        if len(sys.argv) > 1
+        else DEFAULT_DXL_PATH
+    )
 
     rows = analyze_form_dxl(dxl_path)
 
