@@ -29,6 +29,7 @@ from main.services.graph_client import GraphClient, RateLimitExceededError
 
 NO_LINK = "NO_LINK"
 HAS_LINK_UNRESOLVED = "HAS_LINK_UNRESOLVED"
+HAS_LINK_UNRESOLVED_CHECKED = "HAS_LINK_UNRESOLVED_CHECKED"
 HAS_LINK_RESOLVED = "HAS_LINK_RESOLVED"
 
 
@@ -479,7 +480,9 @@ def main() -> int:
                 unresolved_links += missing
                 no_placeholder_links += no_placeholder
                 row["link_resolution_status"] = (
-                    HAS_LINK_RESOLVED if (missing == 0 and no_placeholder == 0) else HAS_LINK_UNRESOLVED
+                    HAS_LINK_RESOLVED
+                    if (missing == 0 and no_placeholder == 0)
+                    else HAS_LINK_UNRESOLVED_CHECKED
                 )
                 print(
                     f"[PAGE] source_id={source_id} commands={len(commands)} replaced={replaced_refs} "
@@ -487,7 +490,7 @@ def main() -> int:
                     f"state={row['link_resolution_status']}"
                 )
             except Exception as exc:
-                row["link_resolution_status"] = HAS_LINK_UNRESOLVED
+                row["link_resolution_status"] = HAS_LINK_UNRESOLVED_CHECKED
                 print(f"[WARN] source_id={source_id} page_id={page_id} error={exc}")
 
             if not args.dry_run:

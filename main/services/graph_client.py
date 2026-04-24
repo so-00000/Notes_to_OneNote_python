@@ -515,10 +515,11 @@ class GraphClient:
             params=params,
         ).json()
 
-    def get_onenote_page_content(self, page_id: str) -> str:
+    def get_onenote_page_content(self, page_id: str, *, include_ids: bool = False) -> str:
         """OneNoteページ本文をHTML文字列として取得する。"""
         url = f"{GRAPH_ONENOTE_BASE_URL}/pages/{quote(page_id)}/content"
-        resp = self._request_json("GET", url, headers={"Accept": "text/html"})
+        params = {"includeIDs": "true"} if include_ids else None
+        resp = self._request_json("GET", url, headers={"Accept": "text/html"}, params=params)
         return resp.text
 
     def delete(self, url: str) -> None:

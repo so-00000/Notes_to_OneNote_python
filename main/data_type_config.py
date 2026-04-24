@@ -34,10 +34,50 @@ _SETTINGS: dict[DataType, DataTypeSettings] = {
         title_field="Fd_Text_1",
     ),
     
+
+
+    # UserCallは同じView・項目・テンプレートを使用
+    
     DataType.CALL2024: DataTypeSettings(
         label="UserCall2024",
         view_name="2024_基本担当者別日付別全ｺｰﾙ",
         dxl_dir="1_target_dxl/UserCall2024/",
+        template_html_path="resources/templates/call_gen/Call4/",
+        fields_json_path="resources/forms/call_gen/Call4/",
+        title_field="outline",
+    ),
+
+    DataType.CALL2023: DataTypeSettings(
+        label="UserCall2023",
+        view_name="2024_基本担当者別日付別全ｺｰﾙ",
+        dxl_dir="1_target_dxl/UserCall2023/",
+        template_html_path="resources/templates/call_gen/Call4/",
+        fields_json_path="resources/forms/call_gen/Call4/",
+        title_field="outline",
+    ),
+
+    DataType.CALL2022: DataTypeSettings(
+        label="UserCall2022",
+        view_name="2024_基本担当者別日付別全ｺｰﾙ",
+        dxl_dir="1_target_dxl/UserCall2022/",
+        template_html_path="resources/templates/call_gen/Call4/",
+        fields_json_path="resources/forms/call_gen/Call4/",
+        title_field="outline",
+    ),
+    
+    DataType.CALL2021: DataTypeSettings(
+        label="UserCall2021",
+        view_name="2024_基本担当者別日付別全ｺｰﾙ",
+        dxl_dir="1_target_dxl/UserCall2021/",
+        template_html_path="resources/templates/call_gen/Call4/",
+        fields_json_path="resources/forms/call_gen/Call4/",
+        title_field="outline",
+    ),
+
+        DataType.CALL2020: DataTypeSettings(
+        label="UserCall2020",
+        view_name="2024_基本担当者別日付別全ｺｰﾙ",
+        dxl_dir="1_target_dxl/UserCall2020/",
         template_html_path="resources/templates/call_gen/Call4/",
         fields_json_path="resources/forms/call_gen/Call4/",
         title_field="outline",
